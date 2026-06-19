@@ -8,6 +8,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <style>
 /* ── THEME VARIABLES ── */
 :root {
@@ -536,42 +539,84 @@ h1 span { color: var(--accent1); font-weight: 400; font-style: italic; }
 .modal-btn.secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
 .modal-btn.secondary:hover { background: var(--surface3); border-color: var(--border-hover); }
 
-/* ── LOGIN GATE ── */
-#loginGate {
+/* ── AUTH GATE ── */
+#authGate {
   position: fixed; inset: 0; z-index: 500;
   display: flex; align-items: center; justify-content: center;
   background: var(--bg);
 }
-#loginGate.hidden { display: none; }
-.login-box {
+#authGate.hidden { display: none; }
+.auth-box {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: 24px; padding: 40px; width: min(380px, 90vw);
+  border-radius: 24px; padding: 40px; width: min(420px, 92vw);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
-  text-align: center;
 }
-.login-icon {
-  width: 56px; height: 56px; border-radius: 16px; margin: 0 auto 20px;
+.auth-logo {
+  width: 52px; height: 52px; border-radius: 16px; margin: 0 auto 20px;
   display: flex; align-items: center; justify-content: center;
-  background: var(--accent1); color: var(--bg); font-size: 24px; font-weight: 700;
+  background: var(--accent1); color: var(--bg); font-size: 22px; font-weight: 700;
 }
-.login-box h2 { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 4px; letter-spacing: -0.3px; }
-.login-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
-.login-input {
+.auth-title { font-size: 20px; font-weight: 700; color: var(--text); text-align:center; margin-bottom: 4px; letter-spacing: -0.4px; }
+.auth-subtitle { font-size: 13px; color: var(--text-muted); text-align:center; margin-bottom: 28px; }
+.auth-tabs { display: flex; gap: 4px; background: var(--surface2); border-radius: 12px; padding: 4px; margin-bottom: 24px; }
+.auth-tab {
+  flex: 1; padding: 9px; text-align: center; border-radius: 9px; cursor: pointer;
+  font-family: inherit; font-size: 13px; font-weight: 500; border: none;
+  background: transparent; color: var(--text-muted); transition: all 0.2s;
+}
+.auth-tab.active { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); }
+.auth-input {
   width: 100%; background: var(--surface2); border: 1px solid var(--border);
   border-radius: 10px; padding: 12px 14px; color: var(--text);
-  font-family: inherit; font-size: 14px; outline: none; transition: all 0.2s ease;
-  margin-bottom: 12px;
+  font-family: inherit; font-size: 14px; outline: none; transition: all 0.2s;
+  margin-bottom: 12px; box-sizing: border-box;
 }
-.login-input:focus { border-color: var(--accent1); box-shadow: 0 0 0 3px var(--accent1-dim); }
-.login-error {
-  font-size: 12.5px; color: var(--red); margin: -2px 0 14px; min-height: 16px; font-weight: 500;
-}
-.login-submit {
-  width: 100%; padding: 12px; border-radius: 10px; border: none;
+.auth-input:focus { border-color: var(--accent1); box-shadow: 0 0 0 3px var(--accent1-dim); }
+.auth-error { font-size: 12.5px; color: var(--red); min-height: 18px; margin: -4px 0 10px; font-weight: 500; }
+.auth-success { font-size: 12.5px; color: var(--green); min-height: 18px; margin: -4px 0 10px; font-weight: 500; }
+.auth-submit {
+  width: 100%; padding: 13px; border-radius: 10px; border: none;
   background: var(--accent1); color: var(--bg); font-family: inherit;
-  font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;
+  font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+  margin-top: 4px;
 }
-.login-submit:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.auth-submit:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.auth-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.auth-footer { text-align: center; margin-top: 16px; font-size: 12.5px; color: var(--text-muted); }
+.auth-footer a { color: var(--accent1); cursor: pointer; text-decoration: none; font-weight: 500; }
+.auth-divider { text-align:center; color: var(--text-muted); font-size:12px; margin: 4px 0 12px; }
+/* Loading overlay */
+#authLoading {
+  position: fixed; inset: 0; z-index: 600;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg); flex-direction: column; gap: 16px;
+}
+#authLoading.hidden { display: none; }
+.auth-spinner {
+  width: 40px; height: 40px; border: 3px solid var(--border);
+  border-top-color: var(--accent1); border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+#authLoading p { font-size: 14px; color: var(--text-muted); }
+/* User info in header */
+.user-badge {
+  display: flex; align-items: center; gap: 8px; padding: 6px 12px;
+  border-radius: 10px; border: 1px solid var(--border);
+  background: var(--surface); font-size: 12px; color: var(--text-muted);
+}
+.user-avatar {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--accent1); color: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+}
+.logout-btn {
+  padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border);
+  background: transparent; color: var(--text-muted); font-family: inherit;
+  font-size: 12px; cursor: pointer; transition: all 0.2s;
+}
+.logout-btn:hover { border-color: var(--red); color: var(--red); }
 
 /* ── DEADLINE MODAL ── */
 .deadline-input {
@@ -655,17 +700,48 @@ kbd {
 </style>
 </head>
 <body>
-<div id="loginGate">
-  <div class="login-box">
-    <div class="login-icon">✦</div>
-    <h2>Model Launch Control</h2>
-    <p>Enter your ID and password to continue</p>
-    <input type="text" class="login-input" id="loginId" placeholder="ID" autocomplete="off">
-    <input type="password" class="login-input" id="loginPass" placeholder="Password" autocomplete="off">
-    <div class="login-error" id="loginError"></div>
-    <button class="login-submit" id="loginSubmitBtn">Unlock Dashboard</button>
+<!-- LOADING OVERLAY -->
+<div id="authLoading">
+  <div class="auth-spinner"></div>
+  <p>Connecting…</p>
+</div>
+
+<!-- AUTH GATE -->
+<div id="authGate" class="hidden">
+  <div class="auth-box">
+    <div class="auth-logo">✦</div>
+    <div class="auth-title">Model Launch Control</div>
+    <div class="auth-subtitle">Production Readiness Tracker · V7 Premium</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin">Sign In</button>
+      <button class="auth-tab" id="tabRegister">Create Account</button>
+    </div>
+    <!-- Login panel -->
+    <div id="panelLogin">
+      <input type="email" class="auth-input" id="loginEmail" placeholder="Email address" autocomplete="email">
+      <input type="password" class="auth-input" id="loginPassword" placeholder="Password" autocomplete="current-password">
+      <div class="auth-error" id="loginError"></div>
+      <button class="auth-submit" id="loginBtn">Sign In</button>
+      
+      <div class="auth-divider">OR</div>
+      <button class="auth-submit" id="googleBtn" style="background: var(--surface2); color: var(--text); border: 1px solid var(--border);">
+        Sign in with Google
+      </button>
+
+      <div class="auth-footer"><a id="forgotLink">Forgot password?</a></div>
+    </div>
+    <!-- Register panel -->
+    <div id="panelRegister" style="display:none;">
+      <input type="email" class="auth-input" id="regEmail" placeholder="Email address" autocomplete="email">
+      <input type="password" class="auth-input" id="regPassword" placeholder="Password (min 6 characters)" autocomplete="new-password">
+      <input type="password" class="auth-input" id="regConfirm" placeholder="Confirm password" autocomplete="new-password">
+      <div class="auth-error" id="regError"></div>
+      <div class="auth-success" id="regSuccess"></div>
+      <button class="auth-submit" id="registerBtn">Create Account</button>
+    </div>
   </div>
 </div>
+
 <div class="wrap">
 
 <!-- HEADER -->
@@ -680,6 +756,11 @@ kbd {
   <div class="header-right">
     <div class="live-badge"><span class="live-dot"></span>LIVE</div>
     <div class="last-updated" id="lastUpdated"></div>
+    <div class="user-badge" id="userBadge" style="display:none;">
+      <div class="user-avatar" id="userAvatar">?</div>
+      <span id="userEmail" style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+    </div>
+    <button class="logout-btn" id="logoutBtn" style="display:none;">Sign Out</button>
     <button class="hdr-btn" id="themeToggleBtn" title="Toggle dark/light mode">✧ <span>Theme</span></button>
     <button class="hdr-btn accent" id="exportBtn" title="Export data">↓ <span>Export</span></button>
     <label class="hdr-btn accent" title="Import JSON" style="cursor:pointer;">
@@ -903,30 +984,209 @@ kbd {
 </div>
 
 <script>
-// ── LOGIN GATE ────────────────────────────────────────────────────────────────
-const LOGIN_ID='56290';
-const LOGIN_PASS='PoweredbyAI';
-function tryLogin(){
-  const idVal=document.getElementById('loginId').value.trim();
-  const passVal=document.getElementById('loginPass').value;
+// ── FIREBASE CONFIG ───────────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyD3acOjOQlm4znaJWjiKw1UWoorsfoSjOw",
+  authDomain: "product-launch-cd58a.firebaseapp.com",
+  projectId: "product-launch-cd58a",
+  storageBucket: "product-launch-cd58a.firebasestorage.app",
+  messagingSenderId: "323149984155",
+  appId: "1:323149984155:web:f38464a174b16d77ee713e"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db   = firebase.firestore();
+
+// ── FIREBASE AUTH UI ──────────────────────────────────────────────────────────
+let saveTimer=null;
+function showAuthGate(){ document.getElementById('authGate').classList.remove('hidden'); }
+function hideAuthGate(){ document.getElementById('authGate').classList.add('hidden'); }
+function showLoading(){ document.getElementById('authLoading').classList.remove('hidden'); }
+function hideLoading(){ document.getElementById('authLoading').classList.add('hidden'); }
+
+// Tab switching
+document.getElementById('tabLogin').onclick=()=>{
+  document.getElementById('tabLogin').classList.add('active');
+  document.getElementById('tabRegister').classList.remove('active');
+  document.getElementById('panelLogin').style.display='';
+  document.getElementById('panelRegister').style.display='none';
+  document.getElementById('loginError').textContent='';
+};
+document.getElementById('tabRegister').onclick=()=>{
+  document.getElementById('tabRegister').classList.add('active');
+  document.getElementById('tabLogin').classList.remove('active');
+  document.getElementById('panelRegister').style.display='';
+  document.getElementById('panelLogin').style.display='none';
+  document.getElementById('regError').textContent='';
+  document.getElementById('regSuccess').textContent='';
+};
+
+// Sign In
+async function doLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const pass=document.getElementById('loginPassword').value;
   const errEl=document.getElementById('loginError');
-  if(idVal===LOGIN_ID&&passVal===LOGIN_PASS){
-    sessionStorage.setItem('dashboardUnlocked','1');
-    document.getElementById('loginGate').classList.add('hidden');
-    document.querySelector('.wrap').classList.add('unlocked');
-    if(typeof refreshStickyBarOrigin==='function') refreshStickyBarOrigin();
-  } else {
-    errEl.textContent='Incorrect ID or password. Please try again.';
-    document.getElementById('loginPass').value='';
+  const btn=document.getElementById('loginBtn');
+  if(!email||!pass){errEl.textContent='Please enter email and password.';return;}
+  btn.disabled=true;btn.textContent='Signing in…';errEl.textContent='';
+  try{
+    await auth.signInWithEmailAndPassword(email,pass);
+  }catch(e){
+    errEl.textContent=friendlyAuthError(e.code);
+    btn.disabled=false;btn.textContent='Sign In';
   }
 }
-if(sessionStorage.getItem('dashboardUnlocked')==='1'){
-  document.getElementById('loginGate').classList.add('hidden');
-  document.querySelector('.wrap').classList.add('unlocked');
+document.getElementById('loginBtn').onclick=doLogin;
+document.getElementById('loginPassword').onkeydown=e=>{if(e.key==='Enter')doLogin();};
+document.getElementById('loginEmail').onkeydown=e=>{if(e.key==='Enter')doLogin();};
+// Google Sign In
+document.getElementById('googleBtn').onclick = async () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  const errEl = document.getElementById('loginError');
+  errEl.textContent = '';
+  
+  try {
+    await auth.signInWithPopup(provider);
+    // You do not need to write extra redirect logic here! 
+    // Your existing auth.onAuthStateChanged listener will automatically 
+    // detect the login, hide the gate, and load the dashboard.
+  } catch (e) {
+    if (e.code === 'auth/popup-closed-by-user') {
+        errEl.textContent = 'Google sign-in was cancelled.';
+    } else {
+        errEl.textContent = friendlyAuthError(e.code);
+    }
+  }
+};
+// Register
+async function doRegister(){
+  const email=document.getElementById('regEmail').value.trim();
+  const pass=document.getElementById('regPassword').value;
+  const confirm=document.getElementById('regConfirm').value;
+  const errEl=document.getElementById('regError');
+  const okEl=document.getElementById('regSuccess');
+  const btn=document.getElementById('registerBtn');
+  errEl.textContent='';okEl.textContent='';
+  if(!email||!pass){errEl.textContent='Please fill in all fields.';return;}
+  if(pass!==confirm){errEl.textContent='Passwords do not match.';return;}
+  if(pass.length<6){errEl.textContent='Password must be at least 6 characters.';return;}
+  btn.disabled=true;btn.textContent='Creating account…';
+  try{
+    await auth.createUserWithEmailAndPassword(email,pass);
+    okEl.textContent='Account created! Signing you in…';
+  }catch(e){
+    errEl.textContent=friendlyAuthError(e.code);
+    btn.disabled=false;btn.textContent='Create Account';
+  }
 }
-document.getElementById('loginSubmitBtn').onclick=tryLogin;
-document.getElementById('loginPass').onkeydown=e=>{if(e.key==='Enter')tryLogin();};
-document.getElementById('loginId').onkeydown=e=>{if(e.key==='Enter')tryLogin();};
+document.getElementById('registerBtn').onclick=doRegister;
+document.getElementById('regConfirm').onkeydown=e=>{if(e.key==='Enter')doRegister();};
+
+// Forgot password
+document.getElementById('forgotLink').onclick=async()=>{
+  const email=document.getElementById('loginEmail').value.trim();
+  const errEl=document.getElementById('loginError');
+  if(!email){errEl.textContent='Enter your email above first.';return;}
+  try{
+    await auth.sendPasswordResetEmail(email);
+    errEl.style.color='var(--green)';
+    errEl.textContent='Reset email sent — check your inbox.';
+    setTimeout(()=>{errEl.style.color='';errEl.textContent='';},5000);
+  }catch(e){
+    errEl.style.color='';errEl.textContent=friendlyAuthError(e.code);
+  }
+};
+
+// Logout
+document.getElementById('logoutBtn').onclick=()=>auth.signOut();
+
+// Friendly error messages
+function friendlyAuthError(code){
+  const map={
+    'auth/user-not-found':'No account found with this email.',
+    'auth/wrong-password':'Incorrect password.',
+    'auth/invalid-email':'Please enter a valid email address.',
+    'auth/email-already-in-use':'An account with this email already exists.',
+    'auth/weak-password':'Password must be at least 6 characters.',
+    'auth/too-many-requests':'Too many attempts. Please wait a moment.',
+    'auth/invalid-credential':'Invalid email or password.',
+    'auth/network-request-failed':'Network error. Check your connection.',
+  };
+  return map[code]||'Something went wrong. Please try again.';
+}
+
+// ── FIRESTORE SAVE / LOAD ─────────────────────────────────────────────────────
+function getUserDoc(uid){ return db.collection('dashboards').doc(uid); }
+
+async function loadFromFirestore(uid){
+  try{
+    const snap=await getUserDoc(uid).get();
+    return snap.exists ? snap.data() : null;
+  }catch(e){ console.error('Load error:',e); return null; }
+}
+
+function save(){
+  if(!auth.currentUser) return;
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(async()=>{
+    try{
+      await getUserDoc(auth.currentUser.uid).set({
+        tasks:state,
+        deadlines,
+        deletedModels:[...deletedModelsSet],
+        updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+      });
+      document.getElementById('lastUpdated').textContent='Saved '+new Date().toLocaleTimeString();
+    }catch(e){ console.error('Save error:',e); toast('⚠','Failed to save data');}
+  },800); // debounce — max one write per 800ms
+}
+
+let deletedModelsSet=new Set();
+
+// ── AUTH STATE OBSERVER ───────────────────────────────────────────────────────
+auth.onAuthStateChanged(async(user)=>{
+  if(user){
+    // Show loading while fetching data
+    showLoading();
+    hideAuthGate();
+
+    // Update header user info
+    const avatar=document.getElementById('userAvatar');
+    const emailEl=document.getElementById('userEmail');
+    const badge=document.getElementById('userBadge');
+    const logoutBtn=document.getElementById('logoutBtn');
+    avatar.textContent=(user.email||'?')[0].toUpperCase();
+    emailEl.textContent=user.email||'';
+    badge.style.display='flex';
+    logoutBtn.style.display='';
+
+    // Load user's data from Firestore
+    const saved=await loadFromFirestore(user.uid);
+    deletedModelsSet=new Set(saved?.deletedModels||[]);
+    ({tasks: state, deadlines}=loadState(saved));
+refreshModelsList();
+    if (!activeTab && models.length > 0) activeTab = models[0];
+    document.querySelector('.wrap').classList.add('unlocked');
+    document.getElementById('lastUpdated').textContent='Loaded '+new Date().toLocaleTimeString();
+    renderAll();
+    hideLoading();
+    if(typeof refreshStickyBarOrigin==='function') setTimeout(refreshStickyBarOrigin,100);
+  } else {
+    // Signed out
+    document.querySelector('.wrap').classList.remove('unlocked');
+    document.getElementById('userBadge').style.display='none';
+    document.getElementById('logoutBtn').style.display='none';
+    document.getElementById('loginBtn').disabled=false;
+    document.getElementById('loginBtn').textContent='Sign In';
+    document.getElementById('registerBtn').disabled=false;
+    document.getElementById('registerBtn').textContent='Create Account';
+    document.getElementById('loginEmail').value='';
+    document.getElementById('loginPassword').value='';
+    document.getElementById('loginError').textContent='';
+    hideLoading();
+    showAuthGate();
+  }
+});
 
 // ── DATA ──────────────────────────────────────────────────────────────────────
 const INITIAL_DATA = {
@@ -1022,12 +1282,10 @@ const INITIAL_DATA = {
 const STANDARD_TASK_TEMPLATE = Object.values(INITIAL_DATA)[0].map(t=>t.name);
 
 // ── STATE LOAD ─────────────────────────────────────────────────────────────────
-function loadState() {
-  const saved = JSON.parse(localStorage.getItem('mlc_state_v7_premium')||'null');
-  const deletedModels = new Set(JSON.parse(localStorage.getItem('mlc_deleted_models_premium')||'[]'));
+function loadState(saved) {
   const fresh = JSON.parse(JSON.stringify(INITIAL_DATA));
   if (!saved) {
-    deletedModels.forEach(m=>delete fresh[m]);
+    deletedModelsSet.forEach(m=>delete fresh[m]);
     Object.values(fresh).forEach(tasks=>tasks.forEach(t=>{
       t.priority=t.priority||'med'; t.notes=t.notes||''; t.taskDeadline=t.taskDeadline||'';
     }));
@@ -1035,7 +1293,7 @@ function loadState() {
   }
   const result={};
   Object.keys(fresh).forEach(model=>{
-    if(deletedModels.has(model)) return;
+    if(deletedModelsSet.has(model)) return;
     const savedModel = saved.tasks&&saved.tasks[model];
     if(!savedModel||!savedModel.length){result[model]=fresh[model];return;}
     const tasks=savedModel.map(t=>({...t}));
@@ -1049,7 +1307,7 @@ function loadState() {
     result[model]=tasks;
   });
   if(saved.tasks) Object.keys(saved.tasks).forEach(model=>{
-    if(!(model in result)&&!deletedModels.has(model)&&saved.tasks[model]&&saved.tasks[model].length)
+    if(!(model in result)&&!deletedModelsSet.has(model)&&saved.tasks[model]&&saved.tasks[model].length)
       result[model]=saved.tasks[model].map(t=>({...t}));
   });
   return { tasks: result, deadlines: saved.deadlines||{} };
@@ -1057,11 +1315,11 @@ function loadState() {
 
 function renumber(tasks){tasks.forEach((t,i)=>{t.sn=i+1;});}
 
-let appState = loadState();
-let state = appState.tasks;
-let deadlines = appState.deadlines;
-let models = Object.keys(state);
-let activeTab = models[0];
+// State initialized by onAuthStateChanged after login
+let state = {};
+let deadlines = {};
+let models = [];
+let activeTab = '';
 let activeFilter = 'all';
 let searchQuery = '';
 let editingIdx = null;
@@ -1069,11 +1327,7 @@ let selectedTasks = new Set();
 let dragSrcIdx = null;
 
 function refreshModelsList(){models=Object.keys(state);}
-
-function save(){
-  localStorage.setItem('mlc_state_v7_premium', JSON.stringify({tasks:state, deadlines}));
-  document.getElementById('lastUpdated').textContent='Updated '+new Date().toLocaleTimeString();
-}
+// save() is defined above in the Firebase section
 
 // ── STATS ─────────────────────────────────────────────────────────────────────
 function stats(model){
@@ -1443,8 +1697,7 @@ function addModel(name,deadline){
   if(models.some(m=>m.toUpperCase()===key)){alert(`Model "${trimmed}" already exists.`);return;}
   state[trimmed]=STANDARD_TASK_TEMPLATE.map((n,i)=>({sn:i+1,name:n,done:false,priority:'med',notes:'',taskDeadline:''}));
   if(deadline)deadlines[trimmed]=deadline;
-  const del=new Set(JSON.parse(localStorage.getItem('mlc_deleted_models_premium')||'[]'));
-  if(del.has(trimmed)){del.delete(trimmed);localStorage.setItem('mlc_deleted_models_premium',JSON.stringify([...del]));}
+  deletedModelsSet.delete(trimmed);
   refreshModelsList();activeTab=trimmed;editingIdx=null;save();renderAll();
   toast('＋',`Model added: ${trimmed}`);
 }
@@ -1452,10 +1705,7 @@ function deleteModel(name){
   if(models.length<=1){alert("Can't delete last model.");return;}
   if(!confirm(`Delete model "${name}" and all tasks?`))return;
   delete state[name];delete deadlines[name];
-  if(name in INITIAL_DATA){
-    const del=new Set(JSON.parse(localStorage.getItem('mlc_deleted_models_premium')||'[]'));
-    del.add(name);localStorage.setItem('mlc_deleted_models_premium',JSON.stringify([...del]));
-  }
+  if(name in INITIAL_DATA) deletedModelsSet.add(name);
   refreshModelsList();if(activeTab===name)activeTab=models[0];
   editingIdx=null;save();renderAll();toast('×',`Model deleted: ${name}`);
 }
@@ -1803,8 +2053,7 @@ function renderAll(){
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
-document.getElementById('lastUpdated').textContent='Loaded '+new Date().toLocaleTimeString();
-renderAll();
+// Rendering is triggered by auth.onAuthStateChanged above after user logs in
 
 const stickyBarEl=document.getElementById('stickyModelBar');
 const stickyBarSpacer=document.getElementById('stickyModelBarSpacer');
