@@ -7,10 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
 <style>
 /* ── THEME VARIABLES ── */
 :root {
@@ -983,6 +980,11 @@ kbd {
   </div>
 </div>
 
+<!-- Loaded here (end of body) instead of <head> so the page renders immediately
+     without waiting on these network round-trips first. -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
 // ── FIREBASE CONFIG ───────────────────────────────────────────────────────────
 const firebaseConfig = {
@@ -1928,9 +1930,27 @@ document.getElementById('importFile').onchange=e=>{
   e.target.value='';
 };
 
+// ── LAZY-LOAD XLSX LIBRARY (only needed for Excel import/export) ─────────────
+// This is a ~700KB library most page loads never touch, so we fetch it on
+// first use instead of blocking every page load with it.
+let xlsxLoadPromise=null;
+function loadXLSX(){
+  if(window.XLSX) return Promise.resolve();
+  if(xlsxLoadPromise) return xlsxLoadPromise;
+  xlsxLoadPromise=new Promise((resolve,reject)=>{
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    s.onload=()=>resolve();
+    s.onerror=()=>{xlsxLoadPromise=null;reject(new Error('Failed to load Excel library'));};
+    document.head.appendChild(s);
+  });
+  return xlsxLoadPromise;
+}
+
 // ── EXCEL EXPORT (current model's tasks) ──────────────────────────────────────
-document.getElementById('exportExcelBtn').onclick=()=>{
+document.getElementById('exportExcelBtn').onclick=async()=>{
   if(activeTab==='Compare Models'){alert('Switch to a model tab before exporting.');return;}
+  try{ await loadXLSX(); }catch(e){ alert('Could not load the Excel library. Check your connection and try again.'); return; }
   const tasks=state[activeTab];
   const prioMap={high:'High',med:'Med',low:'Low'};
   const rows=[['Task Name','Priority','Status','Notes','Deadline']];
@@ -1971,9 +1991,10 @@ function normDate(val){
   if(m2) return `${m2[3]}-${String(m2[1]).padStart(2,'0')}-${String(m2[2]).padStart(2,'0')}`;
   return '';
 }
-document.getElementById('importExcelFile').onchange=e=>{
+document.getElementById('importExcelFile').onchange=async e=>{
   const file=e.target.files[0];if(!file)return;
   if(activeTab==='Compare Models'){alert('Switch to a model tab before importing.');e.target.value='';return;}
+  try{ await loadXLSX(); }catch(err){ alert('Could not load the Excel library. Check your connection and try again.'); e.target.value=''; return; }
   const reader=new FileReader();
   reader.onload=ev=>{
     try{
