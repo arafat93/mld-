@@ -315,6 +315,14 @@ h1 span { color: var(--accent1); font-weight: 400; }
 }
 .filter-btn.active { border-color: var(--accent1); color: var(--accent1); background: var(--accent1-dim); }
 .filter-btn:hover:not(.active) { color: var(--text); border-color: var(--border-hover); background: var(--surface2); }
+.filter-count {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 20px; height: 18px; padding: 0 5px;
+  border-radius: 100px; font-size: 10px; font-weight: 700;
+  background: var(--surface3); color: var(--text-muted);
+  margin-left: 6px; letter-spacing: 0; transition: all 0.3s ease;
+}
+.filter-btn.active .filter-count { background: var(--accent1); color: var(--bg); }
 
 .search-box {
   margin-left: auto; background: var(--surface); border: 1px solid var(--border);
@@ -833,12 +841,12 @@ kbd {
 </div>
 
 <div class="filter-bar" id="filterBar">
-  <button class="filter-btn active" data-filter="all">All</button>
-  <button class="filter-btn" data-filter="done">Done</button>
-  <button class="filter-btn" data-filter="pending">Pending</button>
-  <button class="filter-btn" data-filter="high">High Priority</button>
-  <button class="filter-btn" data-filter="med">Medium</button>
-  <button class="filter-btn" data-filter="low">Low</button>
+  <button class="filter-btn active" data-filter="all">All<span class="filter-count" id="fc-all">0</span></button>
+  <button class="filter-btn" data-filter="done">Done<span class="filter-count" id="fc-done">0</span></button>
+  <button class="filter-btn" data-filter="pending">Pending<span class="filter-count" id="fc-pending">0</span></button>
+  <button class="filter-btn" data-filter="high">High Priority<span class="filter-count" id="fc-high">0</span></button>
+  <button class="filter-btn" data-filter="med">Medium<span class="filter-count" id="fc-med">0</span></button>
+  <button class="filter-btn" data-filter="low">Low<span class="filter-count" id="fc-low">0</span></button>
   <div class="kbd-hint">Shortcuts: <kbd>N</kbd> new task · <kbd>/</kbd> search · <kbd>Esc</kbd> clear</div>
 </div>
 
@@ -1479,7 +1487,6 @@ function renderModelCards(){
         <div>
           <div class="model-name">${m}</div>
           ${dlHtml}
-          <div class="chart-wrap">${bars}</div>
         </div>
         <div class="model-tag">${lbl}</div>
       </div>
@@ -1552,6 +1559,20 @@ function renderTaskList(){
   const tbody=document.getElementById('taskRows');
   tbody.innerHTML='';
   const tasks=state[activeTab];
+
+  // ── UPDATE FILTER COUNTS ──
+  const fc={
+    all: tasks.length,
+    done: tasks.filter(t=>t.done).length,
+    pending: tasks.filter(t=>!t.done).length,
+    high: tasks.filter(t=>t.priority==='high').length,
+    med: tasks.filter(t=>t.priority==='med').length,
+    low: tasks.filter(t=>t.priority==='low').length,
+  };
+  Object.entries(fc).forEach(([key,val])=>{
+    const el=document.getElementById('fc-'+key);
+    if(el) el.textContent=val;
+  });
 
   const selAll=document.getElementById('selectAllChk');
   const visibleIdxs=tasks.map((t,i)=>matchesFilter(t)?i:null).filter(i=>i!==null);
@@ -1851,8 +1872,9 @@ document.getElementById('taskDeadlineModal').onclick=e=>{if(e.target===document.
 
 // ── BULK ACTIONS ──────────────────────────────────────────────────────────────
 document.getElementById('bulkDoneBtn').onclick=()=>{
+  const n=selectedTasks.size;
   selectedTasks.forEach(i=>{state[activeTab][i].done=true;});
-  selectedTasks.clear();save();renderAll();toast('✓',`Marked ${selectedTasks.size} tasks done`);
+  selectedTasks.clear();save();renderAll();toast('✓',`Marked ${n} tasks done`);
 };
 document.getElementById('bulkPendingBtn').onclick=()=>{
   selectedTasks.forEach(i=>{state[activeTab][i].done=false;});
@@ -1866,7 +1888,7 @@ document.getElementById('bulkMoveTopBtn').onclick=()=>{
   const remaining=tasks.filter((_,i)=>!selectedTasks.has(i));
   state[activeTab]=[...moving,...remaining];
   renumber(state[activeTab]);
-  selectedTasks=new Set(moving.map((_,i)=>i));
+  selectedTasks.clear();moving.forEach((_,i)=>selectedTasks.add(i));
   save();renderAll();
   toast('↑',`Moved ${moving.length} tasks to top`);
 };
@@ -1879,7 +1901,7 @@ document.getElementById('bulkMoveBottomBtn').onclick=()=>{
   state[activeTab]=[...remaining,...moving];
   renumber(state[activeTab]);
   const base=remaining.length;
-  selectedTasks=new Set(moving.map((_,i)=>base+i));
+  selectedTasks.clear();moving.forEach((_,i)=>selectedTasks.add(base+i));
   save();renderAll();
   toast('↓',`Moved ${moving.length} tasks to bottom`);
 };
@@ -2111,20 +2133,26 @@ document.getElementById('deleteModelBtn').onclick=()=>{
 
 // ── KEYBOARD SHORTCUTS ────────────────────────────────────────────────────────
 document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    document.getElementById('searchBox').value='';
+    searchQuery='';
+    selectedTasks.clear();
+    updateBulkBar();
+    renderTaskList();
+    document.getElementById('notesModal').classList.remove('open');
+    document.getElementById('deadlineModal').classList.remove('open');
+    document.getElementById('exportModal').classList.remove('open');
+    if (document.activeElement) document.activeElement.blur();
+    return;
+  }
+
   if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+  
   if(e.key==='n'||e.key==='N'){
     e.preventDefault(); document.getElementById('newTaskInput').focus();
   }
   if(e.key==='/'){
     e.preventDefault(); document.getElementById('searchBox').focus();
-  }
-  if(e.key==='Escape'){
-    document.getElementById('searchBox').value='';
-    searchQuery='';renderTaskList();
-    selectedTasks.clear();updateBulkBar();renderTaskList();
-    document.getElementById('notesModal').classList.remove('open');
-    document.getElementById('deadlineModal').classList.remove('open');
-    document.getElementById('exportModal').classList.remove('open');
   }
 });
 
@@ -2193,6 +2221,16 @@ window.addEventListener('resize',refreshStickyBarOrigin);
 captureStickyBarOrigin();
 updateStickyBarPin();
 
+</script>
+
+<script>
+  window.addEventListener('load', () => {
+    // Force show dashboard, hide any 'connecting' or 'loader' elements
+    const dashboard = document.querySelector('#dashboard-content') || document.body;
+    const loader = document.querySelector('#loader') || document.querySelector('.loader');
+    if (dashboard) dashboard.style.display = 'block';
+    if (loader) loader.style.display = 'none';
+  });
 </script>
 </body>
 </html>
