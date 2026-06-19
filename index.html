@@ -1164,6 +1164,28 @@ async function loadFromFirestore(uid){
   }
 }
 
+function formatLastUpdated(ts){
+  // ts is a Firestore Timestamp (has .toDate()) — ignore anything else
+  if(!ts || typeof ts.toDate!=='function') return '';
+  const d=ts.toDate();
+  const datePart=d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
+  const timePart=d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+  return `Last changed ${datePart}, ${timePart}`;
+}
+
+let unsubscribeLastUpdated=null;
+function listenForLastUpdated(uid){
+  // Live-updates the "last changed" label for EVERY logged-in user the moment
+  // anyone saves a change — no refresh needed.
+  if(unsubscribeLastUpdated) unsubscribeLastUpdated();
+  unsubscribeLastUpdated=getUserDoc(uid).onSnapshot(snap=>{
+    const data=snap.data();
+    if(data && data.updatedAt){
+      document.getElementById('lastUpdated').textContent=formatLastUpdated(data.updatedAt);
+    }
+  }, err=>console.warn('lastUpdated listener error:',err));
+}
+
 function save(){
   if(!auth.currentUser) return;
   clearTimeout(saveTimer);
@@ -1175,7 +1197,8 @@ function save(){
         deletedModels:[...deletedModelsSet],
         updatedAt:firebase.firestore.FieldValue.serverTimestamp()
       });
-      document.getElementById('lastUpdated').textContent='Saved '+new Date().toLocaleTimeString();
+      // lastUpdated label is refreshed automatically by the live Firestore
+      // listener (listenForLastUpdated) once the server timestamp lands.
     }catch(e){ console.error('Save error:',e); toast('⚠','Failed to save data');}
   },800); // debounce — max one write per 800ms
 }
@@ -1206,12 +1229,15 @@ auth.onAuthStateChanged(async(user)=>{
 refreshModelsList();
     if (!activeTab && models.length > 0) activeTab = models[0];
     document.querySelector('.wrap').classList.add('unlocked');
-    document.getElementById('lastUpdated').textContent='Loaded '+new Date().toLocaleTimeString();
+    document.getElementById('lastUpdated').textContent=formatLastUpdated(saved&&saved.updatedAt)||'';
+    listenForLastUpdated(user.uid);
     renderAll();
     hideLoading();
     if(typeof refreshStickyBarOrigin==='function') setTimeout(refreshStickyBarOrigin,100);
   } else {
     // Signed out
+    if(unsubscribeLastUpdated){ unsubscribeLastUpdated(); unsubscribeLastUpdated=null; }
+    document.getElementById('lastUpdated').textContent='';
     document.querySelector('.wrap').classList.remove('unlocked');
     document.getElementById('userBadge').style.display='none';
     document.getElementById('logoutBtn').style.display='none';
