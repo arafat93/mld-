@@ -2223,14 +2223,5 @@ updateStickyBarPin();
 
 </script>
 
-<script>
-  window.addEventListener('load', () => {
-    // Force show dashboard, hide any 'connecting' or 'loader' elements
-    const dashboard = document.querySelector('#dashboard-content') || document.body;
-    const loader = document.querySelector('#loader') || document.querySelector('.loader');
-    if (dashboard) dashboard.style.display = 'block';
-    if (loader) loader.style.display = 'none';
-  });
-</script>
 </body>
 </html>
