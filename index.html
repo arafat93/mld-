@@ -8,15 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-<!-- Preload the Firebase SDK + config so the browser starts downloading them
-     immediately (in parallel) instead of waiting until the parser reaches
-     these script elements near the bottom of the page. This is what
-     actually cuts the "Connecting…" delay — the scripts still execute in
-     the same order, just further along in the download queue already. -->
-<link rel="preload" as="script" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js" crossorigin>
-<link rel="preload" as="script" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js" crossorigin>
-<link rel="preload" as="script" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js" crossorigin>
-<link rel="preload" as="script" href="config.js">
 <style>
 /* ── THEME VARIABLES ── */
 :root {
@@ -135,7 +126,8 @@ body::before {
   -webkit-mask-image: radial-gradient(circle at center, black, transparent 80%);
 }
 
-.wrap { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 32px 80px; display: block; }
+.wrap { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 32px 80px; display: none; }
+.wrap.unlocked { display: block; }
 
 /* ── HEADER ── */
 header {
@@ -164,7 +156,7 @@ h1 span { color: var(--accent1); font-weight: 400; }
 
 .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex-shrink: 0; }
 .live-badge {
-  display: flex; align-items: center; gap: 5px;
+  display: flex; align-items: center; gap: 8px;
   font-size: 11px; font-weight: 600; color: var(--green);
   background: rgba(16, 185, 129, 0.1);
   border: 1px solid rgba(16, 185, 129, 0.2);
@@ -558,24 +550,27 @@ h1 span { color: var(--accent1); font-weight: 400; }
 #authGate {
   position: fixed; inset: 0; z-index: 500;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 24px; box-sizing: border-box;
 }
 #authGate.hidden { display: none; }
 .auth-box {
+  position: relative;
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 24px; padding: 40px; width: min(420px, 92vw);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
-  position: relative;
 }
 .auth-close {
   position: absolute; top: 16px; right: 16px;
-  width: 28px; height: 28px; border-radius: 8px; border: none;
-  background: var(--surface2); color: var(--text-muted);
-  cursor: pointer; font-size: 16px; line-height: 1;
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--surface2);
+  color: var(--text-muted); font-size: 15px; line-height: 1;
   display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s;
+  cursor: pointer; transition: all 0.2s;
 }
-.auth-close:hover { background: var(--surface3); color: var(--text); }
+.auth-close:hover { color: var(--text); border-color: var(--border-hover); background: var(--surface3); }
 .auth-logo {
   width: 52px; height: 52px; border-radius: 16px; margin: 0 auto 20px;
   display: flex; align-items: center; justify-content: center;
@@ -610,20 +605,6 @@ h1 span { color: var(--accent1); font-weight: 400; }
 .auth-footer { text-align: center; margin-top: 16px; font-size: 12.5px; color: var(--text-muted); }
 .auth-footer a { color: var(--accent1); cursor: pointer; text-decoration: none; font-weight: 500; }
 .auth-divider { text-align:center; color: var(--text-muted); font-size:12px; margin: 4px 0 12px; }
-.preview-banner {
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  background: var(--accent1-dim); border: 1px solid var(--accent1);
-  border-radius: 14px; padding: 12px 18px; margin-bottom: 24px;
-  font-size: 13px; color: var(--text); flex-wrap: wrap;
-}
-.preview-banner button {
-  background: var(--accent1); color: var(--bg); border: none;
-  border-radius: 8px; padding: 8px 18px; font-family: inherit;
-  font-size: 13px; font-weight: 600; cursor: pointer; flex-shrink: 0;
-  transition: all 0.2s;
-}
-.preview-banner button:hover { filter: brightness(1.1); }
-.preview-banner.hidden { display: none; }
 /* Loading overlay */
 #authLoading {
   position: fixed; inset: 0; z-index: 600;
@@ -748,7 +729,7 @@ kbd {
 <!-- AUTH GATE -->
 <div id="authGate" class="hidden">
   <div class="auth-box">
-    <button class="auth-close" id="authCloseBtn" title="Close" aria-label="Close">×</button>
+    <button class="auth-close" id="authCloseBtn" title="Close" aria-label="Close">✕</button>
     <div class="auth-logo">✦</div>
     <div class="auth-title">Model Launch Control</div>
     <div class="auth-subtitle">Production Readiness Tracker · V7 Premium</div>
@@ -805,7 +786,7 @@ kbd {
       <span id="userEmail" style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
     </div>
     <button class="logout-btn" id="logoutBtn" style="display:none;">Sign Out</button>
-    <button class="hdr-btn accent" id="loginPromptBtn">Log In to Save</button>
+    <button class="hdr-btn accent" id="loginOpenBtn">✦ <span>Login</span></button>
     <button class="hdr-btn" id="themeToggleBtn" title="Toggle dark/light mode">✧ <span>Theme</span></button>
     <button class="hdr-btn accent" id="exportBtn" title="Export data">↓ <span>Export</span></button>
     <label class="hdr-btn accent" title="Import JSON" style="cursor:pointer;">
@@ -814,12 +795,6 @@ kbd {
     </label>
   </div>
 </header>
-
-<!-- PREVIEW MODE BANNER (shown before login) -->
-<div id="previewBanner" class="preview-banner">
-  <span>👀 You're viewing sample data. Changes won't be saved until you log in.</span>
-  <button id="previewLoginBtn">Log In</button>
-</div>
 
 <!-- KPI CARDS -->
 <div class="kpi-grid">
@@ -1035,17 +1010,20 @@ kbd {
 </div>
 
 <!-- Loaded here (end of body) instead of <head> so the page renders immediately
-     without waiting on these network round-trips first. The preload hints
-     above (in <head>) let the browser fetch all four of these in parallel
-     instead of one-by-one, while execution still happens in document order. -->
+     without waiting on these network round-trips first. -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<!-- config.js defines firebaseConfig and is gitignored (not committed). Copy
-     config.example.js to config.js and fill in your project's values. -->
-<script src="config.js"></script>
 <script>
-// ── FIREBASE INIT ──────────────────────────────────────────────────────────────
+// ── FIREBASE CONFIG ───────────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyD3acOjOQlm4znaJWjiKw1UWoorsfoSjOw",
+  authDomain: "product-launch-cd58a.firebaseapp.com",
+  projectId: "product-launch-cd58a",
+  storageBucket: "product-launch-cd58a.firebasestorage.app",
+  messagingSenderId: "323149984155",
+  appId: "1:323149984155:web:f38464a174b16d77ee713e"
+};
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db   = firebase.firestore();
@@ -1061,6 +1039,12 @@ function showAuthGate(){ document.getElementById('authGate').classList.remove('h
 function hideAuthGate(){ document.getElementById('authGate').classList.add('hidden'); }
 function showLoading(){ document.getElementById('authLoading').classList.remove('hidden'); }
 function hideLoading(){ document.getElementById('authLoading').classList.add('hidden'); }
+
+document.getElementById('loginOpenBtn').onclick=showAuthGate;
+document.getElementById('authCloseBtn').onclick=hideAuthGate;
+document.getElementById('authGate').addEventListener('click',e=>{
+  if(e.target.id==='authGate') hideAuthGate();
+});
 
 // Tab switching
 document.getElementById('tabLogin').onclick=()=>{
@@ -1206,7 +1190,7 @@ async function loadFromFirestore(uid){
     // No cache available yet (e.g. first-ever login on this device) — fall through to network.
   }
   try{
-    const snap=await withTimeout(ref.get(),5000);
+    const snap=await withTimeout(ref.get(),6000);
     return snap.exists ? snap.data() : null;
   }catch(e){
     console.error('Load error:',e);
@@ -1238,10 +1222,7 @@ function listenForLastUpdated(uid){
 }
 
 function save(){
-  if(!auth.currentUser){
-    toast('🔒','Log in to save your changes');
-    return;
-  }
+  if(!auth.currentUser) return;
   clearTimeout(saveTimer);
   saveTimer=setTimeout(async()=>{
     try{
@@ -1259,75 +1240,64 @@ function save(){
 
 let deletedModelsSet=new Set();
 
-// ── PREVIEW MODE (before login) ───────────────────────────────────────────────
-// Show the dashboard immediately with the built-in sample data, so people can
-// look around without waiting on Firebase Auth or logging in at all. Nothing
-// here is saved — save() already checks auth.currentUser and prompts a login
-// toast if someone tries to edit before signing in.
-function loadPreviewData(){
-  ({tasks: state, deadlines}=loadState(null));
+// ── AUTH STATE OBSERVER ───────────────────────────────────────────────────────
+let previewMode = false;
+
+// Show the dashboard immediately with local seed data, before Firebase
+// has even told us whether anyone is signed in. This is a throwaway,
+// non-persisted preview — save() already no-ops without auth.currentUser,
+// so nothing here ever reaches Firestore.
+function enterPreviewMode(){
+  previewMode = true;
+  deletedModelsSet = new Set();
+  ({tasks: state, deadlines} = loadState(null));
   refreshModelsList();
   if (!activeTab && models.length > 0) activeTab = models[0];
+  document.querySelector('.wrap').classList.add('unlocked');
+  document.getElementById('lastUpdated').textContent = '';
   renderAll();
-  if(typeof refreshStickyBarOrigin==='function') setTimeout(refreshStickyBarOrigin,100);
+  hideLoading();
+  if (typeof refreshStickyBarOrigin === 'function') setTimeout(refreshStickyBarOrigin, 100);
 }
 
-function showLoginModal(){ showAuthGate(); }
-function closeLoginModal(){ hideAuthGate(); }
-document.getElementById('loginPromptBtn').onclick=showLoginModal;
-document.getElementById('previewLoginBtn').onclick=showLoginModal;
-document.getElementById('authCloseBtn').onclick=closeLoginModal;
-// Click on the dim backdrop (but not inside the box itself) also closes it.
-document.getElementById('authGate').onclick=(e)=>{
-  if(e.target.id==='authGate') closeLoginModal();
-};
-
-// ── AUTH STATE OBSERVER ───────────────────────────────────────────────────────
-// Firebase Auth's first callback can take a noticeable moment (it has to
-// check IndexedDB for a saved session before it knows whether anyone's
-// logged in). Since the dashboard already shows preview data immediately
-// (see loadPreviewData above), there's no "Connecting…" wait to worry about
-// here — this just quietly checks in the background whether someone already
-// has a saved session, and if so, swaps the preview for their real data.
-auth.onAuthStateChanged(async(user)=>{
+async function handleAuthState(user){
   if(user){
-    hideLoading();
+    // Show loading while fetching data
+    showLoading();
     hideAuthGate();
-    document.querySelector('.wrap').classList.add('unlocked');
-    document.getElementById('previewBanner').classList.add('hidden');
+    previewMode = false;
 
     // Update header user info
     const avatar=document.getElementById('userAvatar');
     const emailEl=document.getElementById('userEmail');
     const badge=document.getElementById('userBadge');
     const logoutBtn=document.getElementById('logoutBtn');
-    const loginPromptBtn=document.getElementById('loginPromptBtn');
+    const loginOpenBtn=document.getElementById('loginOpenBtn');
     avatar.textContent=(user.email||'?')[0].toUpperCase();
     emailEl.textContent=user.email||'';
     badge.style.display='flex';
     logoutBtn.style.display='';
-    loginPromptBtn.style.display='none';
+    loginOpenBtn.style.display='none';
 
-    // Load user's data from Firestore (cache-first; see loadFromFirestore)
+    // Load user's data from Firestore
     const saved=await loadFromFirestore(user.uid);
     deletedModelsSet=new Set(saved?.deletedModels||[]);
     ({tasks: state, deadlines}=loadState(saved));
-    refreshModelsList();
+refreshModelsList();
     if (!activeTab && models.length > 0) activeTab = models[0];
+    document.querySelector('.wrap').classList.add('unlocked');
     document.getElementById('lastUpdated').textContent=formatLastUpdated(saved&&saved.updatedAt)||'';
     listenForLastUpdated(user.uid);
     renderAll();
+    hideLoading();
     if(typeof refreshStickyBarOrigin==='function') setTimeout(refreshStickyBarOrigin,100);
   } else {
-    // Signed out (or never signed in) — fall back to preview data so the
-    // dashboard never goes blank; only save() is blocked, not viewing.
+    // Signed out (or never signed in) — fall back to the local preview
+    // instead of locking the dashboard behind a forced gate.
     if(unsubscribeLastUpdated){ unsubscribeLastUpdated(); unsubscribeLastUpdated=null; }
-    document.getElementById('lastUpdated').textContent='';
-    document.querySelector('.wrap').classList.remove('unlocked');
     document.getElementById('userBadge').style.display='none';
     document.getElementById('logoutBtn').style.display='none';
-    document.getElementById('loginPromptBtn').style.display='';
-    document.getElementById('previewBanner').classList.remove('hidden');
+    document.getElementById('loginOpenBtn').style.display='';
     document.getElementById('loginBtn').disabled=false;
     document.getElementById('loginBtn').textContent='Sign In';
     document.getElementById('registerBtn').disabled=false;
@@ -1335,12 +1305,14 @@ auth.onAuthStateChanged(async(user)=>{
     document.getElementById('loginEmail').value='';
     document.getElementById('loginPassword').value='';
     document.getElementById('loginError').textContent='';
-    hideLoading();
-    deletedModelsSet=new Set();
-    activeTab='';
-    loadPreviewData();
+    editingIdx=null;
+    selectedTasks.clear();
+    enterPreviewMode();
   }
-});
+}
+// Registered at the bottom of the script (see BOOTSTRAP section) so every
+// helper/state variable above is guaranteed to exist before Firebase can
+// ever invoke this callback.
 
 // ── DATA ──────────────────────────────────────────────────────────────────────
 const INITIAL_DATA = {
@@ -1555,9 +1527,8 @@ function renderModelCards(){
     }
     const bars=groups.map(p=>`<div class="chart-bar ${p>0?'filled':''}" style="height:${Math.max(4,p*0.32)}px" title="${p}%"></div>`).join('');
     const dl=deadlineLabel(m);
-    const calSvg=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:-2px;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`;
-    const dlHtml=dl?`<div class="model-deadline ${dl.cls}">${calSvg} ${dl.text}</div>`
-      :`<div class="model-deadline">${calSvg} No deadline set</div>`;
+    const dlHtml=dl?`<div class="model-deadline ${dl.cls}">🗓 ${dl.text}</div>`
+      :`<div class="model-deadline">🗓 No deadline set</div>`;
     card.innerHTML=`
       <div class="model-header">
         <div>
@@ -2218,6 +2189,7 @@ document.addEventListener('keydown',e=>{
     document.getElementById('notesModal').classList.remove('open');
     document.getElementById('deadlineModal').classList.remove('open');
     document.getElementById('exportModal').classList.remove('open');
+    hideAuthGate();
     if (document.activeElement) document.activeElement.blur();
     return;
   }
@@ -2247,9 +2219,7 @@ function renderAll(){
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
-// Preview data renders immediately via loadPreviewData() at the bottom of
-// this script. auth.onAuthStateChanged (registered above) swaps it for real
-// Firestore data if/when someone is or becomes logged in.
+// Rendering is triggered by auth.onAuthStateChanged above after user logs in
 
 const stickyBarEl=document.getElementById('stickyModelBar');
 const stickyBarSpacer=document.getElementById('stickyModelBarSpacer');
@@ -2296,14 +2266,16 @@ function refreshStickyBarOrigin(){
 }
 window.addEventListener('scroll',updateStickyBarPin,{passive:true});
 window.addEventListener('resize',refreshStickyBarOrigin);
+
+// ── BOOTSTRAP ─────────────────────────────────────────────────────────────────
+// Show the dashboard with seed data right away rather than waiting on
+// Firebase. Once Firebase resolves, handleAuthState swaps in real data
+// for a signed-in user, or re-enters preview mode if nobody is signed in.
+enterPreviewMode();
+auth.onAuthStateChanged(handleAuthState);
+
 captureStickyBarOrigin();
 updateStickyBarPin();
-
-// Show sample data immediately so the dashboard never sits on a blank/loading
-// screen — auth.onAuthStateChanged (registered above) will silently swap
-// this for the person's real data if they're already logged in, or leave
-// it in place (read-only) if not.
-loadPreviewData();
 
 </script>
 </body>
