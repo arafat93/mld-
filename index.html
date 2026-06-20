@@ -8,14 +8,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-<!-- Preload the Firebase SDK + config so the browser starts downloading them
-     immediately (in parallel) instead of waiting until the parser reaches
-     these script elements near the bottom of the page. This is what
-     actually cuts the "Connecting…" delay — the scripts still execute in
-     the same order, just further along in the download queue already. -->
-<link rel="preload" as="script" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js" crossorigin>
-<link rel="preload" as="script" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js" crossorigin>
-<link rel="preload" as="script" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js" crossorigin>
+<!-- modulepreload starts downloading the (smaller) modular Firebase SDK
+     immediately instead of waiting for the parser to reach the module
+     script near the bottom of the page. -->
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js" crossorigin>
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js" crossorigin>
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js" crossorigin>
 <link rel="preload" as="script" href="config.js">
 <style>
 /* ── THEME VARIABLES ── */
@@ -1004,26 +1002,96 @@ kbd {
 </div>
 
 <!-- Loaded here (end of body) instead of <head> so the page renders immediately
-     without waiting on these network round-trips first. The preload hints
-     above (in <head>) let the browser fetch all four of these in parallel
+     without waiting on these network round-trips first. The modulepreload
+     hints above (in <head>) let the browser fetch these in parallel
      instead of one-by-one, while execution still happens in document order. -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<!-- config.js defines firebaseConfig and is gitignored (not committed). Copy
-     config.example.js to config.js and fill in your project's values. -->
-<script src="config.js"></script>
-<script>
-// ── FIREBASE INIT ──────────────────────────────────────────────────────────────
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db   = firebase.firestore();
+<!-- config.js defines and exports firebaseConfig and is gitignored (not
+     committed). Copy config.example.js to config.js and fill in your
+     project's values. -->
+<script type="module">
+// ── FIREBASE INIT (modular v9+ SDK) ─────────────────────────────────────────────
+// Using the modular SDK instead of the old firebase-*-compat.js bundles cuts
+// the amount of JS that has to download + parse + execute before the app
+// can show anything — that download time was the biggest piece of the
+// "Connecting…" delay. This block initializes everything, then exposes
+// `window.auth` / `window.db` as small wrapper objects with the SAME method
+// names the rest of this file already calls (signInWithEmailAndPassword,
+// onAuthStateChanged, etc.), so none of the application code below needs to
+// change. Once ready, it dispatches a 'firebase-ready' event that the
+// non-module script (further down) waits for before touching auth/db.
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getAuth, onAuthStateChanged, signInWithEmailAndPassword,
+  createUserWithEmailAndPassword, signInWithPopup, signOut,
+  sendPasswordResetEmail, GoogleAuthProvider
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  getFirestore, doc, getDoc, getDocFromCache, getDocFromServer, setDoc,
+  onSnapshot as fsOnSnapshot, serverTimestamp, enableMultiTabIndexedDbPersistence
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { firebaseConfig } from "./config.js";
+
+const app = initializeApp(firebaseConfig);
+const authInstance = getAuth(app);
+const dbInstance = getFirestore(app);
+
 // Enable offline persistence so cached data loads instantly on repeat logins
 // and the app still works (read-only-ish) on flaky connections.
-db.enablePersistence({ synchronizeTabs: true }).catch(err=>{
+//
+// NOTE: enableMultiTabIndexedDbPersistence() is marked deprecated in favor of
+// passing `localCache: persistentLocalCache(...)` to initializeFirestore().
+// Kept here deliberately: the newer persistentLocalCache API has been
+// reported as meaningfully slower for cache reads in some setups, which
+// would work against the whole point of this rewrite. Revisit if/when that
+// performance gap closes upstream.
+enableMultiTabIndexedDbPersistence(dbInstance).catch(err=>{
   console.warn('Firestore persistence unavailable:', err.code);
 });
 
+// Thin wrapper exposing the compat-style API surface the rest of the app
+// already uses, backed by the modular SDK underneath.
+window.firebase = {
+  firestore: { FieldValue: { serverTimestamp } }
+};
+window.auth = {
+  get currentUser(){ return authInstance.currentUser; },
+  onAuthStateChanged: (cb)=>onAuthStateChanged(authInstance, cb),
+  signInWithEmailAndPassword: (email,pass)=>signInWithEmailAndPassword(authInstance,email,pass),
+  createUserWithEmailAndPassword: (email,pass)=>createUserWithEmailAndPassword(authInstance,email,pass),
+  signInWithPopup: (provider)=>signInWithPopup(authInstance,provider),
+  signOut: ()=>signOut(authInstance),
+  sendPasswordResetEmail: (email)=>sendPasswordResetEmail(authInstance,email),
+};
+window.GoogleAuthProvider = GoogleAuthProvider;
+window.db = {
+  collection(name){
+    return {
+      doc(uid){
+        const ref = doc(dbInstance, name, uid);
+        return {
+          async get(opts){
+            let snap;
+            if(opts?.source==='cache') snap = await getDocFromCache(ref);
+            else if(opts?.source==='server') snap = await getDocFromServer(ref);
+            else snap = await getDoc(ref);
+            // Expose `.exists` as a property (compat-style) even though the
+            // modular SDK gives `.exists()` as a method, so loadFromFirestore
+            // below doesn't need to change.
+            return { exists: snap.exists(), data: ()=>snap.data() };
+          },
+          set(data){ return setDoc(ref, data); },
+          onSnapshot(onNext, onError){
+            return fsOnSnapshot(ref, onNext, onError);
+          }
+        };
+      }
+    };
+  }
+};
+
+window.dispatchEvent(new CustomEvent('firebase-ready'));
+</script>
+<script>
 // ── FIREBASE AUTH UI ──────────────────────────────────────────────────────────
 let saveTimer=null;
 function showAuthGate(){ document.getElementById('authGate').classList.remove('hidden'); }
@@ -1068,7 +1136,7 @@ document.getElementById('loginPassword').onkeydown=e=>{if(e.key==='Enter')doLogi
 document.getElementById('loginEmail').onkeydown=e=>{if(e.key==='Enter')doLogin();};
 // Google Sign In
 document.getElementById('googleBtn').onclick = async () => {
-  const provider = new firebase.auth.GoogleAuthProvider();
+  const provider = new window.GoogleAuthProvider();
   const errEl = document.getElementById('loginError');
   errEl.textContent = '';
   
@@ -1232,6 +1300,10 @@ let deletedModelsSet=new Set();
 // slow connection, give it a short window — if the real callback hasn't
 // fired by then, show the sign-in form anyway. If the real callback does
 // land after that, it still runs normally and corrects the view.
+//
+// The watchdog starts immediately (counting from page load), but the real
+// listener can only be registered once the module script above has set up
+// window.auth — so we wait for the 'firebase-ready' event for that part.
 let authStateResolved=false;
 const authWatchdog=setTimeout(()=>{
   if(authStateResolved) return;
@@ -1239,7 +1311,8 @@ const authWatchdog=setTimeout(()=>{
   showAuthGate();
 },2000);
 
-auth.onAuthStateChanged(async(user)=>{
+function registerAuthObserver(){
+  auth.onAuthStateChanged(async(user)=>{
   authStateResolved=true;
   clearTimeout(authWatchdog);
   if(user){
@@ -1289,7 +1362,17 @@ auth.onAuthStateChanged(async(user)=>{
     hideLoading();
     showAuthGate();
   }
-});
+  });
+}
+
+// The module script above may finish before or after this point — handle
+// both: if window.auth already exists, the 'firebase-ready' event already
+// fired and we missed it, so register immediately; otherwise wait for it.
+if(window.auth){
+  registerAuthObserver();
+} else {
+  window.addEventListener('firebase-ready', registerAuthObserver, {once:true});
+}
 
 // ── DATA ──────────────────────────────────────────────────────────────────────
 const INITIAL_DATA = {

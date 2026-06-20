@@ -2,7 +2,10 @@
 // This file holds the real project credentials and should NOT be committed.
 // It is listed in .gitignore. See config.example.js for the template that
 // teammates / future you should copy this from when setting up a new clone.
-const firebaseConfig = {
+//
+// Exported as an ES module so it can be `import`ed by the modular Firebase
+// SDK init script in index.html.
+export const firebaseConfig = {
   apiKey: "AIzaSyD3acOjOQlm4znaJWjiKw1UWoorsfoSjOw",
   authDomain: "product-launch-cd58a.firebaseapp.com",
   projectId: "product-launch-cd58a",
