@@ -8,6 +8,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<!-- Preload the Firebase SDK + config so the browser starts downloading them
+     immediately (in parallel) instead of waiting until the parser reaches
+     these script elements near the bottom of the page. This is what
+     actually cuts the "Connecting…" delay — the scripts still execute in
+     the same order, just further along in the download queue already. -->
+<link rel="preload" as="script" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js" crossorigin>
+<link rel="preload" as="script" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js" crossorigin>
+<link rel="preload" as="script" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js" crossorigin>
+<link rel="preload" as="script" href="config.js">
 <style>
 /* ── THEME VARIABLES ── */
 :root {
@@ -995,20 +1004,17 @@ kbd {
 </div>
 
 <!-- Loaded here (end of body) instead of <head> so the page renders immediately
-     without waiting on these network round-trips first. -->
+     without waiting on these network round-trips first. The preload hints
+     above (in <head>) let the browser fetch all four of these in parallel
+     instead of one-by-one, while execution still happens in document order. -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<!-- config.js defines firebaseConfig and is gitignored (not committed). Copy
+     config.example.js to config.js and fill in your project's values. -->
+<script src="config.js"></script>
 <script>
-// ── FIREBASE CONFIG ───────────────────────────────────────────────────────────
-const firebaseConfig = {
-  apiKey: "AIzaSyD3acOjOQlm4znaJWjiKw1UWoorsfoSjOw",
-  authDomain: "product-launch-cd58a.firebaseapp.com",
-  projectId: "product-launch-cd58a",
-  storageBucket: "product-launch-cd58a.firebasestorage.app",
-  messagingSenderId: "323149984155",
-  appId: "1:323149984155:web:f38464a174b16d77ee713e"
-};
+// ── FIREBASE INIT ──────────────────────────────────────────────────────────────
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db   = firebase.firestore();
@@ -1169,7 +1175,7 @@ async function loadFromFirestore(uid){
     // No cache available yet (e.g. first-ever login on this device) — fall through to network.
   }
   try{
-    const snap=await withTimeout(ref.get(),6000);
+    const snap=await withTimeout(ref.get(),5000);
     return snap.exists ? snap.data() : null;
   }catch(e){
     console.error('Load error:',e);
@@ -1220,11 +1226,31 @@ function save(){
 let deletedModelsSet=new Set();
 
 // ── AUTH STATE OBSERVER ───────────────────────────────────────────────────────
+// Firebase Auth's first callback can take a noticeable moment (it has to
+// check IndexedDB for a saved session before it knows whether anyone's
+// logged in). Rather than let "Connecting…" sit there indefinitely on a
+// slow connection, give it a short window — if the real callback hasn't
+// fired by then, show the sign-in form anyway. If the real callback does
+// land after that, it still runs normally and corrects the view.
+let authStateResolved=false;
+const authWatchdog=setTimeout(()=>{
+  if(authStateResolved) return;
+  hideLoading();
+  showAuthGate();
+},2000);
+
 auth.onAuthStateChanged(async(user)=>{
+  authStateResolved=true;
+  clearTimeout(authWatchdog);
   if(user){
-    // Show loading while fetching data
-    showLoading();
+    // Don't show the full-screen "Connecting…" overlay again here — the
+    // person just came from the login form and is expecting the dashboard,
+    // not a second loading screen. Reveal the dashboard shell right away;
+    // loadFromFirestore() below is cache-first and usually resolves fast,
+    // and renderAll() will just re-render in place once data lands.
+    hideLoading();
     hideAuthGate();
+    document.querySelector('.wrap').classList.add('unlocked');
 
     // Update header user info
     const avatar=document.getElementById('userAvatar');
@@ -1236,17 +1262,15 @@ auth.onAuthStateChanged(async(user)=>{
     badge.style.display='flex';
     logoutBtn.style.display='';
 
-    // Load user's data from Firestore
+    // Load user's data from Firestore (cache-first; see loadFromFirestore)
     const saved=await loadFromFirestore(user.uid);
     deletedModelsSet=new Set(saved?.deletedModels||[]);
     ({tasks: state, deadlines}=loadState(saved));
-refreshModelsList();
+    refreshModelsList();
     if (!activeTab && models.length > 0) activeTab = models[0];
-    document.querySelector('.wrap').classList.add('unlocked');
     document.getElementById('lastUpdated').textContent=formatLastUpdated(saved&&saved.updatedAt)||'';
     listenForLastUpdated(user.uid);
     renderAll();
-    hideLoading();
     if(typeof refreshStickyBarOrigin==='function') setTimeout(refreshStickyBarOrigin,100);
   } else {
     // Signed out
@@ -2222,6 +2246,5 @@ captureStickyBarOrigin();
 updateStickyBarPin();
 
 </script>
-
 </body>
 </html>
