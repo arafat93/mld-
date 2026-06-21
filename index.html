@@ -671,6 +671,13 @@ h1 span { color: var(--accent1); font-weight: 400; }
 }
 .toast.show { transform: translateY(0); opacity: 1; }
 .toast-icon { font-size: 18px; }
+.toast-undo-btn {
+  margin-left: 8px; padding: 6px 12px; border-radius: 10px;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--accent1); font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.toast-undo-btn:hover { background: var(--surface3); border-color: var(--border-hover); }
 
 /* ── FOOTER ── */
 .footer-bar {
@@ -787,11 +794,12 @@ kbd {
     </div>
     <button class="logout-btn" id="logoutBtn" style="display:none;">Sign Out</button>
     <button class="hdr-btn accent" id="loginOpenBtn">✦ <span>Login</span></button>
+    <button class="hdr-btn" id="undoBtn" title="Undo last change" style="display:none;">↺ <span>Undo</span></button>
     <button class="hdr-btn" id="themeToggleBtn" title="Toggle dark/light mode">✧ <span>Theme</span></button>
     <button class="hdr-btn accent" id="exportBtn" title="Export data">↓ <span>Export</span></button>
-    <label class="hdr-btn accent" title="Import JSON" style="cursor:pointer;">
+    <label class="hdr-btn accent" title="Import JSON or Excel (.xlsx)" style="cursor:pointer;">
       ↑ <span>Import</span>
-      <input type="file" id="importFile" accept=".json" style="display:none;">
+      <input type="file" id="importFile" accept=".json,.xlsx,.xls" style="display:none;">
     </label>
   </div>
 </header>
@@ -844,7 +852,7 @@ kbd {
     <div class="tab-bar" id="tabBar"></div>
   </div>
   <div style="margin-left:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-    <button class="hdr-btn" id="setDeadlineBtn" title="Set deadline for current model">🗓 Set Deadline</button>
+    <button class="hdr-btn" id="setDeadlineBtn" title="Set deadline for current model"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Set Deadline</button>
     <button class="hdr-btn" id="exportExcelBtn" title="Export current model's tasks to Excel">📤 <span>Export Excel</span></button>
     <label class="hdr-btn" id="importExcelLabel" title="Import tasks from Excel into the current model" style="cursor:pointer;">
       📥 <span>Import Excel</span>
@@ -941,6 +949,7 @@ kbd {
 <div class="toast" id="toast">
   <span class="toast-icon" id="toastIcon"></span>
   <span id="toastMsg"></span>
+  <button class="toast-undo-btn" id="toastUndoBtn" style="display:none;">Undo</button>
 </div>
 
 <!-- NOTES MODAL -->
@@ -1041,6 +1050,7 @@ function showLoading(){ document.getElementById('authLoading').classList.remove(
 function hideLoading(){ document.getElementById('authLoading').classList.add('hidden'); }
 
 document.getElementById('loginOpenBtn').onclick=showAuthGate;
+document.getElementById('undoBtn').onclick=()=>undo();
 document.getElementById('authCloseBtn').onclick=hideAuthGate;
 document.getElementById('authGate').addEventListener('click',e=>{
   if(e.target.id==='authGate') hideAuthGate();
@@ -1181,7 +1191,7 @@ async function loadFromFirestore(uid){
       // (the next save()/renderAll() cycle will pick up fresh data).
       withTimeout(ref.get({source:'server'}),8000)
         .then(fresh=>{
-          if(fresh.exists) toast('🔄','Synced latest data');
+          if(fresh.exists) toast('🔄','Synced latest data',false);
         })
         .catch(e=>console.warn('Background sync failed:',e));
       return cached.data();
@@ -1194,7 +1204,7 @@ async function loadFromFirestore(uid){
     return snap.exists ? snap.data() : null;
   }catch(e){
     console.error('Load error:',e);
-    toast('⚠','Could not reach the server — showing local defaults');
+    toast('⚠','Could not reach the server — showing local defaults',false);
     return null;
   }
 }
@@ -1223,6 +1233,7 @@ function listenForLastUpdated(uid){
 
 function save(){
   if(!auth.currentUser) return;
+  pushUndoSnapshot();
   clearTimeout(saveTimer);
   saveTimer=setTimeout(async()=>{
     try{
@@ -1234,11 +1245,75 @@ function save(){
       });
       // lastUpdated label is refreshed automatically by the live Firestore
       // listener (listenForLastUpdated) once the server timestamp lands.
-    }catch(e){ console.error('Save error:',e); toast('⚠','Failed to save data');}
+    }catch(e){ console.error('Save error:',e); toast('⚠','Failed to save data',false);}
   },800); // debounce — max one write per 800ms
 }
 
+// ── UNDO ──────────────────────────────────────────────────────────────────────
+// Every save() call snapshots the state as it was *before* the change that
+// triggered it, so each user action becomes one undo step (independent of
+// the 800ms write debounce above). Capped to a small recent history.
+const UNDO_LIMIT=20;
+let undoStack=[];
+let lastSnapshot=null;
+function snapshotNow(){
+  return {
+    state:JSON.parse(JSON.stringify(state)),
+    deadlines:JSON.parse(JSON.stringify(deadlines)),
+    deletedModels:[...deletedModelsSet],
+    activeTab
+  };
+}
+function pushUndoSnapshot(){
+  if(lastSnapshot){
+    undoStack.push(lastSnapshot);
+    if(undoStack.length>UNDO_LIMIT) undoStack.shift();
+  }
+  lastSnapshot=snapshotNow();
+  updateUndoBtn();
+}
+function resetUndo(){
+  undoStack=[];
+  lastSnapshot=snapshotNow();
+  updateUndoBtn();
+}
+function updateUndoBtn(){
+  const btn=document.getElementById('undoBtn');
+  if(btn) btn.style.display=undoStack.length?'':'none';
+}
+function undo(){
+  if(!undoStack.length) return;
+  const prev=undoStack.pop();
+  state=prev.state;
+  deadlines=prev.deadlines;
+  deletedModelsSet=new Set(prev.deletedModels);
+  refreshModelsList();
+  activeTab=models.includes(prev.activeTab)?prev.activeTab:(models[0]||'');
+  selectedTasks.clear();editingIdx=null;
+  // This counts as a change too, but shouldn't itself be undoable back to
+  // a state we just left — re-baseline without pushing a new undo step.
+  lastSnapshot=snapshotNow();
+  updateUndoBtn();
+  if(auth.currentUser){
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(async()=>{
+      try{
+        await getUserDoc(auth.currentUser.uid).set({
+          tasks:state,deadlines,deletedModels:[...deletedModelsSet],
+          updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+        });
+      }catch(e){ console.error('Save error:',e); toast('⚠','Failed to save data',false);}
+    },800);
+  }
+  renderAll();
+  toast('↺','Undone',false);
+}
+
 let deletedModelsSet=new Set();
+
+// Shared inline calendar icon (replaces the 🗓 emoji, which renders as a flat
+// info-glyph on some platforms/fonts). Inherits color via currentColor.
+const CAL_ICON='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:-1px;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
 
 // ── AUTH STATE OBSERVER ───────────────────────────────────────────────────────
 let previewMode = false;
@@ -1255,6 +1330,7 @@ function enterPreviewMode(){
   if (!activeTab && models.length > 0) activeTab = models[0];
   document.querySelector('.wrap').classList.add('unlocked');
   document.getElementById('lastUpdated').textContent = '';
+  resetUndo();
   renderAll();
   hideLoading();
   if (typeof refreshStickyBarOrigin === 'function') setTimeout(refreshStickyBarOrigin, 100);
@@ -1288,6 +1364,7 @@ refreshModelsList();
     document.querySelector('.wrap').classList.add('unlocked');
     document.getElementById('lastUpdated').textContent=formatLastUpdated(saved&&saved.updatedAt)||'';
     listenForLastUpdated(user.uid);
+    resetUndo();
     renderAll();
     hideLoading();
     if(typeof refreshStickyBarOrigin==='function') setTimeout(refreshStickyBarOrigin,100);
@@ -1527,8 +1604,8 @@ function renderModelCards(){
     }
     const bars=groups.map(p=>`<div class="chart-bar ${p>0?'filled':''}" style="height:${Math.max(4,p*0.32)}px" title="${p}%"></div>`).join('');
     const dl=deadlineLabel(m);
-    const dlHtml=dl?`<div class="model-deadline ${dl.cls}">🗓 ${dl.text}</div>`
-      :`<div class="model-deadline">🗓 No deadline set</div>`;
+    const dlHtml=dl?`<div class="model-deadline ${dl.cls}">${CAL_ICON} ${dl.text}</div>`
+      :`<div class="model-deadline">${CAL_ICON} No deadline set</div>`;
     card.innerHTML=`
       <div class="model-header">
         <div>
@@ -1880,12 +1957,12 @@ document.getElementById('deadlineSaveBtn').onclick=()=>{
   if(val)deadlines[model]=val; else delete deadlines[model];
   save();renderModelCards();
   document.getElementById('deadlineModal').classList.remove('open');
-  toast('🗓',`Deadline ${val?'set':'cleared'}`);
+  toast(CAL_ICON,`Deadline ${val?'set':'cleared'}`);
 };
 document.getElementById('deadlineClearBtn').onclick=()=>{
   delete deadlines[activeTab];save();renderModelCards();
   document.getElementById('deadlineModal').classList.remove('open');
-  toast('🗓','Deadline cleared');
+  toast(CAL_ICON,'Deadline cleared');
 };
 document.getElementById('deadlineCancelBtn').onclick=()=>document.getElementById('deadlineModal').classList.remove('open');
 document.getElementById('deadlineModal').onclick=e=>{if(e.target===document.getElementById('deadlineModal'))document.getElementById('deadlineModal').classList.remove('open');};
@@ -1905,14 +1982,14 @@ document.getElementById('taskDeadlineSaveBtn').onclick=()=>{
   state[model][idx].taskDeadline=val;
   save();renderAll();
   document.getElementById('taskDeadlineModal').classList.remove('open');
-  toast('🗓',`Task deadline ${val?'set':'cleared'}`);
+  toast(CAL_ICON,`Task deadline ${val?'set':'cleared'}`);
 };
 document.getElementById('taskDeadlineClearBtn').onclick=()=>{
   const{model,idx}=taskDeadlineCtx;
   state[model][idx].taskDeadline='';
   save();renderAll();
   document.getElementById('taskDeadlineModal').classList.remove('open');
-  toast('🗓','Task deadline cleared');
+  toast(CAL_ICON,'Task deadline cleared');
 };
 document.getElementById('taskDeadlineCancelBtn').onclick=()=>document.getElementById('taskDeadlineModal').classList.remove('open');
 document.getElementById('taskDeadlineModal').onclick=e=>{if(e.target===document.getElementById('taskDeadlineModal'))document.getElementById('taskDeadlineModal').classList.remove('open');};
@@ -1980,7 +2057,7 @@ document.getElementById('exportModal').onclick=e=>{if(e.target===document.getEle
 
 document.getElementById('exportJSON').onclick=()=>{
   dlFile(JSON.stringify({tasks:state,deadlines},null,2),'model_launch_data.json','application/json');
-  document.getElementById('exportModal').classList.remove('open');toast('📦','JSON exported');
+  document.getElementById('exportModal').classList.remove('open');toast('📦','JSON exported',false);
 };
 document.getElementById('exportCSV').onclick=()=>{
   const rows=['Model,SN,Task,Priority,Status,Notes'];
@@ -1991,7 +2068,7 @@ document.getElementById('exportCSV').onclick=()=>{
     });
   });
   dlFile(rows.join('\n'),'model_launch_data.csv','text/csv');
-  document.getElementById('exportModal').classList.remove('open');toast('📊','CSV exported');
+  document.getElementById('exportModal').classList.remove('open');toast('📊','CSV exported',false);
 };
 document.getElementById('exportTXT').onclick=()=>{
   let out='MODEL LAUNCH DASHBOARD — REPORT\n';
@@ -2011,11 +2088,61 @@ document.getElementById('exportTXT').onclick=()=>{
     out+='\n';
   });
   dlFile(out,'model_launch_report.txt','text/plain');
-  document.getElementById('exportModal').classList.remove('open');toast('📄','Text report exported');
+  document.getElementById('exportModal').classList.remove('open');toast('📄','Text report exported',false);
 };
 
-document.getElementById('importFile').onchange=e=>{
+document.getElementById('importFile').onchange=async e=>{
   const file=e.target.files[0];if(!file)return;
+  const isExcel=/\.(xlsx|xls)$/i.test(file.name);
+
+  if(isExcel){
+    try{ await loadXLSX(); }catch(err){ alert('Could not load the Excel library. Check your connection and try again.'); e.target.value=''; return; }
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      try{
+        const wb=XLSX.read(ev.target.result,{type:'array',cellDates:true});
+        const sheetNames=wb.SheetNames.filter(n=>{
+          const ws=wb.Sheets[n];
+          const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+          return rows.length>0;
+        });
+        if(!sheetNames.length){alert('The workbook appears to be empty.');e.target.value='';return;}
+        const newState={};
+        const newDeadlines={};
+        sheetNames.forEach(sheetName=>{
+          const ws=wb.Sheets[sheetName];
+          const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+          let startIdx=0;
+          const firstRow=(rows[0]||[]).map(c=>String(c).trim().toLowerCase());
+          if(firstRow[0]&&(firstRow[0].includes('task')||firstRow[0].includes('name'))) startIdx=1;
+          const tasks=[];
+          for(let i=startIdx;i<rows.length;i++){
+            const row=rows[i];
+            const name=String(row[0]||'').trim();
+            if(!name) continue;
+            tasks.push({
+              sn:tasks.length+1,
+              name:name.toUpperCase(),
+              done:normDone(row[2]),
+              priority:normPriority(row[1]),
+              notes:String(row[3]||'').trim(),
+              taskDeadline:normDate(row[4])
+            });
+          }
+          if(tasks.length) newState[sheetName]=tasks;
+        });
+        if(!Object.keys(newState).length){alert('No tasks found in the workbook.');e.target.value='';return;}
+        state=newState;deadlines=newDeadlines;deletedModelsSet=new Set();
+        refreshModelsList();activeTab=models[0];
+        save();renderAll();
+        toast('↑',`Imported ${models.length} model${models.length===1?'':'s'} from Excel`);
+      }catch(err){alert('Could not parse Excel file. Make sure it\'s a valid .xlsx or .xls workbook.');}
+    };
+    reader.readAsArrayBuffer(file);
+    e.target.value='';
+    return;
+  }
+
   const reader=new FileReader();
   reader.onload=ev=>{
     try{
@@ -2064,7 +2191,7 @@ document.getElementById('exportExcelBtn').onclick=async()=>{
   XLSX.utils.book_append_sheet(wb,ws,activeTab.slice(0,31));
   const fname=`${activeTab.replace(/[^a-z0-9]+/gi,'_')}_tasks.xlsx`;
   XLSX.writeFile(wb,fname);
-  toast('📤',`Exported ${tasks.length} tasks to Excel`);
+  toast('📤',`Exported ${tasks.length} tasks to Excel`,false);
 };
 
 // ── EXCEL IMPORT (append tasks to current model) ─────────────────────────────
@@ -2180,6 +2307,12 @@ document.getElementById('deleteModelBtn').onclick=()=>{
 
 // ── KEYBOARD SHORTCUTS ────────────────────────────────────────────────────────
 document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'&&!e.shiftKey){
+    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+    e.preventDefault();
+    undo();
+    return;
+  }
   if(e.key==='Escape'){
     document.getElementById('searchBox').value='';
     searchQuery='';
@@ -2205,12 +2338,15 @@ document.addEventListener('keydown',e=>{
 });
 
 // ── TOAST ─────────────────────────────────────────────────────────────────────
-function toast(icon,msg){
+function toast(icon,msg,showUndo){
   const t=document.getElementById('toast');
-  document.getElementById('toastIcon').textContent=icon;
+  document.getElementById('toastIcon').innerHTML=icon;
   document.getElementById('toastMsg').textContent=msg;
+  const undoBtn=document.getElementById('toastUndoBtn');
+  undoBtn.style.display=(showUndo!==false && undoStack.length)?'':'none';
+  undoBtn.onclick=()=>{ t.classList.remove('show'); undo(); };
   t.classList.add('show');clearTimeout(t._t);
-  t._t=setTimeout(()=>t.classList.remove('show'),2800);
+  t._t=setTimeout(()=>t.classList.remove('show'),showUndo!==false?4500:2800);
 }
 
 // ── RENDER ALL ────────────────────────────────────────────────────────────────
