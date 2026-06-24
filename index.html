@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Model Launch Dashboard</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#09090b">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Launch Dash">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -293,6 +300,26 @@ footer {
 .model-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
 .model-name { font-size: 18px; font-weight: 600; color: var(--text); letter-spacing: -0.3px; }
 .model-deadline { font-size: 11px; color: var(--text-muted); margin-top: 6px; display: flex; align-items: center; gap: 6px; font-weight: 400; }
+.model-deadline-btn {
+  background: none; border: 1px solid transparent; border-radius: 8px;
+  padding: 3px 8px 3px 0; cursor: pointer; font-family: inherit;
+  font-size: 11px; font-weight: 400; color: var(--text-muted);
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+  margin-top: 6px;
+}
+.model-deadline-btn:hover {
+  background: rgba(255,255,255,0.06); border-color: var(--border);
+  color: var(--text-primary); padding-left: 8px;
+}
+.model-deadline-btn .model-deadline-edit-hint {
+  font-size: 11px; opacity: 0; transition: opacity 0.18s; margin-left: 2px;
+}
+.model-deadline-btn:hover .model-deadline-edit-hint { opacity: 0.6; }
+.model-deadline-btn.model-deadline-unset { font-style: italic; }
+.model-deadline-btn.overdue { color: var(--red); }
+.model-deadline-btn.warning { color: var(--yellow); }
+.model-deadline-btn.ok { color: var(--green); }
 .deadline-overdue { color: var(--red) !important; font-weight: 500; }
 .deadline-soon { color: var(--yellow) !important; font-weight: 500; }
 .deadline-ok { color: var(--green) !important; }
@@ -320,6 +347,24 @@ footer {
 .model-card.theme-3 .stat-num.done-val { color: var(--green); }
 .stat-num.pend-val { color: var(--red); }
 .stat-num.pct-val { color: var(--text); }
+
+/* ── MODEL CARD DRAG & DROP ── */
+.model-card { cursor: pointer; }
+.model-card:active { cursor: pointer; }
+.model-card.dragging {
+  opacity: 0.35;
+  cursor: pointer;
+  transform: scale(0.97);
+  box-shadow: none !important;
+  border-style: dashed;
+  border-color: var(--accent1);
+}
+.model-card.drag-over {
+  border-color: var(--accent1);
+  box-shadow: 0 0 0 2px var(--accent1), var(--shadow-md) !important;
+  transform: translateY(-6px) scale(1.02);
+  background: var(--surface2);
+}
 
 /* ── ARCHIVE CARD ── */
 .model-card.archived { cursor: default; opacity: 0.85; }
@@ -363,6 +408,16 @@ footer {
 }
 .tab-btn.active { background: var(--accent1-dim); color: var(--accent1); box-shadow: 0 2px 10px rgba(0,0,0,0.15); border: 1px solid var(--accent1); }
 .tab-btn:hover:not(.active) { color: var(--text); background: rgba(255, 255, 255, 0.02); }
+.tab-btn.dragging {
+  opacity: 0.35;
+  cursor: pointer;
+  border-style: dashed;
+  border-color: var(--accent1);
+}
+.tab-btn.drag-over {
+  box-shadow: 0 0 0 2px var(--accent1) inset;
+  background: var(--surface2);
+}
 
 /* ── FILTER BAR ── */
 .filter-bar { display: flex; gap: 10px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
@@ -402,7 +457,7 @@ footer {
 }
 .table-header {
   display: grid;
-  grid-template-columns: 36px 56px 1fr 110px 130px 96px 160px;
+  grid-template-columns: 36px 56px 1fr 110px 130px 90px 96px 160px;
   padding: 16px 24px;
   background: var(--surface2); border-bottom: 1px solid var(--border);
   font-size: 11px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;
@@ -431,7 +486,7 @@ footer {
 .th-sort.active.desc .sort-icon .dn { color: var(--accent1); }
 .task-row {
   display: grid;
-  grid-template-columns: 36px 56px 1fr 110px 130px 96px 160px;
+  grid-template-columns: 36px 56px 1fr 110px 130px 90px 96px 160px;
   padding: 0 24px; border-bottom: 1px solid var(--border);
   align-items: center; min-height: 64px; transition: background 0.2s;
 }
@@ -583,6 +638,36 @@ footer {
 .hdr-deadline-clear:hover { background: rgba(255,255,255,0.2); }
 
 
+/* ── TASK DEADLINE DAY-COUNT PILL ── */
+.task-dl-pill {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 3px 9px; border-radius: 100px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.3px;
+  white-space: nowrap; flex-shrink: 0;
+  border: 1px solid transparent; min-width: 40px;
+}
+.task-dl-pill.overdue {
+  background: rgba(244, 63, 94, 0.12);
+  color: var(--red);
+  border-color: rgba(244, 63, 94, 0.25);
+}
+.task-dl-pill.due-today {
+  background: rgba(245, 158, 11, 0.12);
+  color: var(--yellow);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+.task-dl-pill.due-soon {
+  background: rgba(96, 165, 250, 0.1);
+  color: var(--accent2);
+  border-color: rgba(96, 165, 250, 0.2);
+}
+.task-dl-pill.due-done {
+  background: rgba(16, 185, 129, 0.08);
+  color: var(--green);
+  border-color: rgba(16, 185, 129, 0.18);
+  font-weight: 500;
+}
+
 /* status chip */
 .status-chip {
   display: inline-flex; align-items: center; gap: 8px;
@@ -699,6 +784,7 @@ footer {
   padding: 14px 20px; margin-bottom: 20px;
   background: var(--surface2); border: 1px solid var(--border);
   border-radius: 14px; flex-wrap: wrap; box-shadow: var(--shadow-sm);
+  position: relative; z-index: 10;
 }
 .bulk-bar.visible { display: flex; animation: fadeUp 0.3s ease both; }
 .bulk-count { font-size: 13px; font-weight: 600; color: var(--accent1); margin-right: 8px; }
@@ -708,6 +794,69 @@ footer {
 }
 .bulk-btn:hover { color: var(--text); border-color: var(--border-hover); background: var(--surface3); }
 .bulk-btn.danger:hover { color: var(--bg); border-color: var(--red); background: var(--red); }
+.bulk-btn.bulk-btn-deadline { color: var(--accent2); border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.07); }
+.bulk-btn.bulk-btn-deadline:hover { background: rgba(96,165,250,0.14); border-color: var(--accent2); color: var(--accent2); }
+.bulk-btn.bulk-btn-priority { color: var(--yellow); border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.07); }
+.bulk-btn.bulk-btn-priority:hover { background: rgba(245,158,11,0.14); border-color: var(--yellow); color: var(--yellow); }
+.bulk-btn.bulk-btn-move-model { color: var(--accent1); border-color: rgba(212,175,55,0.3); background: rgba(212,175,55,0.07); }
+.bulk-btn.bulk-btn-move-model:hover { background: rgba(212,175,55,0.14); border-color: var(--accent1); color: var(--accent1); }
+.bulk-btn.bulk-btn-copy-model { color: var(--accent2); border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.07); }
+.bulk-btn.bulk-btn-copy-model:hover { background: rgba(96,165,250,0.14); border-color: var(--accent2); color: var(--accent2); }
+
+/* ── BULK MOVE DROPDOWN (consolidates Move to Top/Bottom/Model) ── */
+.bulk-move-dropdown { position: relative; }
+.bulk-move-caret { font-size: 9px; opacity: 0.6; transition: transform 0.2s ease; margin-left: 2px; display: inline-block; }
+.bulk-move-dropdown:hover .bulk-move-caret,
+.bulk-move-dropdown.menu-open .bulk-move-caret { transform: rotate(180deg); }
+.bulk-move-menu {
+  position: absolute; top: calc(100% + 10px); left: 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; box-shadow: 0 12px 32px rgba(0,0,0,0.35), var(--shadow-md);
+  padding: 8px; min-width: 190px; z-index: 100;
+  opacity: 0; visibility: hidden; transform: translateY(-6px) scale(0.98);
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+}
+/* Invisible bridge over the gap so a diagonal cursor move doesn't flicker-close the menu. */
+.bulk-move-menu::before {
+  content: ''; position: absolute; top: -10px; left: 0; right: 0; height: 10px;
+}
+.bulk-move-dropdown:hover .bulk-move-menu,
+.bulk-move-dropdown.menu-open .bulk-move-menu { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+.bulk-move-menu .menu-item { font-size: 13px; padding: 10px 12px; }
+.bulk-move-menu .menu-item span:first-child { width: 16px; flex-shrink: 0; text-align: center; opacity: 0.85; }
+
+/* Bulk priority picker buttons */
+.bulk-prio-btn {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 16px 12px; border-radius: 12px; border: 2px solid transparent;
+  font-family: inherit; font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
+  cursor: pointer; transition: all 0.2s ease; text-transform: uppercase;
+}
+.bulk-prio-btn.prio-high { background: rgba(244,63,94,0.1); color: var(--red); border-color: rgba(244,63,94,0.25); }
+.bulk-prio-btn.prio-high:hover { background: rgba(244,63,94,0.2); border-color: var(--red); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(244,63,94,0.2); }
+.bulk-prio-btn.prio-med { background: rgba(245,158,11,0.1); color: var(--yellow); border-color: rgba(245,158,11,0.25); }
+.bulk-prio-btn.prio-med:hover { background: rgba(245,158,11,0.2); border-color: var(--yellow); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(245,158,11,0.2); }
+.bulk-prio-btn.prio-low { background: rgba(16,185,129,0.1); color: var(--green); border-color: rgba(16,185,129,0.25); }
+.bulk-prio-btn.prio-low:hover { background: rgba(16,185,129,0.2); border-color: var(--green); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(16,185,129,0.2); }
+.bulk-prio-icon { font-size: 12px; }
+.move-model-list {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-top: 4px; max-height: 320px; overflow-y: auto;
+}
+.move-model-option {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; padding: 14px 16px; border-radius: 12px;
+  border: 1px solid var(--border); background: var(--surface2);
+  color: var(--text); font-family: inherit; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s ease; text-align: left;
+}
+.move-model-option:hover {
+  border-color: var(--accent1); background: var(--accent1-dim); color: var(--accent1);
+  transform: translateY(-1px); box-shadow: 0 6px 18px rgba(212,175,55,0.15);
+}
+.move-model-option .move-model-arrow { opacity: 0; transition: opacity 0.2s ease; font-size: 16px; }
+.move-model-option:hover .move-model-arrow { opacity: 1; }
+.move-model-empty { color: var(--text-muted); font-size: 13px; text-align: center; padding: 24px 0; }
 .task-checkbox {
   -webkit-appearance: none; -moz-appearance: none; appearance: none;
   width: 19px; height: 19px; min-width: 19px; cursor: pointer;
@@ -1050,13 +1199,13 @@ kbd {
 
 /* ── RESPONSIVE ── */
 @media(max-width: 1200px) {
-  .table-header, .task-row { grid-template-columns: 30px 48px 1fr 100px 120px 80px 150px; }
+  .table-header, .task-row { grid-template-columns: 30px 48px 1fr 100px 120px 80px 80px 150px; }
 }
 @media(max-width: 900px) {
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
   .models-grid { grid-template-columns: 1fr; }
   .table-header { grid-template-columns: 26px 40px 1fr 100px 110px; }
-  .table-header > *:nth-child(6), .table-header > *:nth-child(7) { display: none; }
+  .table-header > *:nth-child(6), .table-header > *:nth-child(7), .table-header > *:nth-child(8) { display: none; }
   .task-row {
     grid-template-columns: 26px 40px 1fr 100px 110px;
     grid-template-rows: auto auto;
@@ -1070,6 +1219,7 @@ kbd {
   .task-row > *:nth-child(3) { grid-area: name; }
   .task-row > *:nth-child(4) { grid-area: prio; }
   .task-row > *:nth-child(5) { grid-area: status; }
+  .task-row > *:nth-child(6) { display: none; } /* Due column */
   .task-row > .task-icons-cell { grid-area: icons; justify-content: flex-start; }
   .task-row > .row-actions { grid-area: actions; justify-content: flex-end; }
   .compare-header, .compare-row { grid-template-columns: 40px 1fr 140px; }
@@ -1081,6 +1231,60 @@ kbd {
   .search-box { width: 140px; }
   .hdr-btn span { display: none; }
   .wrap { padding: 0 16px 40px; }
+}
+
+/* ── PHONE BREAKPOINT (≤480px): covers virtually all phones in portrait.
+   Restores button labels (hidden by the 600px rule above) but lets them
+   wrap onto multiple lines instead of overflowing, fixes the task-table
+   horizontal overflow by dropping the serial-number column and moving
+   priority/status into a second row, and repositions the toast so it's
+   full-width instead of clipped. ── */
+@media(max-width: 480px) {
+  .wrap { padding: 0 12px 32px; }
+
+  /* Header: restore labels but allow wrapping across rows instead of
+     a single overflowing line. */
+  .header-right { width: 100%; flex-basis: 100%; }
+  .hdr-btn span { display: inline; }
+  .hdr-btn { padding: 7px 12px; font-size: 11.5px; }
+  .search-box { width: 100%; }
+
+  /* Tab-bar action buttons (Set Deadline / Export / Import / Archive /
+     Delete) — same .hdr-btn class, restore labels and allow wrap. */
+  .hdr-deadline-btn span,
+  #exportModelToggleBtn span,
+  #importExcelLabel span { display: inline; }
+
+  /* Task table: drop the serial-number column entirely (least essential
+     on a phone) and shrink padding so the remaining columns fit. */
+  .table-header, .task-row { padding: 0 12px; }
+  .table-header { grid-template-columns: 32px 1fr 72px; }
+  .table-header > *:nth-child(1) { display: none; } /* # column header */
+  .table-header > *:nth-child(5) { display: none; } /* status column header */
+  .task-row {
+    grid-template-columns: 32px 1fr 72px;
+    grid-template-areas:
+      "chk name prio"
+      "spacer icons actions"
+      "spacer status status";
+    row-gap: 6px;
+  }
+  .task-row > *:nth-child(1) { display: none; } /* serial number cell */
+  .task-row > *:nth-child(2) { grid-area: chk; }
+  .task-row > *:nth-child(3) { grid-area: name; }
+  .task-row > *:nth-child(4) { grid-area: prio; justify-self: end; }
+  .task-row > *:nth-child(5) { grid-area: status; justify-self: start; margin-top: 2px; }
+  .task-row > .task-icons-cell { grid-area: icons; justify-content: flex-start; }
+  .task-row > .row-actions { grid-area: actions; justify-content: flex-end; }
+  .priority-badge { width: auto; padding: 6px 10px; }
+
+  /* Toast: full-width banner instead of a fixed min-width box that can
+     clip or sit awkwardly close to the viewport edge. */
+  .toast {
+    left: 12px; right: 12px; bottom: 16px;
+    min-width: 0; width: auto;
+    padding: 14px 16px;
+  }
 }
 
 /* ── COPY PROTECTION: disable text selection/drag ── */
@@ -1143,7 +1347,7 @@ img { -webkit-user-drag: none; }
 <script>
 // ── COPY PROTECTION (deters casual copying — not a real security measure) ──
 document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('dragstart', e => e.preventDefault());
+document.addEventListener('dragstart', e => { if (!e.target.closest('[draggable="true"]')) e.preventDefault(); });
 document.addEventListener('keydown', e => {
   const k = e.key.toUpperCase();
   // View source
@@ -1226,6 +1430,7 @@ document.addEventListener('keydown', e => {
       <span class="user-badge-caret">▾</span>
       <div class="user-menu" id="userMenu">
         <button class="menu-item" id="archiveViewBtn" title="View archived models"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><line x1="10" y1="13" x2="14" y2="13"/></svg><span>Archived</span><span class="archive-count-badge" id="archiveCountBadge" style="display:none;">0</span></button>
+        <button class="menu-item" id="userManualBtn" title="Download the user manual (PDF)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg><span>User Manual</span></button>
         <button class="menu-item" id="freshStartBtn" title="Clear everything and start fresh" style="color:var(--red);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg><span>Fresh Start</span></button>
         <button class="menu-item" id="undoBtn" title="Undo last change" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"/></svg><span>Undo</span></button>
         <div class="menu-divider"></div>
@@ -1238,7 +1443,7 @@ document.addEventListener('keydown', e => {
       <button class="hdr-btn accent" id="exportAllToggleBtn" title="Export all models">↓ <span>Export</span> <span class="hdr-btn-caret">▾</span></button>
       <div class="export-menu" id="exportAllMenu">
         <button class="menu-item" id="exportAllExcelBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#21a366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="10" y1="11" x2="10" y2="19"/></svg><span>Export as Excel</span></button>
-        <button class="menu-item" id="exportAllPdfBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="#e5484d" stroke-width="2"/><polyline points="14 2 14 8 20 8" stroke="#e5484d" stroke-width="2"/><rect x="6" y="13" width="12" height="6" rx="1" fill="#e5484d" stroke="none"/><text x="12" y="17.6" font-size="5.2" font-family="Arial, sans-serif" font-weight="700" text-anchor="middle" fill="#fff">PDF</text></svg><span>Export as PDF</span></button>
+        <button class="menu-item" id="exportAllPdfBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="#e5484d" stroke-width="2"/><polyline points="14 2 14 8 20 8" stroke="#e5484d" stroke-width="2"/><line x1="7.5" y1="13" x2="16.5" y2="13" stroke="#e5484d" stroke-width="1.6"/><line x1="7.5" y1="16" x2="16.5" y2="16" stroke="#e5484d" stroke-width="1.6"/><line x1="7.5" y1="19" x2="13" y2="19" stroke="#e5484d" stroke-width="1.6"/></svg><span>Export as PDF</span></button>
       </div>
     </div>
     <label class="hdr-btn accent" title="Import from Excel — adds new models/tasks, keeps existing data" style="cursor:pointer;">
@@ -1299,20 +1504,18 @@ document.addEventListener('keydown', e => {
     <div class="tab-bar" id="tabBar"></div>
   </div>
   <div style="margin-left:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-    <button class="hdr-btn hdr-deadline-btn" id="setDeadlineBtn" title="Set deadline for current model"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> <span id="setDeadlineBtnLabel">Set Deadline</span>
-      <span class="hdr-deadline-clear" id="clearModelDeadlineBtn" title="Clear deadline">✕</span>
-    </button>
     <div class="export-dropdown" id="exportModelDropdown">
       <button class="hdr-btn" id="exportModelToggleBtn" title="Export current model's checklist">📤 <span>Export</span> <span class="hdr-btn-caret">▾</span></button>
       <div class="export-menu" id="exportModelMenu">
         <button class="menu-item" id="exportExcelBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#21a366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="10" y1="11" x2="10" y2="19"/></svg><span>Export as Excel</span></button>
-        <button class="menu-item" id="exportPdfBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="#e5484d" stroke-width="2"/><polyline points="14 2 14 8 20 8" stroke="#e5484d" stroke-width="2"/><rect x="6" y="13" width="12" height="6" rx="1" fill="#e5484d" stroke="none"/><text x="12" y="17.6" font-size="5.2" font-family="Arial, sans-serif" font-weight="700" text-anchor="middle" fill="#fff">PDF</text></svg><span>Export as PDF</span></button>
+        <button class="menu-item" id="exportPdfBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="#e5484d" stroke-width="2"/><polyline points="14 2 14 8 20 8" stroke="#e5484d" stroke-width="2"/><line x1="7.5" y1="13" x2="16.5" y2="13" stroke="#e5484d" stroke-width="1.6"/><line x1="7.5" y1="16" x2="16.5" y2="16" stroke="#e5484d" stroke-width="1.6"/><line x1="7.5" y1="19" x2="13" y2="19" stroke="#e5484d" stroke-width="1.6"/></svg><span>Export as PDF</span></button>
       </div>
     </div>
     <label class="hdr-btn" id="importExcelLabel" title="Import tasks from Excel into the current model" style="cursor:pointer;">
       📥 <span>Import Excel</span>
       <input type="file" id="importExcelFile" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv" style="display:none;">
     </label>
+    <button class="row-action-btn edit" id="duplicateModelBtn" title="Duplicate current model" style="width:auto;padding:0 14px;height:36px;font-size:12px;font-weight:600;">⧉ Duplicate</button>
     <button class="row-action-btn archive" id="archiveModelBtn" title="Archive current model" style="width:auto;padding:0 14px;height:36px;font-size:12px;font-weight:600;">Archive</button>
     <button class="row-action-btn delete" id="deleteModelBtn" title="Delete current model" style="width:auto;padding:0 14px;height:36px;font-size:12px;font-weight:600;">Delete Model</button>
     <input class="search-box" type="text" id="searchBox" placeholder="Search tasks…">
@@ -1335,8 +1538,17 @@ document.addEventListener('keydown', e => {
   <span class="bulk-count" id="bulkCount">0 selected</span>
   <button class="bulk-btn" id="bulkDoneBtn">Mark Done</button>
   <button class="bulk-btn" id="bulkPendingBtn">Mark Pending</button>
-  <button class="bulk-btn" id="bulkMoveTopBtn" title="Move selected tasks to the top of the list">↑ Move to Top</button>
-  <button class="bulk-btn" id="bulkMoveBottomBtn" title="Move selected tasks to the bottom of the list">↓ Move to Bottom</button>
+  <button class="bulk-btn bulk-btn-deadline" id="bulkSetDeadlineBtn">📅 Set Deadline</button>
+  <button class="bulk-btn bulk-btn-priority" id="bulkSetPriorityBtn">⚑ Set Priority</button>
+  <div class="bulk-move-dropdown" id="bulkMoveDropdown">
+    <button class="bulk-btn" id="bulkMoveToggleBtn">Move <span class="bulk-move-caret">▾</span></button>
+    <div class="bulk-move-menu" id="bulkMoveMenu">
+      <button class="menu-item" id="bulkMoveTopBtn" title="Move selected tasks to the top of the list"><span>↑</span><span>Move to Top</span></button>
+      <button class="menu-item" id="bulkMoveBottomBtn" title="Move selected tasks to the bottom of the list"><span>↓</span><span>Move to Bottom</span></button>
+      <button class="menu-item" id="bulkMoveModelBtn" title="Move selected tasks to a different model"><span>⇄</span><span>Move to Model</span></button>
+    </div>
+  </div>
+  <button class="bulk-btn bulk-btn-copy-model" id="bulkCopyModelBtn" title="Copy selected tasks to a different model">⧉ Copy to Model</button>
   <button class="bulk-btn danger" id="bulkDeleteBtn">Delete Selected</button>
   <button class="bulk-btn" id="bulkClearBtn" style="margin-left:auto;">Clear Selection</button>
 </div>
@@ -1359,6 +1571,7 @@ document.addEventListener('keydown', e => {
     <div class="th-sort" data-sort="name" title="Sort by task name">Task Description <span class="sort-icon"><svg class="up" width="8" height="6" viewBox="0 0 8 6"><path d="M4 0L8 6H0Z" fill="currentColor"/></svg><svg class="dn" width="8" height="6" viewBox="0 0 8 6"><path d="M4 6L0 0H8Z" fill="currentColor"/></svg></span></div>
     <div class="th-sort" data-sort="priority" title="Sort by priority">Priority <span class="sort-icon"><svg class="up" width="8" height="6" viewBox="0 0 8 6"><path d="M4 0L8 6H0Z" fill="currentColor"/></svg><svg class="dn" width="8" height="6" viewBox="0 0 8 6"><path d="M4 6L0 0H8Z" fill="currentColor"/></svg></span></div>
     <div style="justify-content:center;">Status</div>
+    <div style="justify-content:center;">Due</div>
     <div style="justify-content:center;">Notes</div>
     <div style="justify-content:center;">Actions</div>
   </div>
@@ -1508,6 +1721,54 @@ document.addEventListener('keydown', e => {
   </div>
 </div>
 
+<!-- BULK DEADLINE MODAL -->
+<div class="modal-overlay" id="bulkDeadlineModal">
+  <div class="modal-box">
+    <div class="modal-title">Set Deadline for Selected Tasks</div>
+    <div class="modal-subtitle" id="bulkDeadlineSubtitle"></div>
+    <input type="date" class="deadline-input" id="bulkDeadlinePicker" style="margin-top:4px;">
+    <div class="modal-actions" style="margin-top:24px;">
+      <button class="modal-btn secondary" id="bulkDeadlineClearBtn">Clear Dates</button>
+      <button class="modal-btn secondary" id="bulkDeadlineCancelBtn">Cancel</button>
+      <button class="modal-btn primary" id="bulkDeadlineSaveBtn">Apply to Selected</button>
+    </div>
+  </div>
+</div>
+
+<!-- BULK PRIORITY MODAL -->
+<div class="modal-overlay" id="bulkPriorityModal">
+  <div class="modal-box">
+    <div class="modal-title">Set Priority for Selected Tasks</div>
+    <div class="modal-subtitle" id="bulkPrioritySubtitle"></div>
+    <div class="bulk-priority-options" style="display:flex;gap:12px;margin-top:20px;">
+      <button class="bulk-prio-btn prio-high" id="bulkPrioHigh">
+        <span class="bulk-prio-icon">▲</span> High
+      </button>
+      <button class="bulk-prio-btn prio-med" id="bulkPrioMed">
+        <span class="bulk-prio-icon">●</span> Medium
+      </button>
+      <button class="bulk-prio-btn prio-low" id="bulkPrioLow">
+        <span class="bulk-prio-icon">▼</span> Low
+      </button>
+    </div>
+    <div class="modal-actions" style="margin-top:24px;">
+      <button class="modal-btn secondary" id="bulkPriorityCancelBtn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- BULK MOVE/COPY TO MODEL MODAL (shared by Move to Model and Copy to Model) -->
+<div class="modal-overlay" id="bulkMoveModelModal">
+  <div class="modal-box">
+    <div class="modal-title" id="bulkMoveModelTitle">Move Selected Tasks</div>
+    <div class="modal-subtitle" id="bulkMoveModelSubtitle"></div>
+    <div class="move-model-list" id="moveModelList"></div>
+    <div class="modal-actions" style="margin-top:24px;">
+      <button class="modal-btn secondary" id="bulkMoveModelCancelBtn">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <!-- CONFIRM / ALERT MODAL (generic, reused via showConfirm/showAlert JS helpers) -->
 <div class="modal-overlay" id="confirmModal">
   <div class="modal-box confirm-box">
@@ -1554,6 +1815,19 @@ try{
 }catch(err){
   console.warn('Firebase init failed:', err);
   window.__firebaseLoadFailed=true;
+}
+
+// ── USER MANUAL (hosted PDF link) ─────────────────────────────────────────────
+const USER_MANUAL_URL = "https://arafat93.github.io/model-launch/Model%20Launch%20Control%20-%20User%20Manual.pdf";
+
+function downloadUserManual(){
+  try{
+    window.open(USER_MANUAL_URL, '_blank');
+    toast('📘','Opening the User Manual (PDF)',false);
+  }catch(e){
+    console.error('User manual open failed:',e);
+    toast('⚠','Could not open the manual — please try again',false);
+  }
 }
 
 // ── FIREBASE AUTH UI ──────────────────────────────────────────────────────────
@@ -1703,10 +1977,19 @@ document.getElementById('exportModelToggleBtn').addEventListener('click',(e)=>{
   document.getElementById('exportModelDropdown').classList.toggle('menu-open');
 });
 
+// Bulk "Move" dropdown: hover reveals Move to Top/Bottom/Model on desktop.
+// On touch devices, tap the Move button to toggle it instead.
+document.getElementById('bulkMoveToggleBtn').addEventListener('click',(e)=>{
+  if(window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  e.stopPropagation();
+  document.getElementById('bulkMoveDropdown').classList.toggle('menu-open');
+});
+
 document.addEventListener('click',()=>{
   document.getElementById('userBadge').classList.remove('menu-open');
   document.getElementById('exportAllDropdown').classList.remove('menu-open');
   document.getElementById('exportModelDropdown').classList.remove('menu-open');
+  document.getElementById('bulkMoveDropdown').classList.remove('menu-open');
 });
 
 // Friendly error messages
@@ -1803,6 +2086,7 @@ function save(){
         deadlines,
         deletedModels:[...deletedModelsSet],
         archivedModels:[...archivedModelsSet],
+        modelOrder:[...modelOrder],
         updatedAt:firebase.firestore.FieldValue.serverTimestamp()
       });
       // lastUpdated label is refreshed automatically by the live Firestore
@@ -1863,7 +2147,7 @@ function undo(){
     saveTimer=setTimeout(async()=>{
       try{
         await getUserDoc(auth.currentUser.uid).set({
-          tasks:state,deadlines,deletedModels:[...deletedModelsSet],archivedModels:[...archivedModelsSet],
+          tasks:state,deadlines,deletedModels:[...deletedModelsSet],archivedModels:[...archivedModelsSet],modelOrder:[...modelOrder],
           updatedAt:firebase.firestore.FieldValue.serverTimestamp()
         });
       }catch(e){ console.error('Save error:',e); toast('⚠','Failed to save data',false);}
@@ -1901,7 +2185,7 @@ function enterPreviewMode(){
   resetUndo();
   renderAll();
   hideLoading();
-  setTimeout(checkDeadlinesAndNotify,1200);
+  setTimeout(startDeadlineWatch,1200);
   if (typeof refreshStickyBarOrigin === 'function') setTimeout(refreshStickyBarOrigin, 100);
 }
 
@@ -1927,9 +2211,10 @@ async function handleAuthState(user){
     const saved=await loadFromFirestore(user.uid);
     deletedModelsSet=new Set(saved?.deletedModels||[]);
     archivedModelsSet=new Set(saved?.archivedModels||[]);
+    modelOrder=saved?.modelOrder||[];
     setArchiveView(false);
     ({tasks: state, deadlines}=loadState(saved));
-refreshModelsList();
+    refreshModelsList();
     if (!activeTab && models.length > 0) activeTab = models[0];
     document.querySelector('.wrap').classList.add('unlocked');
     document.getElementById('lastUpdated').textContent=formatLastUpdated(saved&&saved.updatedAt)||'';
@@ -1937,7 +2222,7 @@ refreshModelsList();
     resetUndo();
     renderAll();
     hideLoading();
-    setTimeout(checkDeadlinesAndNotify,1200);
+    setTimeout(startDeadlineWatch,1200);
     if(typeof refreshStickyBarOrigin==='function') setTimeout(refreshStickyBarOrigin,100);
   } else {
     // Signed out (or never signed in) — fall back to the local preview
@@ -2101,23 +2386,31 @@ let searchQuery = '';
 let editingIdx = null;
 let selectedTasks = new Set();
 let dragSrcIdx = null;
+let modelOrder = []; // persisted drag-and-drop order for model cards
+let renamingModel = null; // model name currently being renamed inline
 // Tracks which models currently have their "Completed" section expanded.
 // Collapsed by default — clicking the divider toggles it per model.
 let expandedCompletedSet = new Set();
 
-function refreshModelsList(){models=Object.keys(state).filter(m=>!archivedModelsSet.has(m));}
+function refreshModelsList(){
+  const active=Object.keys(state).filter(m=>!archivedModelsSet.has(m));
+  // Merge saved order with current active models
+  const ordered=modelOrder.filter(m=>active.includes(m));
+  const unordered=active.filter(m=>!ordered.includes(m));
+  models=[...ordered,...unordered];
+  modelOrder=[...models]; // keep in sync
+}
 // save() is defined above in the Firebase section
 
 // ── DEADLINE NOTIFICATIONS ────────────────────────────────────────────────────
-// Runs once per page load, after real data is in place (preview or signed-in).
-// Surfaces overdue tasks/models and anything due within the next 2 days,
-// via a native browser Notification when permitted, falling back to an
-// in-app toast otherwise so nothing is silently missed either way.
-let _deadlineCheckDone=false;
+// Runs shortly after real data is in place (preview or signed-in), then again
+// every hour for as long as the tab stays open, so an overdue/due-soon
+// deadline is surfaced even if you never reload the page. Surfaces overdue
+// tasks/models and anything due within the next 2 days, via a native browser
+// Notification when permitted, falling back to an in-app toast otherwise so
+// nothing is silently missed either way.
+let _deadlineCheckInterval=null;
 function checkDeadlinesAndNotify(){
-  if(_deadlineCheckDone) return;
-  _deadlineCheckDone=true;
-
   const today=new Date(); today.setHours(0,0,0,0);
   const overdueTasks=[]; const dueSoonTasks=[];
   const overdueModels=[]; const dueSoonModels=[];
@@ -2176,6 +2469,16 @@ function checkDeadlinesAndNotify(){
   } else {
     toast('⏰',summary,false);
   }
+}
+
+// Starts (or restarts) the recurring deadline check: runs once right away,
+// then every hour for as long as the tab stays open. Safe to call multiple
+// times (e.g. once from preview mode, once from signed-in mode) — any
+// previous timer is cleared first so checks never stack up.
+function startDeadlineWatch(){
+  checkDeadlinesAndNotify();
+  if(_deadlineCheckInterval) clearInterval(_deadlineCheckInterval);
+  _deadlineCheckInterval=setInterval(checkDeadlinesAndNotify, 60*60*1000);
 }
 
 // ── STATS ─────────────────────────────────────────────────────────────────────
@@ -2241,6 +2544,8 @@ function renderKPIs(){
 }
 
 // ── MODEL CARDS ───────────────────────────────────────────────────────────────
+let _cardDragSrc = null; // model name being dragged
+
 function renderModelCards(){
   const grid=document.getElementById('modelsGrid');
   grid.innerHTML='';
@@ -2249,13 +2554,32 @@ function renderModelCards(){
     const[lbl]=statusLabel(s.pct);
     const card=document.createElement('div');
     card.className='model-card theme-'+(idx%4);
+    card.draggable=true;
+    card.dataset.model=m;
     const dl=deadlineLabel(m);
-    const dlHtml=dl?`<div class="model-deadline ${dl.cls}">${CAL_ICON} ${dl.text}</div>`
-      :`<div class="model-deadline">${CAL_ICON} No deadline set</div>`;
+    const dlHtml=dl
+      ?`<div class="model-deadline model-deadline-btn ${dl.cls}" style="position:relative;display:inline-flex;align-items:center;gap:6px;">${CAL_ICON} ${dl.text} <span class="model-deadline-edit-hint">✎</span><input type="date" class="model-deadline-native-input task-deadline-native" value="${deadlines[m]||''}" tabindex="-1" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;-webkit-appearance:none;appearance:none;border:none;background:transparent;margin:0;padding:0;"></div>`
+      :`<div class="model-deadline model-deadline-btn model-deadline-unset" style="position:relative;display:inline-flex;align-items:center;gap:6px;">${CAL_ICON} Set deadline <span class="model-deadline-edit-hint">✎</span><input type="date" class="model-deadline-native-input task-deadline-native" value="" tabindex="-1" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;-webkit-appearance:none;appearance:none;border:none;background:transparent;margin:0;padding:0;"></div>`;
+
+    const isRenaming=renamingModel===m;
+    const nameHtml=isRenaming
+      ?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <input class="task-name-edit model-rename-input" type="text" value="${m.replace(/"/g,'&quot;')}" style="font-size:16px;font-weight:600;padding:6px 10px;" maxlength="80">
+          <button class="row-action-btn save model-rename-save" title="Save" style="flex-shrink:0;">✓</button>
+          <button class="row-action-btn cancel model-rename-cancel" title="Cancel" style="flex-shrink:0;">✕</button>
+        </div>`
+      :`<div style="display:flex;align-items:center;gap:8px;">
+          <div class="model-name">${m}</div>
+          <button class="row-action-btn edit model-rename-btn" title="Rename model" style="width:26px;height:26px;font-size:13px;opacity:0;transition:opacity 0.2s;" data-model="${m}">✎</button>
+          <button class="row-action-btn edit model-duplicate-btn" title="Duplicate model" style="width:26px;height:26px;font-size:13px;opacity:0;transition:opacity 0.2s;" data-model="${m}">⧉</button>
+          <button class="row-action-btn archive model-archive-btn" title="Archive model" style="width:26px;height:26px;font-size:13px;opacity:0;transition:opacity 0.2s;" data-model="${m}">🗄</button>
+          <button class="row-action-btn delete model-delete-btn" title="Delete model" style="width:26px;height:26px;font-size:13px;opacity:0;transition:opacity 0.2s;" data-model="${m}">🗑</button>
+        </div>`;
+
     card.innerHTML=`
       <div class="model-header">
-        <div>
-          <div class="model-name">${m}</div>
+        <div style="min-width:0;flex:1;">
+          ${nameHtml}
           ${dlHtml}
         </div>
         <div class="model-tag">${lbl}</div>
@@ -2269,13 +2593,146 @@ function renderModelCards(){
         <div class="stat-item"><div class="stat-num pend-val">${s.pending}</div><div class="stat-lbl">PENDING</div></div>
         <div class="stat-item"><div class="stat-num" style="color:var(--text-muted)">${s.total}</div><div class="stat-lbl">TOTAL</div></div>
       </div>`;
-    card.onclick=()=>{
+
+    // Deadline: native date input overlay — no modal, opens picker directly on click
+    const dlNativeInput=card.querySelector('.model-deadline-native-input');
+    if(dlNativeInput){
+      dlNativeInput.addEventListener('click',e=>e.stopPropagation());
+      dlNativeInput.addEventListener('change',e=>{
+        e.stopPropagation();
+        const val=e.target.value;
+        if(val) deadlines[m]=val;
+        else delete deadlines[m];
+        save();renderAll();
+        toast(CAL_ICON,`Model deadline ${val?'set':'cleared'}`);
+      });
+    }
+
+    // Show/hide rename + duplicate + archive + delete icons on hover
+    card.addEventListener('mouseenter',()=>{
+      const btn=card.querySelector('.model-rename-btn');
+      if(btn) btn.style.opacity='1';
+      const dupBtn=card.querySelector('.model-duplicate-btn');
+      if(dupBtn) dupBtn.style.opacity='1';
+      const archBtn=card.querySelector('.model-archive-btn');
+      if(archBtn) archBtn.style.opacity='1';
+      const delBtn=card.querySelector('.model-delete-btn');
+      if(delBtn) delBtn.style.opacity='1';
+    });
+    card.addEventListener('mouseleave',()=>{
+      const btn=card.querySelector('.model-rename-btn');
+      if(btn) btn.style.opacity='0';
+      const dupBtn=card.querySelector('.model-duplicate-btn');
+      if(dupBtn) dupBtn.style.opacity='0';
+      const archBtn=card.querySelector('.model-archive-btn');
+      if(archBtn) archBtn.style.opacity='0';
+      const delBtn=card.querySelector('.model-delete-btn');
+      if(delBtn) delBtn.style.opacity='0';
+    });
+
+    // Rename button click
+    const renameBtn=card.querySelector('.model-rename-btn');
+    if(renameBtn){
+      renameBtn.addEventListener('click',e=>{
+        e.stopPropagation();
+        renamingModel=m;
+        renderModelCards();
+      });
+    }
+
+    // Duplicate button click
+    const dupBtn=card.querySelector('.model-duplicate-btn');
+    if(dupBtn){
+      dupBtn.addEventListener('click',e=>{
+        e.stopPropagation();
+        duplicateModel(m);
+      });
+    }
+
+    // Archive button click
+    const archBtn=card.querySelector('.model-archive-btn');
+    if(archBtn){
+      archBtn.addEventListener('click',e=>{
+        e.stopPropagation();
+        archiveModel(m);
+      });
+    }
+
+    // Delete button click
+    const delBtn=card.querySelector('.model-delete-btn');
+    if(delBtn){
+      delBtn.addEventListener('click',e=>{
+        e.stopPropagation();
+        deleteModel(m);
+      });
+    }
+
+    // Rename input handlers
+    if(isRenaming){
+      const input=card.querySelector('.model-rename-input');
+      const commit=()=>{ renamingModel=null; renameModel(m,input.value); };
+      const cancel=()=>{ renamingModel=null; renderModelCards(); };
+      card.querySelector('.model-rename-save').addEventListener('click',e=>{e.stopPropagation();commit();});
+      card.querySelector('.model-rename-cancel').addEventListener('click',e=>{e.stopPropagation();cancel();});
+      input.addEventListener('keydown',e=>{
+        if(e.key==='Enter'){e.preventDefault();commit();}
+        if(e.key==='Escape'){e.preventDefault();cancel();}
+      });
+      input.addEventListener('click',e=>e.stopPropagation());
+      setTimeout(()=>{input.focus();input.select();},50);
+    }
+
+    // ── Click to navigate (only if not a drag and not renaming) ──
+    let _didDrag=false;
+    card.addEventListener('mousedown',()=>{ _didDrag=false; });
+    card.addEventListener('dragstart',()=>{ _didDrag=true; });
+    card.addEventListener('click',()=>{
+      if(_didDrag||isRenaming){ _didDrag=false; return; }
       activeTab=m;editingIdx=null;selectedTasks.clear();renderAll();
       const target=document.getElementById('taskChecklistLabel');
       if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
-    };
+    });
+
+    // ── Drag & Drop ──
+    card.addEventListener('dragstart',e=>{
+      if(isRenaming){ e.preventDefault(); return; }
+      _cardDragSrc=m;
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed='move';
+      e.dataTransfer.setData('text/plain',m);
+    });
+    card.addEventListener('dragend',()=>{
+      card.classList.remove('dragging');
+      document.querySelectorAll('.model-card.drag-over').forEach(c=>c.classList.remove('drag-over'));
+    });
+    card.addEventListener('dragover',e=>{
+      e.preventDefault();
+      e.dataTransfer.dropEffect='move';
+      if(_cardDragSrc && _cardDragSrc!==m) card.classList.add('drag-over');
+    });
+    card.addEventListener('dragleave',()=>{ card.classList.remove('drag-over'); });
+    card.addEventListener('drop',e=>{
+      e.preventDefault();
+      card.classList.remove('drag-over');
+      if(!_cardDragSrc || _cardDragSrc===m) return;
+      // Swap positions in models array
+      const fromIdx=models.indexOf(_cardDragSrc);
+      const toIdx=models.indexOf(m);
+      if(fromIdx<0||toIdx<0) return;
+      models.splice(fromIdx,1);
+      models.splice(toIdx,0,_cardDragSrc);
+      modelOrder=[...models];
+      _cardDragSrc=null;
+      renderModelCards(); // re-render cards in new order
+      // Animate progress bars
+      document.querySelectorAll('.progress-bar-fill').forEach((bar,i)=>{
+        const pct=bar.dataset.pct;
+        setTimeout(()=>{ bar.style.width=pct+'%'; },100+i*80);
+      });
+    });
+
     grid.appendChild(card);
-    setTimeout(()=>{card.querySelector('.progress-bar-fill').style.width=s.pct+'%';},100+idx*80);
+    setTimeout(()=>{ card.querySelector('.progress-bar-fill').style.width=s.pct+'%'; },100+idx*80);
   });
 }
 
@@ -2315,8 +2772,8 @@ function renderArchiveView(){
     const card=document.createElement('div');
     card.className='model-card archived theme-'+(idx%4);
     const dl=deadlineLabel(m);
-    const dlHtml=dl?`<div class="model-deadline ${dl.cls}">${CAL_ICON} ${dl.text}</div>`
-      :`<div class="model-deadline">${CAL_ICON} No deadline set</div>`;
+    const dlHtml=dl?`<button class="model-deadline model-deadline-btn ${dl.cls}" onclick="event.stopPropagation()">${CAL_ICON} ${dl.text}</button>`
+      :`<div class="model-deadline">${CAL_ICON} No deadline</div>`;
     card.innerHTML=`
       <div class="model-header">
         <div>
@@ -2453,16 +2910,55 @@ function exportAllModelsToPdf(){
   toast('🖨️',`Prepared ${models.length} model${models.length===1?'':'s'} for PDF export`,false);
 }
 
+let _tabDragSrc=null; // model name being dragged in the tab bar
 function renderTabs(){
   const bar=document.getElementById('tabBar');
   bar.innerHTML='';
   const tabs=models.length>=2?[...models,'Compare Models']:[...models];
   if(activeTab==='Compare Models'&&models.length<2)activeTab=models[0];
   tabs.forEach(m=>{
+    const isCompare=m==='Compare Models';
     const btn=document.createElement('button');
     btn.className='tab-btn'+(m===activeTab?' active':'');
     btn.textContent=m;
-    btn.onclick=()=>{activeTab=m;editingIdx=null;selectedTasks.clear();renderTabs();renderTaskList();scrollToTaskChecklist();};
+    let _didDrag=false;
+    btn.onclick=()=>{
+      if(_didDrag){ _didDrag=false; return; }
+      activeTab=m;editingIdx=null;selectedTasks.clear();renderTabs();renderTaskList();scrollToTaskChecklist();
+    };
+    if(!isCompare){
+      btn.draggable=true;
+      btn.addEventListener('dragstart',e=>{
+        _didDrag=true;
+        _tabDragSrc=m;
+        btn.classList.add('dragging');
+        e.dataTransfer.effectAllowed='move';
+        e.dataTransfer.setData('text/plain',m);
+      });
+      btn.addEventListener('dragend',()=>{
+        btn.classList.remove('dragging');
+        bar.querySelectorAll('.tab-btn.drag-over').forEach(b=>b.classList.remove('drag-over'));
+      });
+      btn.addEventListener('dragover',e=>{
+        e.preventDefault();
+        e.dataTransfer.dropEffect='move';
+        if(_tabDragSrc && _tabDragSrc!==m) btn.classList.add('drag-over');
+      });
+      btn.addEventListener('dragleave',()=>{ btn.classList.remove('drag-over'); });
+      btn.addEventListener('drop',e=>{
+        e.preventDefault();
+        btn.classList.remove('drag-over');
+        if(!_tabDragSrc || _tabDragSrc===m) return;
+        const fromIdx=models.indexOf(_tabDragSrc);
+        const toIdx=models.indexOf(m);
+        if(fromIdx<0||toIdx<0) return;
+        models.splice(fromIdx,1);
+        models.splice(toIdx,0,_tabDragSrc);
+        modelOrder=[...models];
+        _tabDragSrc=null;
+        save();renderTabs();renderModelCards();
+      });
+    }
     bar.appendChild(btn);
   });
 }
@@ -2485,7 +2981,7 @@ function renderTaskList(){
   const addBar=document.getElementById('addTaskBar');
   const delBtn=document.getElementById('deleteModelBtn');
   const archBtn=document.getElementById('archiveModelBtn');
-  const setDlBtn=document.getElementById('setDeadlineBtn');
+  const dupBtn=document.getElementById('duplicateModelBtn');
   const exportBtn=document.getElementById('exportModelDropdown');
   const importLbl=document.getElementById('importExcelLabel');
   const searchBoxEl=document.getElementById('searchBox');
@@ -2493,13 +2989,15 @@ function renderTaskList(){
 
   if(activeTab==='Compare Models'){
     table.style.display='none';addBar.style.display='none';
-    delBtn.style.display='none';archBtn.style.display='none';setDlBtn.style.display='none';
+    delBtn.style.display='none';archBtn.style.display='none';
+    dupBtn.style.display='none';
     exportBtn.style.display='none';importLbl.style.display='none';
     searchBoxEl.style.display='none';filterBarEl.style.display='none';
     compare.style.display='block';renderCompare();return;
   }
   table.style.display='';addBar.style.display='';
-  delBtn.style.display='';archBtn.style.display='';setDlBtn.style.display='';
+  delBtn.style.display='';archBtn.style.display='';
+  dupBtn.style.display='';
   exportBtn.style.display='';importLbl.style.display='';
   searchBoxEl.style.display='';filterBarEl.style.display='';
   compare.style.display='none';
@@ -2507,7 +3005,7 @@ function renderTaskList(){
   // No models — hide task section entirely
   if(!activeTab || !state[activeTab]){
     table.style.display='none';addBar.style.display='none';
-    delBtn.style.display='none';archBtn.style.display='none';setDlBtn.style.display='none';
+    delBtn.style.display='none';archBtn.style.display='none';
     exportBtn.style.display='none';importLbl.style.display='none';
     searchBoxEl.style.display='none';filterBarEl.style.display='none';
     ['all','done','pending','critical','high','med','low'].forEach(k=>{
@@ -2516,7 +3014,6 @@ function renderTaskList(){
     return;
   }
   document.getElementById('newTaskInput').placeholder=`Add a new task to ${activeTab}…`;
-  syncModelDeadlineBtn();
 
   const tbody=document.getElementById('taskRows');
   tbody.innerHTML='';
@@ -2643,12 +3140,30 @@ function renderTaskList(){
     const dlIconCls=tdl?tdl.cls:'';
     const dlTitle=tdl?`Deadline: ${tdl.text}`:'Set task deadline';
 
+    // Due column cell — day count badge for pending tasks
+    let dueCellHtml='<div style="display:flex;justify-content:center;align-items:center;">—</div>';
+    if(task.taskDeadline){
+      const today=new Date(); today.setHours(0,0,0,0);
+      const d=new Date(task.taskDeadline+'T00:00:00');
+      const diff=Math.round((d-today)/(1000*60*60*24));
+      if(showAsDone){
+        dueCellHtml=`<div style="display:flex;justify-content:center;align-items:center;"><span class="task-dl-pill due-done" title="Completed · deadline was ${task.taskDeadline}">Done</span></div>`;
+      } else if(diff<0){
+        dueCellHtml=`<div style="display:flex;justify-content:center;align-items:center;"><span class="task-dl-pill overdue" title="Overdue by ${-diff} day${-diff===1?'':'s'}">-${-diff}d</span></div>`;
+      } else if(diff===0){
+        dueCellHtml=`<div style="display:flex;justify-content:center;align-items:center;"><span class="task-dl-pill due-today" title="Due today">Today</span></div>`;
+      } else {
+        dueCellHtml=`<div style="display:flex;justify-content:center;align-items:center;"><span class="task-dl-pill due-soon" title="Due in ${diff} day${diff===1?'':'s'}">${diff}d</span></div>`;
+      }
+    }
+
     row.innerHTML=`
       <div class="task-sn">${task.sn}</div>
       <div><input type="checkbox" class="task-checkbox row-chk" ${checked?'checked':''}></div>
       ${nameCell}
       <div><button class="priority-badge ${prioClass[task.priority||'med']}" data-idx="${idx}">${prioMap[task.priority||'med']}</button></div>
-      <div><button class="status-chip ${showAsDone?'done':'pending'}" data-idx="${idx}"><span class="chip-dot"></span>${showAsDone?'Done':'Pending'}</button></div>
+      <div style="display:flex;align-items:center;justify-content:center;"><button class="status-chip ${showAsDone?'done':'pending'}" data-idx="${idx}"><span class="chip-dot"></span>${showAsDone?'Done':'Pending'}</button></div>
+      ${dueCellHtml}
       <div class="task-icons-cell">
         <div class="notes-indicator ${task.notes?'has-note':''}" data-idx="${idx}" title="${task.notes?'View/edit note':'Add note'}">📝</div>
         <div class="task-deadline-wrap ${dlIconCls}" data-idx="${idx}" title="${dlTitle}">
@@ -2992,6 +3507,28 @@ async function addModel(name,deadline){
   refreshModelsList();activeTab=trimmed;editingIdx=null;save();renderAll();
   toast('＋',`Model added: ${trimmed}`);
 }
+async function duplicateModel(name){
+  if(!(name in state)) return;
+  // Build a unique copy name: "MODEL (Copy)", then "MODEL (Copy 2)", "MODEL (Copy 3)", ...
+  const existingKeys=new Set(Object.keys(state).map(m=>m.toUpperCase()));
+  let copyName=`${name} (Copy)`;
+  let n=2;
+  while(existingKeys.has(copyName.toUpperCase())){
+    copyName=`${name} (Copy ${n})`;
+    n++;
+  }
+  // Deep-clone tasks so edits to the copy never touch the original.
+  state[copyName]=JSON.parse(JSON.stringify(state[name]||[]));
+  if(deadlines[name]) deadlines[copyName]=deadlines[name];
+  deletedModelsSet.delete(copyName);
+  // Place the duplicate right after the source model in the order list.
+  const srcIdx=modelOrder.indexOf(name);
+  if(srcIdx>=0) modelOrder.splice(srcIdx+1,0,copyName);
+  else modelOrder.push(copyName);
+  refreshModelsList();
+  activeTab=copyName;editingIdx=null;save();renderAll();
+  toast('⧉',`Duplicated: ${name} → ${copyName}`);
+}
 async function deleteModel(name){
   if(!archivedModelsSet.has(name)&&models.length<=1){await showAlert({title:"Can't delete this model",message:'You need at least one model on the dashboard.',tone:'warn'});return;}
   const ok=await showConfirm({title:'Delete model?',message:`"${name}" and all of its tasks will be permanently removed.`,confirmText:'Delete Model',danger:true,icon:'🗑'});
@@ -3003,6 +3540,26 @@ async function deleteModel(name){
   editingIdx=null;save();renderAll();
   if(archiveViewActive) renderArchiveView();
   toast('×',`Model deleted: ${name}`);
+}
+
+async function renameModel(oldName, newName){
+  const trimmed=newName.trim();
+  if(!trimmed||trimmed.toUpperCase()===oldName.toUpperCase()){renderModelCards();renderTabs();return;}
+  const key=trimmed.toUpperCase();
+  if(Object.keys(state).some(m=>m!==oldName&&m.toUpperCase()===key)){
+    await showAlert({title:'Name already taken',message:`A model named "${trimmed}" already exists.`,tone:'warn'});
+    renderModelCards();renderTabs();return;
+  }
+  // Migrate state, deadlines, model order
+  state[trimmed]=state[oldName]; delete state[oldName];
+  if(deadlines[oldName]){ deadlines[trimmed]=deadlines[oldName]; delete deadlines[oldName]; }
+  if(archivedModelsSet.has(oldName)){ archivedModelsSet.delete(oldName); archivedModelsSet.add(trimmed); }
+  if(deletedModelsSet.has(oldName)){ deletedModelsSet.delete(oldName); }
+  const oi=modelOrder.indexOf(oldName); if(oi>=0) modelOrder[oi]=trimmed;
+  refreshModelsList();
+  if(activeTab===oldName) activeTab=trimmed;
+  save(); renderAll();
+  toast('✎',`Renamed: ${oldName.slice(0,20)} → ${trimmed.slice(0,20)}`);
 }
 
 // ── NOTES & DEADLINE MODALS ───────────────────────────────────────────────────
@@ -3029,45 +3586,26 @@ document.getElementById('notesModal').onclick=e=>{if(e.target===document.getElem
 // Real, fully-functional <input type="date"> stretched invisibly over the
 // header button — clicking the button opens the native picker directly on
 // the first click (no modal hop), matching the per-task deadline icon.
-function syncModelDeadlineBtn(){
-  const btn=document.getElementById('setDeadlineBtn');
-  const labelEl=document.getElementById('setDeadlineBtnLabel');
-  if(!btn||!activeTab||activeTab==='Compare Models') return;
-  const dl=deadlineLabel(activeTab);
-  btn.classList.remove('has-date','is-overdue');
-  if(dl){
-    btn.classList.add(dl.cls==='deadline-overdue'?'is-overdue':'has-date');
-    labelEl.textContent=dl.text;
-  } else {
-    labelEl.textContent='Set Deadline';
-  }
-}
-function openModelDeadlineModal(){
-  if(!activeTab||activeTab==='Compare Models') return;
-  document.getElementById('modelDeadlineModelName').textContent=activeTab;
-  const picker=document.getElementById('modelDeadlinePickerModal');
-  picker.value=deadlines[activeTab]||'';
-  document.getElementById('modelDeadlineModal').classList.add('open');
-  setTimeout(()=>{ try{ if(picker.showPicker) picker.showPicker(); else picker.focus(); }catch(err){ picker.focus(); } },320);
-}
-document.getElementById('setDeadlineBtn').onclick=e=>{
-  e.preventDefault();e.stopPropagation();
-  openModelDeadlineModal();
-};
+// ── MODEL DEADLINE MODAL (opened from model cards) ───────────────────────────
+let _modelDeadlineTarget = null; // set by card click in renderModelCards
+
 document.getElementById('modelDeadlineSaveBtn').onclick=()=>{
-  const model=activeTab;
+  const model=_modelDeadlineTarget;
+  if(!model) return;
   const val=document.getElementById('modelDeadlinePickerModal').value;
   if(val) deadlines[model]=val; else delete deadlines[model];
-  save();renderModelCards();syncModelDeadlineBtn();
+  save(); renderModelCards();
   document.getElementById('modelDeadlineModal').classList.remove('open');
-  toast(CAL_ICON,`Deadline ${val?'set':'cleared'}`);
+  toast(CAL_ICON,`Deadline ${val?'set':'cleared'} for ${model}`);
 };
 document.getElementById('modelDeadlineClearBtn').onclick=()=>{
-  delete deadlines[activeTab];
+  const model=_modelDeadlineTarget;
+  if(!model) return;
+  delete deadlines[model];
   document.getElementById('modelDeadlinePickerModal').value='';
-  save();renderModelCards();syncModelDeadlineBtn();
+  save(); renderModelCards();
   document.getElementById('modelDeadlineModal').classList.remove('open');
-  toast(CAL_ICON,'Deadline cleared');
+  toast(CAL_ICON,`Deadline cleared for ${model}`);
 };
 document.getElementById('modelDeadlineCancelBtn').onclick=()=>{
   document.getElementById('modelDeadlineModal').classList.remove('open');
@@ -3075,12 +3613,6 @@ document.getElementById('modelDeadlineCancelBtn').onclick=()=>{
 document.getElementById('modelDeadlineModal').onclick=e=>{
   if(e.target===document.getElementById('modelDeadlineModal'))
     document.getElementById('modelDeadlineModal').classList.remove('open');
-};
-document.getElementById('clearModelDeadlineBtn').onclick=e=>{
-  e.preventDefault();e.stopPropagation();
-  delete deadlines[activeTab];
-  save();renderModelCards();syncModelDeadlineBtn();
-  toast(CAL_ICON,'Deadline cleared');
 };
 
 let taskDeadlineCtx={model:null,idx:null};
@@ -3135,6 +3667,7 @@ document.getElementById('bulkMoveTopBtn').onclick=()=>{
   renumber(state[activeTab]);
   selectedTasks.clear();moving.forEach((_,i)=>selectedTasks.add(i));
   save();renderAll();
+  document.getElementById('bulkMoveDropdown').classList.remove('menu-open');
   toast('↑',`Moved ${moving.length} tasks to top`);
 };
 document.getElementById('bulkMoveBottomBtn').onclick=()=>{
@@ -3148,7 +3681,87 @@ document.getElementById('bulkMoveBottomBtn').onclick=()=>{
   const base=remaining.length;
   selectedTasks.clear();moving.forEach((_,i)=>selectedTasks.add(base+i));
   save();renderAll();
+  document.getElementById('bulkMoveDropdown').classList.remove('menu-open');
   toast('↓',`Moved ${moving.length} tasks to bottom`);
+};
+let _moveModelAction='move'; // 'move' or 'copy' — tracks which bulk action opened the shared modal
+document.getElementById('bulkMoveModelBtn').onclick=()=>{
+  const n=selectedTasks.size;
+  if(!n)return;
+  _moveModelAction='move';
+  document.getElementById('bulkMoveModelTitle').textContent='Move Selected Tasks';
+  document.getElementById('bulkMoveModelSubtitle').textContent=
+    `${n} task${n===1?'':'s'} selected — choose a model to move ${n===1?'it':'them'} to`;
+  populateMoveModelList();
+  document.getElementById('bulkMoveModelModal').classList.add('open');
+  document.getElementById('bulkMoveDropdown').classList.remove('menu-open');
+};
+document.getElementById('bulkCopyModelBtn').onclick=()=>{
+  const n=selectedTasks.size;
+  if(!n)return;
+  _moveModelAction='copy';
+  document.getElementById('bulkMoveModelTitle').textContent='Copy Selected Tasks';
+  document.getElementById('bulkMoveModelSubtitle').textContent=
+    `${n} task${n===1?'':'s'} selected — choose a model to copy ${n===1?'it':'them'} to`;
+  populateMoveModelList();
+  document.getElementById('bulkMoveModelModal').classList.add('open');
+};
+function populateMoveModelList(){
+  const list=document.getElementById('moveModelList');
+  list.innerHTML='';
+  const destinations=models.filter(m=>m!==activeTab);
+  if(!destinations.length){
+    const verb=_moveModelAction==='copy'?'copy':'move';
+    list.innerHTML=`<div class="move-model-empty">No other models to ${verb} tasks to. Add another model first.</div>`;
+  } else {
+    destinations.forEach(m=>{
+      const btn=document.createElement('button');
+      btn.className='move-model-option';
+      btn.innerHTML=`<span></span><span class="move-model-arrow">→</span>`;
+      btn.querySelector('span').textContent=m;
+      btn.onclick=()=>{
+        if(_moveModelAction==='copy') copySelectedTasksToModel(m);
+        else moveSelectedTasksToModel(m);
+      };
+      list.appendChild(btn);
+    });
+  }
+}
+function moveSelectedTasksToModel(destModel){
+  const n=selectedTasks.size;
+  if(!n||!(destModel in state))return;
+  const srcTasks=state[activeTab];
+  const idxs=[...selectedTasks].sort((a,b)=>b-a); // descending so splice is safe
+  const moving=idxs.map(i=>srcTasks[i]).reverse(); // restore original order
+  idxs.forEach(i=>srcTasks.splice(i,1));
+  // Deep-clone moved tasks into the destination so source/destination never share references
+  state[destModel]=[...state[destModel],...JSON.parse(JSON.stringify(moving))];
+  renumber(state[activeTab]);
+  renumber(state[destModel]);
+  selectedTasks.clear();
+  if(editingIdx!==null) editingIdx=null;
+  save();renderAll();
+  document.getElementById('bulkMoveModelModal').classList.remove('open');
+  toast('⇄',`Moved ${n} task${n===1?'':'s'} to ${destModel}`);
+}
+function copySelectedTasksToModel(destModel){
+  const n=selectedTasks.size;
+  if(!n||!(destModel in state))return;
+  const srcTasks=state[activeTab];
+  const idxs=[...selectedTasks].sort((a,b)=>a-b); // ascending to preserve original order
+  const copying=idxs.map(i=>srcTasks[i]);
+  // Deep-clone copied tasks into the destination — source list is left untouched
+  state[destModel]=[...state[destModel],...JSON.parse(JSON.stringify(copying))];
+  renumber(state[destModel]);
+  selectedTasks.clear();
+  save();renderAll();
+  document.getElementById('bulkMoveModelModal').classList.remove('open');
+  toast('⧉',`Copied ${n} task${n===1?'':'s'} to ${destModel}`);
+}
+document.getElementById('bulkMoveModelCancelBtn').onclick=()=>document.getElementById('bulkMoveModelModal').classList.remove('open');
+document.getElementById('bulkMoveModelModal').onclick=e=>{
+  if(e.target===document.getElementById('bulkMoveModelModal'))
+    document.getElementById('bulkMoveModelModal').classList.remove('open');
 };
 document.getElementById('bulkDeleteBtn').onclick=async()=>{
   const n=selectedTasks.size;
@@ -3162,6 +3775,66 @@ document.getElementById('bulkDeleteBtn').onclick=async()=>{
   toast('×',`Deleted ${n} tasks`);
 };
 document.getElementById('bulkClearBtn').onclick=()=>{selectedTasks.clear();updateBulkBar();renderTaskList();};
+
+// ── BULK SET DEADLINE ─────────────────────────────────────────────────────────
+document.getElementById('bulkSetDeadlineBtn').onclick=()=>{
+  const n=selectedTasks.size;
+  if(!n) return;
+  document.getElementById('bulkDeadlineSubtitle').textContent=
+    `${n} task${n===1?'':'s'} selected — pick a date to apply to all of them`;
+  // Pre-fill with the common deadline if all selected tasks share one
+  const dates=[...selectedTasks].map(i=>(state[activeTab][i]||{}).taskDeadline||'');
+  const common=dates.every(d=>d===dates[0])?dates[0]:'';
+  const picker=document.getElementById('bulkDeadlinePicker');
+  picker.value=common;
+  document.getElementById('bulkDeadlineModal').classList.add('open');
+  setTimeout(()=>{ try{ if(picker.showPicker) picker.showPicker(); else picker.focus(); }catch(e){ picker.focus(); } },320);
+};
+document.getElementById('bulkDeadlineSaveBtn').onclick=()=>{
+  const val=document.getElementById('bulkDeadlinePicker').value;
+  const n=selectedTasks.size;
+  selectedTasks.forEach(i=>{ if(state[activeTab][i]) state[activeTab][i].taskDeadline=val; });
+  save(); renderAll();
+  document.getElementById('bulkDeadlineModal').classList.remove('open');
+  toast(CAL_ICON, val ? `Deadline set for ${n} task${n===1?'':'s'}` : `Deadline cleared for ${n} task${n===1?'':'s'}`);
+};
+document.getElementById('bulkDeadlineClearBtn').onclick=()=>{
+  const n=selectedTasks.size;
+  selectedTasks.forEach(i=>{ if(state[activeTab][i]) state[activeTab][i].taskDeadline=''; });
+  save(); renderAll();
+  document.getElementById('bulkDeadlineModal').classList.remove('open');
+  toast(CAL_ICON,`Deadline cleared for ${n} task${n===1?'':'s'}`);
+};
+document.getElementById('bulkDeadlineCancelBtn').onclick=()=>document.getElementById('bulkDeadlineModal').classList.remove('open');
+document.getElementById('bulkDeadlineModal').onclick=e=>{
+  if(e.target===document.getElementById('bulkDeadlineModal'))
+    document.getElementById('bulkDeadlineModal').classList.remove('open');
+};
+
+// ── BULK SET PRIORITY ─────────────────────────────────────────────────────────
+document.getElementById('bulkSetPriorityBtn').onclick=()=>{
+  const n=selectedTasks.size;
+  if(!n) return;
+  document.getElementById('bulkPrioritySubtitle').textContent=
+    `${n} task${n===1?'':'s'} selected — choose a priority to apply to all of them`;
+  document.getElementById('bulkPriorityModal').classList.add('open');
+};
+function applyBulkPriority(level){
+  const n=selectedTasks.size;
+  selectedTasks.forEach(i=>{ if(state[activeTab][i]) state[activeTab][i].priority=level; });
+  save(); renderAll();
+  document.getElementById('bulkPriorityModal').classList.remove('open');
+  const label={high:'High',med:'Medium',low:'Low'}[level];
+  toast('⚑',`Priority set to ${label} for ${n} task${n===1?'':'s'}`);
+}
+document.getElementById('bulkPrioHigh').onclick=()=>applyBulkPriority('high');
+document.getElementById('bulkPrioMed').onclick=()=>applyBulkPriority('med');
+document.getElementById('bulkPrioLow').onclick=()=>applyBulkPriority('low');
+document.getElementById('bulkPriorityCancelBtn').onclick=()=>document.getElementById('bulkPriorityModal').classList.remove('open');
+document.getElementById('bulkPriorityModal').onclick=e=>{
+  if(e.target===document.getElementById('bulkPriorityModal'))
+    document.getElementById('bulkPriorityModal').classList.remove('open');
+};
 document.getElementById('selectAllChk').onchange=e=>{
   const tasks=state[activeTab];
   if(e.target.checked)tasks.forEach((_,i)=>{if(matchesFilter(tasks[i]))selectedTasks.add(i);});
@@ -3450,6 +4123,9 @@ document.getElementById('newModelInput').addEventListener('keydown',e=>{
 document.getElementById('newModelDeadline').addEventListener('input',e=>{
   e.target.classList.toggle('has-value',!!e.target.value);
 });
+document.getElementById('duplicateModelBtn').onclick=()=>{
+  if(activeTab==='Compare Models')return;duplicateModel(activeTab);
+};
 document.getElementById('archiveModelBtn').onclick=()=>{
   if(activeTab==='Compare Models')return;archiveModel(activeTab);
 };
@@ -3617,6 +4293,7 @@ async function freshStart(){
   deadlines = {};
   deletedModelsSet = new Set();
   archivedModelsSet = new Set();
+  modelOrder = [];
   activeTab = '';
   selectedTasks.clear();
   editingIdx = null;
@@ -3633,6 +4310,7 @@ async function freshStart(){
         deadlines: {},
         deletedModels: [],
         archivedModels: [],
+        modelOrder: [],
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       });
     } catch(e){ console.error('Fresh start save error:',e); }
@@ -3642,6 +4320,11 @@ async function freshStart(){
   if(typeof refreshStickyBarOrigin==='function') setTimeout(refreshStickyBarOrigin,100);
   toast('🔄','Dashboard cleared — ready for new models & tasks',false);
 }
+
+document.getElementById('userManualBtn').onclick = ()=>{
+  document.getElementById('userBadge').classList.remove('menu-open');
+  downloadUserManual();
+};
 
 document.getElementById('freshStartBtn').onclick = ()=>{
   document.getElementById('userBadge').classList.remove('menu-open');
@@ -3723,6 +4406,15 @@ const backToTopBtn=document.getElementById('backToTopBtn');
 backToTopBtn.onclick=()=>{window.scrollTo({top:0,behavior:'smooth'});};
 
 // ── BOOTSTRAP ─────────────────────────────────────────────────────────────────
+// Register the service worker for PWA installability + offline app-shell
+// loading. Purely additive — if it fails (unsupported browser, blocked,
+// not served over https) the dashboard works exactly as it did before.
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{/* PWA install just won't be offered — no functional impact */});
+  });
+}
+
 // Show the dashboard with seed data right away rather than waiting on
 // Firebase. Once Firebase resolves, handleAuthState swaps in real data
 // for a signed-in user, or re-enters preview mode if nobody is signed in.
