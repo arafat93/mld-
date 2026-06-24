@@ -512,6 +512,90 @@ footer {
 .task-row.task-row-settling { background: rgba(16, 185, 129, 0.06); transition: background 0.3s ease; }
 .task-row.task-row-settling-pending { background: rgba(244, 63, 94, 0.05); transition: background 0.3s ease; }
 
+/* ── SUBTASK TOGGLE BUTTON ── */
+.subtask-toggle-btn {
+  width: 20px; height: 20px; border-radius: 5px;
+  border: 1px solid var(--border); background: var(--surface2);
+  color: var(--text-muted); cursor: pointer; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 9px; line-height: 1;
+  transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.28s cubic-bezier(0.4,0,0.2,1);
+  margin-right: 5px; vertical-align: middle;
+}
+.subtask-toggle-btn:hover { border-color: var(--accent1); color: var(--accent1); background: var(--accent1-dim); }
+.subtask-toggle-btn.open { background: var(--accent1-dim); border-color: var(--accent1); color: var(--accent1); transform: rotate(90deg); }
+
+.subtask-count-pill {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 18px; height: 16px; padding: 0 5px;
+  border-radius: 100px; font-size: 10px; font-weight: 700;
+  background: var(--surface3); color: var(--text-muted);
+  margin-left: 5px; vertical-align: middle;
+  transition: background 0.2s, color 0.2s;
+}
+.subtask-count-pill.has { background: var(--accent1-dim); color: var(--accent1); }
+.subtask-count-pill.all-done { background: rgba(16,185,129,0.12); color: var(--green); }
+
+/* ── SUBTASK PANEL — grid-template-rows trick for perfect smooth animation ── */
+.subtask-panel-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.32s cubic-bezier(0.4,0,0.2,1);
+}
+.subtask-panel-wrap.open { grid-template-rows: 1fr; }
+.subtask-panel-inner { overflow: hidden; min-height: 0; }
+
+.subtask-panel {
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 0 14px;
+}
+.subtask-panel-title {
+  font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
+  text-transform: uppercase; color: var(--text-muted);
+  margin-bottom: 9px; display: block;
+  padding: 0 24px;
+}
+.subtask-add-bar { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; padding: 0 24px; }
+.subtask-add-input {
+  flex: 1; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 13px; color: var(--text);
+  font-family: inherit; font-size: 13px; outline: none; transition: all 0.2s;
+}
+.subtask-add-input:focus { border-color: var(--accent1); box-shadow: 0 0 0 2px var(--accent1-dim); }
+.subtask-add-input::placeholder { color: var(--text-muted); font-weight: 300; }
+.subtask-add-btn {
+  padding: 7px 15px; border-radius: 8px; border: 1px solid var(--accent1);
+  background: var(--accent1); color: var(--bg);
+  font-family: inherit; font-size: 12px; font-weight: 600;
+  cursor: pointer; white-space: nowrap; transition: all 0.2s;
+}
+.subtask-add-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+.subtask-row {
+  display: grid;
+  grid-template-columns: 36px 56px 1fr 110px 130px 90px 96px 160px;
+  padding: 0 24px; border-bottom: 1px solid var(--border);
+  align-items: center; min-height: 56px; transition: background 0.15s;
+  border-radius: 6px;
+}
+.subtask-row:last-child { border-bottom: none; }
+.subtask-row:hover { background: rgba(255,255,255,0.03); }
+.subtask-row.dragging { opacity: 0.4; }
+.subtask-row.drag-over { border-top: 2px solid var(--accent1); }
+.subtask-row > div:nth-child(5) { display: flex; justify-content: center; }
+.subtask-num { font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; text-align: center; font-weight: 500; }
+.subtask-chk { width: 15px; height: 15px; border-radius: 4px; cursor: pointer; flex-shrink: 0; accent-color: var(--accent1); }
+.subtask-name { flex: 1; font-size: 13px; color: var(--text); font-weight: 400; line-height: 1.4; min-width: 0; cursor: grab; }
+.subtask-name.done { text-decoration: line-through; color: var(--text-muted); opacity: 0.6; }
+.subtask-name-edit {
+  flex: 1; width: 100%; background: var(--surface); border: 1px solid var(--accent1);
+  border-radius: 6px; padding: 4px 9px; color: var(--text);
+  font-family: inherit; font-size: 13px; outline: none;
+  box-shadow: 0 0 0 2px var(--accent1-dim);
+}
+.subtask-name-cell { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.subtask-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; justify-content: flex-end; }
 .completed-divider {
   display: flex; align-items: center; gap: 12px;
   padding: 14px 24px; user-select: none;
@@ -802,6 +886,12 @@ footer {
 .bulk-btn.bulk-btn-move-model:hover { background: rgba(212,175,55,0.14); border-color: var(--accent1); color: var(--accent1); }
 .bulk-btn.bulk-btn-copy-model { color: var(--accent2); border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.07); }
 .bulk-btn.bulk-btn-copy-model:hover { background: rgba(96,165,250,0.14); border-color: var(--accent2); color: var(--accent2); }
+
+.bulk-bar.subtask-bulk-bar {
+  margin: 0 24px 10px; padding: 10px 14px; border-radius: 10px;
+}
+.bulk-bar.subtask-bulk-bar .bulk-btn { padding: 6px 12px; font-size: 11.5px; }
+.bulk-bar.subtask-bulk-bar .bulk-count { font-size: 12px; }
 
 /* ── BULK MOVE DROPDOWN (consolidates Move to Top/Bottom/Model) ── */
 .bulk-move-dropdown { position: relative; }
@@ -1199,14 +1289,14 @@ kbd {
 
 /* ── RESPONSIVE ── */
 @media(max-width: 1200px) {
-  .table-header, .task-row { grid-template-columns: 30px 48px 1fr 100px 120px 80px 80px 150px; }
+  .table-header, .task-row, .subtask-row { grid-template-columns: 30px 48px 1fr 100px 120px 80px 80px 150px; }
 }
 @media(max-width: 900px) {
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
   .models-grid { grid-template-columns: 1fr; }
   .table-header { grid-template-columns: 26px 40px 1fr 100px 110px; }
   .table-header > *:nth-child(6), .table-header > *:nth-child(7), .table-header > *:nth-child(8) { display: none; }
-  .task-row {
+  .task-row, .subtask-row {
     grid-template-columns: 26px 40px 1fr 100px 110px;
     grid-template-rows: auto auto;
     grid-template-areas:
@@ -1214,14 +1304,14 @@ kbd {
       "spacer1 spacer2 icons actions actions";
     row-gap: 8px; padding-top: 12px; padding-bottom: 12px;
   }
-  .task-row > *:nth-child(1) { grid-area: sn; }
-  .task-row > *:nth-child(2) { grid-area: chk; }
-  .task-row > *:nth-child(3) { grid-area: name; }
-  .task-row > *:nth-child(4) { grid-area: prio; }
-  .task-row > *:nth-child(5) { grid-area: status; }
-  .task-row > *:nth-child(6) { display: none; } /* Due column */
-  .task-row > .task-icons-cell { grid-area: icons; justify-content: flex-start; }
-  .task-row > .row-actions { grid-area: actions; justify-content: flex-end; }
+  .task-row > *:nth-child(1), .subtask-row > *:nth-child(1) { grid-area: sn; }
+  .task-row > *:nth-child(2), .subtask-row > *:nth-child(2) { grid-area: chk; }
+  .task-row > *:nth-child(3), .subtask-row > *:nth-child(3) { grid-area: name; }
+  .task-row > *:nth-child(4), .subtask-row > *:nth-child(4) { grid-area: prio; }
+  .task-row > *:nth-child(5), .subtask-row > *:nth-child(5) { grid-area: status; }
+  .task-row > *:nth-child(6), .subtask-row > *:nth-child(6) { display: none; } /* Due column */
+  .task-row > .task-icons-cell, .subtask-row > .task-icons-cell { grid-area: icons; justify-content: flex-start; }
+  .task-row > .row-actions, .subtask-row > .row-actions { grid-area: actions; justify-content: flex-end; }
   .compare-header, .compare-row { grid-template-columns: 40px 1fr 140px; }
   .compare-header > *:last-child, .compare-row > *:last-child { display: none; }
 }
@@ -1257,11 +1347,11 @@ kbd {
 
   /* Task table: drop the serial-number column entirely (least essential
      on a phone) and shrink padding so the remaining columns fit. */
-  .table-header, .task-row { padding: 0 12px; }
+  .table-header, .task-row, .subtask-row { padding: 0 12px; }
   .table-header { grid-template-columns: 32px 1fr 72px; }
   .table-header > *:nth-child(1) { display: none; } /* # column header */
   .table-header > *:nth-child(5) { display: none; } /* status column header */
-  .task-row {
+  .task-row, .subtask-row {
     grid-template-columns: 32px 1fr 72px;
     grid-template-areas:
       "chk name prio"
@@ -1269,14 +1359,18 @@ kbd {
       "spacer status status";
     row-gap: 6px;
   }
-  .task-row > *:nth-child(1) { display: none; } /* serial number cell */
-  .task-row > *:nth-child(2) { grid-area: chk; }
-  .task-row > *:nth-child(3) { grid-area: name; }
-  .task-row > *:nth-child(4) { grid-area: prio; justify-self: end; }
-  .task-row > *:nth-child(5) { grid-area: status; justify-self: start; margin-top: 2px; }
-  .task-row > .task-icons-cell { grid-area: icons; justify-content: flex-start; }
-  .task-row > .row-actions { grid-area: actions; justify-content: flex-end; }
+  .task-row > *:nth-child(1) { display: none; } /* serial number cell (task rows only — subtask numbering stays visible) */
+  .subtask-row > *:nth-child(1) { grid-area: chk; justify-self: start; }
+  .subtask-row > *:nth-child(2) { display: none; } /* checkbox hidden on phone to make room; tap status chip to toggle */
+  .task-row > *:nth-child(2), .subtask-row > *:nth-child(2) { grid-area: chk; }
+  .task-row > *:nth-child(3), .subtask-row > *:nth-child(3) { grid-area: name; }
+  .task-row > *:nth-child(4), .subtask-row > *:nth-child(4) { grid-area: prio; justify-self: end; }
+  .task-row > *:nth-child(5), .subtask-row > *:nth-child(5) { grid-area: status; justify-self: start; margin-top: 2px; }
+  .task-row > .task-icons-cell, .subtask-row > .task-icons-cell { grid-area: icons; justify-content: flex-start; }
+  .task-row > .row-actions, .subtask-row > .row-actions { grid-area: actions; justify-content: flex-end; }
   .priority-badge { width: auto; padding: 6px 10px; }
+  .subtask-panel-title, .subtask-add-bar { padding: 0 12px; }
+  .bulk-bar.subtask-bulk-bar { margin: 0 12px 10px; }
 
   /* Toast: full-width banner instead of a fixed min-width box that can
      clip or sit awkwardly close to the viewport edge. */
@@ -2179,7 +2273,7 @@ function undo(){
   modelOrder=prev.modelOrder||modelOrder;
   refreshModelsList();
   activeTab=models.includes(prev.activeTab)?prev.activeTab:(models[0]||'');
-  selectedTasks.clear();editingIdx=null;
+  selectedTasks.clear();selectedSubtasks.clear();editingIdx=null;
   // This counts as a change too, but shouldn't itself be undoable back to
   // a state we just left — re-baseline without pushing a new undo step.
   lastSnapshot=snapshotNow();
@@ -2213,7 +2307,7 @@ function redo(){
   modelOrder=next.modelOrder||modelOrder;
   refreshModelsList();
   activeTab=models.includes(next.activeTab)?next.activeTab:(models[0]||'');
-  selectedTasks.clear();editingIdx=null;
+  selectedTasks.clear();selectedSubtasks.clear();editingIdx=null;
   lastSnapshot=snapshotNow();
   updateUndoBtn();
   updateRedoBtn();
@@ -2317,7 +2411,7 @@ async function handleAuthState(user){
     document.getElementById('loginPassword').value='';
     document.getElementById('loginError').textContent='';
     editingIdx=null;
-    selectedTasks.clear();
+    selectedTasks.clear();selectedSubtasks.clear();
     enterPreviewMode();
   }
 }
@@ -2461,12 +2555,41 @@ let activeFilter = 'all';
 let searchQuery = '';
 let editingIdx = null;
 let selectedTasks = new Set();
+// Subtask bulk-select — keyed by "model::taskIdx::subIdx" strings so selections
+// from subtask panels on different tasks (even across different open panels)
+// never collide with each other or with the task-level selection above.
+let selectedSubtasks = new Set();
+function subSelKey(model,idx,sIdx){ return model+'::'+idx+'::'+sIdx; }
+// Whenever a model's task array is reordered, inserted into, or has a task
+// removed, every subtask-selection key for that model embeds a now-stale
+// task index — clear them rather than risk a bulk action hitting the wrong
+// task's subtasks (mirrors how selectedTasks itself is just cleared on
+// drag-drop reorder elsewhere in this file).
+function clearSubSelectionsForModel(model){
+  const prefix=model+'::';
+  [...selectedSubtasks].forEach(k=>{ if(k.startsWith(prefix)) selectedSubtasks.delete(k); });
+}
+// Same idea, but scoped to one task only — used after a subtask delete/reorder
+// within that task's panel, so sibling panels' selections are left untouched.
+function clearSubSelectionsForTask(model,idx){
+  const prefix=model+'::'+idx+'::';
+  [...selectedSubtasks].forEach(k=>{ if(k.startsWith(prefix)) selectedSubtasks.delete(k); });
+}
 let dragSrcIdx = null;
+// Subtask drag-and-drop is scoped to one task at a time — dragSrcSubCtx
+// records which task's panel the drag started in ({model, idx}) plus the
+// dragged subtask's index, so a drop is only honored within that same
+// task's subtask list (dragging between different tasks' panels isn't
+// supported, same as how task drag-drop only reorders within one model).
+let dragSrcSubCtx = null;
 let modelOrder = []; // persisted drag-and-drop order for model cards
 let renamingModel = null; // model name currently being renamed inline
 // Tracks which models currently have their "Completed" section expanded.
 // Collapsed by default — clicking the divider toggles it per model.
 let expandedCompletedSet = new Set();
+// Tracks which tasks have their subtask panel open. Key = "model::idx".
+// Toggle purely flips a CSS class — no re-render — so the CSS transition plays.
+let expandedSubtasksSet = new Set();
 
 function refreshModelsList(){
   const active=Object.keys(state).filter(m=>!archivedModelsSet.has(m));
@@ -2603,6 +2726,57 @@ function isOverdueTask(task){
   const today=new Date(); today.setHours(0,0,0,0);
   const d=new Date(task.taskDeadline+'T00:00:00');
   return d<today;
+}
+
+// ── SUBTASK HELPERS ───────────────────────────────────────────────────────────
+function getSubtasks(model,idx){
+  const t=state[model]&&state[model][idx];
+  if(!t) return [];
+  if(!Array.isArray(t.subtasks)) t.subtasks=[];
+  return t.subtasks;
+}
+function subKey(model,idx){ return model+'::'+idx; }
+function subPanelId(key){ return 'sp-'+key.replace(/[^a-zA-Z0-9]/g,'_'); }
+
+function addSubtask(model,idx,name){
+  const n=name.trim(); if(!n) return;
+  getSubtasks(model,idx).push({name:n.toUpperCase(),done:false,priority:'med',notes:'',taskDeadline:''});
+  save(); renderAll(); toast('＋','Subtask added: '+n.slice(0,28));
+}
+function toggleSubtask(model,idx,sIdx){
+  const s=getSubtasks(model,idx)[sIdx]; if(!s) return;
+  s.done=!s.done; save(); renderAll();
+}
+function deleteSubtask(model,idx,sIdx){
+  const subs=getSubtasks(model,idx);
+  const nm=subs[sIdx].name; subs.splice(sIdx,1);
+  clearSubSelectionsForTask(model,idx);
+  save(); renderAll(); toast('×','Subtask deleted: '+nm.slice(0,28));
+}
+function renameSubtask(model,idx,sIdx,newName){
+  const n=newName.trim(); if(!n) return;
+  getSubtasks(model,idx)[sIdx].name=n.toUpperCase();
+  save(); renderAll();
+}
+function moveSubtask(model,idx,sIdx,dir){
+  const subs=getSubtasks(model,idx);
+  const ni=sIdx+dir; if(ni<0||ni>=subs.length) return;
+  [subs[sIdx],subs[ni]]=[subs[ni],subs[sIdx]];
+  clearSubSelectionsForTask(model,idx);
+  save(); renderAll();
+}
+function setSubPriority(model,idx,sIdx,p){
+  getSubtasks(model,idx)[sIdx].priority=p; save(); renderAll();
+}
+
+// Generic notes modal (reuses the existing modal for subtasks too)
+let _notesObj=null, _notesObjCb=null;
+function openNotesForObj(obj,cb){
+  _notesObj=obj; _notesObjCb=cb;
+  document.getElementById('notesTaskName').textContent=obj.name;
+  document.getElementById('notesTextarea').value=obj.notes||'';
+  document.getElementById('notesModal').classList.add('open');
+  setTimeout(()=>document.getElementById('notesTextarea').focus(),100);
 }
 
 // ── KPI ───────────────────────────────────────────────────────────────────────
@@ -2764,7 +2938,7 @@ function renderModelCards(){
     card.addEventListener('dragstart',()=>{ _didDrag=true; });
     card.addEventListener('click',()=>{
       if(_didDrag||isRenaming){ _didDrag=false; return; }
-      activeTab=m;editingIdx=null;selectedTasks.clear();renderAll();
+      activeTab=m;editingIdx=null;selectedTasks.clear();selectedSubtasks.clear();renderAll();
       const target=document.getElementById('taskChecklistLabel');
       if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
     });
@@ -3001,7 +3175,7 @@ function renderTabs(){
     let _didDrag=false;
     btn.onclick=()=>{
       if(_didDrag){ _didDrag=false; return; }
-      activeTab=m;editingIdx=null;selectedTasks.clear();renderTabs();renderTaskList();scrollToTaskChecklist();
+      activeTab=m;editingIdx=null;selectedTasks.clear();selectedSubtasks.clear();renderTabs();renderTaskList();scrollToTaskChecklist();
     };
     if(!isCompare){
       btn.draggable=true;
@@ -3192,9 +3366,21 @@ function renderTaskList(){
     const prioMap={high:'HIGH',med:'MED',low:'LOW'};
     const prioClass={high:'prio-high',med:'prio-med',low:'prio-low'};
 
+    // ── subtask state for this row ──
+    const subs=getSubtasks(activeTab,idx);
+    const subsDone=subs.filter(s=>s.done).length;
+    const subsTotal=subs.length;
+    const sk=subKey(activeTab,idx);
+    const subOpen=expandedSubtasksSet.has(sk);
+    const pillCls=subsTotal===0?'':('has'+(subsDone===subsTotal&&subsTotal>0?' all-done':''));
+
     const nameCell=isEditing
       ?`<input class="task-name-edit" id="editInput" type="text" value="${escHtml(task.name)}">`
-      :`<div class="task-name ${showAsDone?'done-name':''}">${escHtml(task.name)}</div>`;
+      :`<div style="display:flex;align-items:center;gap:2px;min-width:0;">
+          <button class="subtask-toggle-btn${subOpen?' open':''}" data-sk="${sk}" title="${subOpen?'Collapse subtasks':'Expand / add subtasks'}">▸</button>
+          <div class="task-name ${showAsDone?'done-name':''}" style="margin:0;">${escHtml(task.name)}</div>
+          ${subsTotal>0?`<span class="subtask-count-pill ${pillCls}">${subsDone}/${subsTotal}</span>`:''}
+        </div>`;
 
     const sectionEntries=task.done?doneEntries:pendingEntries;
     const posInSection=sectionEntries.findIndex(e=>e.idx===idx);
@@ -3266,6 +3452,7 @@ function renderTaskList(){
       // Selections are stored by array index, which this reorder invalidates —
       // clear rather than risk the checkbox marking the wrong task as selected.
       selectedTasks.clear();
+      clearSubSelectionsForModel(activeTab);
       if(editingIdx!==null) editingIdx=null;
       save();renderAll();
     });
@@ -3306,11 +3493,261 @@ function renderTaskList(){
         save();renderAll();
         toast(CAL_ICON,`Task deadline ${val?'set':'cleared'}`);
       };
+
+      // Subtask toggle — flips CSS class only, no re-render, so transition plays
+      const toggleEl=row.querySelector('.subtask-toggle-btn');
+      if(toggleEl){
+        toggleEl.addEventListener('click',e=>{
+          e.stopPropagation();
+          const k=toggleEl.dataset.sk;
+          const nowOpen=!expandedSubtasksSet.has(k);
+          if(nowOpen) expandedSubtasksSet.add(k); else expandedSubtasksSet.delete(k);
+          toggleEl.classList.toggle('open',nowOpen);
+          const pw=document.getElementById(subPanelId(k));
+          if(pw) pw.classList.toggle('open',nowOpen);
+        });
+      }
     }
-    return row;
+
+    // ── SUBTASK PANEL — always in DOM, CSS controls open/close ──
+    const panelWrap=document.createElement('div');
+    panelWrap.className='subtask-panel-wrap'+(subOpen?' open':'');
+    panelWrap.id=subPanelId(sk);
+
+    const panelInner=document.createElement('div');
+    panelInner.className='subtask-panel-inner';
+    panelWrap.appendChild(panelInner);
+
+    const panel=document.createElement('div');
+    panel.className='subtask-panel';
+
+    // Title row — includes a "select all" checkbox for this task's subtasks
+    const titleRow=document.createElement('div');
+    titleRow.style.cssText='display:flex;align-items:center;gap:10px;padding:0 24px;margin-bottom:9px;';
+    const selAllSub=document.createElement('input');
+    selAllSub.type='checkbox'; selAllSub.className='task-checkbox subtask-select-all-chk';
+    selAllSub.title='Select all subtasks';
+    const subKeysForTask=subs.map((_,sIdx)=>subSelKey(activeTab,idx,sIdx));
+    selAllSub.checked=subs.length>0&&subKeysForTask.every(k=>selectedSubtasks.has(k));
+    selAllSub.indeterminate=!selAllSub.checked&&subKeysForTask.some(k=>selectedSubtasks.has(k));
+    selAllSub.onclick=e=>e.stopPropagation();
+    selAllSub.onchange=e=>{
+      if(e.target.checked) subKeysForTask.forEach(k=>selectedSubtasks.add(k));
+      else subKeysForTask.forEach(k=>selectedSubtasks.delete(k));
+      renderTaskList();
+    };
+    const titleEl=document.createElement('span');
+    titleEl.className='subtask-panel-title';
+    titleEl.style.padding='0'; titleEl.style.marginBottom='0';
+    titleEl.textContent=`Subtasks${subsTotal>0?' ('+subsTotal+')':''}`;
+    titleRow.appendChild(selAllSub);
+    titleRow.appendChild(titleEl);
+    panel.appendChild(titleRow);
+
+    // Subtask bulk action bar — mirrors the task-level bulk bar, but scoped
+    // to this task's subtasks only, so selecting subtasks in one panel never
+    // affects another open panel.
+    const selectedHere=subKeysForTask.filter(k=>selectedSubtasks.has(k));
+    if(selectedHere.length>0){
+      const sBar=document.createElement('div');
+      sBar.className='bulk-bar subtask-bulk-bar visible';
+      sBar.innerHTML=`
+        <span class="bulk-count">${selectedHere.length} selected</span>
+        <button class="bulk-btn" data-act="done">Mark Done</button>
+        <button class="bulk-btn" data-act="pending">Mark Pending</button>
+        <button class="bulk-btn bulk-btn-deadline" data-act="deadline">📅 Set Deadline</button>
+        <button class="bulk-btn bulk-btn-priority" data-act="priority">⚑ Set Priority</button>
+        <button class="bulk-btn danger" data-act="delete">Delete Selected</button>
+        <button class="bulk-btn" data-act="clear" style="margin-left:auto;">Clear Selection</button>`;
+      sBar.querySelector('[data-act="done"]').onclick=e=>{
+        e.stopPropagation();
+        selectedHere.forEach(k=>{const sI=Number(k.split('::')[2]); if(subs[sI])subs[sI].done=true;});
+        subKeysForTask.forEach(k=>selectedSubtasks.delete(k));
+        save();renderAll();toast('✓',`Marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} done`);
+      };
+      sBar.querySelector('[data-act="pending"]').onclick=e=>{
+        e.stopPropagation();
+        selectedHere.forEach(k=>{const sI=Number(k.split('::')[2]); if(subs[sI])subs[sI].done=false;});
+        subKeysForTask.forEach(k=>selectedSubtasks.delete(k));
+        save();renderAll();toast('↺',`Marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} pending`);
+      };
+      sBar.querySelector('[data-act="delete"]').onclick=async e=>{
+        e.stopPropagation();
+        const n=selectedHere.length;
+        const ok=await showConfirm({title:'Delete selected subtasks?',message:`${n} subtask${n===1?'':'s'} will be permanently removed.`,confirmText:`Delete ${n}`,danger:true,icon:'🗑'});
+        if(!ok)return;
+        const sIdxs=selectedHere.map(k=>Number(k.split('::')[2])).sort((a,b)=>b-a);
+        sIdxs.forEach(sI=>subs.splice(sI,1));
+        clearSubSelectionsForTask(activeTab,idx);
+        save();renderAll();toast('×',`Deleted ${n} subtask${n===1?'':'s'}`);
+      };
+      sBar.querySelector('[data-act="clear"]').onclick=e=>{e.stopPropagation();subKeysForTask.forEach(k=>selectedSubtasks.delete(k));renderTaskList();};
+      sBar.querySelector('[data-act="deadline"]').onclick=e=>{
+        e.stopPropagation();
+        openSubBulkDeadlineModal(activeTab,idx,selectedHere.map(k=>Number(k.split('::')[2])));
+      };
+      sBar.querySelector('[data-act="priority"]').onclick=e=>{
+        e.stopPropagation();
+        openSubBulkPriorityModal(activeTab,idx,selectedHere.map(k=>Number(k.split('::')[2])));
+      };
+      panel.appendChild(sBar);
+    }
+
+    // Add bar
+    const addBar=document.createElement('div');
+    addBar.className='subtask-add-bar';
+    addBar.innerHTML=`<input class="subtask-add-input" type="text" placeholder="Add a subtask and press Enter…" maxlength="120"><button class="subtask-add-btn">＋ Add</button>`;
+    const addInp=addBar.querySelector('.subtask-add-input');
+    const addBtn=addBar.querySelector('.subtask-add-btn');
+    const doAdd=()=>{ addSubtask(activeTab,idx,addInp.value); };
+    addBtn.onclick=e=>{e.stopPropagation();doAdd();};
+    addInp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();doAdd();}});
+    addInp.addEventListener('click',e=>e.stopPropagation());
+    panel.appendChild(addBar);
+
+    // Subtask rows — same 8-column grid as the parent task row, so
+    // Priority/Status/Due/Notes/Actions all line up under the matching
+    // task-table header cells. Numbered "<task#>.<subtask#>", e.g. 1.1, 1.2.
+    const prioMap2={high:'HIGH',med:'MED',low:'LOW'};
+    const prioClass2={high:'prio-high',med:'prio-med',low:'prio-low'};
+    subs.forEach((sub,sIdx)=>{
+      const sRow=document.createElement('div');
+      sRow.className='subtask-row';
+      sRow.draggable=true;
+      const sdl=taskDeadlineLabel(sub.taskDeadline||'');
+      const dlIconCls2=sdl?sdl.cls:'';
+      const dlTitle2=sdl?`Deadline: ${sdl.text}`:'Set subtask deadline';
+
+      // Due column cell — mirrors the parent task's day-count badge
+      let subDueHtml='<div style="display:flex;justify-content:center;align-items:center;">—</div>';
+      if(sub.taskDeadline){
+        const today=new Date(); today.setHours(0,0,0,0);
+        const d=new Date(sub.taskDeadline+'T00:00:00');
+        const diff=Math.round((d-today)/(1000*60*60*24));
+        if(sub.done){
+          subDueHtml=`<div style="display:flex;justify-content:center;align-items:center;"><span class="task-dl-pill due-done" title="Completed · deadline was ${sub.taskDeadline}">Done</span></div>`;
+        } else if(diff<0){
+          subDueHtml=`<div style="display:flex;justify-content:center;align-items:center;"><span class="task-dl-pill overdue" title="Overdue by ${-diff} day${-diff===1?'':'s'}">-${-diff}d</span></div>`;
+        } else if(diff===0){
+          subDueHtml=`<div style="display:flex;justify-content:center;align-items:center;"><span class="task-dl-pill due-today" title="Due today">Today</span></div>`;
+        } else {
+          subDueHtml=`<div style="display:flex;justify-content:center;align-items:center;"><span class="task-dl-pill due-soon" title="Due in ${diff} day${diff===1?'':'s'}">${diff}d</span></div>`;
+        }
+      }
+
+      const selKey=subSelKey(activeTab,idx,sIdx);
+      const isSelected=selectedSubtasks.has(selKey);
+      sRow.innerHTML=`
+        <div class="subtask-num">${task.sn}.${sIdx+1}</div>
+        <div><input type="checkbox" class="task-checkbox subtask-sel-chk" ${isSelected?'checked':''}></div>
+        <div class="subtask-name-cell">
+          <span class="subtask-name${sub.done?' done':''}">${escHtml(sub.name)}</span>
+        </div>
+        <div><button class="priority-badge ${prioClass2[sub.priority||'med']}" title="Click to cycle priority">${prioMap2[sub.priority||'med']}</button></div>
+        <div style="display:flex;align-items:center;justify-content:center;"><button class="status-chip ${sub.done?'done':'pending'}"><span class="chip-dot"></span>${sub.done?'Done':'Pending'}</button></div>
+        ${subDueHtml}
+        <div class="task-icons-cell">
+          <div class="notes-indicator ${sub.notes?'has-note':''}" title="${sub.notes?'View/edit note':'Add note'}">📝</div>
+          <div class="task-deadline-wrap ${dlIconCls2}" title="${dlTitle2}">
+            <input type="date" class="task-deadline-native" tabindex="-1" value="${sub.taskDeadline||''}">
+          </div>
+        </div>
+        <div class="row-actions">
+          <button class="row-action-btn edit" title="Rename">✎</button>
+          <button class="row-action-btn move-up" title="Move up" ${sIdx===0?'disabled':''}>↑</button>
+          <button class="row-action-btn move-down" title="Move down" ${sIdx===subs.length-1?'disabled':''}>↓</button>
+          <button class="row-action-btn delete" title="Delete">✕</button>
+        </div>`;
+
+      sRow.querySelector('.subtask-sel-chk').onclick=e=>e.stopPropagation();
+      sRow.querySelector('.subtask-sel-chk').onchange=e=>{
+        if(e.target.checked) selectedSubtasks.add(selKey); else selectedSubtasks.delete(selKey);
+        renderTaskList();
+      };
+      sRow.addEventListener('dragstart',e=>{
+        dragSrcSubCtx={model:activeTab,idx,sIdx};
+        sRow.classList.add('dragging');
+        e.stopPropagation();
+      });
+      sRow.addEventListener('dragend',()=>{
+        sRow.classList.remove('dragging');
+        panel.querySelectorAll('.subtask-row.drag-over').forEach(r=>r.classList.remove('drag-over'));
+      });
+      sRow.addEventListener('dragover',e=>{
+        e.preventDefault();e.stopPropagation();
+        // Only show the drop indicator when dragging within this same task's
+        // subtask list — dropping a subtask onto a different task's panel
+        // (or onto a task row) isn't supported.
+        if(dragSrcSubCtx&&dragSrcSubCtx.model===activeTab&&dragSrcSubCtx.idx===idx) sRow.classList.add('drag-over');
+      });
+      sRow.addEventListener('dragleave',()=>sRow.classList.remove('drag-over'));
+      sRow.addEventListener('drop',e=>{
+        e.preventDefault();e.stopPropagation();
+        sRow.classList.remove('drag-over');
+        if(!dragSrcSubCtx||dragSrcSubCtx.model!==activeTab||dragSrcSubCtx.idx!==idx) return;
+        const fromI=dragSrcSubCtx.sIdx;
+        dragSrcSubCtx=null;
+        if(fromI===sIdx) return;
+        const[moved]=subs.splice(fromI,1);
+        subs.splice(sIdx,0,moved);
+        // Reorder invalidates this task's subtask-index-based selections —
+        // clear them rather than risk acting on the wrong subtask.
+        clearSubSelectionsForTask(activeTab,idx);
+        save();renderAll();
+      });
+      sRow.querySelector('.status-chip').onclick=e=>{e.stopPropagation();toggleSubtask(activeTab,idx,sIdx);};
+      sRow.querySelector('.priority-badge').onclick=e=>{
+        e.stopPropagation();
+        const cyc={high:'low',med:'high',low:'med'};
+        setSubPriority(activeTab,idx,sIdx,cyc[sub.priority||'med']);
+      };
+      sRow.querySelector('.notes-indicator').onclick=e=>{
+        e.stopPropagation();
+        openNotesForObj(sub,()=>{save();renderAll();});
+      };
+      // Deadline
+      const sdlNative=sRow.querySelector('.task-deadline-native');
+      sdlNative.onclick=e=>e.stopPropagation();
+      sdlNative.onchange=e=>{
+        e.stopPropagation(); sub.taskDeadline=e.target.value;
+        save();renderAll(); toast(CAL_ICON,`Subtask deadline ${e.target.value?'set':'cleared'}`);
+      };
+      // Edit inline
+      sRow.querySelector('.row-action-btn.edit').onclick=e=>{
+        e.stopPropagation();
+        const nameEl=sRow.querySelector('.subtask-name');
+        const inp=document.createElement('input');
+        inp.className='subtask-name-edit'; inp.value=sub.name;
+        nameEl.replaceWith(inp);
+        const saveBtn=sRow.querySelector('.row-action-btn.edit');
+        saveBtn.textContent='✓'; saveBtn.classList.replace('edit','save');
+        const cancelBtn=document.createElement('button');
+        cancelBtn.className='row-action-btn cancel'; cancelBtn.textContent='✕';
+        saveBtn.after(cancelBtn);
+        inp.focus(); inp.select();
+        inp.addEventListener('click',e2=>e2.stopPropagation());
+        const commit=()=>renameSubtask(activeTab,idx,sIdx,inp.value);
+        saveBtn.onclick=e2=>{e2.stopPropagation();commit();};
+        cancelBtn.onclick=e2=>{e2.stopPropagation();renderTaskList();};
+        inp.addEventListener('keydown',e2=>{
+          if(e2.key==='Enter'){e2.preventDefault();commit();}
+          if(e2.key==='Escape'){e2.preventDefault();renderTaskList();}
+        });
+      };
+      sRow.querySelector('.row-action-btn.move-up').onclick=e=>{e.stopPropagation();moveSubtask(activeTab,idx,sIdx,-1);};
+      sRow.querySelector('.row-action-btn.move-down').onclick=e=>{e.stopPropagation();moveSubtask(activeTab,idx,sIdx,1);};
+      sRow.querySelector('.row-action-btn.delete').onclick=e=>{e.stopPropagation();deleteSubtask(activeTab,idx,sIdx);};
+      panel.appendChild(sRow);
+    });
+
+    panelInner.appendChild(panel);
+    return {row,panelWrap};
   }
 
-  pendingEntries.forEach(({task,idx})=>tbody.appendChild(buildRow(task,idx)));
+  pendingEntries.forEach(({task,idx})=>{
+    const {row,panelWrap}=buildRow(task,idx);
+    tbody.appendChild(row); tbody.appendChild(panelWrap);
+  });
 
   // ── COMPLETED DIVIDER (collapsible) ──
   // Only shown when there's at least one done task that's currently visible
@@ -3332,7 +3769,10 @@ function renderTaskList(){
   }
 
   if(isExpanded){
-    doneEntries.forEach(({task,idx})=>tbody.appendChild(buildRow(task,idx)));
+    doneEntries.forEach(({task,idx})=>{
+      const {row,panelWrap}=buildRow(task,idx);
+      tbody.appendChild(row); tbody.appendChild(panelWrap);
+    });
   }
 
   if(editingIdx!==null){
@@ -3509,7 +3949,7 @@ function addTask(model,name,position){
   renumber(tasks);
   // Inserting anywhere but the end shifts every later index, which would
   // desync any existing checkbox selections — clear to stay safe.
-  if(insertAt<tasks.length-1){ selectedTasks.clear(); if(editingIdx!==null) editingIdx=null; }
+  if(insertAt<tasks.length-1){ selectedTasks.clear(); clearSubSelectionsForModel(model); if(editingIdx!==null) editingIdx=null; }
   save();renderAll();
   toast('＋',`Task added${insertAt<tasks.length-1?` at #${insertAt+1}`:''}: ${trimmed.slice(0,28)}`);
 }
@@ -3535,6 +3975,7 @@ async function deleteTask(model,idx){
     else if(i>idx) shifted.add(i-1);
   });
   selectedTasks=shifted;
+  clearSubSelectionsForModel(model);
   if(editingIdx!==null){
     if(editingIdx===idx) editingIdx=null;
     else if(editingIdx>idx) editingIdx-=1;
@@ -3559,6 +4000,7 @@ function moveTask(model,idx,dir){
   // Selections are stored by array index, which this reorder invalidates —
   // clear rather than risk the checkbox marking the wrong task as selected.
   selectedTasks.clear();
+  clearSubSelectionsForModel(model);
   if(editingIdx!==null) editingIdx=null;
   save();renderAll();
 }
@@ -3650,9 +4092,14 @@ function openNotesModal(model,idx){
   setTimeout(()=>document.getElementById('notesTextarea').focus(),100);
 }
 document.getElementById('notesSaveBtn').onclick=()=>{
-  const{model,idx}=notesCtx;
-  state[model][idx].notes=document.getElementById('notesTextarea').value.trim();
-  save();renderTaskList();renderModelCards();
+  const text=document.getElementById('notesTextarea').value.trim();
+  if(_notesObj&&_notesObjCb){
+    _notesObj.notes=text; _notesObjCb(); _notesObj=null; _notesObjCb=null;
+  } else {
+    const{model,idx}=notesCtx;
+    state[model][idx].notes=text;
+    save();renderTaskList();renderModelCards();
+  }
   document.getElementById('notesModal').classList.remove('open');
   toast('✎','Note saved');
 };
@@ -3743,6 +4190,7 @@ document.getElementById('bulkMoveTopBtn').onclick=()=>{
   state[activeTab]=[...moving,...remaining];
   renumber(state[activeTab]);
   selectedTasks.clear();moving.forEach((_,i)=>selectedTasks.add(i));
+  clearSubSelectionsForModel(activeTab);
   save();renderAll();
   document.getElementById('bulkMoveDropdown').classList.remove('menu-open');
   toast('↑',`Moved ${moving.length} tasks to top`);
@@ -3757,6 +4205,7 @@ document.getElementById('bulkMoveBottomBtn').onclick=()=>{
   renumber(state[activeTab]);
   const base=remaining.length;
   selectedTasks.clear();moving.forEach((_,i)=>selectedTasks.add(base+i));
+  clearSubSelectionsForModel(activeTab);
   save();renderAll();
   document.getElementById('bulkMoveDropdown').classList.remove('menu-open');
   toast('↓',`Moved ${moving.length} tasks to bottom`);
@@ -3816,6 +4265,8 @@ function moveSelectedTasksToModel(destModel){
   renumber(state[activeTab]);
   renumber(state[destModel]);
   selectedTasks.clear();
+  clearSubSelectionsForModel(activeTab);
+  clearSubSelectionsForModel(destModel);
   if(editingIdx!==null) editingIdx=null;
   save();renderAll();
   document.getElementById('bulkMoveModelModal').classList.remove('open');
@@ -3831,6 +4282,7 @@ function copySelectedTasksToModel(destModel){
   state[destModel]=[...state[destModel],...JSON.parse(JSON.stringify(copying))];
   renumber(state[destModel]);
   selectedTasks.clear();
+  clearSubSelectionsForModel(destModel);
   save();renderAll();
   document.getElementById('bulkMoveModelModal').classList.remove('open');
   toast('⧉',`Copied ${n} task${n===1?'':'s'} to ${destModel}`);
@@ -3847,6 +4299,7 @@ document.getElementById('bulkDeleteBtn').onclick=async()=>{
   const idxs=[...selectedTasks].sort((a,b)=>b-a);
   idxs.forEach(i=>state[activeTab].splice(i,1));
   renumber(state[activeTab]);selectedTasks.clear();
+  clearSubSelectionsForModel(activeTab);
   if(editingIdx!==null) editingIdx=null;
   save();renderAll();
   toast('×',`Deleted ${n} tasks`);
@@ -3854,9 +4307,28 @@ document.getElementById('bulkDeleteBtn').onclick=async()=>{
 document.getElementById('bulkClearBtn').onclick=()=>{selectedTasks.clear();updateBulkBar();renderTaskList();};
 
 // ── BULK SET DEADLINE ─────────────────────────────────────────────────────────
+// bulkModalSubCtx is non-null while the deadline/priority modal is being used
+// for a subtask bulk action ({model, idx, subIdxs}); null means the modal is
+// operating on the task-level selectedTasks set, as before.
+let bulkModalSubCtx=null;
+function openSubBulkDeadlineModal(model,idx,subIdxs){
+  if(!subIdxs.length) return;
+  bulkModalSubCtx={model,idx,subIdxs};
+  const n=subIdxs.length;
+  document.getElementById('bulkDeadlineSubtitle').textContent=
+    `${n} subtask${n===1?'':'s'} selected — pick a date to apply to all of them`;
+  const subs=getSubtasks(model,idx);
+  const dates=subIdxs.map(sI=>(subs[sI]||{}).taskDeadline||'');
+  const common=dates.every(d=>d===dates[0])?dates[0]:'';
+  const picker=document.getElementById('bulkDeadlinePicker');
+  picker.value=common;
+  document.getElementById('bulkDeadlineModal').classList.add('open');
+  setTimeout(()=>{ try{ if(picker.showPicker) picker.showPicker(); else picker.focus(); }catch(e){ picker.focus(); } },320);
+}
 document.getElementById('bulkSetDeadlineBtn').onclick=()=>{
   const n=selectedTasks.size;
   if(!n) return;
+  bulkModalSubCtx=null;
   document.getElementById('bulkDeadlineSubtitle').textContent=
     `${n} task${n===1?'':'s'} selected — pick a date to apply to all of them`;
   // Pre-fill with the common deadline if all selected tasks share one
@@ -3869,6 +4341,18 @@ document.getElementById('bulkSetDeadlineBtn').onclick=()=>{
 };
 document.getElementById('bulkDeadlineSaveBtn').onclick=()=>{
   const val=document.getElementById('bulkDeadlinePicker').value;
+  if(bulkModalSubCtx){
+    const {model,idx,subIdxs}=bulkModalSubCtx;
+    const subs=getSubtasks(model,idx);
+    const n=subIdxs.length;
+    subIdxs.forEach(sI=>{ if(subs[sI]) subs[sI].taskDeadline=val; });
+    clearSubSelectionsForTask(model,idx);
+    save(); renderAll();
+    document.getElementById('bulkDeadlineModal').classList.remove('open');
+    toast(CAL_ICON, val ? `Deadline set for ${n} subtask${n===1?'':'s'}` : `Deadline cleared for ${n} subtask${n===1?'':'s'}`);
+    bulkModalSubCtx=null;
+    return;
+  }
   const n=selectedTasks.size;
   selectedTasks.forEach(i=>{ if(state[activeTab][i]) state[activeTab][i].taskDeadline=val; });
   save(); renderAll();
@@ -3876,27 +4360,63 @@ document.getElementById('bulkDeadlineSaveBtn').onclick=()=>{
   toast(CAL_ICON, val ? `Deadline set for ${n} task${n===1?'':'s'}` : `Deadline cleared for ${n} task${n===1?'':'s'}`);
 };
 document.getElementById('bulkDeadlineClearBtn').onclick=()=>{
+  if(bulkModalSubCtx){
+    const {model,idx,subIdxs}=bulkModalSubCtx;
+    const subs=getSubtasks(model,idx);
+    const n=subIdxs.length;
+    subIdxs.forEach(sI=>{ if(subs[sI]) subs[sI].taskDeadline=''; });
+    clearSubSelectionsForTask(model,idx);
+    save(); renderAll();
+    document.getElementById('bulkDeadlineModal').classList.remove('open');
+    toast(CAL_ICON,`Deadline cleared for ${n} subtask${n===1?'':'s'}`);
+    bulkModalSubCtx=null;
+    return;
+  }
   const n=selectedTasks.size;
   selectedTasks.forEach(i=>{ if(state[activeTab][i]) state[activeTab][i].taskDeadline=''; });
   save(); renderAll();
   document.getElementById('bulkDeadlineModal').classList.remove('open');
   toast(CAL_ICON,`Deadline cleared for ${n} task${n===1?'':'s'}`);
 };
-document.getElementById('bulkDeadlineCancelBtn').onclick=()=>document.getElementById('bulkDeadlineModal').classList.remove('open');
+document.getElementById('bulkDeadlineCancelBtn').onclick=()=>{bulkModalSubCtx=null;document.getElementById('bulkDeadlineModal').classList.remove('open');};
 document.getElementById('bulkDeadlineModal').onclick=e=>{
-  if(e.target===document.getElementById('bulkDeadlineModal'))
+  if(e.target===document.getElementById('bulkDeadlineModal')){
+    bulkModalSubCtx=null;
     document.getElementById('bulkDeadlineModal').classList.remove('open');
+  }
 };
 
 // ── BULK SET PRIORITY ─────────────────────────────────────────────────────────
+function openSubBulkPriorityModal(model,idx,subIdxs){
+  if(!subIdxs.length) return;
+  bulkModalSubCtx={model,idx,subIdxs};
+  const n=subIdxs.length;
+  document.getElementById('bulkPrioritySubtitle').textContent=
+    `${n} subtask${n===1?'':'s'} selected — choose a priority to apply to all of them`;
+  document.getElementById('bulkPriorityModal').classList.add('open');
+}
 document.getElementById('bulkSetPriorityBtn').onclick=()=>{
   const n=selectedTasks.size;
   if(!n) return;
+  bulkModalSubCtx=null;
   document.getElementById('bulkPrioritySubtitle').textContent=
     `${n} task${n===1?'':'s'} selected — choose a priority to apply to all of them`;
   document.getElementById('bulkPriorityModal').classList.add('open');
 };
 function applyBulkPriority(level){
+  if(bulkModalSubCtx){
+    const {model,idx,subIdxs}=bulkModalSubCtx;
+    const subs=getSubtasks(model,idx);
+    const n=subIdxs.length;
+    subIdxs.forEach(sI=>{ if(subs[sI]) subs[sI].priority=level; });
+    clearSubSelectionsForTask(model,idx);
+    save(); renderAll();
+    document.getElementById('bulkPriorityModal').classList.remove('open');
+    const label={high:'High',med:'Medium',low:'Low'}[level];
+    toast('⚑',`Priority set to ${label} for ${n} subtask${n===1?'':'s'}`);
+    bulkModalSubCtx=null;
+    return;
+  }
   const n=selectedTasks.size;
   selectedTasks.forEach(i=>{ if(state[activeTab][i]) state[activeTab][i].priority=level; });
   save(); renderAll();
@@ -3907,10 +4427,12 @@ function applyBulkPriority(level){
 document.getElementById('bulkPrioHigh').onclick=()=>applyBulkPriority('high');
 document.getElementById('bulkPrioMed').onclick=()=>applyBulkPriority('med');
 document.getElementById('bulkPrioLow').onclick=()=>applyBulkPriority('low');
-document.getElementById('bulkPriorityCancelBtn').onclick=()=>document.getElementById('bulkPriorityModal').classList.remove('open');
+document.getElementById('bulkPriorityCancelBtn').onclick=()=>{bulkModalSubCtx=null;document.getElementById('bulkPriorityModal').classList.remove('open');};
 document.getElementById('bulkPriorityModal').onclick=e=>{
-  if(e.target===document.getElementById('bulkPriorityModal'))
+  if(e.target===document.getElementById('bulkPriorityModal')){
+    bulkModalSubCtx=null;
     document.getElementById('bulkPriorityModal').classList.remove('open');
+  }
 };
 document.getElementById('selectAllChk').onchange=e=>{
   const tasks=state[activeTab];
@@ -4228,6 +4750,7 @@ document.addEventListener('keydown',e=>{
     document.getElementById('searchBox').value='';
     searchQuery='';
     selectedTasks.clear();
+    selectedSubtasks.clear();
     updateBulkBar();
     renderTaskList();
     document.getElementById('notesModal').classList.remove('open');
@@ -4379,6 +4902,8 @@ async function freshStart(){
   modelOrder = [];
   activeTab = '';
   selectedTasks.clear();
+  selectedSubtasks.clear();
+  expandedSubtasksSet.clear();
   editingIdx = null;
   setArchiveView(false);
   refreshModelsList();
