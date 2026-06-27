@@ -550,13 +550,18 @@ footer {
   border-bottom: 1px solid var(--border);
   padding: 12px 0 14px;
 }
+.subtask-title-row {
+  display: grid; grid-template-columns: 36px 56px 1fr;
+  align-items: center;
+  padding: 0 24px; margin-bottom: 9px;
+}
 .subtask-panel-title {
   font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
   text-transform: uppercase; color: var(--text-muted);
-  margin-bottom: 9px; display: block;
-  padding: 0 24px;
+  display: block; grid-column: 3;
 }
-.subtask-add-bar { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; padding: 0 24px; }
+.subtask-title-row .subtask-select-all-chk { grid-column: 2; }
+.subtask-add-bar { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; padding: 0 24px 0 116px; }
 .subtask-add-input {
   flex: 1; background: var(--surface); border: 1px solid var(--border);
   border-radius: 8px; padding: 7px 13px; color: var(--text);
@@ -1290,6 +1295,8 @@ kbd {
 /* ── RESPONSIVE ── */
 @media(max-width: 1200px) {
   .table-header, .task-row, .subtask-row { grid-template-columns: 30px 48px 1fr 100px 120px 80px 80px 150px; }
+  .subtask-panel-title, .subtask-add-bar { padding-left: 102px; }
+  .subtask-title-row { grid-template-columns: 30px 48px 1fr; }
 }
 @media(max-width: 900px) {
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1312,6 +1319,8 @@ kbd {
   .task-row > *:nth-child(6), .subtask-row > *:nth-child(6) { display: none; } /* Due column */
   .task-row > .task-icons-cell, .subtask-row > .task-icons-cell { grid-area: icons; justify-content: flex-start; }
   .task-row > .row-actions, .subtask-row > .row-actions { grid-area: actions; justify-content: flex-end; }
+  .subtask-panel-title, .subtask-add-bar { padding-left: 90px; }
+  .subtask-title-row { grid-template-columns: 26px 40px 1fr; }
   .compare-header, .compare-row { grid-template-columns: 40px 1fr 140px; }
   .compare-header > *:last-child, .compare-row > *:last-child { display: none; }
 }
@@ -1370,6 +1379,8 @@ kbd {
   .task-row > .row-actions, .subtask-row > .row-actions { grid-area: actions; justify-content: flex-end; }
   .priority-badge { width: auto; padding: 6px 10px; }
   .subtask-panel-title, .subtask-add-bar { padding: 0 12px; }
+  .subtask-title-row { display: flex; align-items: center; gap: 10px; grid-template-columns: unset; padding: 0 12px 0 44px; }
+  .subtask-title-row .subtask-panel-title { grid-column: unset; }
   .bulk-bar.subtask-bulk-bar { margin: 0 12px 10px; }
 
   /* Toast: full-width banner instead of a fixed min-width box that can
@@ -3523,7 +3534,7 @@ function renderTaskList(){
 
     // Title row — includes a "select all" checkbox for this task's subtasks
     const titleRow=document.createElement('div');
-    titleRow.style.cssText='display:flex;align-items:center;gap:10px;padding:0 24px;margin-bottom:9px;';
+    titleRow.className='subtask-title-row';
     const selAllSub=document.createElement('input');
     selAllSub.type='checkbox'; selAllSub.className='task-checkbox subtask-select-all-chk';
     selAllSub.title='Select all subtasks';
