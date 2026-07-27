@@ -101,6 +101,187 @@
   --shadow-md: 0 10px 40px -10px rgba(0, 0, 4, 0.55);
 }
 
+[data-theme="forest"] {
+  /* Forest Theme (deep evergreen base with Emerald accents) */
+  --bg: #08110d;
+  --surface: #0e1a14;
+  --surface2: #16261d;
+  --surface3: #1f3327;
+  --border: rgba(167, 255, 200, 0.07);
+  --border-hover: rgba(167, 255, 200, 0.14);
+
+  /* Premium Accents — emerald takes the role gold plays elsewhere */
+  --accent1: #34d399; /* Emerald */
+  --accent1-hover: #5eead4;
+  --accent1-dim: rgba(52, 211, 153, 0.12);
+  --accent2: #a3e635; /* Lime */
+  --accent3: #fbbf24; /* Amber, unchanged role as tertiary */
+
+  /* Refined Status Colors */
+  --green: #4ade80;
+  --red: #fb7185;
+  --yellow: #facc15;
+
+  --text: #eefcf3;
+  --text-muted: #8fae9c;
+
+  --card-glow1: rgba(52, 211, 153, 0.06);
+  --card-glow2: rgba(163, 230, 53, 0.04);
+  --shadow-sm: 0 4px 12px rgba(0, 5, 2, 0.35);
+  --shadow-md: 0 10px 40px -10px rgba(0, 5, 2, 0.55);
+}
+
+[data-theme="sunset"] {
+  /* Sunset Theme (warm cream base with Terracotta/Coral accents) */
+  --bg: #fdf6f0;
+  --surface: #ffffff;
+  --surface2: #fbeee4;
+  --surface3: #f6e1d2;
+  --border: rgba(180, 83, 9, 0.08);
+  --border-hover: rgba(180, 83, 9, 0.16);
+
+  /* Premium Accents — terracotta takes the role gold plays elsewhere */
+  --accent1: #c2410c; /* Terracotta */
+  --accent1-hover: #9a3412;
+  --accent1-dim: rgba(194, 65, 12, 0.08);
+  --accent2: #e11d48; /* Coral Rose */
+  --accent3: #d97706; /* Warm Amber */
+
+  /* Refined Status Colors */
+  --green: #15803d;
+  --red: #dc2626;
+  --yellow: #b45309;
+
+  --text: #2a1810;
+  --text-muted: #8a6a57;
+
+  --card-glow1: rgba(194, 65, 12, 0.03);
+  --card-glow2: rgba(225, 29, 72, 0.03);
+  --shadow-sm: 0 4px 12px rgba(120, 53, 15, 0.06);
+  --shadow-md: 0 10px 40px -10px rgba(120, 53, 15, 0.1);
+}
+
+[data-theme="argentina"] {
+  /* Argentina Theme — sky blue & white stripes with gold Sun of May */
+  --bg: #0a1f3d;              /* Deep navy night sky */
+  --surface: #0e2a52;
+  --surface2: #133366;
+  --surface3: #173d7a;
+  --border: rgba(116, 195, 232, 0.15);
+  --border-hover: rgba(116, 195, 232, 0.30);
+
+  /* Celeste (sky blue) as primary, gold Sun of May as secondary */
+  --accent1: #74c3e8;         /* Argentina celeste */
+  --accent1-hover: #9dd4f0;
+  --accent1-dim: rgba(116, 195, 232, 0.14);
+  --accent2: #f5c518;         /* Sun of May gold */
+  --accent3: #ffffff;         /* Pure white stripe */
+
+  --green: #4ade80;
+  --red: #fb7185;
+  --yellow: #f5c518;
+
+  --text: #e8f4fc;
+  --text-muted: #6ea8cc;
+
+  --card-glow1: rgba(116, 195, 232, 0.07);
+  --card-glow2: rgba(245, 197, 24, 0.05);
+  --shadow-sm: 0 4px 12px rgba(0, 8, 24, 0.40);
+  --shadow-md: 0 10px 40px -10px rgba(0, 8, 24, 0.60);
+}
+
+[data-theme="brazil"] {
+  /* Brazil Theme — deep Amazon green + golden yellow diamond + blue globe */
+  --bg: #0d2b0a;              /* Deep Amazon green */
+  --surface: #133810;
+  --surface2: #1a4a15;
+  --surface3: #215d1a;
+  --border: rgba(250, 204, 21, 0.15);
+  --border-hover: rgba(250, 204, 21, 0.30);
+
+  /* Brazilian gold as primary, blue globe as secondary */
+  --accent1: #facc15;         /* Brazilian yellow-gold */
+  --accent1-hover: #fde047;
+  --accent1-dim: rgba(250, 204, 21, 0.14);
+  --accent2: #3b82f6;         /* Blue globe */
+  --accent3: #4ade80;         /* Bright green complement */
+
+  --green: #4ade80;
+  --red: #fb7185;
+  --yellow: #facc15;
+
+  --text: #f0fce8;
+  --text-muted: #7fb86a;
+
+  --card-glow1: rgba(250, 204, 21, 0.07);
+  --card-glow2: rgba(59, 130, 246, 0.05);
+  --shadow-sm: 0 4px 12px rgba(0, 8, 0, 0.40);
+  --shadow-md: 0 10px 40px -10px rgba(0, 8, 0, 0.60);
+}
+
+[data-theme="bangladesh"] {
+  /* Bangladesh Theme — inspired by the national flag: deep forest green + bold red circle */
+  --bg: #012d1a;              /* Deep flag green */
+  --surface: #01421f;         /* Rich green */
+  --surface2: #015a2a;        /* Lighter green panel */
+  --surface3: #017034;        /* Even lighter for hover surfaces */
+  --border: rgba(244, 42, 65, 0.15);
+  --border-hover: rgba(244, 42, 65, 0.30);
+
+  /* Red circle from the Bangladesh flag as the primary accent */
+  --accent1: #f42a41;         /* Flag red */
+  --accent1-hover: #ff5266;
+  --accent1-dim: rgba(244, 42, 65, 0.14);
+  --accent2: #4ade80;         /* Soft green complement */
+  --accent3: #fbbf24;         /* Amber tertiary */
+
+  /* Status Colors */
+  --green: #4ade80;
+  --red: #ff6b7a;
+  --yellow: #fbbf24;
+
+  --text: #e8fdf0;            /* Pale mint white */
+  --text-muted: #7bbf94;      /* Muted green */
+
+  --card-glow1: rgba(244, 42, 65, 0.07);
+  --card-glow2: rgba(74, 222, 128, 0.05);
+  --shadow-sm: 0 4px 12px rgba(0, 10, 5, 0.40);
+  --shadow-md: 0 10px 40px -10px rgba(0, 10, 5, 0.60);
+}
+
+[data-theme="antigravity"] {
+  /* Antigravity Theme — pixel-sampled directly from the Antigravity IDE
+     screenshot. It's a muted, desaturated teal-navy (Solarized-Dark-like),
+     not a bright neon-emerald — the "Retry" button teal is the brightest
+     accent in the whole UI, and everything else sits well below it. */
+  --bg: #00212b;              /* Sampled from the chat-panel background */
+  --surface: #0a333e;         /* Sampled from card backgrounds */
+  --surface2: #123e49;        /* Slightly lighter, for hover/secondary */
+  --surface3: #17495a;        /* Elevated surfaces */
+  --border: rgba(125, 164, 167, 0.12);
+  --border-hover: rgba(125, 164, 167, 0.24);
+
+  /* Muted teal accent — sampled from the "Retry" button fill (#1d7574) */
+  --accent1: #1d7574;
+  --accent1-hover: #2a938f;
+  --accent1-dim: rgba(29, 117, 116, 0.16);
+  --accent2: #3b8ea5;         /* Cooler steel-teal complement */
+  --accent3: #a78bfa;         /* Violet tertiary, unchanged role */
+
+  /* Status Colors */
+  --green: #2aa198;           /* Solarized-style teal-green */
+  --red: #dc7176;             /* Muted rose-red, matches the error card icon */
+  --yellow: #b58900;          /* Muted amber, matches the "MCP" warning chip */
+
+  --text: #d8d8ce;            /* Sampled off-white/cream title text */
+  --text-muted: #7a97a0;      /* Sampled muted teal-gray body text */
+
+  --card-glow1: rgba(29, 117, 116, 0.07);
+  --card-glow2: rgba(59, 142, 165, 0.04);
+  --shadow-sm: 0 4px 12px rgba(0, 5, 7, 0.40);
+  --shadow-md: 0 10px 40px -10px rgba(0, 5, 7, 0.60);
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 /* ── DATE INPUT CALENDAR ICON ── */
@@ -125,6 +306,25 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover { opacity: 0.75; }
 }
 [data-theme="midnight"] input[type="date"]::-webkit-calendar-picker-indicator {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235b8def' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>");
+}
+[data-theme="forest"] input[type="date"]::-webkit-calendar-picker-indicator {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2334d399' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>");
+}
+[data-theme="sunset"] input[type="date"] { color-scheme: light; }
+[data-theme="sunset"] input[type="date"]::-webkit-calendar-picker-indicator {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c2410c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>");
+}
+[data-theme="argentina"] input[type="date"]::-webkit-calendar-picker-indicator {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2374c3e8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>");
+}
+[data-theme="brazil"] input[type="date"]::-webkit-calendar-picker-indicator {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23facc15' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>");
+}
+[data-theme="bangladesh"] input[type="date"]::-webkit-calendar-picker-indicator {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f42a41' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>");
+}
+[data-theme="antigravity"] input[type="date"]::-webkit-calendar-picker-indicator {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231d7574' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>");
 }
 
 /* custom placeholder overlay for date inputs (native date inputs ignore placeholder attr) */
@@ -181,6 +381,8 @@ header {
 .logo-group { display: flex; align-items: center; gap: 18px; min-width: 0; flex: 1 1 auto; max-width: 420px; }
 .logo-group > div:last-child { min-width: 0; }
 .logo-group h1, .logo-group div[style] { overflow: hidden; text-overflow: ellipsis; }
+#logoEditBtn { opacity: 0; visibility: hidden; transition: opacity 0.15s ease; }
+.logo-group:hover #logoEditBtn { opacity: 1; visibility: visible; }
 .logo-icon {
   width: 48px; height: 48px;
   background: linear-gradient(135deg, var(--surface2), var(--surface3));
@@ -279,7 +481,7 @@ footer {
 }
 
 /* ── KPI CARDS ── */
-.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 44px; }
+.kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; margin-bottom: 44px; }
 .kpi-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 18px; padding: 28px 26px;
@@ -294,6 +496,10 @@ footer {
 .kpi-card.done::before { background: linear-gradient(90deg, var(--green), transparent); }
 .kpi-card.pending::before { background: linear-gradient(90deg, var(--red), transparent); }
 .kpi-card.pct::before { background: linear-gradient(90deg, var(--accent2), transparent); }
+.kpi-card.overdue::before { background: linear-gradient(90deg, var(--red), transparent); }
+.kpi-card.overdue { cursor: pointer; }
+.kpi-card.overdue.has-overdue { border-color: rgba(244,63,94,0.4); }
+.kpi-card.overdue.has-overdue:hover { border-color: var(--red); box-shadow: 0 0 0 1px rgba(244,63,94,0.2), var(--shadow-md); }
 
 .kpi-label { font-size: 11px; letter-spacing: 1.5px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; margin-bottom: 12px; }
 .kpi-value { font-size: 42px; font-weight: 300; line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; }
@@ -301,12 +507,14 @@ footer {
 .kpi-card.done  .kpi-value { color: var(--green); }
 .kpi-card.pending .kpi-value { color: var(--red); }
 .kpi-card.pct   .kpi-value { color: var(--accent2); }
+.kpi-card.overdue .kpi-value { color: var(--red); }
 .kpi-sub { font-size: 12px; color: var(--text-muted); font-weight: 300; }
 
 .kpi-card:nth-child(1) { animation-delay: 0.05s; }
 .kpi-card:nth-child(2) { animation-delay: 0.1s; }
 .kpi-card:nth-child(3) { animation-delay: 0.15s; }
 .kpi-card:nth-child(4) { animation-delay: 0.2s; }
+.kpi-card:nth-child(5) { animation-delay: 0.25s; }
 
 /* ── MODEL CARDS ── */
 .models-section-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }
@@ -320,6 +528,44 @@ footer {
   cursor: pointer; box-shadow: var(--shadow-sm);
 }
 .model-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--border-hover); }
+.model-pin-btn {
+  position: absolute; top: 14px; right: 14px; z-index: 3;
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  color: var(--text-muted); font-size: 14px; line-height: 1;
+  filter: grayscale(1) opacity(0.55);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; opacity: 0; transform: scale(0.8) rotate(-25deg);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.04);
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(.34,1.56,.64,1),
+              background 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+.model-card:hover .model-pin-btn { opacity: 1; transform: scale(1) rotate(0deg); }
+.model-pin-btn:hover {
+  border-color: rgba(212,175,55,0.55); color: var(--accent1);
+  background: rgba(212,175,55,0.1); transform: scale(1.08) rotate(0deg);
+  filter: grayscale(0) opacity(1);
+}
+.model-pin-btn:active { transform: scale(0.94) rotate(0deg); }
+.model-pin-btn.pinned {
+  opacity: 1; transform: scale(1) rotate(0deg); filter: none;
+  background: radial-gradient(circle at 35% 30%, rgba(212,175,55,0.16), var(--surface2) 70%);
+  border: 1px solid rgba(212,175,55,0.5);
+  box-shadow: 0 0 0 3px rgba(212,175,55,0.08), 0 4px 10px rgba(0,0,0,0.25),
+              inset 0 1px 0 rgba(255,255,255,0.06);
+}
+.model-pin-btn.pinned:hover {
+  transform: scale(1.08) rotate(0deg);
+  border-color: rgba(212,175,55,0.75);
+  box-shadow: 0 0 0 4px rgba(212,175,55,0.12), 0 4px 10px rgba(0,0,0,0.3);
+}
+.model-card.pinned-card {
+  border-color: rgba(212,175,55,0.28);
+  box-shadow: var(--shadow-sm), 0 0 24px -12px rgba(212,175,55,0.35);
+}
+.model-card.pinned-card:hover { box-shadow: var(--shadow-md), 0 0 28px -10px rgba(212,175,55,0.45); }
 .model-card::after {
   content: ''; position: absolute; top: -80px; right: -80px;
   width: 200px; height: 200px;
@@ -331,6 +577,43 @@ footer {
 .model-card.theme-3::after { background: radial-gradient(circle, rgba(16, 185, 129, 0.04) 0%, transparent 70%); }
 
 .model-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+.model-header-main { display: flex; align-items: flex-start; gap: 14px; min-width: 0; flex: 1; }
+.model-thumb-wrap { position: relative; flex-shrink: 0; width: 56px; height: 56px; }
+.model-thumb {
+  position: relative; width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
+  overflow: hidden; background: var(--surface2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.model-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.model-thumb .model-thumb-icon { color: var(--text-muted); opacity: 0.5; }
+.model-thumb .model-thumb-overlay {
+  position: absolute; inset: 0; background: rgba(0,0,0,0.55);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.18s; color: #fff; font-size: 15px;
+}
+.model-thumb:hover .model-thumb-overlay { opacity: 1; }
+.model-thumb-remove {
+  position: absolute; top: -7px; right: -7px; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--red); color: #fff; border: 2px solid var(--surface); font-size: 11px;
+  line-height: 1; display: flex; align-items: center; justify-content: center; cursor: pointer;
+  opacity: 0; transition: opacity 0.18s, transform 0.18s; z-index: 3; padding: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+.model-card:hover .model-thumb-remove { opacity: 1; }
+.model-thumb-remove:hover { transform: scale(1.12); }
+.model-thumb-preview {
+  position: absolute; top: -7px; left: -7px; width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(20, 20, 24, 0.75); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  color: var(--accent1); border: 1.5px solid var(--accent1); font-size: 10px;
+  line-height: 1; display: flex; align-items: center; justify-content: center; cursor: pointer;
+  opacity: 0; transform: scale(0.85); transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+  z-index: 3; padding: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.02);
+}
+.model-thumb-preview svg { width: 12px; height: 12px; display: block; }
+.model-card:hover .model-thumb-preview { opacity: 1; transform: scale(1); }
+.model-thumb-preview:hover { background: var(--accent1); color: #fff; transform: scale(1.12); box-shadow: 0 2px 10px var(--accent1-dim), 0 0 0 1px rgba(255,255,255,0.04); }
+.model-thumb-input { display: none; }
 .model-name { font-size: 18px; font-weight: 600; color: var(--text); letter-spacing: -0.3px; }
 .model-deadline { font-size: 11px; color: var(--text-muted); margin-top: 6px; display: flex; align-items: center; gap: 6px; font-weight: 400; }
 .model-deadline-btn {
@@ -353,6 +636,15 @@ footer {
 .model-deadline-btn.overdue { color: var(--red); }
 .model-deadline-btn.warning { color: var(--yellow); }
 .model-deadline-btn.ok { color: var(--green); }
+.model-deadline-row {
+  display: flex; align-items: center; gap: 4px; flex-wrap: nowrap;
+  overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -ms-overflow-style: none;
+}
+.model-deadline-row::-webkit-scrollbar { display: none; }
+.model-deadline-row .model-deadline-btn { flex-shrink: 0; }
+.model-card-actions-row { display: flex; align-items: center; margin-top: 6px; }
+.model-card-action-btn { opacity: 0; transition: opacity 0.2s ease; }
+.model-card:hover .model-card-action-btn { opacity: 1; }
 .deadline-overdue { color: var(--red) !important; font-weight: 500; }
 .deadline-soon { color: var(--yellow) !important; font-weight: 500; }
 .deadline-ok { color: var(--green) !important; }
@@ -397,6 +689,14 @@ footer {
   box-shadow: 0 0 0 2px var(--accent1), var(--shadow-md) !important;
   transform: translateY(-6px) scale(1.02);
   background: var(--surface2);
+}
+.model-card.drag-over-before {
+  box-shadow: inset 3px 0 0 0 var(--accent1), var(--shadow-md) !important;
+  transform: translateY(-4px);
+}
+.model-card.drag-over-after {
+  box-shadow: inset -3px 0 0 0 var(--accent1), var(--shadow-md) !important;
+  transform: translateY(-4px);
 }
 
 /* ── ARCHIVE CARD ── */
@@ -502,6 +802,10 @@ footer {
   margin-left: 6px; letter-spacing: 0; transition: all 0.3s ease;
 }
 .filter-btn.active .filter-count { background: var(--accent1); color: var(--bg); }
+.select-completed-btn { margin-left: 4px; border-style: dashed; }
+.select-completed-btn.has-selection { border-style: solid; border-color: var(--green); color: var(--green); background: rgba(16,185,129,0.12); }
+.select-pending-btn { border-style: dashed; }
+.select-pending-btn.has-selection { border-style: solid; border-color: var(--accent1); color: var(--accent1); background: var(--accent1-dim); }
 
 .search-box {
   margin-left: auto; background: var(--surface); border: 1px solid var(--border);
@@ -712,6 +1016,15 @@ footer {
 
 /* task deadline icon (sits beside notes icon) */
 .task-icons-cell { display: flex; align-items: center; justify-content: center; gap: 6px; }
+.assignee-select {
+  max-width: 84px; font-family: inherit; font-size: 10.5px; font-weight: 600;
+  color: var(--accent1); background: var(--accent1-dim);
+  border: 1px solid var(--border); border-radius: 20px;
+  padding: 3px 6px; cursor: pointer; appearance: none; -webkit-appearance: none;
+  text-align: center; text-overflow: ellipsis;
+}
+.assignee-select:hover { border-color: var(--accent1); }
+.assignee-select:focus { outline: none; border-color: var(--accent1); }
 
 /* Deadline icon button: a purely visual wrapper div (drawn with our own
    ::before calendar glyph) with the *real* <input type="date"> stretched
@@ -1045,7 +1358,8 @@ footer {
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
-[data-theme="light"] .task-checkbox:checked::after { border-color: #fff; }
+[data-theme="light"] .task-checkbox:checked::after,
+[data-theme="sunset"] .task-checkbox:checked::after { border-color: #fff; }
 .task-checkbox:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px var(--accent1-dim);
@@ -1081,6 +1395,23 @@ footer {
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
 }
 .modal-overlay.open { display: flex; }
+.overdue-modal-body { max-height: 60vh; overflow-y: auto; margin-top: 10px; }
+.overdue-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--surface2); margin-bottom: 8px; cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.overdue-row:hover { border-color: var(--red); background: rgba(244,63,94,0.08); }
+.overdue-row-main { min-width: 0; }
+.overdue-row-name { font-size: 13.5px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.overdue-row-model { font-size: 11.5px; color: var(--text-dim); margin-top: 2px; }
+.overdue-row-days {
+  flex-shrink: 0; font-size: 11.5px; font-weight: 700; color: var(--red);
+  background: rgba(244,63,94,0.12); border: 1px solid rgba(244,63,94,0.3);
+  border-radius: 20px; padding: 4px 10px; white-space: nowrap;
+}
+.overdue-empty { padding: 32px 8px; text-align: center; color: var(--text-dim); font-size: 13px; }
 .modal-box {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 24px; padding: 36px; width: min(500px, 90vw);
@@ -1125,6 +1456,9 @@ footer {
   display: flex; flex-wrap: wrap; gap: 10px;
 }
 .notes-shots-gallery:empty { display: none; }
+.notes-shot-item {
+  display: flex; flex-direction: column; gap: 5px; width: 84px; flex-shrink: 0;
+}
 .notes-shot-thumb {
   position: relative; width: 84px; height: 84px; border-radius: 10px;
   overflow: hidden; border: 1px solid var(--border); cursor: pointer;
@@ -1139,6 +1473,15 @@ footer {
   align-items: center; justify-content: center; transition: background 0.2s ease;
 }
 .notes-shot-remove:hover { background: var(--red); }
+.notes-shot-title-input {
+  width: 84px; box-sizing: border-box; font-family: inherit; font-size: 11px;
+  padding: 4px 6px; border-radius: 6px; border: 1px solid var(--border);
+  background: var(--surface2); color: var(--text); text-align: center;
+  resize: none; overflow: hidden; line-height: 1.35; word-break: break-word;
+  white-space: pre-wrap; min-height: 24px;
+}
+.notes-shot-title-input:focus { outline: none; border-color: var(--accent1); }
+.notes-shot-title-input::placeholder { color: var(--text-muted); }
 .notes-shots-empty { font-size: 12px; color: var(--text-muted); font-weight: 300; font-style: italic; }
 .notes-shots-empty.hide { display: none; }
 .notes-shots-dropzone-active { outline: 2px dashed var(--accent1); outline-offset: 4px; border-radius: 12px; }
@@ -1299,6 +1642,9 @@ footer {
 .menu-item:hover { background: var(--accent1-dim); color: var(--text); }
 .menu-item:hover svg { opacity: 1; color: var(--accent1); }
 .menu-item:active { background: var(--surface2); }
+.menu-item:disabled { opacity: 0.4; cursor: not-allowed; }
+.menu-item:disabled:hover { background: none; color: inherit; }
+.menu-item:disabled:hover svg { opacity: 0.75; color: inherit; }
 .menu-item .archive-count-badge { margin-left: auto; }
 .menu-divider { height: 1px; background: var(--border); margin: 6px 6px; }
 
@@ -1333,6 +1679,12 @@ footer {
 .theme-swatch-dark { background: linear-gradient(135deg, #09090b 50%, #d4af37 50%); }
 .theme-swatch-light { background: linear-gradient(135deg, #f8f9fa 50%, #b48600 50%); }
 .theme-swatch-midnight { background: linear-gradient(135deg, #07090f 50%, #5b8def 50%); }
+.theme-swatch-forest { background: linear-gradient(135deg, #08110d 50%, #34d399 50%); }
+.theme-swatch-sunset { background: linear-gradient(135deg, #fdf6f0 50%, #c2410c 50%); }
+.theme-swatch-bangladesh { background: linear-gradient(135deg, #006a4e 50%, #f42a41 50%); }
+.theme-swatch-argentina { background: linear-gradient(135deg, #74c3e8 40%, #ffffff 40% 60%, #74c3e8 60%); }
+.theme-swatch-brazil    { background: linear-gradient(135deg, #009c3b 50%, #facc15 50%); }
+.theme-swatch-antigravity { background: linear-gradient(135deg, #00212b 50%, #1d7574 50%); }
 .theme-menu-item.theme-active { color: var(--text); background: var(--accent1-dim); }
 .theme-menu-item.theme-active::after {
   content: '✓'; margin-left: auto; color: var(--accent1); font-size: 12px; font-weight: 700;
@@ -1349,6 +1701,95 @@ footer {
 .logout-btn:hover { background: rgba(239, 68, 68, 0.1); color: var(--red); }
 .logout-btn:hover svg { opacity: 1; color: var(--red); }
 .logout-btn:active { filter: brightness(0.95); }
+
+/* ── WHATSAPP HELP BUTTON ── */
+.whatsapp-menu-item {
+  text-decoration: none;
+  color: #25d366 !important;
+}
+.whatsapp-menu-item:hover {
+  background: rgba(37, 211, 102, 0.1) !important;
+  color: #25d366 !important;
+}
+.whatsapp-menu-item svg { fill: #25d366; flex-shrink: 0; }
+
+/* ── EXPORT-BEFORE-LOGOUT MODAL ── */
+#exportLogoutOverlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+  padding: 20px;
+}
+#exportLogoutOverlay.open { opacity: 1; pointer-events: all; }
+#exportLogoutModal {
+  background: var(--surface);
+  border: 1px solid var(--border-hover);
+  border-radius: 24px;
+  padding: 36px 32px 28px;
+  max-width: 440px; width: 100%;
+  box-shadow: var(--shadow-md), 0 0 0 1px var(--border);
+  transform: translateY(12px) scale(0.97);
+  transition: transform 0.25s ease;
+  position: relative;
+}
+#exportLogoutOverlay.open #exportLogoutModal { transform: translateY(0) scale(1); }
+.elmodal-icon {
+  width: 52px; height: 52px; border-radius: 16px;
+  background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 20px;
+}
+.elmodal-title {
+  font-size: 20px; font-weight: 600; color: var(--text);
+  margin-bottom: 8px; letter-spacing: -0.3px;
+}
+.elmodal-desc {
+  font-size: 14px; color: var(--text-muted); font-weight: 300;
+  line-height: 1.6; margin-bottom: 28px;
+}
+.elmodal-export-group {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+  margin-bottom: 20px;
+}
+.elmodal-export-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border);
+  background: var(--surface2); color: var(--text); font-family: inherit;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: all 0.18s ease;
+}
+.elmodal-export-btn:hover {
+  border-color: var(--accent1); background: var(--accent1-dim); color: var(--accent1);
+}
+.elmodal-export-btn svg { flex-shrink: 0; }
+.elmodal-divider {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px; color: var(--text-muted); font-size: 12px;
+}
+.elmodal-divider::before, .elmodal-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+.elmodal-actions { display: flex; gap: 10px; }
+.elmodal-skip-btn {
+  flex: 1; padding: 12px; border-radius: 12px;
+  border: 1px solid var(--border); background: none;
+  color: var(--red); font-family: inherit; font-size: 14px;
+  font-weight: 500; cursor: pointer;
+  transition: all 0.18s ease;
+}
+.elmodal-skip-btn:hover { background: rgba(239,68,68,0.08); border-color: var(--red); }
+.elmodal-cancel-btn {
+  flex: 1; padding: 12px; border-radius: 12px;
+  border: 1px solid var(--border); background: var(--surface2);
+  color: var(--text-muted); font-family: inherit; font-size: 14px;
+  font-weight: 500; cursor: pointer;
+  transition: all 0.18s ease;
+}
+.elmodal-cancel-btn:hover { background: var(--surface3); color: var(--text); border-color: var(--border-hover); }
 
 /* ── DEADLINE MODAL ── */
 .deadline-input {
@@ -1419,6 +1860,7 @@ kbd {
 
 /* ── RESPONSIVE ── */
 @media(max-width: 1200px) {
+  .kpi-grid { grid-template-columns: repeat(3, 1fr); }
   .table-header, .task-row, .subtask-row { grid-template-columns: 30px 48px 1fr 100px 120px 80px 80px 150px; }
   .subtask-panel-title, .subtask-add-bar { padding-left: 102px; }
   .subtask-title-row { grid-template-columns: 30px 48px 1fr; }
@@ -1575,8 +2017,151 @@ img { -webkit-user-drag: none; }
   .print-footer { margin-top: 16px; font-size: 10px; color: #777; text-align: right; }
   .print-model-section { page-break-after: always; }
   .print-model-section:last-child { page-break-after: auto; }
+  .print-table tr.pt-subtask td { background: #f7f7f7; font-size: 10px; color: #555; }
+  .print-table tr.pt-subtask td.pt-sn { color: #999; }
+  .print-table tr.pt-subtask td:nth-child(2) { padding-left: 22px; }
+  .print-table tr.pt-subtask.pt-done td { color: #999; }
   @page { margin: 18mm 14mm; }
 }
+
+/* ── EXPORT-BEFORE-LOGOUT MODAL ── */
+#exportLogoutOverlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+  padding: 20px;
+}
+#exportLogoutOverlay.open { opacity: 1; pointer-events: all; }
+#exportLogoutModal {
+  background: var(--surface);
+  border: 1px solid var(--border-hover);
+  border-radius: 24px;
+  padding: 36px 32px 28px;
+  max-width: 440px; width: 100%;
+  box-shadow: var(--shadow-md), 0 0 0 1px var(--border);
+  transform: translateY(14px) scale(0.97);
+  transition: transform 0.28s cubic-bezier(0.16,1,0.3,1);
+}
+#exportLogoutOverlay.open #exportLogoutModal { transform: translateY(0) scale(1); }
+.elmodal-icon {
+  width: 52px; height: 52px; border-radius: 16px;
+  background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; margin-bottom: 20px;
+}
+.elmodal-title {
+  font-size: 20px; font-weight: 600; color: var(--text);
+  margin-bottom: 8px; letter-spacing: -0.3px;
+}
+.elmodal-desc {
+  font-size: 14px; color: var(--text-muted); font-weight: 300;
+  line-height: 1.65; margin-bottom: 28px;
+}
+.elmodal-export-group {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+  margin-bottom: 20px;
+}
+.elmodal-export-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 13px 16px; border-radius: 12px; border: 1px solid var(--border);
+  background: var(--surface2); color: var(--text); font-family: inherit;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: all 0.18s ease;
+}
+.elmodal-export-btn:hover {
+  border-color: var(--accent1); background: var(--accent1-dim); color: var(--accent1);
+}
+.elmodal-export-btn:disabled { opacity: 0.55; cursor: default; }
+.elmodal-export-btn svg { flex-shrink: 0; }
+.elmodal-divider {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px; color: var(--text-muted); font-size: 12px; font-weight: 400;
+}
+.elmodal-divider::before, .elmodal-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+.elmodal-actions { display: flex; gap: 10px; }
+.elmodal-skip-btn {
+  flex: 1; padding: 13px; border-radius: 12px;
+  border: 1px solid rgba(239,68,68,0.3); background: rgba(239,68,68,0.06);
+  color: var(--red); font-family: inherit; font-size: 14px;
+  font-weight: 500; cursor: pointer;
+  transition: all 0.18s ease;
+}
+.elmodal-skip-btn:hover { background: rgba(239,68,68,0.12); border-color: var(--red); }
+.elmodal-cancel-btn {
+  flex: 1; padding: 13px; border-radius: 12px;
+  border: 1px solid var(--border); background: var(--surface2);
+  color: var(--text-muted); font-family: inherit; font-size: 14px;
+  font-weight: 500; cursor: pointer;
+  transition: all 0.18s ease;
+}
+.elmodal-cancel-btn:hover { background: var(--surface3); color: var(--text); border-color: var(--border-hover); }
+
+/* ── Team / Workspace modal ── */
+#teamOverlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+  padding: 20px;
+}
+#teamOverlay.open { opacity: 1; pointer-events: all; }
+#teamModal {
+  background: var(--surface);
+  border: 1px solid var(--border-hover);
+  border-radius: 24px;
+  padding: 32px 30px 26px;
+  max-width: 460px; width: 100%; max-height: 85vh; overflow-y: auto;
+  box-shadow: var(--shadow-md), 0 0 0 1px var(--border);
+  transform: translateY(14px) scale(0.97);
+  transition: transform 0.28s cubic-bezier(0.16,1,0.3,1);
+}
+#teamOverlay.open #teamModal { transform: translateY(0) scale(1); }
+.team-section-label {
+  font-size: 12px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.5px; margin: 20px 0 8px;
+}
+.team-members-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
+.team-member-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 12px;
+  background: var(--surface2); border: 1px solid var(--border);
+}
+.team-member-avatar {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  background: var(--accent1-dim); color: var(--accent1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+}
+.team-member-name { font-size: 13.5px; color: var(--text); font-weight: 500; }
+.team-member-email { font-size: 11.5px; color: var(--text-muted); }
+.team-member-owner-tag {
+  margin-left: auto; font-size: 10.5px; color: var(--accent1);
+  background: var(--accent1-dim); padding: 2px 8px; border-radius: 20px; font-weight: 600;
+}
+.team-invite-row { display: flex; gap: 8px; align-items: center; }
+.team-invite-code {
+  flex: 1; font-family: 'SF Mono', 'Courier New', monospace;
+  font-size: 18px; font-weight: 700; letter-spacing: 3px; text-align: center;
+  padding: 11px; border-radius: 12px; background: var(--surface2);
+  border: 1px dashed var(--border-hover); color: var(--accent1);
+}
+.team-join-input {
+  flex: 1; font-family: 'SF Mono', 'Courier New', monospace;
+  font-size: 15px; letter-spacing: 2px; text-align: center; text-transform: uppercase;
+  padding: 11px; border-radius: 12px; background: var(--surface2);
+  border: 1px solid var(--border); color: var(--text);
+}
+.team-join-input:focus { outline: none; border-color: var(--accent1); }
+.team-join-error { font-size: 12px; color: var(--red); margin-top: 6px; min-height: 14px; }
 </style>
 </head>
 <body>
@@ -1584,6 +2169,30 @@ img { -webkit-user-drag: none; }
 // ── COPY PROTECTION (deters casual copying — not a real security measure) ──
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.addEventListener('dragstart', e => { if (!e.target.closest('[draggable="true"]')) e.preventDefault(); });
+
+// ── AUTO-SCROLL WHILE DRAGGING (task rows, subtask rows, model cards) ──
+// Native HTML5 drag-and-drop does not reliably auto-scroll the page when you
+// drag a row toward the top/bottom edge of the viewport, so long lists were
+// impossible to reorder across more than a screenful. This watches every
+// dragover on the page and, whenever something with the shared ".dragging"
+// class is being dragged, nudges the window scroll if the cursor is near the
+// top or bottom edge — scroll speed ramps up the closer the cursor gets.
+(function(){
+  const EDGE=110;      // px from viewport edge that triggers scrolling
+  const MAX_SPEED=26;  // px scrolled per dragover tick at the very edge
+  document.addEventListener('dragover', e => {
+    if(!document.querySelector('.dragging')) return;
+    const y=e.clientY, vh=window.innerHeight;
+    if(y<EDGE){
+      const speed=Math.ceil(MAX_SPEED*(1-Math.max(y,0)/EDGE));
+      window.scrollBy(0,-speed);
+    } else if(y>vh-EDGE){
+      const dist=vh-y;
+      const speed=Math.ceil(MAX_SPEED*(1-Math.max(dist,0)/EDGE));
+      window.scrollBy(0,speed);
+    }
+  });
+})();
 document.addEventListener('keydown', e => {
   const k = e.key.toUpperCase();
   // View source
@@ -1649,16 +2258,42 @@ document.addEventListener('keydown', e => {
 
 <!-- HEADER -->
 <header>
-  <div class="logo-group">
+  <div class="logo-group" id="logoHomeBtn" title="Reload dashboard" style="cursor:pointer;">
     <div class="logo-icon">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(15deg);">
         <path d="M21 3L13.5 21l-2.2-7.3L4 11.5 21 3z"/>
       </svg>
     </div>
-    <div>
-      <h1>Model <span>Launch</span> Control</h1>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <h1 id="logoTitle">Model <span id="logoAccent">Launch</span> Control</h1>
+      <button id="logoEditBtn" title="Edit title" onclick="event.stopPropagation();(function(){var modal=document.getElementById('logoEditModal');var accentEl=document.getElementById('logoAccent');var titleEl=document.getElementById('logoTitle');var parts=titleEl.textContent.trim().split(/\s+/);document.getElementById('editWord1').value=parts[0]||'Model';document.getElementById('editWord2').value=accentEl?accentEl.textContent.trim():(parts[1]||'Launch');document.getElementById('editWord3').value=parts[parts.length-1]||'Control';modal.style.display='flex';})();" style="background:none;border:1px solid var(--border);border-radius:7px;padding:4px 7px;cursor:pointer;color:var(--text-muted);display:flex;align-items:center;flex-shrink:0;transition:all 0.2s ease;" onmouseover="this.style.borderColor='var(--accent1)';this.style.color='var(--accent1)';" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)';">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </button>
     </div>
   </div>
+  <!-- Edit Logo Modal -->
+  <div id="logoEditModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);align-items:center;justify-content:center;">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;width:380px;box-shadow:var(--shadow-md);font-family:'Sora',sans-serif;">
+      <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:24px;">✏️ Edit Header Logo</div>
+      <div style="margin-bottom:16px;">
+        <label style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:8px;">First Word</label>
+        <input id="editWord1" type="text" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:inherit;font-size:14px;outline:none;" placeholder="Model">
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:8px;">Accent Word <span style="color:var(--accent1);">(highlighted)</span></label>
+        <input id="editWord2" type="text" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--accent1);font-family:inherit;font-size:14px;outline:none;" placeholder="Launch">
+      </div>
+      <div style="margin-bottom:24px;">
+        <label style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:8px;">Last Word</label>
+        <input id="editWord3" type="text" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:inherit;font-size:14px;outline:none;" placeholder="Control">
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;">
+        <button id="logoEditCancel" style="padding:10px 20px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text-muted);font-family:inherit;font-size:13px;cursor:pointer;">Cancel</button>
+        <button id="logoEditSave" style="padding:10px 20px;border-radius:10px;border:none;background:var(--accent1);color:var(--bg);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;">Save</button>
+      </div>
+    </div>
+  </div>
+
   <div class="header-right">
     <div class="live-badge" id="liveBadge" title="Return to live dashboard"><span class="live-dot"></span>LIVE</div>
     <div class="last-updated" id="lastUpdated"></div>
@@ -1667,12 +2302,15 @@ document.addEventListener('keydown', e => {
       <span id="userEmail" style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
       <span class="user-badge-caret">▾</span>
       <div class="user-menu" id="userMenu">
+        <button class="menu-item" id="teamMenuBtn" title="Invite teammates or manage your shared workspace"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Team</span><span class="archive-count-badge" id="teamCountBadge" style="display:none;">1</span></button>
         <button class="menu-item" id="archiveViewBtn" title="View archived models"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><line x1="10" y1="13" x2="14" y2="13"/></svg><span>Archived</span><span class="archive-count-badge" id="archiveCountBadge" style="display:none;">0</span></button>
         <button class="menu-item" id="recycleViewBtn" title="View deleted tasks (kept for 30 days)" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg><span>Recycle Bin</span><span class="archive-count-badge" id="recycleCountBadge" style="display:none;">0</span></button>
         <button class="menu-item" id="userManualBtn" title="Download the user manual (PDF)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg><span>User Manual</span></button>
         <button class="menu-item" id="freshStartBtn" title="Clear everything and start fresh" style="color:var(--red);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg><span>Fresh Start</span></button>
         <button class="menu-item" id="undoBtn" title="Undo last change" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"/></svg><span>Undo</span></button>
         <button class="menu-item" id="redoBtn" title="Redo last undone change" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14l5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0-5.5 5.5v0A5.5 5.5 0 0 0 9.5 20H13"/></svg><span>Redo</span></button>
+        <div class="menu-divider"></div>
+        <a class="menu-item whatsapp-menu-item" href="https://wa.me/8801608985264?text=Hi%2C%20I%20need%20help%20with%20the%20Model%20Launch%20Dashboard." target="_blank" rel="noopener noreferrer" title="Chat with admin on WhatsApp"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.533 5.858L.057 23.184a.75.75 0 0 0 .916.919l5.453-1.43A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.726 9.726 0 0 1-4.964-1.357l-.355-.212-3.68.965.981-3.585-.232-.369A9.713 9.713 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg><span>Help (WhatsApp)</span></a>
         <div class="menu-divider"></div>
         <button class="logout-btn" id="logoutBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Sign Out</span></button>
       </div>
@@ -1684,6 +2322,12 @@ document.addEventListener('keydown', e => {
         <button class="menu-item theme-menu-item" id="themeOptDark" data-theme-val="dark"><span class="theme-swatch theme-swatch-dark"></span><span>Dark</span></button>
         <button class="menu-item theme-menu-item" id="themeOptLight" data-theme-val="light"><span class="theme-swatch theme-swatch-light"></span><span>Light</span></button>
         <button class="menu-item theme-menu-item" id="themeOptMidnight" data-theme-val="midnight"><span class="theme-swatch theme-swatch-midnight"></span><span>Midnight Blue</span></button>
+        <button class="menu-item theme-menu-item" id="themeOptForest" data-theme-val="forest"><span class="theme-swatch theme-swatch-forest"></span><span>Forest</span></button>
+        <button class="menu-item theme-menu-item" id="themeOptSunset" data-theme-val="sunset"><span class="theme-swatch theme-swatch-sunset"></span><span>Sunset</span></button>
+        <button class="menu-item theme-menu-item" id="themeOptBangladesh" data-theme-val="bangladesh"><span class="theme-swatch theme-swatch-bangladesh"></span><span>🇧🇩 Bangladesh</span></button>
+        <button class="menu-item theme-menu-item" id="themeOptArgentina" data-theme-val="argentina"><span class="theme-swatch theme-swatch-argentina"></span><span>🇦🇷 Argentina</span></button>
+        <button class="menu-item theme-menu-item" id="themeOptBrazil" data-theme-val="brazil"><span class="theme-swatch theme-swatch-brazil"></span><span>🇧🇷 Brazil</span></button>
+        <button class="menu-item theme-menu-item" id="themeOptAntigravity" data-theme-val="antigravity"><span class="theme-swatch theme-swatch-antigravity"></span><span>Antigravity</span></button>
       </div>
     </div>
     <div class="export-dropdown" id="exportAllDropdown">
@@ -1691,6 +2335,9 @@ document.addEventListener('keydown', e => {
       <div class="export-menu" id="exportAllMenu">
         <button class="menu-item" id="exportAllExcelBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#21a366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="10" y1="11" x2="10" y2="19"/></svg><span>Export as Excel</span></button>
         <button class="menu-item" id="exportAllPdfBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="#e5484d" stroke-width="2"/><polyline points="14 2 14 8 20 8" stroke="#e5484d" stroke-width="2"/><line x1="7.5" y1="13" x2="16.5" y2="13" stroke="#e5484d" stroke-width="1.6"/><line x1="7.5" y1="16" x2="16.5" y2="16" stroke="#e5484d" stroke-width="1.6"/><line x1="7.5" y1="19" x2="13" y2="19" stroke="#e5484d" stroke-width="1.6"/></svg><span>Export as PDF</span></button>
+        <div class="menu-divider"></div>
+        <button class="menu-item" id="backupNowBtn" title="Save a local backup right now (replaces the previous one — only the latest is ever kept)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span id="backupNowLabel">Backup Now</span></button>
+        <button class="menu-item" id="restoreBackupBtn" title="No backup yet — use &quot;Backup Now&quot; once to create one"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"/></svg><span id="restoreBackupLabel">Restore Last Backup</span></button>
       </div>
     </div>
     <label class="hdr-btn accent" title="Import from Excel — adds new models/tasks, keeps existing data" style="cursor:pointer;">
@@ -1722,6 +2369,11 @@ document.addEventListener('keydown', e => {
     <div class="kpi-value" id="kpiPct">—</div>
     <div class="kpi-sub">Completion rate</div>
   </div>
+  <div class="kpi-card overdue" id="kpiOverdueCard" title="Click to see every overdue task across all models">
+    <div class="kpi-label">Overdue</div>
+    <div class="kpi-value" id="kpiOverdue">—</div>
+    <div class="kpi-sub">Click to view all</div>
+  </div>
 </div>
 
 <!-- MAIN DASHBOARD VIEW (hidden when Archive view is active) -->
@@ -1740,6 +2392,15 @@ document.addEventListener('keydown', e => {
   </div>
 </div>
 <div class="models-grid" id="modelsGrid"></div>
+<div class="empty-state" id="modelsEmptyState" style="border:1px dashed var(--border);border-radius:16px;margin-bottom:24px;">
+  <div class="empty-state-icon" id="modelsEmptyStateIcon">🚀</div>
+  <div class="empty-state-title" id="modelsEmptyStateTitle">No models yet</div>
+  <div class="empty-state-sub" id="modelsEmptyStateSub">Add your first model card above to start tracking its launch checklist.</div>
+  <div style="display:flex;gap:10px;margin-top:16px;">
+    <button class="add-task-btn" id="modelsEmptyStateBtn">＋ Add Your First Model</button>
+    <button class="hdr-btn accent" id="modelsEmptyStateSignInBtn" style="display:none;">✦ Sign In</button>
+  </div>
+</div>
 
 <!-- DETAIL SECTION -->
 <div class="section-label" id="taskChecklistLabel">Task Checklist</div>
@@ -1777,6 +2438,9 @@ document.addEventListener('keydown', e => {
   <button class="filter-btn" data-filter="med">Medium<span class="filter-count" id="fc-med">0</span></button>
   <button class="filter-btn" data-filter="low">Low<span class="filter-count" id="fc-low">0</span></button>
   <button class="filter-btn filter-btn-critical" data-filter="critical">⚠ Critical<span class="filter-count" id="fc-critical">0</span></button>
+  <button class="filter-btn" data-filter="mine" id="mineFilterBtn" style="display:none;">👤 My Tasks<span class="filter-count" id="fc-mine">0</span></button>
+  <button class="filter-btn select-completed-btn" id="selectCompletedBtn" title="Select all completed tasks for bulk actions, regardless of the current filter">☑ Select Completed</button>
+  <button class="filter-btn select-pending-btn" id="selectPendingBtn" title="Select all pending tasks for bulk actions, regardless of the current filter">☐ Select Pending</button>
   <div class="kbd-hint">Shortcuts: <kbd>N</kbd> new task · <kbd>/</kbd> search · <kbd>Esc</kbd> clear</div>
 </div>
 
@@ -1871,12 +2535,12 @@ document.addEventListener('keydown', e => {
     <div class="section-label" style="margin-bottom:0;flex:1;">Recycle Bin</div>
     <button class="hdr-btn" id="emptyRecycleBinBtn" style="color:var(--red);border-color:rgba(244,63,94,0.25);" title="Permanently delete everything in the Recycle Bin" >Empty Bin</button>
   </div>
-  <div class="recycle-bin-note">Deleted tasks and subtasks stay here for 30 days, then expire automatically.</div>
+  <div class="recycle-bin-note">Deleted models, tasks, and subtasks stay here for 30 days, then expire automatically.</div>
   <div class="recycle-list" id="recycleList"></div>
   <div class="empty-state" id="recycleEmptyState" style="display:none;">
     <div class="empty-state-icon">🗑</div>
     <div class="empty-state-title">Recycle Bin is empty</div>
-    <div class="empty-state-sub">Tasks and subtasks you delete will show up here for 30 days before they're gone for good.</div>
+    <div class="empty-state-sub">Models, tasks, and subtasks you delete will show up here for 30 days before they're gone for good.</div>
   </div>
 </div>
 <!-- END RECYCLE BIN VIEW -->
@@ -1973,11 +2637,23 @@ document.addEventListener('keydown', e => {
 <div class="modal-overlay" id="shotLightbox" style="z-index:260;">
   <div class="shot-lightbox-inner">
     <img id="shotLightboxImg" src="" alt="Screenshot preview">
+    <div id="shotLightboxTitle" style="display:none;position:absolute;left:0;right:0;bottom:0;padding:10px 16px;background:rgba(0,0,0,0.65);color:#fff;font-size:14px;font-weight:600;border-radius:0 0 12px 12px;text-align:center;"></div>
     <button type="button" class="shot-lightbox-close" id="shotLightboxClose" title="Close">✕</button>
   </div>
 </div>
 
 <!-- TASK DEADLINE MODAL -->
+<div class="modal-overlay" id="overdueModal">
+  <div class="modal-box" id="overdueModalBox" style="width:min(560px, 92vw);">
+    <div class="modal-title">⚠ Overdue Tasks</div>
+    <div class="modal-subtitle" id="overdueModalCount">All pending tasks past their deadline, across every model.</div>
+    <div class="overdue-modal-body" id="overdueModalBody"></div>
+    <div class="modal-actions" style="margin-top:16px;">
+      <button class="modal-btn primary" id="overdueModalCloseBtn">Close</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="taskDeadlineModal">
   <div class="modal-box">
     <div class="modal-title">Task Deadline</div>
@@ -2255,12 +2931,8 @@ document.getElementById('forgotLink').onclick=async()=>{
   }
 };
 
-// Logout
-document.getElementById('logoutBtn').onclick=(e)=>{
-  e.stopPropagation();
-  document.getElementById('userBadge').classList.remove('menu-open');
-  auth.signOut();
-};
+// Logout — intercepted by export-before-logout modal (wired up below)
+// The modal handler re-assigns logoutBtn.onclick after DOM is ready.
 
 // User badge dropdown: click the name/avatar to reveal the Sign Out menu
 document.getElementById('userBadge').addEventListener('click',(e)=>{
@@ -2319,6 +2991,98 @@ function friendlyAuthError(code){
 // ── FIRESTORE SAVE / LOAD ─────────────────────────────────────────────────────
 function getUserDoc(uid){ return db.collection('dashboards').doc(uid); }
 
+// ── WORKSPACES (shared/team data) ─────────────────────────────────────────────
+// A "workspace" is the shared document multiple people can read/write.
+// Every account gets its own personal workspace automatically (workspaceId ==
+// their own uid, reusing any pre-existing single-user `dashboards/{uid}` data
+// so nobody's existing data is lost). Joining a teammate's workspace via an
+// invite code switches which workspace this browser is currently pointed at.
+let currentWorkspaceId=null;     // workspace this session is currently reading/writing
+let personalWorkspaceId=null;    // this account's own workspace — always == their uid
+let workspaceOwnerUid=null;
+let workspaceMembers={};         // {uid: {email, displayName}} for everyone in currentWorkspaceId
+function getWorkspaceDoc(){ return db.collection('workspaces').doc(currentWorkspaceId); }
+function getUserProfileDoc(uid){ return db.collection('users').doc(uid); }
+function isCurrentWorkspaceOwner(){ return !!auth&&!!auth.currentUser&&workspaceOwnerUid===auth.currentUser.uid; }
+
+function randomInviteCode(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no 0/O/1/I to avoid ambiguity
+  let out='';
+  for(let i=0;i<6;i++) out+=chars[Math.floor(Math.random()*chars.length)];
+  return out;
+}
+
+// Resolves (and migrates/creates as needed) which workspace this signed-in
+// user should load. Populates the module-level workspace state above.
+async function resolveWorkspace(user){
+  const uid=user.uid;
+  personalWorkspaceId=uid;
+  const profileRef=getUserProfileDoc(uid);
+  let profileSnap;
+  try{ profileSnap=await withTimeout(profileRef.get(),6000); }
+  catch(e){ console.error('Profile load error:',e); profileSnap=null; }
+
+  const profile=profileSnap&&profileSnap.exists?profileSnap.data():null;
+  const myInfo={email:user.email||'',displayName:user.displayName||(user.email||'').split('@')[0]};
+
+  if(profile && profile.workspaceId){
+    // Keep the denormalized member info fresh (in case display name changed).
+    try{
+      await getWorkspaceDocById(profile.workspaceId).set(
+        {members:{[uid]:myInfo}}, {merge:true}
+      );
+    }catch(e){ console.warn('Could not refresh member info:',e); }
+    return profile.workspaceId;
+  }
+
+  // First time we've seen this account — migrate any pre-existing
+  // single-user data from the old `dashboards/{uid}` doc into a brand new
+  // personal workspace at `workspaces/{uid}`, so nothing is lost.
+  let legacyData=null;
+  try{
+    const legacySnap=await withTimeout(getUserDoc(uid).get(),6000);
+    if(legacySnap.exists) legacyData=legacySnap.data();
+  }catch(e){ console.warn('Legacy data check failed:',e); }
+
+  const newWorkspace={
+    ownerUid:uid,
+    memberUids:[uid],
+    members:{[uid]:myInfo},
+    inviteCode:null,
+    tasks:(legacyData&&legacyData.tasks)||{},
+    deadlines:(legacyData&&legacyData.deadlines)||{},
+    modelImages:(legacyData&&legacyData.modelImages)||{},
+    deletedModels:(legacyData&&legacyData.deletedModels)||[],
+    archivedModels:(legacyData&&legacyData.archivedModels)||[],
+    pinnedModels:(legacyData&&legacyData.pinnedModels)||[],
+    modelOrder:(legacyData&&legacyData.modelOrder)||[],
+    recycleBin:(legacyData&&legacyData.recycleBin)||{},
+    updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+  };
+  try{
+    await getWorkspaceDocById(uid).set(newWorkspace);
+    await profileRef.set({workspaceId:uid,personalWorkspaceId:uid,email:myInfo.email,displayName:myInfo.displayName},{merge:true});
+  }catch(e){
+    console.error('Workspace creation failed:',e);
+    toast('⚠','Could not set up your workspace — check your connection',false);
+  }
+  return uid;
+}
+function getWorkspaceDocById(id){ return db.collection('workspaces').doc(id); }
+
+// Loads the {members, ownerUid} side of the current workspace into the
+// module-level vars above, so the assignee dropdown/team panel can use them.
+async function refreshWorkspaceMembers(){
+  try{
+    const snap=await withTimeout(getWorkspaceDoc().get(),6000);
+    if(snap.exists){
+      const d=snap.data();
+      workspaceMembers=d.members||{};
+      workspaceOwnerUid=d.ownerUid||null;
+    }
+  }catch(e){ console.warn('Could not refresh workspace members:',e); }
+}
+
 // Rejects if `promise` doesn't settle within `ms` milliseconds, so the UI
 // never hangs forever waiting on a slow/stalled network request.
 function withTimeout(promise, ms){
@@ -2328,8 +3092,8 @@ function withTimeout(promise, ms){
   ]);
 }
 
-async function loadFromFirestore(uid){
-  const ref=getUserDoc(uid);
+async function loadFromFirestore(workspaceId){
+  const ref=getWorkspaceDocById(workspaceId);
   // Try cache first — if persistence is enabled and we've loaded before,
   // this resolves instantly with no network round-trip.
   try{
@@ -2368,11 +3132,12 @@ function formatLastUpdated(ts){
 }
 
 let unsubscribeLastUpdated=null;
-function listenForLastUpdated(uid){
-  // Live-updates the "last changed" label for EVERY logged-in user the moment
-  // anyone saves a change — no refresh needed.
+function listenForLastUpdated(workspaceId){
+  // Live-updates the "last changed" label — and, since a workspace can now
+  // be shared, this fires the moment ANY teammate saves a change, not just
+  // the current viewer, so everyone stays in sync without refreshing.
   if(unsubscribeLastUpdated) unsubscribeLastUpdated();
-  unsubscribeLastUpdated=getUserDoc(uid).onSnapshot(snap=>{
+  unsubscribeLastUpdated=getWorkspaceDocById(workspaceId).onSnapshot(snap=>{
     const data=snap.data();
     if(data && data.updatedAt){
       const label=formatLastUpdated(data.updatedAt);
@@ -2390,15 +3155,17 @@ function save(){
   clearTimeout(saveTimer);
   saveTimer=setTimeout(async()=>{
     try{
-      await getUserDoc(auth.currentUser.uid).set({
+      await getWorkspaceDoc().set({
         tasks:state,
         deadlines,
+        modelImages,
         deletedModels:[...deletedModelsSet],
         archivedModels:[...archivedModelsSet],
+        pinnedModels:[...pinnedModelsSet],
         modelOrder:[...modelOrder],
         recycleBin,
         updatedAt:firebase.firestore.FieldValue.serverTimestamp()
-      });
+      }, {merge:true});
       // lastUpdated label is refreshed automatically by the live Firestore
       // listener (listenForLastUpdated) once the server timestamp lands.
     }catch(e){ console.error('Save error:',e); toast('⚠','Failed to save data',false);}
@@ -2417,8 +3184,10 @@ function snapshotNow(){
   return {
     state:JSON.parse(JSON.stringify(state)),
     deadlines:JSON.parse(JSON.stringify(deadlines)),
+    modelImages:JSON.parse(JSON.stringify(modelImages)),
     deletedModels:[...deletedModelsSet],
     archivedModels:[...archivedModelsSet],
+    pinnedModels:[...pinnedModelsSet],
     modelOrder:[...modelOrder],
     recycleBin:JSON.parse(JSON.stringify(recycleBin)),
     activeTab
@@ -2457,8 +3226,10 @@ function undo(){
   if(redoStack.length>UNDO_LIMIT) redoStack.shift();
   state=prev.state;
   deadlines=prev.deadlines;
+  modelImages=prev.modelImages||modelImages;
   deletedModelsSet=new Set(prev.deletedModels);
   archivedModelsSet=new Set(prev.archivedModels||[]);
+  pinnedModelsSet=new Set(prev.pinnedModels||[]);
   recycleBin=prev.recycleBin||{};
   // Guard with `|| modelOrder` so undo steps taken before this field existed
   // (e.g. mid-session after a reload of older saved state) don't wipe the
@@ -2466,6 +3237,7 @@ function undo(){
   modelOrder=prev.modelOrder||modelOrder;
   refreshModelsList();
   activeTab=models.includes(prev.activeTab)?prev.activeTab:(models[0]||'');
+  localStorage.setItem('mlc_activeTab',activeTab);
   selectedTasks.clear();selectedSubtasks.clear();editingIdx=null;
   // This counts as a change too, but shouldn't itself be undoable back to
   // a state we just left — re-baseline without pushing a new undo step.
@@ -2476,10 +3248,10 @@ function undo(){
     clearTimeout(saveTimer);
     saveTimer=setTimeout(async()=>{
       try{
-        await getUserDoc(auth.currentUser.uid).set({
-          tasks:state,deadlines,deletedModels:[...deletedModelsSet],archivedModels:[...archivedModelsSet],modelOrder:[...modelOrder],recycleBin,
+        await getWorkspaceDoc().set({
+          tasks:state,deadlines,modelImages,deletedModels:[...deletedModelsSet],archivedModels:[...archivedModelsSet],pinnedModels:[...pinnedModelsSet],modelOrder:[...modelOrder],recycleBin,
           updatedAt:firebase.firestore.FieldValue.serverTimestamp()
-        });
+        }, {merge:true});
       }catch(e){ console.error('Save error:',e); toast('⚠','Failed to save data',false);}
     },800);
   }
@@ -2495,12 +3267,15 @@ function redo(){
   if(undoStack.length>UNDO_LIMIT) undoStack.shift();
   state=next.state;
   deadlines=next.deadlines;
+  modelImages=next.modelImages||modelImages;
   deletedModelsSet=new Set(next.deletedModels);
   archivedModelsSet=new Set(next.archivedModels||[]);
+  pinnedModelsSet=new Set(next.pinnedModels||[]);
   recycleBin=next.recycleBin||{};
   modelOrder=next.modelOrder||modelOrder;
   refreshModelsList();
   activeTab=models.includes(next.activeTab)?next.activeTab:(models[0]||'');
+  localStorage.setItem('mlc_activeTab',activeTab);
   selectedTasks.clear();selectedSubtasks.clear();editingIdx=null;
   lastSnapshot=snapshotNow();
   updateUndoBtn();
@@ -2509,10 +3284,10 @@ function redo(){
     clearTimeout(saveTimer);
     saveTimer=setTimeout(async()=>{
       try{
-        await getUserDoc(auth.currentUser.uid).set({
-          tasks:state,deadlines,deletedModels:[...deletedModelsSet],archivedModels:[...archivedModelsSet],modelOrder:[...modelOrder],recycleBin,
+        await getWorkspaceDoc().set({
+          tasks:state,deadlines,modelImages,deletedModels:[...deletedModelsSet],archivedModels:[...archivedModelsSet],pinnedModels:[...pinnedModelsSet],modelOrder:[...modelOrder],recycleBin,
           updatedAt:firebase.firestore.FieldValue.serverTimestamp()
-        });
+        }, {merge:true});
       }catch(e){ console.error('Save error:',e); toast('⚠','Failed to save data',false);}
     },800);
   }
@@ -2522,6 +3297,7 @@ function redo(){
 
 let deletedModelsSet=new Set();
 let archivedModelsSet=new Set();
+let pinnedModelsSet=new Set();
 let archiveViewActive=false;
 
 // ── RECYCLE BIN ───────────────────────────────────────────────────────────────
@@ -2556,6 +3332,23 @@ function recycleSubtask(model,taskName,sub,subIdx){
   if(!recycleBin[model]) recycleBin[model]=[];
   recycleBin[model].push({type:'subtask',task:taskName,sub:JSON.parse(JSON.stringify(sub)),subIdx,deletedAt:Date.now()});
 }
+// Store a whole model (its tasks + deadline + order position) in the recycle bin.
+// Keyed under __models__ so it stays accessible after state[name] is deleted.
+const RECYCLE_MODELS_KEY='__models__';
+function recycleModel(name){
+  if(!recycleBin[RECYCLE_MODELS_KEY]) recycleBin[RECYCLE_MODELS_KEY]=[];
+  recycleBin[RECYCLE_MODELS_KEY].push({
+    type:'model',
+    name,
+    tasks:JSON.parse(JSON.stringify(state[name]||[])),
+    deadline:deadlines[name]||null,
+    image:modelImages[name]||null,
+    orderIdx:modelOrder.indexOf(name),
+    wasArchived:archivedModelsSet.has(name),
+    wasPinned:pinnedModelsSet.has(name),
+    deletedAt:Date.now()
+  });
+}
 function daysLeftLabel(deletedAt){
   const elapsedDays=(Date.now()-deletedAt)/(24*60*60*1000);
   const left=Math.max(0,Math.ceil(RECYCLE_RETENTION_DAYS-elapsedDays));
@@ -2577,18 +3370,23 @@ function enterPreviewMode(){
   previewMode = true;
   deletedModelsSet = new Set();
   archivedModelsSet = new Set();
+  pinnedModelsSet = new Set();
   recycleBin = {};
+  modelImages = {};
   setArchiveView(false);
   setRecycleView(false);
   ({tasks: state, deadlines} = loadState(null));
   refreshModelsList();
-  if (!activeTab && models.length > 0) activeTab = models[0];
+  const _savedPreviewTab=localStorage.getItem('mlc_activeTab');
+  if(_savedPreviewTab && models.includes(_savedPreviewTab)) activeTab=_savedPreviewTab;
+  else if (!activeTab && models.length > 0) activeTab = models[0];
   document.querySelector('.wrap').classList.add('unlocked');
   document.getElementById('lastUpdated').textContent = '';
   resetUndo();
   renderAll();
   hideLoading();
   setTimeout(startDeadlineWatch,1200);
+  setTimeout(startAutoBackup,1500);
   if (typeof refreshStickyBarOrigin === 'function') setTimeout(refreshStickyBarOrigin, 100);
 }
 
@@ -2611,25 +3409,37 @@ async function handleAuthState(user){
     document.getElementById('archiveViewBtn').style.display='';
     document.getElementById('recycleViewBtn').style.display='';
 
+    // Resolve which workspace this account should load (auto-migrates any
+    // pre-existing single-user data into a personal workspace the first
+    // time this runs for an account).
+    currentWorkspaceId=await resolveWorkspace(user);
+    await refreshWorkspaceMembers();
+
     // Load user's data from Firestore
-    const saved=await loadFromFirestore(user.uid);
+    const saved=await loadFromFirestore(currentWorkspaceId);
     deletedModelsSet=new Set(saved?.deletedModels||[]);
     archivedModelsSet=new Set(saved?.archivedModels||[]);
+    pinnedModelsSet=new Set(saved?.pinnedModels||[]);
     modelOrder=saved?.modelOrder||[];
+    modelImages=saved?.modelImages||{};
     recycleBin=saved?.recycleBin||{};
     const expiredPurged=purgeExpiredRecycleItems();
     setArchiveView(false);
     setRecycleView(false);
     ({tasks: state, deadlines}=loadState(saved));
     refreshModelsList();
-    if (!activeTab && models.length > 0) activeTab = models[0];
+    const _savedTab=localStorage.getItem('mlc_activeTab');
+    if(_savedTab && models.includes(_savedTab)) activeTab=_savedTab;
+    else if(!activeTab||!models.includes(activeTab)) activeTab=models[0]||'';
     document.querySelector('.wrap').classList.add('unlocked');
     document.getElementById('lastUpdated').textContent=formatLastUpdated(saved&&saved.updatedAt)||'';
-    listenForLastUpdated(user.uid);
+    listenForLastUpdated(currentWorkspaceId);
+    updateTeamUI();
     resetUndo();
     renderAll();
     hideLoading();
     setTimeout(startDeadlineWatch,1200);
+    setTimeout(startAutoBackup,1500);
     if(typeof refreshStickyBarOrigin==='function') setTimeout(refreshStickyBarOrigin,100);
     // Items that aged past 30 days were dropped above — persist that quietly,
     // without disturbing the undo baseline we just reset.
@@ -2637,10 +3447,10 @@ async function handleAuthState(user){
       clearTimeout(saveTimer);
       saveTimer=setTimeout(async()=>{
         try{
-          await getUserDoc(auth.currentUser.uid).set({
-            tasks:state,deadlines,deletedModels:[...deletedModelsSet],archivedModels:[...archivedModelsSet],modelOrder:[...modelOrder],recycleBin,
+          await getWorkspaceDoc().set({
+            tasks:state,deadlines,modelImages,deletedModels:[...deletedModelsSet],archivedModels:[...archivedModelsSet],pinnedModels:[...pinnedModelsSet],modelOrder:[...modelOrder],recycleBin,
             updatedAt:firebase.firestore.FieldValue.serverTimestamp()
-          });
+          }, {merge:true});
         }catch(e){ console.error('Save error:',e); }
       },800);
     }
@@ -2767,32 +3577,24 @@ const STANDARD_TASK_TEMPLATE = Object.values(INITIAL_DATA)[0].map(t=>t.name);
 
 // ── STATE LOAD ─────────────────────────────────────────────────────────────────
 function loadState(saved) {
-  const fresh = JSON.parse(JSON.stringify(INITIAL_DATA));
-  if (!saved) {
-    deletedModelsSet.forEach(m=>delete fresh[m]);
-    Object.values(fresh).forEach(tasks=>tasks.forEach(t=>{
-      t.priority=t.priority||'med'; t.notes=t.notes||''; t.taskDeadline=t.taskDeadline||''; if(!Array.isArray(t.screenshots))t.screenshots=[];
-    }));
-    return { tasks: fresh, deadlines:{} };
+  // BUGFIX/FEATURE: this used to always seed in the two INITIAL_DATA demo
+  // models (DUPLEX 2.0 / LUMINOUS PRO 2.0) — for a not-signed-in guest
+  // AND for every signed-in account, even a brand-new one with nothing
+  // saved yet. That meant "fresh start" never actually looked fresh, and
+  // a new signed-in user got two pre-filled demo models instead of an
+  // empty dashboard prompting them to add their own first model.
+  if (!saved || !saved.tasks) {
+    return { tasks: {}, deadlines: (saved && saved.deadlines) || {} };
   }
   const result={};
-  Object.keys(fresh).forEach(model=>{
+  Object.keys(saved.tasks).forEach(model=>{
     if(deletedModelsSet.has(model)) return;
-    const savedModel = saved.tasks&&saved.tasks[model];
-    if(!savedModel||!savedModel.length){result[model]=fresh[model];return;}
+    const savedModel=saved.tasks[model];
+    if(!savedModel||!savedModel.length) return;
     const tasks=savedModel.map(t=>({...t}));
-    const existingNames=new Set(tasks.map(t=>t.name.trim().toUpperCase()));
-    fresh[model].forEach(task=>{
-      if(!existingNames.has(task.name.trim().toUpperCase()))
-        tasks.push({...task,priority:'med',notes:'',taskDeadline:'',screenshots:[]});
-    });
     tasks.forEach(t=>{if(!t.priority)t.priority='med';if(!t.notes)t.notes='';if(!t.taskDeadline)t.taskDeadline='';if(!Array.isArray(t.screenshots))t.screenshots=[];});
     renumber(tasks);
     result[model]=tasks;
-  });
-  if(saved.tasks) Object.keys(saved.tasks).forEach(model=>{
-    if(!(model in result)&&!deletedModelsSet.has(model)&&saved.tasks[model]&&saved.tasks[model].length)
-      result[model]=saved.tasks[model].map(t=>({...t}));
   });
   return { tasks: result, deadlines: saved.deadlines||{} };
 }
@@ -2802,6 +3604,7 @@ function renumber(tasks){tasks.forEach((t,i)=>{t.sn=i+1;});}
 // State initialized by onAuthStateChanged after login
 let state = {};
 let deadlines = {};
+let modelImages = {};
 let models = [];
 let activeTab = '';
 let activeFilter = 'all';
@@ -2849,8 +3652,13 @@ function refreshModelsList(){
   // Merge saved order with current active models
   const ordered=modelOrder.filter(m=>active.includes(m));
   const unordered=active.filter(m=>!ordered.includes(m));
-  models=[...ordered,...unordered];
-  modelOrder=[...models]; // keep in sync
+  const combined=[...ordered,...unordered];
+  // Pinned models float to the top, but keep their relative drag-order
+  // among themselves (and unpinned models keep theirs too).
+  const pinned=combined.filter(m=>pinnedModelsSet.has(m));
+  const rest=combined.filter(m=>!pinnedModelsSet.has(m));
+  models=[...pinned,...rest];
+  modelOrder=[...combined]; // keep drag order in sync (independent of pin state)
 }
 // save() is defined above in the Firebase section
 
@@ -2869,11 +3677,22 @@ function checkDeadlinesAndNotify(){
 
   models.forEach(m=>{
     (state[m]||[]).forEach(t=>{
-      if(t.done||!t.taskDeadline) return;
-      const d=new Date(t.taskDeadline+'T00:00:00');
-      const diff=Math.round((d-today)/(1000*60*60*24));
-      if(diff<0) overdueTasks.push({model:m,task:t});
-      else if(diff<=2) dueSoonTasks.push({model:m,task:t});
+      if(!t.done&&t.taskDeadline){
+        const d=new Date(t.taskDeadline+'T00:00:00');
+        const diff=Math.round((d-today)/(1000*60*60*24));
+        if(diff<0) overdueTasks.push({model:m,task:t});
+        else if(diff<=2) dueSoonTasks.push({model:m,task:t});
+      }
+      // BUGFIX: subtask deadlines were never checked here, so an overdue or
+      // due-soon subtask never triggered a notification even though it's
+      // surfaced everywhere else (KPI card, PDF export, row due-badges).
+      (Array.isArray(t.subtasks)?t.subtasks:[]).forEach(s=>{
+        if(s.done||!s.taskDeadline) return;
+        const d=new Date(s.taskDeadline+'T00:00:00');
+        const diff=Math.round((d-today)/(1000*60*60*24));
+        if(diff<0) overdueTasks.push({model:m,task:s});
+        else if(diff<=2) dueSoonTasks.push({model:m,task:s});
+      });
     });
     const mdl=deadlines[m];
     if(mdl){
@@ -2943,6 +3762,33 @@ function globalStats(){
   let total=0,done=0;
   models.forEach(m=>{const s=stats(m);total+=s.total;done+=s.done;});
   return{total,done,pending:total-done,pct:total?Math.round(done/total*100):0};
+}
+// Collects every pending task whose deadline has passed, across ALL models
+// (not just the currently active tab), sorted with the most overdue first.
+function getAllOverdueTasks(){
+  const out=[];
+  const today=new Date(); today.setHours(0,0,0,0);
+  models.forEach(m=>{
+    (state[m]||[]).forEach((t,idx)=>{
+      if(!t.done&&t.taskDeadline){
+        const d=new Date(t.taskDeadline+'T00:00:00');
+        const diff=Math.round((d-today)/(1000*60*60*24));
+        if(diff<0) out.push({model:m, idx, task:t, days:-diff});
+      }
+      // BUGFIX: subtasks have their own deadlines and were previously never
+      // checked here, so an overdue subtask under an on-time parent task
+      // was invisible to the global Overdue KPI card and modal even though
+      // it's tracked everywhere else (PDF export, per-row due badges, etc).
+      (Array.isArray(t.subtasks)?t.subtasks:[]).forEach((s,subIdx)=>{
+        if(s.done||!s.taskDeadline) return;
+        const d=new Date(s.taskDeadline+'T00:00:00');
+        const diff=Math.round((d-today)/(1000*60*60*24));
+        if(diff<0) out.push({model:m, idx, subIdx, task:s, parentName:t.name, days:-diff});
+      });
+    });
+  });
+  out.sort((a,b)=>b.days-a.days);
+  return out;
 }
 function statusLabel(pct){
   if(pct===100) return['COMPLETED','#10b981','rgba(16, 185, 129, 0.1)'];
@@ -3086,8 +3932,12 @@ async function addScreenshotFiles(files){
     }
     try{
       const dataUrl=await compressImageFile(file);
-      _notesScreenshots.push({id:'shot_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),dataUrl});
+      const newId='shot_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
+      _notesScreenshots.push({id:newId,dataUrl,title:''});
       renderNotesShotsGallery();
+      // Focus the title field for the image just added so the user can name it right away.
+      const newInput=document.querySelector(`.notes-shot-title-input[data-id="${newId}"]`);
+      if(newInput) setTimeout(()=>newInput.focus(),0);
     }catch(e){ toast('⚠','Could not add image',false); }
   }
 }
@@ -3098,25 +3948,132 @@ function renderNotesShotsGallery(){
   if(!gallery) return;
   gallery.innerHTML='';
   _notesScreenshots.forEach(shot=>{
+    const item=document.createElement('div');
+    item.className='notes-shot-item';
     const thumb=document.createElement('div');
     thumb.className='notes-shot-thumb';
-    thumb.innerHTML=`<img src="${shot.dataUrl}" alt="Screenshot"><button type="button" class="notes-shot-remove" title="Remove">✕</button>`;
-    thumb.querySelector('img').addEventListener('click',()=>openShotLightbox(shot.dataUrl));
+    thumb.innerHTML=`<img src="${shot.dataUrl}" alt="${_printEsc(shot.title||'Screenshot')}"><button type="button" class="notes-shot-remove" title="Remove">✕</button>`;
+    thumb.querySelector('img').addEventListener('click',()=>openShotLightbox(shot.dataUrl,shot.title));
     thumb.querySelector('.notes-shot-remove').addEventListener('click',e=>{
       e.stopPropagation();
       _notesScreenshots=_notesScreenshots.filter(s=>s.id!==shot.id);
       renderNotesShotsGallery();
     });
-    gallery.appendChild(thumb);
+    const titleInput=document.createElement('textarea');
+    titleInput.className='notes-shot-title-input';
+    titleInput.placeholder='Add title…';
+    titleInput.maxLength=60;
+    titleInput.rows=1;
+    titleInput.value=shot.title||'';
+    titleInput.dataset.id=shot.id;
+    const autoGrow=()=>{ titleInput.style.height='auto'; titleInput.style.height=titleInput.scrollHeight+'px'; };
+    titleInput.addEventListener('input',()=>{
+      const s=_notesScreenshots.find(s=>s.id===shot.id);
+      if(s) s.title=titleInput.value;
+      autoGrow();
+    });
+    item.appendChild(thumb);
+    item.appendChild(titleInput);
+    gallery.appendChild(item);
+    autoGrow();
   });
   empty.classList.toggle('hide',_notesScreenshots.length>0);
 }
 
-function openShotLightbox(dataUrl){
+function openShotLightbox(dataUrl,title){
   document.getElementById('shotLightboxImg').src=dataUrl;
+  const titleEl=document.getElementById('shotLightboxTitle');
+  if(title){ titleEl.textContent=title; titleEl.style.display='block'; }
+  else{ titleEl.textContent=''; titleEl.style.display='none'; }
   document.getElementById('shotLightbox').classList.add('open');
 }
 document.getElementById('shotLightboxClose').onclick=()=>document.getElementById('shotLightbox').classList.remove('open');
+
+// ── OVERDUE TASKS MODAL ─────────────────────────────────────────────────────
+function renderOverdueModal(){
+  const list=getAllOverdueTasks();
+  const countEl=document.getElementById('overdueModalCount');
+  const body=document.getElementById('overdueModalBody');
+  if(!list.length){
+    countEl.textContent='Nothing overdue — nice work.';
+    body.innerHTML=`<div class="overdue-empty">🎉 No overdue tasks across any model.</div>`;
+    return;
+  }
+  countEl.textContent=`${list.length} item${list.length>1?'s':''} past their deadline, across ${new Set(list.map(x=>x.model)).size} model${new Set(list.map(x=>x.model)).size>1?'s':''}.`;
+  body.innerHTML=list.map((item,i)=>`
+    <div class="overdue-row" data-i="${i}">
+      <div class="overdue-row-main">
+        <div class="overdue-row-name">${escHtml(item.task.name)}</div>
+        <div class="overdue-row-model">${escHtml(item.model)}${item.parentName?` · sub-task of "${escHtml(item.parentName)}"`:''}</div>
+      </div>
+      <div class="overdue-row-days">${item.days}d overdue</div>
+    </div>
+  `).join('');
+  body.querySelectorAll('.overdue-row').forEach(row=>{
+    row.onclick=()=>{
+      const item=list[parseInt(row.dataset.i,10)];
+      // BUGFIX: subIdx wasn't being passed through, so clicking an overdue
+      // subtask row always jumped to (and pinpointed) the parent task
+      // instead of expanding and highlighting the actual subtask.
+      jumpToOverdueTask(item.model,item.idx,item.subIdx);
+    };
+  });
+}
+function jumpToOverdueTask(model,idx,subIdx){
+  closeOverdueModal();
+  if(!models.includes(model)) return;
+  activeTab=model; localStorage.setItem('mlc_activeTab',model);
+  editingIdx=null; selectedTasks.clear(); selectedSubtasks.clear();
+  const task=(state[model]||[])[idx];
+  const isSubtaskJump=(typeof subIdx==='number');
+  // BUGFIX: the "critical" filter only ever matches top-level tasks
+  // (see matchesFilter/isOverdueTask), so if only a *subtask* is overdue
+  // while its parent task is on-time, switching to "critical" hid the row
+  // entirely and the person landed on an empty list. Use "all" instead
+  // whenever we're pinpointing a subtask.
+  activeFilter=isSubtaskJump?'all':'critical';
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  const activeBtn=document.querySelector(`.filter-btn[data-filter="${activeFilter}"]`);
+  if(activeBtn) activeBtn.classList.add('active');
+  // Pinpoint via search using the parent task's name either way, since the
+  // subtask panel lives nested under its parent task row.
+  const sb=document.getElementById('searchBox');
+  sb.value=task?task.name:'';
+  searchQuery=sb.value;
+  if(isSubtaskJump && task) expandedSubtasksSet.add(subKey(model,idx));
+  renderTabs();
+  renderTaskList();
+  scrollToTaskChecklist();
+  // The search box was only filled in to pinpoint this one task — clear it
+  // again on the next click elsewhere, but not if that click lands inside
+  // the search box itself (previously any click at all, including one
+  // meant to edit the search text, wiped it out from under the person).
+  if(_pinpointClearHandler) document.removeEventListener('click',_pinpointClearHandler);
+  setTimeout(()=>{
+    _pinpointClearHandler=e=>{
+      if(e.target===document.getElementById('searchBox')) return;
+      document.removeEventListener('click',_pinpointClearHandler);
+      _pinpointClearHandler=null;
+      document.getElementById('searchBox').value='';
+      searchQuery='';
+      renderTaskList();
+    };
+    document.addEventListener('click',_pinpointClearHandler);
+  },0);
+}
+let _pinpointClearHandler=null;
+function openOverdueModal(){
+  renderOverdueModal();
+  document.getElementById('overdueModal').classList.add('open');
+}
+function closeOverdueModal(){
+  document.getElementById('overdueModal').classList.remove('open');
+}
+document.getElementById('kpiOverdueCard').onclick=openOverdueModal;
+document.getElementById('overdueModalCloseBtn').onclick=closeOverdueModal;
+document.getElementById('overdueModal').onclick=e=>{
+  if(e.target.id==='overdueModal') closeOverdueModal();
+};
 document.getElementById('shotLightbox').onclick=e=>{
   if(e.target===document.getElementById('shotLightbox')) document.getElementById('shotLightbox').classList.remove('open');
 };
@@ -3151,6 +4108,9 @@ function renderKPIs(){
   document.getElementById('kpiDone').textContent=g.done;
   document.getElementById('kpiPending').textContent=g.pending;
   document.getElementById('kpiPct').textContent=g.pct+'%';
+  const overdueCount=getAllOverdueTasks().length;
+  document.getElementById('kpiOverdue').textContent=overdueCount;
+  document.getElementById('kpiOverdueCard').classList.toggle('has-overdue',overdueCount>0);
   document.getElementById('footerPct').textContent=g.pct+'%';
   document.getElementById('footerFraction').textContent=`${g.done} / ${g.total} tasks`;
   document.getElementById('ringText').textContent=g.pct+'%';
@@ -3164,17 +4124,62 @@ let _cardDragSrc = null; // model name being dragged
 function renderModelCards(){
   const grid=document.getElementById('modelsGrid');
   grid.innerHTML='';
+
+  // No models at all — fresh start (pre-login) or a brand-new signed-in
+  // account with everything deleted/never created. Show a clear prompt to
+  // add the first model instead of an empty, unexplained grid.
+  const emptyState=document.getElementById('modelsEmptyState');
+  if(!models.length){
+    grid.style.display='none';
+    emptyState.classList.add('show');
+    const iconEl=document.getElementById('modelsEmptyStateIcon');
+    const titleEl=document.getElementById('modelsEmptyStateTitle');
+    const subEl=document.getElementById('modelsEmptyStateSub');
+    const signInBtn=document.getElementById('modelsEmptyStateSignInBtn');
+    if(previewMode){
+      iconEl.textContent='🚀';
+      titleEl.textContent='Welcome — this is a fresh start';
+      subEl.textContent='Add your first model card below to try things out, or sign in to save your progress.';
+      signInBtn.style.display='';
+    }else{
+      iconEl.textContent='＋';
+      titleEl.textContent='No models yet';
+      subEl.textContent='Add your first model card above to start tracking its launch checklist.';
+      signInBtn.style.display='none';
+    }
+    return;
+  }
+  grid.style.display='';
+  emptyState.classList.remove('show');
+
   models.forEach((m,idx)=>{
     const s=stats(m);
     const[lbl]=statusLabel(s.pct);
     const card=document.createElement('div');
-    card.className='model-card theme-'+(idx%4);
+    card.className='model-card theme-'+(idx%4)+(pinnedModelsSet.has(m)?' pinned-card':'');
     card.draggable=true;
     card.dataset.model=m;
     const dl=deadlineLabel(m);
+    const actionBtnsHtml=`
+        <div class="model-card-actions-row">
+          <button class="row-action-btn edit model-card-action-btn model-rename-btn" title="Rename model" style="width:26px;height:26px;font-size:13px;" data-model="${m}">✎</button>
+          <button class="row-action-btn edit model-card-action-btn model-duplicate-btn" title="Duplicate model" style="width:26px;height:26px;font-size:13px;margin-left:-2px;" data-model="${m}">⧉</button>
+          <button class="row-action-btn archive model-card-action-btn model-archive-btn" title="Archive model" style="width:26px;height:26px;font-size:13px;margin-left:4px;" data-model="${m}">🗄</button>
+          <button class="row-action-btn delete model-card-action-btn model-delete-btn" title="Delete model" style="width:26px;height:26px;font-size:13px;margin-left:2px;" data-model="${m}">🗑</button>
+        </div>`;
     const dlHtml=dl
-      ?`<div class="model-deadline model-deadline-btn ${dl.cls}" style="position:relative;display:inline-flex;align-items:center;gap:6px;">${CAL_ICON} ${dl.text} <span class="model-deadline-edit-hint">✎</span><input type="date" class="model-deadline-native-input task-deadline-native" value="${deadlines[m]||''}" tabindex="-1" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;-webkit-appearance:none;appearance:none;border:none;background:transparent;margin:0;padding:0;"></div>`
-      :`<div class="model-deadline model-deadline-btn model-deadline-unset" style="position:relative;display:inline-flex;align-items:center;gap:6px;">${CAL_ICON} Set deadline <span class="model-deadline-edit-hint">✎</span><input type="date" class="model-deadline-native-input task-deadline-native" value="" tabindex="-1" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;-webkit-appearance:none;appearance:none;border:none;background:transparent;margin:0;padding:0;"></div>`;
+      ?`<div>
+          <div class="model-deadline-row">
+            <div class="model-deadline model-deadline-btn ${dl.cls}" style="position:relative;display:inline-flex;align-items:center;gap:6px;">${CAL_ICON} ${dl.text} <span class="model-deadline-edit-hint">✎</span><input type="date" class="model-deadline-native-input task-deadline-native" value="${deadlines[m]||''}" tabindex="-1" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;-webkit-appearance:none;appearance:none;border:none;background:transparent;margin:0;padding:0;"></div>
+          </div>
+          ${actionBtnsHtml}
+        </div>`
+      :`<div>
+          <div class="model-deadline-row">
+            <div class="model-deadline model-deadline-btn model-deadline-unset" style="position:relative;display:inline-flex;align-items:center;gap:6px;">${CAL_ICON} Set deadline <span class="model-deadline-edit-hint">✎</span><input type="date" class="model-deadline-native-input task-deadline-native" value="" tabindex="-1" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;-webkit-appearance:none;appearance:none;border:none;background:transparent;margin:0;padding:0;"></div>
+          </div>
+          ${actionBtnsHtml}
+        </div>`;
 
     const isRenaming=renamingModel===m;
     const nameHtml=isRenaming
@@ -3183,19 +4188,31 @@ function renderModelCards(){
           <button class="row-action-btn save model-rename-save" title="Save" style="flex-shrink:0;">✓</button>
           <button class="row-action-btn cancel model-rename-cancel" title="Cancel" style="flex-shrink:0;">✕</button>
         </div>`
-      :`<div style="display:flex;align-items:center;gap:8px;">
-          <div class="model-name">${escHtml(m)}</div>
-          <button class="row-action-btn edit model-rename-btn" title="Rename model" style="width:26px;height:26px;font-size:13px;opacity:0;transition:opacity 0.2s;" data-model="${m}">✎</button>
-          <button class="row-action-btn edit model-duplicate-btn" title="Duplicate model" style="width:26px;height:26px;font-size:13px;opacity:0;transition:opacity 0.2s;" data-model="${m}">⧉</button>
-          <button class="row-action-btn archive model-archive-btn" title="Archive model" style="width:26px;height:26px;font-size:13px;opacity:0;transition:opacity 0.2s;" data-model="${m}">🗄</button>
-          <button class="row-action-btn delete model-delete-btn" title="Delete model" style="width:26px;height:26px;font-size:13px;opacity:0;transition:opacity 0.2s;" data-model="${m}">🗑</button>
-        </div>`;
+      :`<div class="model-name">${escHtml(m)}</div>`;
 
+
+    const img=modelImages[m];
+    const thumbHtml=`
+      <div class="model-thumb-wrap">
+        <div class="model-thumb model-thumb-btn" title="${img?'Change photo':'Add photo'}" data-model="${m}">
+          ${img?`<img src="${img}" alt="">`:`<svg class="model-thumb-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10.5" r="2"/><path d="M21 15l-4.5-4.5a2 2 0 0 0-2.8 0L5 19"/></svg>`}
+          <div class="model-thumb-overlay">${img?'✎':'＋'}</div>
+          <input type="file" accept="image/*" class="model-thumb-input" data-model="${m}">
+        </div>
+        ${img?`<button class="model-thumb-preview" title="Preview photo" data-model="${m}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>`:''}
+        ${img?`<button class="model-thumb-remove" title="Remove photo" data-model="${m}">✕</button>`:''}
+      </div>`;
+
+    const isPinned=pinnedModelsSet.has(m);
     card.innerHTML=`
+      <button class="model-pin-btn${isPinned?' pinned':''}" title="${isPinned?'Unpin model':'Pin model to top'}" data-model="${m}">📌</button>
       <div class="model-header">
-        <div style="min-width:0;flex:1;">
-          ${nameHtml}
-          ${dlHtml}
+        <div class="model-header-main">
+          ${thumbHtml}
+          <div style="min-width:0;flex:1;">
+            ${nameHtml}
+            ${dlHtml}
+          </div>
         </div>
         <div class="model-tag">${lbl}</div>
       </div>
@@ -3208,6 +4225,63 @@ function renderModelCards(){
         <div class="stat-item"><div class="stat-num pend-val">${s.pending}</div><div class="stat-lbl">PENDING</div></div>
         <div class="stat-item"><div class="stat-num" style="color:var(--text-muted)">${s.total}</div><div class="stat-lbl">TOTAL</div></div>
       </div>`;
+
+    // Pin/unpin toggle — floats the model to the top of the grid
+    const pinBtn=card.querySelector('.model-pin-btn');
+    if(pinBtn){
+      pinBtn.addEventListener('click',e=>{
+        e.stopPropagation();
+        if(pinnedModelsSet.has(m)){
+          pinnedModelsSet.delete(m);
+          toast('📌',`Unpinned: ${m}`,false);
+        }else{
+          pinnedModelsSet.add(m);
+          toast('📌',`Pinned to top: ${m}`);
+        }
+        refreshModelsList();
+        save();renderModelCards();
+      });
+    }
+
+    // Model photo: click thumbnail to pick a file, resized/compressed client-side
+    const thumbBtn=card.querySelector('.model-thumb-btn');
+    const thumbInput=card.querySelector('.model-thumb-input');
+    if(thumbBtn && thumbInput){
+      thumbBtn.addEventListener('click',e=>{ e.stopPropagation(); thumbInput.click(); });
+      thumbInput.addEventListener('click',e=>e.stopPropagation());
+      thumbInput.addEventListener('change',async e=>{
+        e.stopPropagation();
+        const file=e.target.files && e.target.files[0];
+        if(!file) return;
+        if(!file.type.startsWith('image/')){ toast('⚠','Please choose an image file',false); return; }
+        try{
+          const dataUrl=await resizeImageFile(file,320,320,0.75);
+          modelImages[m]=dataUrl;
+          save();renderModelCards();
+          toast('🖼','Photo updated');
+        }catch(err){
+          console.error('Image resize error:',err);
+          toast('⚠','Could not process that image',false);
+        }
+      });
+    }
+    const thumbRemoveBtn=card.querySelector('.model-thumb-remove');
+    if(thumbRemoveBtn){
+      thumbRemoveBtn.addEventListener('click',e=>{
+        e.stopPropagation();
+        delete modelImages[m];
+        save();renderModelCards();
+        toast('🗑','Photo removed',false);
+      });
+    }
+    const thumbPreviewBtn=card.querySelector('.model-thumb-preview');
+    if(thumbPreviewBtn){
+      thumbPreviewBtn.addEventListener('click',e=>{
+        e.stopPropagation();
+        const currentImg=modelImages[m];
+        if(currentImg) openShotLightbox(currentImg,m);
+      });
+    }
 
     // Deadline: native date input overlay — no modal, opens picker directly on click
     const dlNativeInput=card.querySelector('.model-deadline-native-input');
@@ -3222,28 +4296,6 @@ function renderModelCards(){
         toast(CAL_ICON,`Model deadline ${val?'set':'cleared'}`);
       });
     }
-
-    // Show/hide rename + duplicate + archive + delete icons on hover
-    card.addEventListener('mouseenter',()=>{
-      const btn=card.querySelector('.model-rename-btn');
-      if(btn) btn.style.opacity='1';
-      const dupBtn=card.querySelector('.model-duplicate-btn');
-      if(dupBtn) dupBtn.style.opacity='1';
-      const archBtn=card.querySelector('.model-archive-btn');
-      if(archBtn) archBtn.style.opacity='1';
-      const delBtn=card.querySelector('.model-delete-btn');
-      if(delBtn) delBtn.style.opacity='1';
-    });
-    card.addEventListener('mouseleave',()=>{
-      const btn=card.querySelector('.model-rename-btn');
-      if(btn) btn.style.opacity='0';
-      const dupBtn=card.querySelector('.model-duplicate-btn');
-      if(dupBtn) dupBtn.style.opacity='0';
-      const archBtn=card.querySelector('.model-archive-btn');
-      if(archBtn) archBtn.style.opacity='0';
-      const delBtn=card.querySelector('.model-delete-btn');
-      if(delBtn) delBtn.style.opacity='0';
-    });
 
     // Rename button click
     const renameBtn=card.querySelector('.model-rename-btn');
@@ -3303,7 +4355,7 @@ function renderModelCards(){
     card.addEventListener('dragstart',()=>{ _didDrag=true; });
     card.addEventListener('click',()=>{
       if(_didDrag||isRenaming){ _didDrag=false; return; }
-      activeTab=m;editingIdx=null;selectedTasks.clear();selectedSubtasks.clear();renderAll();
+      activeTab=m;localStorage.setItem('mlc_activeTab',m);editingIdx=null;selectedTasks.clear();selectedSubtasks.clear();renderAll();
       const target=document.getElementById('taskChecklistLabel');
       if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
     });
@@ -3318,27 +4370,55 @@ function renderModelCards(){
     });
     card.addEventListener('dragend',()=>{
       card.classList.remove('dragging');
-      document.querySelectorAll('.model-card.drag-over').forEach(c=>c.classList.remove('drag-over'));
+      document.querySelectorAll('.model-card.drag-over,.model-card.drag-over-before,.model-card.drag-over-after')
+        .forEach(c=>c.classList.remove('drag-over','drag-over-before','drag-over-after'));
     });
     card.addEventListener('dragover',e=>{
       e.preventDefault();
       e.dataTransfer.dropEffect='move';
-      if(_cardDragSrc && _cardDragSrc!==m) card.classList.add('drag-over');
+      card.classList.remove('drag-over','drag-over-before','drag-over-after');
+      if(!_cardDragSrc || _cardDragSrc===m) return;
+      // Hovering near the left/right edge of a card means "drop between this
+      // card and its neighbor" (insert); hovering over the middle means
+      // "drop onto this card" (swap places with it).
+      const rect=card.getBoundingClientRect();
+      const relX=e.clientX-rect.left;
+      const edgeZone=rect.width*0.25;
+      if(relX<edgeZone) card.classList.add('drag-over-before');
+      else if(relX>rect.width-edgeZone) card.classList.add('drag-over-after');
+      else card.classList.add('drag-over');
     });
-    card.addEventListener('dragleave',()=>{ card.classList.remove('drag-over'); });
+    card.addEventListener('dragleave',()=>{ card.classList.remove('drag-over','drag-over-before','drag-over-after'); });
     card.addEventListener('drop',e=>{
       e.preventDefault();
-      card.classList.remove('drag-over');
+      const wasBefore=card.classList.contains('drag-over-before');
+      const wasAfter=card.classList.contains('drag-over-after');
+      card.classList.remove('drag-over','drag-over-before','drag-over-after');
       if(!_cardDragSrc || _cardDragSrc===m) return;
-      // Swap positions in models array
       const fromIdx=models.indexOf(_cardDragSrc);
       const toIdx=models.indexOf(m);
       if(fromIdx<0||toIdx<0) return;
-      models.splice(fromIdx,1);
-      models.splice(toIdx,0,_cardDragSrc);
+      if(wasBefore||wasAfter){
+        // Dropped near an edge — remove the dragged card from its old spot
+        // and reinsert it right before/after the target, shifting the cards
+        // in between rather than swapping with the target directly.
+        models.splice(fromIdx,1);
+        let insertIdx=models.indexOf(m);
+        if(wasAfter) insertIdx+=1;
+        models.splice(insertIdx,0,_cardDragSrc);
+      }else{
+        // Dropped on the middle of a card — swap positions directly. (A
+        // remove-then-insert approach has a quirk here: dragging a card onto
+        // its immediate next neighbor computes an insert index that lands it
+        // right back where it started, so nothing visibly moves. A straight
+        // swap has no such blind spot in either direction.)
+        [models[fromIdx],models[toIdx]]=[models[toIdx],models[fromIdx]];
+      }
       modelOrder=[...models];
       _cardDragSrc=null;
+      save(); // persist the new card order
       renderModelCards(); // re-render cards in new order
+      renderTabs();       // keep the checklist tab bar in sync
       // Animate progress bars
       document.querySelectorAll('.progress-bar-fill').forEach((bar,i)=>{
         const pct=bar.dataset.pct;
@@ -3381,6 +4461,26 @@ document.getElementById('archiveViewBtn').onclick=()=>{
   setArchiveView(!archiveViewActive);
 };
 document.getElementById('liveBadge').onclick=()=>{ setArchiveView(false); setRecycleView(false); };
+// ── LOGO EDIT ────────────────────────────────────────────────────────────────
+(function(){
+  var modal  = document.getElementById('logoEditModal');
+  var titleEl= document.getElementById('logoTitle');
+
+  document.getElementById('logoHomeBtn').onclick=()=>{ window.location.reload(); };
+
+  document.getElementById('logoEditSave').onclick=function(){
+    var w1=document.getElementById('editWord1').value.trim()||'Model';
+    var w2=document.getElementById('editWord2').value.trim()||'Launch';
+    var w3=document.getElementById('editWord3').value.trim()||'Control';
+    titleEl.innerHTML=w1+' <span id="logoAccent" style="color:var(--accent1);font-weight:400;">'+w2+'</span> '+w3;
+    document.title=w1+' '+w2+' '+w3;
+    modal.style.display='none';
+  };
+
+  document.getElementById('logoEditCancel').onclick=function(){ modal.style.display='none'; };
+  modal.addEventListener('click',function(e){ if(e.target===modal) modal.style.display='none'; });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&modal.style.display==='flex') modal.style.display='none'; });
+})();
 
 function renderArchiveView(){
   const grid=document.getElementById('archiveGrid');
@@ -3396,10 +4496,17 @@ function renderArchiveView(){
     const dl=deadlineLabel(m);
     const dlHtml=dl?`<button class="model-deadline model-deadline-btn ${dl.cls}" onclick="event.stopPropagation()">${CAL_ICON} ${dl.text}</button>`
       :`<div class="model-deadline">${CAL_ICON} No deadline</div>`;
+    const archImg=modelImages[m];
+    const archThumbHtml=`<div class="model-thumb" style="cursor:default;">
+        ${archImg?`<img src="${archImg}" alt="">`:`<svg class="model-thumb-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10.5" r="2"/><path d="M21 15l-4.5-4.5a2 2 0 0 0-2.8 0L5 19"/></svg>`}
+      </div>`;
     card.innerHTML=`
       <div class="model-header">
-        <div>
-          <div class="model-name">${escHtml(m)}</div>
+        <div class="model-header-main">
+          ${archThumbHtml}
+          <div>
+            <div class="model-name">${escHtml(m)}</div>
+          </div>
         </div>
         <div class="model-tag">ARCHIVED</div>
       </div>
@@ -3429,7 +4536,7 @@ function renderArchiveView(){
 function archiveModel(name){
   archivedModelsSet.add(name);
   refreshModelsList();
-  if(activeTab===name) activeTab=models[0]||'';
+  if(activeTab===name){ activeTab=models[0]||''; localStorage.setItem('mlc_activeTab',activeTab); }
   editingIdx=null;
   save();renderAll();updateArchiveBadge();
   toast('🗄',`Model archived: ${name}`);
@@ -3438,8 +4545,7 @@ function archiveModel(name){
 function restoreModel(name){
   archivedModelsSet.delete(name);
   refreshModelsList();
-  activeTab=name;
-  save();renderAll();updateArchiveBadge();
+  activeTab=name; localStorage.setItem('mlc_activeTab',name);
   if(archiveViewActive) renderArchiveView();
   toast('↺',`Model restored: ${name}`);
 }
@@ -3482,6 +4588,7 @@ if(document.getElementById('recycleViewBtn')){
 }
 
 function recycleEntryLabel(entry){
+  if(entry.type==='model') return entry.name;
   return entry.type==='task' ? entry.task.name : entry.sub.name;
 }
 
@@ -3490,93 +4597,140 @@ function renderRecycleView(){
   const emptyState=document.getElementById('recycleEmptyState');
   const emptyBinBtn=document.getElementById('emptyRecycleBinBtn');
   if(!listEl) return;
-  purgeExpiredRecycleItems();
+  // Purge any items that aged past 30 days while the bin wasn't open, and
+  // persist that removal — otherwise it only happens in memory and the
+  // expired items can come back after a reload.
+  if(purgeExpiredRecycleItems()) save();
   listEl.innerHTML='';
   const entries=[];
-  Object.keys(recycleBin).forEach(model=>{
-    recycleBin[model].forEach((entry,i)=>entries.push({model,entry,i}));
+  Object.keys(recycleBin).forEach(bucket=>{
+    recycleBin[bucket].forEach((entry,i)=>entries.push({bucket,entry,i}));
   });
   entries.sort((a,b)=>b.entry.deletedAt-a.entry.deletedAt);
   emptyState.style.display=entries.length?'none':'';
   listEl.style.display=entries.length?'':'none';
   if(emptyBinBtn) emptyBinBtn.style.display=entries.length?'':'none';
-  entries.forEach(({model,entry,i})=>{
+  entries.forEach(({bucket,entry,i})=>{
     const row=document.createElement('div');
     row.className='recycle-row';
+    const isModel=entry.type==='model';
     const isSub=entry.type==='subtask';
     const name=recycleEntryLabel(entry);
     const dateStr=new Date(entry.deletedAt).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
+    let iconHtml, metaExtra='';
+    if(isModel){
+      iconHtml='<span style="font-size:18px;">📦</span>';
+      const tc=entry.tasks?entry.tasks.length:0;
+      metaExtra=`<span class="recycle-row-type-badge" style="background:var(--accent1-dim);color:var(--accent1);font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;letter-spacing:0.5px;text-transform:uppercase;">MODEL</span><span style="font-size:12px;color:var(--text-muted);">${tc} task${tc===1?'':'s'}</span>`;
+    } else if(isSub){
+      iconHtml='↳';
+      metaExtra=`<span class="recycle-row-model">${escHtml(bucket)}</span><span class="recycle-row-sub">Subtask of "${escHtml(entry.task)}"</span>`;
+    } else {
+      iconHtml='🗑';
+      metaExtra=`<span class="recycle-row-model">${escHtml(bucket)}</span>`;
+    }
     row.innerHTML=`
-      <div class="recycle-row-icon">${isSub?'↳':'🗑'}</div>
+      <div class="recycle-row-icon">${iconHtml}</div>
       <div class="recycle-row-main">
         <div class="recycle-row-name">${escHtml(name)}</div>
         <div class="recycle-row-meta">
-          <span class="recycle-row-model">${escHtml(model)}</span>
-          ${isSub?`<span class="recycle-row-sub">Subtask of "${escHtml(entry.task)}"</span>`:''}
+          ${metaExtra}
           <span class="recycle-row-date">Deleted ${dateStr}</span>
           <span class="recycle-row-expiry">${daysLeftLabel(entry.deletedAt)}</span>
         </div>
       </div>
       <div class="recycle-row-actions">
-        <button class="row-action-btn edit" data-act="restore" data-model="${escHtml(model)}" data-i="${i}" title="Restore">↺ Restore</button>
-        <button class="row-action-btn delete" data-act="purge" data-model="${escHtml(model)}" data-i="${i}" title="Delete forever">Delete Forever</button>
+        <button class="row-action-btn edit" data-act="restore" data-bucket="${escHtml(bucket)}" data-i="${i}" title="Restore">↺ Restore</button>
+        <button class="row-action-btn delete" data-act="purge" data-bucket="${escHtml(bucket)}" data-i="${i}" title="Delete forever">Delete Forever</button>
       </div>`;
     listEl.appendChild(row);
   });
   listEl.querySelectorAll('[data-act="restore"]').forEach(btn=>{
-    btn.onclick=()=>restoreRecycledItem(btn.dataset.model,Number(btn.dataset.i));
+    btn.onclick=()=>restoreRecycledItem(btn.dataset.bucket,Number(btn.dataset.i));
   });
   listEl.querySelectorAll('[data-act="purge"]').forEach(btn=>{
-    btn.onclick=()=>permanentlyDeleteRecycledItem(btn.dataset.model,Number(btn.dataset.i));
+    btn.onclick=()=>permanentlyDeleteRecycledItem(btn.dataset.bucket,Number(btn.dataset.i));
   });
 }
 
-function restoreRecycledItem(model,i){
-  const entry=recycleBin[model]&&recycleBin[model][i];
+function restoreRecycledItem(bucket,i){
+  const entry=recycleBin[bucket]&&recycleBin[bucket][i];
   if(!entry) return;
-  if(entry.type==='task'){
-    if(!(model in state)){
-      toast('⚠',`Can't restore — "${model}" no longer exists`,false);
+
+  if(entry.type==='model'){
+    const name=entry.name;
+    if(name in state){
+      toast('⚠',`Can't restore — a model named "${name}" already exists`,false);
       return;
     }
-    const tasks=state[model];
+    // Restore full model state & deadline
+    state[name]=JSON.parse(JSON.stringify(entry.tasks||[]));
+    if(entry.deadline) deadlines[name]=entry.deadline;
+    if(entry.image) modelImages[name]=entry.image;
+    // Re-insert into modelOrder at original position (clamped)
+    const insertAt=Math.max(0,Math.min(typeof entry.orderIdx==='number'?entry.orderIdx:modelOrder.length,modelOrder.length));
+    modelOrder.splice(insertAt,0,name);
+    // Restore archive status if it was archived when deleted
+    if(entry.wasArchived) archivedModelsSet.add(name);
+    // Restore pin status if it was pinned when deleted
+    if(entry.wasPinned) pinnedModelsSet.add(name);
+    // Un-mark as deleted if it was a built-in model
+    deletedModelsSet.delete(name);
+    recycleBin[bucket].splice(i,1);
+    if(!recycleBin[bucket].length) delete recycleBin[bucket];
+    refreshModelsList();
+    activeTab=name; localStorage.setItem('mlc_activeTab',name);
+    save();renderAll();updateRecycleBadge();renderRecycleView();
+    toast('↺',`Restored model: ${name.slice(0,28)}`);
+    return;
+  }
+
+  if(entry.type==='task'){
+    if(!(bucket in state)){
+      toast('⚠',`Can't restore — "${bucket}" no longer exists`,false);
+      return;
+    }
+    const tasks=state[bucket];
     // Re-insert at the position it was deleted from, clamped to the current
-    // length in case other tasks were added/removed since — falls back to
-    // appending at the end only if the original spot is no longer sensible.
+    // length in case other tasks were added/removed since.
     const insertAt=Math.max(0,Math.min(typeof entry.idx==='number'?entry.idx:tasks.length,tasks.length));
     tasks.splice(insertAt,0,JSON.parse(JSON.stringify(entry.task)));
     renumber(tasks);
-    recycleBin[model].splice(i,1);
-    if(!recycleBin[model].length) delete recycleBin[model];
+    recycleBin[bucket].splice(i,1);
+    if(!recycleBin[bucket].length) delete recycleBin[bucket];
     save();renderAll();updateRecycleBadge();renderRecycleView();
     toast('↺',`Restored task: ${entry.task.name.slice(0,28)}`);
-  } else {
-    if(!(model in state)){
-      toast('⚠',`Can't restore — "${model}" no longer exists`,false);
-      return;
-    }
-    const parentIdx=state[model].findIndex(t=>t.name===entry.task);
-    if(parentIdx===-1){
-      toast('⚠',`Can't restore — parent task "${entry.task}" no longer exists`,false);
-      return;
-    }
-    const subs=getSubtasks(model,parentIdx);
-    const insertAt=Math.max(0,Math.min(typeof entry.subIdx==='number'?entry.subIdx:subs.length,subs.length));
-    subs.splice(insertAt,0,JSON.parse(JSON.stringify(entry.sub)));
-    recycleBin[model].splice(i,1);
-    if(!recycleBin[model].length) delete recycleBin[model];
-    save();renderAll();updateRecycleBadge();renderRecycleView();
-    toast('↺',`Restored subtask: ${entry.sub.name.slice(0,28)}`);
+    return;
   }
+
+  // subtask
+  if(!(bucket in state)){
+    toast('⚠',`Can't restore — "${bucket}" no longer exists`,false);
+    return;
+  }
+  const parentIdx=state[bucket].findIndex(t=>t.name===entry.task);
+  if(parentIdx===-1){
+    toast('⚠',`Can't restore — parent task "${entry.task}" no longer exists`,false);
+    return;
+  }
+  const subs=getSubtasks(bucket,parentIdx);
+  const insertAt=Math.max(0,Math.min(typeof entry.subIdx==='number'?entry.subIdx:subs.length,subs.length));
+  subs.splice(insertAt,0,JSON.parse(JSON.stringify(entry.sub)));
+  recycleBin[bucket].splice(i,1);
+  if(!recycleBin[bucket].length) delete recycleBin[bucket];
+  save();renderAll();updateRecycleBadge();renderRecycleView();
+  toast('↺',`Restored subtask: ${entry.sub.name.slice(0,28)}`);
 }
 
-async function permanentlyDeleteRecycledItem(model,i){
-  const entry=recycleBin[model]&&recycleBin[model][i];
+async function permanentlyDeleteRecycledItem(bucket,i){
+  const entry=recycleBin[bucket]&&recycleBin[bucket][i];
   if(!entry) return;
   const ok=await showConfirm({title:'Delete forever?',message:`"${recycleEntryLabel(entry)}" will be permanently removed and cannot be recovered.`,confirmText:'Delete Forever',danger:true,icon:'🗑'});
   if(!ok)return;
-  recycleBin[model].splice(i,1);
-  if(!recycleBin[model].length) delete recycleBin[model];
+  recycleBin[bucket].splice(i,1);
+  if(!recycleBin[bucket].length) delete recycleBin[bucket];
+  // If it was a built-in model, mark it deleted so it doesn't reappear on load
+  if(entry.type==='model' && entry.name in INITIAL_DATA) deletedModelsSet.add(entry.name);
   save();renderAll();updateRecycleBadge();renderRecycleView();
   toast('×','Permanently deleted',false);
 }
@@ -3598,6 +4752,34 @@ if(document.getElementById('emptyRecycleBinBtn')){
 function scrollToTaskChecklist(){
   const target=document.getElementById('taskChecklistLabel');
   if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── MODEL PHOTO HELPERS ──────────────────────────────────────────────────────
+// Resizes/compresses an image file client-side (down to at most maxW×maxH,
+// preserving aspect ratio) before storing it as a base64 data URL. Keeps
+// per-model photos small so the Firestore doc (1MB limit) has room for many
+// models' worth of images alongside tasks/deadlines.
+function resizeImageFile(file,maxW,maxH,quality){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onerror=()=>reject(new Error('read failed'));
+    reader.onload=()=>{
+      const img=new Image();
+      img.onerror=()=>reject(new Error('decode failed'));
+      img.onload=()=>{
+        let w=img.width,h=img.height;
+        const ratio=Math.min(1,maxW/w,maxH/h);
+        w=Math.round(w*ratio);h=Math.round(h*ratio);
+        const canvas=document.createElement('canvas');
+        canvas.width=w;canvas.height=h;
+        const ctx=canvas.getContext('2d');
+        ctx.drawImage(img,0,0,w,h);
+        resolve(canvas.toDataURL('image/jpeg',quality));
+      };
+      img.src=reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 // ── PDF / PRINT EXPORT ───────────────────────────────────────────────────────
@@ -3623,8 +4805,28 @@ function _buildModelPrintSection(modelName){
       : '—';
     const shots=Array.isArray(t.screenshots)?t.screenshots:[];
     const shotsHtml=shots.length
-      ? `<div class="pt-shots-row">${shots.map(s=>`<img src="${s.dataUrl}" alt="">`).join('')}</div>`
+      ? `<div class="pt-shots-row">${shots.map(s=>`<img src="${s.dataUrl}" alt="${_printEsc(s.title||'')}" title="${_printEsc(s.title||'')}">`).join('')}</div>`
       : '';
+    const subs=Array.isArray(t.subtasks)?t.subtasks:[];
+    const subRows=subs.map(s=>{
+      const subOverdue=!s.done&&s.taskDeadline&&new Date(s.taskDeadline+'T00:00:00')<new Date(new Date().toDateString());
+      const subDlLabel=s.taskDeadline
+        ? new Date(s.taskDeadline+'T00:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric'})
+        : '—';
+      const subShots=Array.isArray(s.screenshots)?s.screenshots:[];
+      const subShotsHtml=subShots.length
+        ? `<div class="pt-shots-row">${subShots.map(sh=>`<img src="${sh.dataUrl}" alt="${_printEsc(sh.title||'')}" title="${_printEsc(sh.title||'')}">`).join('')}</div>`
+        : '';
+      return `<tr class="pt-subtask${s.done?' pt-done':''}${subOverdue?' pt-overdue':''}">
+        <td class="pt-sn">↳</td>
+        <td>${_printEsc(s.name)}</td>
+        <td class="pt-priority">${prioMap[s.priority||'med']}</td>
+        <td class="pt-status">${s.done?'✓ Done':'Pending'}</td>
+        <td class="pt-deadline">${subDlLabel}${subOverdue?' (overdue)':''}</td>
+        <td>${_printEsc(s.notes||'')}</td>
+        <td class="pt-shots">${subShotsHtml}</td>
+      </tr>`;
+    }).join('');
     return `<tr class="${t.done?'pt-done':''}${overdue?' pt-overdue':''}">
       <td class="pt-sn">${t.sn}</td>
       <td>${_printEsc(t.name)}</td>
@@ -3633,7 +4835,7 @@ function _buildModelPrintSection(modelName){
       <td class="pt-deadline">${dlLabel}${overdue?' (overdue)':''}</td>
       <td>${_printEsc(t.notes||'')}</td>
       <td class="pt-shots">${shotsHtml}</td>
-    </tr>`;
+    </tr>${subRows}`;
   }).join('') || `<tr><td colspan="7" style="text-align:center;color:#888;">No tasks in this model</td></tr>`;
 
   return `
@@ -3702,7 +4904,7 @@ function renderTabs(){
     let _didDrag=false;
     btn.onclick=()=>{
       if(_didDrag){ _didDrag=false; return; }
-      activeTab=m;editingIdx=null;selectedTasks.clear();selectedSubtasks.clear();renderTabs();renderTaskList();scrollToTaskChecklist();
+      activeTab=m;localStorage.setItem('mlc_activeTab',m);editingIdx=null;selectedTasks.clear();selectedSubtasks.clear();renderTabs();renderTaskList();scrollToTaskChecklist();
     };
     if(!isCompare){
       btn.draggable=true;
@@ -3731,7 +4933,9 @@ function renderTabs(){
         const toIdx=models.indexOf(m);
         if(fromIdx<0||toIdx<0) return;
         models.splice(fromIdx,1);
-        models.splice(toIdx,0,_tabDragSrc);
+        // Same shift-after-removal correction as the model card drag handler.
+        const insertIdx=toIdx>fromIdx?toIdx-1:toIdx;
+        models.splice(insertIdx,0,_tabDragSrc);
         modelOrder=[...models];
         _tabDragSrc=null;
         save();renderTabs();renderModelCards();
@@ -3748,11 +4952,21 @@ function matchesFilter(task){
   if(activeFilter==='high'&&task.priority!=='high') return false;
   if(activeFilter==='med'&&task.priority!=='med') return false;
   if(activeFilter==='low'&&task.priority!=='low') return false;
+  if(activeFilter==='mine'&&(!auth||!auth.currentUser||task.assignee!==auth.currentUser.uid)) return false;
   if(searchQuery&&!task.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
   return true;
 }
 
 // ── TASK LIST ─────────────────────────────────────────────────────────────────
+// Builds the <option> list for a task's assignee dropdown from the current
+// workspace's member list, marking whichever uid is currently assigned.
+function buildAssigneeOptionsHtml(selectedUid){
+  return Object.entries(workspaceMembers).map(([uid,info])=>{
+    const label=info.displayName||info.email||uid;
+    return `<option value="${escHtml(uid)}"${uid===selectedUid?' selected':''}>${escHtml(label)}</option>`;
+  }).join('');
+}
+
 function renderTaskList(){
   const table=document.getElementById('checklistTable');
   const compare=document.getElementById('compareGrid');
@@ -3786,7 +5000,7 @@ function renderTaskList(){
     delBtn.style.display='none';archBtn.style.display='none';
     exportBtn.style.display='none';importLbl.style.display='none';
     searchBoxEl.style.display='none';filterBarEl.style.display='none';
-    ['all','done','pending','critical','high','med','low'].forEach(k=>{
+    ['all','done','pending','critical','high','med','low','mine'].forEach(k=>{
       const el=document.getElementById('fc-'+k); if(el) el.textContent='0';
     });
     return;
@@ -3806,6 +5020,7 @@ function renderTaskList(){
     high: tasks.filter(t=>t.priority==='high').length,
     med: tasks.filter(t=>t.priority==='med').length,
     low: tasks.filter(t=>t.priority==='low').length,
+    mine: (auth&&auth.currentUser)?tasks.filter(t=>t.assignee===auth.currentUser.uid).length:0,
   };
   Object.entries(fc).forEach(([key,val])=>{
     const el=document.getElementById('fc-'+key);
@@ -3959,6 +5174,10 @@ function renderTaskList(){
         <div class="task-deadline-wrap ${dlIconCls}" data-idx="${idx}" title="${dlTitle}">
           <input type="date" class="task-deadline-native" tabindex="-1" value="${task.taskDeadline||''}">
         </div>
+        ${Object.keys(workspaceMembers).length>1?`<select class="assignee-select" data-idx="${idx}" title="Assign to a teammate">
+          <option value="">Unassigned</option>
+          ${buildAssigneeOptionsHtml(task.assignee)}
+        </select>`:''}
       </div>
       ${actionsCell}`;
 
@@ -3974,7 +5193,11 @@ function renderTaskList(){
       if(dragSrcIdx===null||dragSrcIdx===idx)return;
       const tasks2=state[activeTab];
       const[moved]=tasks2.splice(dragSrcIdx,1);
-      tasks2.splice(idx,0,moved);
+      // Removing the source shifts everything after it left by one, so when
+      // dragging forward (idx was after dragSrcIdx) the insert index needs
+      // to shift back by one to land exactly on the drop target's old row.
+      const insertIdx=idx>dragSrcIdx?idx-1:idx;
+      tasks2.splice(insertIdx,0,moved);
       renumber(tasks2);dragSrcIdx=null;
       // Selections are stored by array index, which this reorder invalidates —
       // clear rather than risk the checkbox marking the wrong task as selected.
@@ -3995,6 +5218,15 @@ function renderTaskList(){
       task.priority=cycle[task.priority||'med'];
       save();renderAll();
     };
+
+    const assigneeSelectEl=row.querySelector('.assignee-select');
+    if(assigneeSelectEl){
+      assigneeSelectEl.onclick=e=>e.stopPropagation();
+      assigneeSelectEl.onchange=e=>{
+        task.assignee=e.target.value||'';
+        save();renderAll();
+      };
+    }
 
     if(isEditing){
       const input=row.querySelector('#editInput');
@@ -4217,7 +5449,11 @@ function renderTaskList(){
         dragSrcSubCtx=null;
         if(fromI===sIdx) return;
         const[moved]=subs.splice(fromI,1);
-        subs.splice(sIdx,0,moved);
+        // Removing the source shifts everything after it left by one, so when
+        // dragging forward (sIdx was after fromI) the insert index needs to
+        // shift back by one to land exactly on the drop target's old row.
+        const insertIdx=sIdx>fromI?sIdx-1:sIdx;
+        subs.splice(insertIdx,0,moved);
         // Reorder invalidates this task's subtask-index-based selections —
         // clear them rather than risk acting on the wrong subtask.
         clearSubSelectionsForTask(activeTab,idx);
@@ -4313,6 +5549,20 @@ function updateBulkBar(){
   const bar=document.getElementById('bulkBar');
   document.getElementById('bulkCount').textContent=`${selectedTasks.size} selected`;
   bar.classList.toggle('visible',selectedTasks.size>0);
+
+  const selCompletedBtn=document.getElementById('selectCompletedBtn');
+  const selPendingBtn=document.getElementById('selectPendingBtn');
+  const tasks=(activeTab && activeTab!=='Compare Models' && state[activeTab])?state[activeTab]:[];
+  if(selCompletedBtn){
+    const doneIdxs=tasks.reduce((arr,t,i)=>{if(t.done)arr.push(i);return arr;},[]);
+    const allDoneSelected=doneIdxs.length>0&&doneIdxs.every(i=>selectedTasks.has(i));
+    selCompletedBtn.classList.toggle('has-selection',allDoneSelected);
+  }
+  if(selPendingBtn){
+    const pendingIdxs=tasks.reduce((arr,t,i)=>{if(!t.done)arr.push(i);return arr;},[]);
+    const allPendingSelected=pendingIdxs.length>0&&pendingIdxs.every(i=>selectedTasks.has(i));
+    selPendingBtn.classList.toggle('has-selection',allPendingSelected);
+  }
 }
 
 // ── COMPARE VIEW ──────────────────────────────────────────────────────────────
@@ -4393,6 +5643,21 @@ function renderCompare(){
 // track of which row is mid-transition.
 const pendingDoneTimers=new Map();
 const pendingRevertTimers=new Map();
+
+// Cancel any in-flight done/revert timers for tasks belonging to a model.
+// Called before deleting a model or wiping state so stale timers can't fire
+// after the task objects they reference are gone.
+function clearPendingTimersForModel(model){
+  const tasks=(state[model]||[]);
+  tasks.forEach(task=>{
+    if(pendingDoneTimers.has(task)){ clearTimeout(pendingDoneTimers.get(task)); pendingDoneTimers.delete(task); }
+    if(pendingRevertTimers.has(task)){ clearTimeout(pendingRevertTimers.get(task)); pendingRevertTimers.delete(task); }
+  });
+}
+function clearAllPendingTimers(){
+  pendingDoneTimers.forEach(t=>clearTimeout(t)); pendingDoneTimers.clear();
+  pendingRevertTimers.forEach(t=>clearTimeout(t)); pendingRevertTimers.clear();
+}
 let sortCol=null; // 'name'|'priority'|'status'
 let sortDir='asc'; // 'asc'|'desc'
 // Frozen priority order captured at the moment the Priority column is sorted.
@@ -4493,6 +5758,7 @@ async function deleteTask(model,idx){
   const ok=await showConfirm({title:'Delete task?',message:`"${task.name}" will be moved to the Recycle Bin (kept for 30 days).`,confirmText:'Delete',danger:true,icon:'🗑'});
   if(!ok)return;
   if(pendingDoneTimers.has(task)){ clearTimeout(pendingDoneTimers.get(task)); pendingDoneTimers.delete(task); }
+  if(pendingRevertTimers.has(task)){ clearTimeout(pendingRevertTimers.get(task)); pendingRevertTimers.delete(task); }
   recycleTask(model,task,idx);
   state[model].splice(idx,1);renumber(state[model]);
   // Removing a row shifts every later index down by one — rebuild the
@@ -4552,7 +5818,7 @@ async function addModel(name,deadline){
     : [];
   if(deadline)deadlines[trimmed]=deadline;
   deletedModelsSet.delete(trimmed);
-  refreshModelsList();activeTab=trimmed;editingIdx=null;save();renderAll();
+  refreshModelsList();activeTab=trimmed;localStorage.setItem('mlc_activeTab',trimmed);editingIdx=null;save();renderAll();
   toast('＋',`Model added: ${trimmed}`);
 }
 async function duplicateModel(name){
@@ -4568,44 +5834,51 @@ async function duplicateModel(name){
   // Deep-clone tasks so edits to the copy never touch the original.
   state[copyName]=JSON.parse(JSON.stringify(state[name]||[]));
   if(deadlines[name]) deadlines[copyName]=deadlines[name];
+  if(modelImages[name]) modelImages[copyName]=modelImages[name];
   deletedModelsSet.delete(copyName);
   // Place the duplicate right after the source model in the order list.
   const srcIdx=modelOrder.indexOf(name);
   if(srcIdx>=0) modelOrder.splice(srcIdx+1,0,copyName);
   else modelOrder.push(copyName);
   refreshModelsList();
-  activeTab=copyName;editingIdx=null;save();renderAll();
+  activeTab=copyName;localStorage.setItem('mlc_activeTab',copyName);editingIdx=null;save();renderAll();
   toast('⧉',`Duplicated: ${name} → ${copyName}`);
 }
 async function deleteModel(name){
   if(!archivedModelsSet.has(name)&&models.length<=1){await showAlert({title:"Can't delete this model",message:'You need at least one model on the dashboard.',tone:'warn'});return;}
-  const ok=await showConfirm({title:'Delete model?',message:`"${name}" and all of its tasks will be permanently removed.`,confirmText:'Delete Model',danger:true,icon:'🗑'});
+  const ok=await showConfirm({title:'Move model to Recycle Bin?',message:`"${name}" and all its tasks will be moved to the Recycle Bin (kept for 30 days). You can restore it any time before then.`,confirmText:'Move to Recycle Bin',danger:true,icon:'🗑'});
   if(!ok)return;
-  delete state[name];delete deadlines[name];
+  clearPendingTimersForModel(name);
+  // Soft-delete: save the whole model into the recycle bin before wiping it
+  recycleModel(name);
+  delete state[name];delete deadlines[name];delete modelImages[name];
   archivedModelsSet.delete(name);
+  pinnedModelsSet.delete(name);
   if(name in INITIAL_DATA) deletedModelsSet.add(name);
-  refreshModelsList();if(activeTab===name)activeTab=models[0];
-  editingIdx=null;save();renderAll();
+  refreshModelsList();if(activeTab===name){ activeTab=models[0]||''; localStorage.setItem('mlc_activeTab',activeTab); }
+  editingIdx=null;save();renderAll();updateRecycleBadge();
   if(archiveViewActive) renderArchiveView();
-  toast('×',`Model deleted: ${name}`);
+  toast('🗑',`Moved to Recycle Bin: ${name}`);
 }
 
 async function renameModel(oldName, newName){
   const trimmed=newName.trim();
   if(!trimmed||trimmed.toUpperCase()===oldName.toUpperCase()){renderModelCards();renderTabs();return;}
   const key=trimmed.toUpperCase();
-  if(Object.keys(state).some(m=>m!==oldName&&m.toUpperCase()===key)){
+  if(Object.keys(state).some(m=>m.toUpperCase()!==oldName.toUpperCase()&&m.toUpperCase()===key)){
     await showAlert({title:'Name already taken',message:`A model named "${trimmed}" already exists.`,tone:'warn'});
     renderModelCards();renderTabs();return;
   }
   // Migrate state, deadlines, model order
   state[trimmed]=state[oldName]; delete state[oldName];
   if(deadlines[oldName]){ deadlines[trimmed]=deadlines[oldName]; delete deadlines[oldName]; }
+  if(modelImages[oldName]){ modelImages[trimmed]=modelImages[oldName]; delete modelImages[oldName]; }
   if(archivedModelsSet.has(oldName)){ archivedModelsSet.delete(oldName); archivedModelsSet.add(trimmed); }
+  if(pinnedModelsSet.has(oldName)){ pinnedModelsSet.delete(oldName); pinnedModelsSet.add(trimmed); }
   if(deletedModelsSet.has(oldName)){ deletedModelsSet.delete(oldName); }
   const oi=modelOrder.indexOf(oldName); if(oi>=0) modelOrder[oi]=trimmed;
   refreshModelsList();
-  if(activeTab===oldName) activeTab=trimmed;
+  if(activeTab===oldName){ activeTab=trimmed; localStorage.setItem('mlc_activeTab',trimmed); }
   save(); renderAll();
   toast('✎',`Renamed: ${oldName.slice(0,20)} → ${trimmed.slice(0,20)}`);
 }
@@ -4613,6 +5886,7 @@ async function renameModel(oldName, newName){
 // ── NOTES & DEADLINE MODALS ───────────────────────────────────────────────────
 let notesCtx={model:null,idx:null};
 function openNotesModal(model,idx){
+  _notesObj=null; _notesObjCb=null;
   notesCtx={model,idx};
   const task=state[model][idx];
   document.getElementById('notesTaskName').textContent=task.name;
@@ -4621,6 +5895,15 @@ function openNotesModal(model,idx){
   renderNotesShotsGallery();
   document.getElementById('notesModal').classList.add('open');
   setTimeout(()=>document.getElementById('notesTextarea').focus(),100);
+}
+// Closes the Notes modal AND clears the pending subtask reference (_notesObj/
+// _notesObjCb). Without this, cancelling out of a subtask's notes leaves that
+// reference set, and the next task-notes save would get silently written into
+// the old subtask instead of the intended task. Always use this to dismiss the
+// modal (Cancel, outside-click, Escape) unless a save just happened.
+function closeNotesModal(){
+  document.getElementById('notesModal').classList.remove('open');
+  _notesObj=null; _notesObjCb=null;
 }
 document.getElementById('notesSaveBtn').onclick=()=>{
   const text=document.getElementById('notesTextarea').value.trim();
@@ -4636,8 +5919,8 @@ document.getElementById('notesSaveBtn').onclick=()=>{
   document.getElementById('notesModal').classList.remove('open');
   toast('✎','Note saved');
 };
-document.getElementById('notesCancelBtn').onclick=()=>document.getElementById('notesModal').classList.remove('open');
-document.getElementById('notesModal').onclick=e=>{if(e.target===document.getElementById('notesModal'))document.getElementById('notesModal').classList.remove('open');};
+document.getElementById('notesCancelBtn').onclick=()=>closeNotesModal();
+document.getElementById('notesModal').onclick=e=>{if(e.target===document.getElementById('notesModal'))closeNotesModal();};
 
 // ── MODEL DEADLINE (header "Set Deadline" button) ─────────────────────────────
 // Real, fully-functional <input type="date"> stretched invisibly over the
@@ -4830,7 +6113,12 @@ document.getElementById('bulkDeleteBtn').onclick=async()=>{
   const ok=await showConfirm({title:'Delete selected tasks?',message:`${n} task${n===1?'':'s'} will be moved to the Recycle Bin (kept for 30 days).`,confirmText:`Delete ${n}`,danger:true,icon:'🗑'});
   if(!ok)return;
   const idxs=[...selectedTasks].sort((a,b)=>b-a);
-  idxs.forEach(i=>{ recycleTask(activeTab,state[activeTab][i],i); state[activeTab].splice(i,1); });
+  idxs.forEach(i=>{
+    const task=state[activeTab][i];
+    if(pendingDoneTimers.has(task)){ clearTimeout(pendingDoneTimers.get(task)); pendingDoneTimers.delete(task); }
+    if(pendingRevertTimers.has(task)){ clearTimeout(pendingRevertTimers.get(task)); pendingRevertTimers.delete(task); }
+    recycleTask(activeTab,task,i); state[activeTab].splice(i,1);
+  });
   renumber(state[activeTab]);selectedTasks.clear();
   clearSubSelectionsForModel(activeTab);
   if(editingIdx!==null) editingIdx=null;
@@ -4979,37 +6267,148 @@ document.getElementById('selectAllChk').onchange=e=>{
 // One sheet per model, same column layout as the Excel import expects:
 // Name, Priority, Status, Notes, Deadline. This is the single, only export
 // format offered from the header — re-importing this file via the header
-// Import button reconstructs the dashboard (deadlines are kept only for
-// models whose name matches a sheet name; everything else, including
-// deletedModelsSet, is reset — same as any other header import).
+// Import button merges it into the existing dashboard rather than replacing
+// it: a sheet matching an existing model only appends its new tasks (that
+// model's deadline, notes, and completion status are left untouched), and a
+// sheet with no matching model becomes a new model. Nothing is reset or
+// deleted by importing — see the import handler below for the exact rules.
 function excelSafeSheetName(name){
   // Excel sheet names: max 31 chars, no \ / ? * [ ] : characters
   return name.replace(/[\\/?*\[\]:]/g,' ').slice(0,31).trim()||'Model';
 }
-document.getElementById('exportAllExcelBtn').onclick=async()=>{
-  document.getElementById('exportAllDropdown').classList.remove('menu-open');
-  if(!models.length){await showAlert({title:'Nothing to export',message:'Add at least one model before exporting.',tone:'warn'});return;}
-  try{ await loadXLSX(); }catch(e){ await showAlert({title:'Could not load Excel library',message:'Check your internet connection and try again.',tone:'error'}); return; }
+// Builds the multi-sheet "all models" workbook from the current state.
+// Shared by the manual "Export as Excel" button and the hourly auto-backup
+// below, so both always produce byte-identical output for the same state.
+function buildAllModelsWorkbook(){
   const prioMap={high:'High',med:'Med',low:'Low'};
   const wb=XLSX.utils.book_new();
   const usedNames=new Set();
   models.forEach(m=>{
     const tasks=state[m];
-    const rows=[['Task Name','Priority','Status','Notes','Deadline']];
+    const rows=[['Task Name','Priority','Status','Notes','Deadline','Type','Parent Task']];
     tasks.forEach(t=>{
-      rows.push([t.name,prioMap[t.priority||'med'],t.done?'Done':'Pending',t.notes||'',t.taskDeadline||'']);
+      rows.push([t.name,prioMap[t.priority||'med'],t.done?'Done':'Pending',t.notes||'',t.taskDeadline||'','Task','']);
+      (Array.isArray(t.subtasks)?t.subtasks:[]).forEach(s=>{
+        rows.push([s.name,prioMap[s.priority||'med'],s.done?'Done':'Pending',s.notes||'',s.taskDeadline||'','Subtask',t.name]);
+      });
     });
     const ws=XLSX.utils.aoa_to_sheet(rows);
-    ws['!cols']=[{wch:40},{wch:10},{wch:10},{wch:35},{wch:14}];
+    ws['!cols']=[{wch:40},{wch:10},{wch:10},{wch:35},{wch:14},{wch:9},{wch:28}];
     // Guard against two model names colliding once sanitized/truncated to 31 chars
     let sheetName=excelSafeSheetName(m), n=2;
     while(usedNames.has(sheetName)){ sheetName=excelSafeSheetName(m).slice(0,28)+'_'+n; n++; }
     usedNames.add(sheetName);
     XLSX.utils.book_append_sheet(wb,ws,sheetName);
   });
+  return wb;
+}
+
+document.getElementById('exportAllExcelBtn').onclick=async()=>{
+  document.getElementById('exportAllDropdown').classList.remove('menu-open');
+  if(!models.length){await showAlert({title:'Nothing to export',message:'Add at least one model before exporting.',tone:'warn'});return;}
+  try{ await loadXLSX(); }catch(e){ await showAlert({title:'Could not load Excel library',message:'Check your internet connection and try again.',tone:'error'}); return; }
+  const wb=buildAllModelsWorkbook();
   XLSX.writeFile(wb,'model_launch_dashboard.xlsx');
-  toast('📤',`Exported ${models.length} model${models.length===1?'':'s'} to Excel`,false);
+  await saveLastBackup();
+  const totalSubs=models.reduce((n,m)=>n+state[m].reduce((s,t)=>s+((Array.isArray(t.subtasks)?t.subtasks.length:0)),0),0);
+  toast('📤',`Exported ${models.length} model${models.length===1?'':'s'}${totalSubs?` (incl. ${totalSubs} subtasks)`:''} to Excel`,false);
 };
+
+// Merges a parsed workbook into the current dashboard state. Shared by the
+// file-based "Import" button and the "Restore Last Backup" button below —
+// same semantics either way: a sheet matching an existing model appends only
+// its new (non-duplicate) tasks/subtasks; a sheet with an unrecognized name
+// becomes a new model. Never overwrites or deletes existing data, so it's
+// safe to use for recovering something that was accidentally removed.
+function mergeWorkbookIntoState(wb){
+  const sheetNames=wb.SheetNames.filter(n=>{
+    const ws=wb.Sheets[n];
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+    return rows.length>0;
+  });
+  let modelsAdded=0, modelsUpdated=0, tasksAdded=0, tasksSkipped=0, subtasksAdded=0, subtasksSkipped=0;
+  sheetNames.forEach(sheetName=>{
+    const ws=wb.Sheets[sheetName];
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+    let startIdx=0;
+    const firstRow=(rows[0]||[]).map(c=>String(c).trim().toLowerCase());
+    let typeIdx=-1, parentIdx=-1;
+    if(firstRow[0]&&(firstRow[0].includes('task')||firstRow[0].includes('name'))){
+      startIdx=1;
+      typeIdx=firstRow.indexOf('type');
+      parentIdx=firstRow.indexOf('parent task');
+    }
+
+    const isExistingModel=Object.prototype.hasOwnProperty.call(state,sheetName);
+    const targetTasks=isExistingModel?state[sheetName]:[];
+    const existingNames=new Set(targetTasks.map(t=>t.name.trim().toUpperCase()));
+    let addedHere=0, lastTaskRef=null;
+
+    for(let i=startIdx;i<rows.length;i++){
+      const row=rows[i];
+      const name=String(row[0]||'').trim();
+      if(!name) continue;
+      const key=name.toUpperCase();
+      const isSubRow=typeIdx>=0 && String(row[typeIdx]||'').trim().toLowerCase()==='subtask';
+
+      if(isSubRow){
+        const parentName=parentIdx>=0?String(row[parentIdx]||'').trim().toUpperCase():'';
+        let parentTask=parentName?targetTasks.find(t=>t.name===parentName):null;
+        if(!parentTask) parentTask=lastTaskRef;
+        if(!parentTask) continue; // orphan subtask row — no known parent task, skip
+        if(!Array.isArray(parentTask.subtasks)) parentTask.subtasks=[];
+        const subExisting=new Set(parentTask.subtasks.map(s=>s.name.trim().toUpperCase()));
+        if(subExisting.has(key)){ subtasksSkipped++; continue; }
+        parentTask.subtasks.push({
+          name:key,
+          done:normDone(row[2]),
+          priority:normPriority(row[1]),
+          notes:String(row[3]||'').trim(),
+          taskDeadline:normDate(row[4]),
+          screenshots:[]
+        });
+        subtasksAdded++;
+        continue;
+      }
+
+      if(existingNames.has(key)){tasksSkipped++;continue;}
+      existingNames.add(key);
+      const newTask={
+        sn:targetTasks.length+1,
+        name:key,
+        done:normDone(row[2]),
+        priority:normPriority(row[1]),
+        notes:String(row[3]||'').trim(),
+        taskDeadline:normDate(row[4]),
+        subtasks:[]
+      };
+      targetTasks.push(newTask);
+      lastTaskRef=newTask;
+      addedHere++;
+    }
+    if(!addedHere && !isExistingModel) return; // empty new sheet — nothing to add
+
+    if(isExistingModel){
+      if(addedHere){ renumber(targetTasks); modelsUpdated++; tasksAdded+=addedHere; }
+    } else if(targetTasks.length){
+      state[sheetName]=targetTasks;
+      deletedModelsSet.delete(sheetName);
+      modelsAdded++; tasksAdded+=addedHere;
+    }
+  });
+  return {modelsAdded,modelsUpdated,tasksAdded,tasksSkipped,subtasksAdded,subtasksSkipped};
+}
+
+function importStatsToMessage(stats){
+  const parts=[];
+  if(stats.modelsAdded) parts.push(`${stats.modelsAdded} new model${stats.modelsAdded===1?'':'s'}`);
+  if(stats.modelsUpdated) parts.push(`${stats.modelsUpdated} model${stats.modelsUpdated===1?'':'s'} updated`);
+  if(stats.tasksAdded) parts.push(`${stats.tasksAdded} task${stats.tasksAdded===1?'':'s'} added`);
+  if(stats.tasksSkipped) parts.push(`${stats.tasksSkipped} duplicate task${stats.tasksSkipped===1?'':'s'} skipped`);
+  if(stats.subtasksAdded) parts.push(`${stats.subtasksAdded} subtask${stats.subtasksAdded===1?'':'s'} added`);
+  if(stats.subtasksSkipped) parts.push(`${stats.subtasksSkipped} duplicate subtask${stats.subtasksSkipped===1?'':'s'} skipped`);
+  return parts;
+}
 
 document.getElementById('importFile').onchange=async e=>{
   const file=e.target.files[0];if(!file)return;
@@ -5021,12 +6420,7 @@ document.getElementById('importFile').onchange=async e=>{
   reader.onload=async ev=>{
     try{
       const wb=XLSX.read(ev.target.result,{type:'array',cellDates:true});
-      const sheetNames=wb.SheetNames.filter(n=>{
-        const ws=wb.Sheets[n];
-        const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
-        return rows.length>0;
-      });
-      if(!sheetNames.length){await showAlert({title:'Empty workbook',message:'The workbook appears to be empty.',tone:'warn'});e.target.value='';return;}
+      if(!wb.SheetNames.length){await showAlert({title:'Empty workbook',message:'The workbook appears to be empty.',tone:'warn'});e.target.value='';return;}
 
       // Merge into the existing dashboard rather than replacing it:
       // - a sheet whose name matches an existing model appends only its
@@ -5034,63 +6428,268 @@ document.getElementById('importFile').onchange=async e=>{
       //   completion status, and the model's deadline are left untouched.
       // - a sheet with a name that doesn't match any model becomes a new
       //   model (and is un-deleted if it was a previously-removed built-in).
-      let modelsAdded=0, modelsUpdated=0, tasksAdded=0, tasksSkipped=0;
-      sheetNames.forEach(sheetName=>{
-        const ws=wb.Sheets[sheetName];
-        const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
-        let startIdx=0;
-        const firstRow=(rows[0]||[]).map(c=>String(c).trim().toLowerCase());
-        if(firstRow[0]&&(firstRow[0].includes('task')||firstRow[0].includes('name'))) startIdx=1;
+      const stats=mergeWorkbookIntoState(wb);
 
-        const isExistingModel=Object.prototype.hasOwnProperty.call(state,sheetName);
-        const targetTasks=isExistingModel?state[sheetName]:[];
-        const existingNames=new Set(targetTasks.map(t=>t.name.trim().toUpperCase()));
-        let addedHere=0;
-
-        for(let i=startIdx;i<rows.length;i++){
-          const row=rows[i];
-          const name=String(row[0]||'').trim();
-          if(!name) continue;
-          const key=name.toUpperCase();
-          if(existingNames.has(key)){tasksSkipped++;continue;}
-          existingNames.add(key);
-          targetTasks.push({
-            sn:targetTasks.length+1,
-            name:key,
-            done:normDone(row[2]),
-            priority:normPriority(row[1]),
-            notes:String(row[3]||'').trim(),
-            taskDeadline:normDate(row[4])
-          });
-          addedHere++;
-        }
-        if(!addedHere && !isExistingModel) return; // empty new sheet — nothing to add
-
-        if(isExistingModel){
-          if(addedHere){ renumber(targetTasks); modelsUpdated++; tasksAdded+=addedHere; }
-        } else if(targetTasks.length){
-          state[sheetName]=targetTasks;
-          deletedModelsSet.delete(sheetName);
-          modelsAdded++; tasksAdded+=addedHere;
-        }
-      });
-
-      if(!modelsAdded && !modelsUpdated){await showAlert({title:'Nothing to import',message:'No new models or tasks found — everything in the workbook already exists.',tone:'warn'});e.target.value='';return;}
+      if(!stats.modelsAdded && !stats.modelsUpdated && !stats.subtasksAdded){await showAlert({title:'Nothing to import',message:'No new models, tasks, or subtasks found — everything in the workbook already exists.',tone:'warn'});e.target.value='';return;}
 
       refreshModelsList();
       if(!activeTab && models.length) activeTab=models[0];
       save();renderAll();
-      const parts=[];
-      if(modelsAdded) parts.push(`${modelsAdded} new model${modelsAdded===1?'':'s'}`);
-      if(modelsUpdated) parts.push(`${modelsUpdated} model${modelsUpdated===1?'':'s'} updated`);
-      if(tasksAdded) parts.push(`${tasksAdded} task${tasksAdded===1?'':'s'} added`);
-      if(tasksSkipped) parts.push(`${tasksSkipped} duplicate${tasksSkipped===1?'':'s'} skipped`);
-      toast('↑',`Imported: ${parts.join(', ')}`);
+      toast('↑',`Imported: ${importStatsToMessage(stats).join(', ')}`);
     }catch(err){await showAlert({title:'Could not read file',message:"Make sure it's a valid .xlsx or .xls workbook.",tone:'error'});}
   };
   reader.readAsArrayBuffer(file);
   e.target.value='';
 };
+
+// ── SINGLE-SLOT LOCAL BACKUP ─────────────────────────────────────────────────
+// Captures a full snapshot of everything on the dashboard — every model's
+// tasks and subtasks (including notes and attached screenshots), model
+// photos, model deadlines, archived/pinned/deleted-model flags, and model
+// order. Saved to the person's Firestore account (dashboards/{uid}/meta/lastBackup)
+// so it's available from any device they sign into — not just this browser.
+// Each new backup overwrites that same document, so only the most recent
+// backup is ever kept. If nobody's signed in (preview mode) or the network
+// write fails, it falls back to localStorage on this device so a backup
+// always exists somewhere rather than silently failing.
+const LAST_BACKUP_KEY='mlc_lastFullBackup';
+
+function buildFullBackupPayload(){
+  return {
+    tasks:JSON.parse(JSON.stringify(state)),
+    deadlines:JSON.parse(JSON.stringify(deadlines)),
+    modelImages:JSON.parse(JSON.stringify(modelImages)),
+    deletedModels:[...deletedModelsSet],
+    archivedModels:[...archivedModelsSet],
+    pinnedModels:[...pinnedModelsSet],
+    modelOrder:[...modelOrder],
+    recycleBin:JSON.parse(JSON.stringify(recycleBin))
+  };
+}
+
+function getBackupDocRef(){
+  if(!auth || !auth.currentUser || !db || !currentWorkspaceId) return null;
+  return db.collection('workspaces').doc(currentWorkspaceId).collection('meta').doc('lastBackup');
+}
+
+async function saveLastBackup(){
+  const payload=buildFullBackupPayload();
+  const modelsCount=models.length;
+  const tasksCount=models.reduce((n,m)=>n+((state[m]||[]).length),0);
+  const record={payload,ts:Date.now(),models:modelsCount,tasks:tasksCount};
+
+  const ref=getBackupDocRef();
+  if(ref){
+    try{
+      await ref.set({...record,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+      record.cloud=true;
+      // Mirror locally too, purely so the Restore button can show status
+      // instantly and a backup still exists if this device goes offline
+      // right after — the cloud copy above remains the source of truth.
+      try{ localStorage.setItem(LAST_BACKUP_KEY,JSON.stringify(record)); }catch(e){}
+      await updateRestoreBackupBtn();
+      return true;
+    }catch(err){
+      console.warn('Cloud backup failed, falling back to a local-only backup on this device:',err);
+    }
+  }
+  // Not signed in, or the cloud write failed — still back up locally so
+  // something is always recoverable.
+  record.cloud=false;
+  try{
+    localStorage.setItem(LAST_BACKUP_KEY,JSON.stringify(record));
+  }catch(err){
+    console.warn('Could not save local backup (data may be too large for localStorage — try removing some photos):',err);
+  }
+  await updateRestoreBackupBtn();
+  return !!ref; // true only if we had a cloud ref but its write failed
+}
+
+async function getLastBackup(){
+  const ref=getBackupDocRef();
+  if(ref){
+    try{
+      const snap=await ref.get();
+      if(snap.exists) return snap.data();
+    }catch(err){
+      console.warn('Could not read cloud backup, checking for a local one instead:',err);
+    }
+  }
+  try{
+    const raw=localStorage.getItem(LAST_BACKUP_KEY);
+    return raw?JSON.parse(raw):null;
+  }catch(err){ return null; }
+}
+
+async function updateRestoreBackupBtn(){
+  const btn=document.getElementById('restoreBackupBtn');
+  const label=document.getElementById('restoreBackupLabel');
+  if(!btn) return;
+  const backup=await getLastBackup();
+  if(!backup){
+    btn.disabled=true;
+    btn.title='No backup yet — use "Backup Now" once to create one';
+    if(label) label.textContent='Restore Last Backup';
+    return;
+  }
+  btn.disabled=false;
+  const d=new Date(backup.ts);
+  const dateStr=d.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+  const whereStr=backup.cloud?'saved to your account':'saved on this device only — sign in to back up online';
+  btn.title=`Full backup taken ${dateStr} — ${backup.models} model${backup.models===1?'':'s'}, ${backup.tasks} task${backup.tasks===1?'':'s'} (incl. photos, notes, deadlines) — ${whereStr}`;
+  if(label) label.textContent=`Restore Last Backup (${dateStr})`;
+}
+
+// Merges a full backup payload back into the current dashboard. Same safe,
+// additive philosophy as the Excel import/restore: an existing model is
+// never overwritten, only missing tasks/subtasks are appended back onto it
+// (screenshots included), and a model-level deadline/photo is only filled
+// in if the current model doesn't already have one. A model absent from the
+// current dashboard entirely is restored in full, including its photo,
+// deadline, archived/pinned state, and its position in the model order.
+function mergeFullBackupIntoState(payload){
+  let modelsAdded=0, modelsUpdated=0, tasksAdded=0, tasksSkipped=0, subtasksAdded=0, subtasksSkipped=0, extrasRestored=0;
+  const backupModels=Object.keys(payload.tasks||{});
+
+  backupModels.forEach(m=>{
+    const backupTasks=Array.isArray(payload.tasks[m])?payload.tasks[m]:[];
+    const isExisting=Object.prototype.hasOwnProperty.call(state,m);
+    const targetTasks=isExisting?state[m]:[];
+    const existingNames=new Set(targetTasks.map(t=>t.name.trim().toUpperCase()));
+    let addedHere=0;
+
+    backupTasks.forEach(bt=>{
+      const key=String(bt.name||'').trim().toUpperCase();
+      if(!key) return;
+      if(existingNames.has(key)){
+        // Task already exists — still recover any subtasks missing from it.
+        const existingTask=targetTasks.find(t=>t.name.trim().toUpperCase()===key);
+        if(existingTask && Array.isArray(bt.subtasks) && bt.subtasks.length){
+          if(!Array.isArray(existingTask.subtasks)) existingTask.subtasks=[];
+          const subNames=new Set(existingTask.subtasks.map(s=>s.name.trim().toUpperCase()));
+          bt.subtasks.forEach(bs=>{
+            const skey=String(bs.name||'').trim().toUpperCase();
+            if(!skey){ return; }
+            if(subNames.has(skey)){ subtasksSkipped++; return; }
+            existingTask.subtasks.push(JSON.parse(JSON.stringify(bs)));
+            subNames.add(skey);
+            subtasksAdded++;
+          });
+        }
+        tasksSkipped++;
+        return;
+      }
+      existingNames.add(key);
+      const newTask=JSON.parse(JSON.stringify(bt));
+      newTask.sn=targetTasks.length+1;
+      newTask.name=key;
+      if(!Array.isArray(newTask.subtasks)) newTask.subtasks=[];
+      targetTasks.push(newTask);
+      addedHere++;
+    });
+
+    if(isExisting){
+      if(addedHere){ renumber(targetTasks); modelsUpdated++; tasksAdded+=addedHere; }
+    } else if(targetTasks.length){
+      state[m]=targetTasks;
+      deletedModelsSet.delete(m);
+      modelsAdded++; tasksAdded+=addedHere;
+      if(payload.deadlines && payload.deadlines[m]){ deadlines[m]=payload.deadlines[m]; }
+      if(payload.modelImages && payload.modelImages[m]){ modelImages[m]=payload.modelImages[m]; }
+      if(Array.isArray(payload.archivedModels) && payload.archivedModels.includes(m)) archivedModelsSet.add(m);
+      if(Array.isArray(payload.pinnedModels) && payload.pinnedModels.includes(m)) pinnedModelsSet.add(m);
+      if(Array.isArray(payload.modelOrder) && payload.modelOrder.includes(m) && !modelOrder.includes(m)) modelOrder.push(m);
+    }
+
+    // Fill in a missing photo/deadline on a model that already exists but
+    // currently has neither — never overwrites one that's already set.
+    if(isExisting){
+      if(payload.deadlines && payload.deadlines[m] && !deadlines[m]){ deadlines[m]=payload.deadlines[m]; extrasRestored++; }
+      if(payload.modelImages && payload.modelImages[m] && !modelImages[m]){ modelImages[m]=payload.modelImages[m]; extrasRestored++; }
+    }
+  });
+
+  return {modelsAdded,modelsUpdated,tasksAdded,tasksSkipped,subtasksAdded,subtasksSkipped,extrasRestored};
+}
+
+function fullBackupStatsToMessage(stats){
+  const parts=importStatsToMessage(stats);
+  if(stats.extrasRestored) parts.push(`${stats.extrasRestored} photo/deadline${stats.extrasRestored===1?'':'s'} restored`);
+  return parts;
+}
+
+document.getElementById('backupNowBtn').onclick=async()=>{
+  document.getElementById('exportAllDropdown').classList.remove('menu-open');
+  if(!models.length){await showAlert({title:'Nothing to back up',message:'Add at least one model before backing up.',tone:'warn'});return;}
+  try{
+    const wentToCloud=await saveLastBackup();
+    // Restart the hourly timer from now, so this manual backup counts as
+    // this cycle's backup instead of leaving one due again in a few minutes.
+    startAutoBackup();
+    const totalTasks=models.reduce((n,m)=>n+state[m].length,0);
+    const whereMsg=wentToCloud?'saved to your account':'saved on this device only — sign in to back up online';
+    toast('💾',`Backed up everything — ${models.length} model${models.length===1?'':'s'}, ${totalTasks} tasks, photos & notes — ${whereMsg}`);
+  }catch(err){
+    await showAlert({title:'Backup failed',message:'Something went wrong while creating the backup. Please try again.',tone:'error'});
+  }
+};
+
+document.getElementById('restoreBackupBtn').onclick=async()=>{
+  document.getElementById('exportAllDropdown').classList.remove('menu-open');
+  const backup=await getLastBackup();
+  if(!backup){await showAlert({title:'No backup found',message:'Use "Backup Now" at least once to create a backup you can restore from.',tone:'warn'});return;}
+  const d=new Date(backup.ts);
+  const dateStr=d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})+' at '+d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+  const whereStr=backup.cloud?'from your account':'from this device';
+  const ok=await showConfirm({
+    title:'Restore from last backup?',
+    message:`This will merge in the full backup ${whereStr}, taken on ${dateStr} (${backup.models} model${backup.models===1?'':'s'}, ${backup.tasks} task${backup.tasks===1?'':'s'}, incl. photos & notes). Existing tasks and models are kept as-is — only what's missing from your current dashboard is added back.`,
+    confirmText:'Restore',
+    icon:'↺'
+  });
+  if(!ok) return;
+  try{
+    const stats=mergeFullBackupIntoState(backup.payload);
+    if(!stats.modelsAdded && !stats.modelsUpdated && !stats.subtasksAdded && !stats.extrasRestored){await showAlert({title:'Nothing to restore',message:'Your current dashboard already has everything from that backup.',tone:'warn'});return;}
+    refreshModelsList();
+    if(!activeTab && models.length) activeTab=models[0];
+    save();renderAll();
+    toast('↺',`Restored from backup: ${fullBackupStatsToMessage(stats).join(', ')}`);
+  }catch(err){
+    await showAlert({title:'Could not read backup',message:'The stored backup appears to be corrupted.',tone:'error'});
+  }
+};
+
+updateRestoreBackupBtn();
+
+// ── HOURLY AUTO-BACKUP ────────────────────────────────────────────────────────
+// Keeps the cloud backup fresh even if the person forgets to back up
+// manually: snapshots the full current state once an hour and overwrites
+// the single stored backup document via saveLastBackup — so the old backup
+// is always discarded and only the newest copy is ever kept.
+const AUTO_BACKUP_INTERVAL_MS=60*60*1000; // 1 hour
+
+async function runAutoBackup(){
+  if(!models.length) return; // nothing to back up yet
+  try{
+    await saveLastBackup();
+  }catch(err){
+    console.warn('Auto-backup failed:',err);
+  }
+}
+
+// Starts (or restarts) the recurring auto-backup. If the stored backup is
+// missing or already an hour (or more) stale, it backs up right away;
+// otherwise it waits for the next hourly tick. Safe to call more than once
+// (e.g. once from preview mode, once from signed-in mode) — any previous
+// timer is cleared first so backups never run twice as often as intended.
+let _autoBackupInterval=null;
+async function startAutoBackup(){
+  const last=await getLastBackup();
+  if(!last || (Date.now()-last.ts)>=AUTO_BACKUP_INTERVAL_MS) runAutoBackup();
+  if(_autoBackupInterval) clearInterval(_autoBackupInterval);
+  _autoBackupInterval=setInterval(runAutoBackup,AUTO_BACKUP_INTERVAL_MS);
+}
 
 // ── LAZY-LOAD XLSX LIBRARY (only needed for Excel import/export) ─────────────
 // This is a ~700KB library most page loads never touch, so we fetch it on
@@ -5116,17 +6715,21 @@ document.getElementById('exportExcelBtn').onclick=async()=>{
   try{ await loadXLSX(); }catch(e){ await showAlert({title:'Could not load Excel library',message:'Check your internet connection and try again.',tone:'error'}); return; }
   const tasks=state[activeTab];
   const prioMap={high:'High',med:'Med',low:'Low'};
-  const rows=[['Task Name','Priority','Status','Notes','Deadline']];
+  const rows=[['Task Name','Priority','Status','Notes','Deadline','Type','Parent Task']];
   tasks.forEach(t=>{
-    rows.push([t.name,prioMap[t.priority||'med'],t.done?'Done':'Pending',t.notes||'',t.taskDeadline||'']);
+    rows.push([t.name,prioMap[t.priority||'med'],t.done?'Done':'Pending',t.notes||'',t.taskDeadline||'','Task','']);
+    (Array.isArray(t.subtasks)?t.subtasks:[]).forEach(s=>{
+      rows.push([s.name,prioMap[s.priority||'med'],s.done?'Done':'Pending',s.notes||'',s.taskDeadline||'','Subtask',t.name]);
+    });
   });
   const ws=XLSX.utils.aoa_to_sheet(rows);
-  ws['!cols']=[{wch:40},{wch:10},{wch:10},{wch:35},{wch:14}];
+  ws['!cols']=[{wch:40},{wch:10},{wch:10},{wch:35},{wch:14},{wch:9},{wch:28}];
   const wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,ws,activeTab.slice(0,31));
   const fname=`${activeTab.replace(/[^a-z0-9]+/gi,'_')}_tasks.xlsx`;
   XLSX.writeFile(wb,fname);
-  toast('📤',`Exported ${tasks.length} tasks to Excel`,false);
+  const subCount=tasks.reduce((n,t)=>n+((Array.isArray(t.subtasks)?t.subtasks.length:0)),0);
+  toast('📤',`Exported ${tasks.length} tasks${subCount?` + ${subCount} subtasks`:''} to Excel`,false);
 };
 
 document.getElementById('exportPdfBtn').onclick=()=>{
@@ -5176,29 +6779,68 @@ document.getElementById('importExcelFile').onchange=async e=>{
       if(!rows.length){await showAlert({title:'Empty file',message:'The file appears to be empty.',tone:'warn'});e.target.value='';return;}
       let startIdx=0;
       const firstRow=rows[0].map(c=>String(c).trim().toLowerCase());
-      if(firstRow[0]&&(firstRow[0].includes('task')||firstRow[0].includes('name'))) startIdx=1;
+      let typeIdx=-1, parentIdx=-1;
+      if(firstRow[0]&&(firstRow[0].includes('task')||firstRow[0].includes('name'))){
+        startIdx=1;
+        typeIdx=firstRow.indexOf('type');
+        parentIdx=firstRow.indexOf('parent task');
+      }
       const tasks=state[activeTab];
       const existingNames=new Set(tasks.map(t=>t.name.trim().toUpperCase()));
-      let added=0,skipped=0;
+      let added=0,skipped=0,subAdded=0,subSkipped=0,lastTaskRef=null;
       for(let i=startIdx;i<rows.length;i++){
         const row=rows[i];
         const name=String(row[0]||'').trim();
         if(!name) continue;
         const key=name.toUpperCase();
+        const isSubRow=typeIdx>=0 && String(row[typeIdx]||'').trim().toLowerCase()==='subtask';
+
+        if(isSubRow){
+          const parentName=parentIdx>=0?String(row[parentIdx]||'').trim().toUpperCase():'';
+          let parentTask=parentName?tasks.find(t=>t.name===parentName):null;
+          if(!parentTask) parentTask=lastTaskRef;
+          if(!parentTask) continue;
+          if(!Array.isArray(parentTask.subtasks)) parentTask.subtasks=[];
+          const subExisting=new Set(parentTask.subtasks.map(s=>s.name.trim().toUpperCase()));
+          if(subExisting.has(key)){ subSkipped++; continue; }
+          parentTask.subtasks.push({
+            name:key,
+            done:normDone(row[2]),
+            priority:normPriority(row[1]),
+            notes:String(row[3]||'').trim(),
+            taskDeadline:normDate(row[4]),
+            screenshots:[]
+          });
+          subAdded++;
+          continue;
+        }
+
         if(existingNames.has(key)){skipped++;continue;}
         existingNames.add(key);
-        tasks.push({
+        const newTask={
           sn:tasks.length+1,
           name:key,
           done:normDone(row[2]),
           priority:normPriority(row[1]),
           notes:String(row[3]||'').trim(),
-          taskDeadline:normDate(row[4])
-        });
+          taskDeadline:normDate(row[4]),
+          subtasks:[]
+        };
+        tasks.push(newTask);
+        lastTaskRef=newTask;
         added++;
       }
       renumber(tasks);save();renderAll();
-      toast('📥',`Imported ${added} task${added===1?'':'s'}${skipped?`, skipped ${skipped} duplicate${skipped===1?'':'s'}`:''}`);
+      const parts=[];
+      if(added) parts.push(`${added} task${added===1?'':'s'}`);
+      if(subAdded) parts.push(`${subAdded} subtask${subAdded===1?'':'s'}`);
+      if(!parts.length) parts.push('0 tasks');
+      let msg=`Imported ${parts.join(', ')}`;
+      const skipParts=[];
+      if(skipped) skipParts.push(`${skipped} duplicate task${skipped===1?'':'s'}`);
+      if(subSkipped) skipParts.push(`${subSkipped} duplicate subtask${subSkipped===1?'':'s'}`);
+      if(skipParts.length) msg+=`, skipped ${skipParts.join(', ')}`;
+      toast('📥',msg);
     }catch(err){await showAlert({title:'Could not read file',message:"Make sure it's a valid .xlsx, .xls, or .csv file.",tone:'error'});}
   };
   reader.readAsArrayBuffer(file);
@@ -5206,7 +6848,7 @@ document.getElementById('importExcelFile').onchange=async e=>{
 };
 
 // ── THEME PICKER ──────────────────────────────────────────────────────────────
-const THEME_ICONS={dark:'✧',light:'✦',midnight:'☾'};
+const THEME_ICONS={dark:'✧',light:'✦',midnight:'☾',forest:'❀',sunset:'☀',bangladesh:'🇧🇩',argentina:'🇦🇷',brazil:'🇧🇷',antigravity:'◭'};
 function applyTheme(theme){
   if(theme==='dark') document.documentElement.removeAttribute('data-theme');
   else document.documentElement.setAttribute('data-theme',theme);
@@ -5218,7 +6860,7 @@ function applyTheme(theme){
   localStorage.setItem('mlc_theme_premium',theme);
 }
 const savedTheme=localStorage.getItem('mlc_theme_premium')||'dark';
-applyTheme(['dark','light','midnight'].includes(savedTheme)?savedTheme:'dark');
+applyTheme(['dark','light','midnight','forest','sunset','bangladesh','argentina','brazil','antigravity'].includes(savedTheme)?savedTheme:'dark');
 document.querySelectorAll('.theme-menu-item').forEach(btn=>{
   btn.addEventListener('click',e=>{
     e.stopPropagation();
@@ -5252,6 +6894,40 @@ document.querySelectorAll('.filter-btn').forEach(btn=>{
 });
 document.getElementById('searchBox').oninput=e=>{searchQuery=e.target.value;renderTaskList();};
 
+// Selects (or deselects) every completed task in the current model for bulk
+// actions, independent of whatever filter/search is currently applied. This
+// is a separate control from the header "select all" checkbox, which only
+// selects tasks matching the active filter/search view.
+document.getElementById('selectCompletedBtn').onclick=()=>{
+  if(!activeTab || activeTab==='Compare Models' || !state[activeTab]) return;
+  const tasks=state[activeTab];
+  const doneIdxs=tasks.reduce((arr,t,i)=>{if(t.done)arr.push(i);return arr;},[]);
+  if(!doneIdxs.length){toast('⚠','No completed tasks in this model',false);return;}
+  const allSelected=doneIdxs.every(i=>selectedTasks.has(i));
+  if(allSelected){
+    doneIdxs.forEach(i=>selectedTasks.delete(i));
+  }else{
+    doneIdxs.forEach(i=>selectedTasks.add(i));
+  }
+  updateBulkBar();renderTaskList();
+};
+
+// Selects (or deselects) every pending task in the current model for bulk
+// actions, independent of whatever filter/search is currently applied.
+document.getElementById('selectPendingBtn').onclick=()=>{
+  if(!activeTab || activeTab==='Compare Models' || !state[activeTab]) return;
+  const tasks=state[activeTab];
+  const pendingIdxs=tasks.reduce((arr,t,i)=>{if(!t.done)arr.push(i);return arr;},[]);
+  if(!pendingIdxs.length){toast('⚠','No pending tasks in this model',false);return;}
+  const allSelected=pendingIdxs.every(i=>selectedTasks.has(i));
+  if(allSelected){
+    pendingIdxs.forEach(i=>selectedTasks.delete(i));
+  }else{
+    pendingIdxs.forEach(i=>selectedTasks.add(i));
+  }
+  updateBulkBar();renderTaskList();
+};
+
 // ── ADD BUTTONS ───────────────────────────────────────────────────────────────
 document.getElementById('addTaskBtn').onclick=()=>{
   const inp=document.getElementById('newTaskInput');
@@ -5277,6 +6953,11 @@ document.getElementById('newModelInput').addEventListener('keydown',e=>{
 document.getElementById('newModelDeadline').addEventListener('input',e=>{
   e.target.classList.toggle('has-value',!!e.target.value);
 });
+document.getElementById('modelsEmptyStateBtn').onclick=()=>{
+  document.getElementById('addModelBar').scrollIntoView({behavior:'smooth',block:'center'});
+  document.getElementById('newModelInput').focus();
+};
+document.getElementById('modelsEmptyStateSignInBtn').onclick=showAuthGate;
 document.getElementById('duplicateModelBtn').onclick=()=>{
   if(activeTab==='Compare Models')return;duplicateModel(activeTab);
 };
@@ -5309,6 +6990,8 @@ document.addEventListener('keydown',e=>{
     updateBulkBar();
     renderTaskList();
     document.getElementById('notesModal').classList.remove('open');
+    _notesObj=null; _notesObjCb=null;
+    document.getElementById('overdueModal').classList.remove('open');
     document.getElementById('userBadge').classList.remove('menu-open');
     hideAuthGate();
     if (document.activeElement) document.activeElement.blur();
@@ -5451,13 +7134,16 @@ async function freshStart(){
   if(!confirmed) return;
 
   // Wipe all state
+  clearAllPendingTimers();
   state = {};
   deadlines = {};
   deletedModelsSet = new Set();
   archivedModelsSet = new Set();
+  pinnedModelsSet = new Set();
   recycleBin = {};
   modelOrder = [];
   activeTab = '';
+  localStorage.removeItem('mlc_activeTab');
   selectedTasks.clear();
   selectedSubtasks.clear();
   expandedSubtasksSet.clear();
@@ -5471,15 +7157,16 @@ async function freshStart(){
   if(auth && auth.currentUser){
     clearTimeout(saveTimer);
     try {
-      await getUserDoc(auth.currentUser.uid).set({
+      await getWorkspaceDoc().set({
         tasks: {},
         deadlines: {},
         deletedModels: [],
         archivedModels: [],
+        pinnedModels: [],
         modelOrder: [],
         recycleBin: {},
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
+      }, {merge:true});
     } catch(e){ console.error('Fresh start save error:',e); }
   }
 
@@ -5628,5 +7315,341 @@ captureStickyBarOrigin();
 updateStickyBarPin();
 
 </script>
+
+<!-- ── EXPORT BEFORE LOGOUT MODAL ── -->
+<div id="exportLogoutOverlay" role="dialog" aria-modal="true" aria-labelledby="elModalTitle">
+  <div id="exportLogoutModal">
+    <div class="elmodal-icon">📤</div>
+    <div class="elmodal-title" id="elModalTitle">Export before signing out?</div>
+    <div class="elmodal-desc">Download your dashboard data now so you don't lose any progress. You can always import it back later.</div>
+    <div class="elmodal-export-group">
+      <button class="elmodal-export-btn" id="elExportExcel">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#21a366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="10" y1="11" x2="10" y2="19"/></svg>
+        <span>Excel</span>
+      </button>
+      <button class="elmodal-export-btn" id="elExportPdf">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="#e5484d" stroke-width="2"/><polyline points="14 2 14 8 20 8" stroke="#e5484d" stroke-width="2"/><line x1="7.5" y1="13" x2="16.5" y2="13" stroke="#e5484d" stroke-width="1.6"/><line x1="7.5" y1="16" x2="16.5" y2="16" stroke="#e5484d" stroke-width="1.6"/><line x1="7.5" y1="19" x2="13" y2="19" stroke="#e5484d" stroke-width="1.6"/></svg>
+        <span>PDF</span>
+      </button>
+      <button class="elmodal-export-btn" id="elBackupNow" title="Save a fresh cloud backup before signing out">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span id="elBackupNowLabel">Backup</span>
+      </button>
+    </div>
+    <div class="elmodal-divider">or</div>
+    <div class="elmodal-actions">
+      <button class="elmodal-skip-btn" id="elSignOutAnyway">Sign out anyway</button>
+      <button class="elmodal-cancel-btn" id="elCancelLogout">Stay signed in</button>
+    </div>
+  </div>
+</div>
+
+<div id="teamOverlay" role="dialog" aria-modal="true" aria-labelledby="teamModalTitle">
+  <div id="teamModal">
+    <div class="elmodal-icon" style="background:var(--accent1-dim);border-color:var(--border-hover);">👥</div>
+    <div class="elmodal-title" id="teamModalTitle">Team &amp; Workspace</div>
+    <div class="elmodal-desc" id="teamWorkspaceDesc">This is your personal workspace — only you can see it.</div>
+
+    <div class="team-section-label">Members</div>
+    <div class="team-members-list" id="teamMembersList"></div>
+
+    <div id="teamInviteSection">
+      <div class="team-section-label">Invite a teammate</div>
+      <div class="team-invite-row">
+        <div class="team-invite-code" id="teamInviteCodeDisplay">— — — — — —</div>
+        <button class="elmodal-export-btn" id="teamGenerateCodeBtn" style="flex:0 0 auto;">Get Code</button>
+        <button class="elmodal-export-btn" id="teamCopyCodeBtn" style="display:none;flex:0 0 auto;">Copy</button>
+      </div>
+      <div class="elmodal-desc" style="margin:8px 0 0;font-size:12.5px;">Share this code with a teammate — they enter it below to join and start seeing/editing this workspace together.</div>
+    </div>
+
+    <div class="elmodal-divider">or</div>
+
+    <div id="teamJoinSection">
+      <div class="team-section-label">Join a teammate's workspace</div>
+      <div class="team-invite-row">
+        <input type="text" id="teamJoinCodeInput" maxlength="6" placeholder="Enter code" class="team-join-input">
+        <button class="elmodal-export-btn" id="teamJoinBtn" style="flex:0 0 auto;">Join</button>
+      </div>
+      <div id="teamJoinError" class="team-join-error"></div>
+    </div>
+
+    <div id="teamBackToPersonalRow" style="display:none;margin-top:14px;">
+      <button class="elmodal-cancel-btn" id="teamBackToPersonalBtn" style="width:100%;">← Back to my personal workspace</button>
+    </div>
+
+    <div class="elmodal-actions" style="margin-top:20px;">
+      <button class="elmodal-cancel-btn" id="teamCloseBtn" style="flex:1;">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── TEAM / SHARED WORKSPACE MODAL ─────────────────────────────────────────────
+function openTeamModal(){
+  document.getElementById('userBadge').classList.remove('menu-open');
+  renderTeamModal();
+  document.getElementById('teamOverlay').classList.add('open');
+}
+function closeTeamModal(){
+  document.getElementById('teamOverlay').classList.remove('open');
+  document.getElementById('teamJoinCodeInput').value='';
+  document.getElementById('teamJoinError').textContent='';
+}
+function renderTeamModal(){
+  const isPersonal = currentWorkspaceId===personalWorkspaceId;
+  const memberCount = Object.keys(workspaceMembers).length;
+  const descEl=document.getElementById('teamWorkspaceDesc');
+  if(isPersonal && memberCount<=1){
+    descEl.textContent='This is your personal workspace — only you can see it. Invite a teammate below to start sharing tasks.';
+  }else if(isPersonal){
+    descEl.textContent='This is your personal workspace, shared with your team below.';
+  }else{
+    const ownerInfo=workspaceMembers[workspaceOwnerUid];
+    descEl.textContent=`You're viewing ${ownerInfo?escHtml(ownerInfo.displayName)+"'s":"a teammate's"} shared workspace.`;
+  }
+
+  const listEl=document.getElementById('teamMembersList');
+  listEl.innerHTML=Object.entries(workspaceMembers).map(([uid,info])=>{
+    const initial=((info.displayName||info.email||'?')[0]||'?').toUpperCase();
+    const isOwner=uid===workspaceOwnerUid;
+    return `<div class="team-member-row">
+      <div class="team-member-avatar">${escHtml(initial)}</div>
+      <div>
+        <div class="team-member-name">${escHtml(info.displayName||info.email||'Unknown')}</div>
+        <div class="team-member-email">${escHtml(info.email||'')}</div>
+      </div>
+      ${isOwner?'<span class="team-member-owner-tag">Owner</span>':''}
+    </div>`;
+  }).join('') || '<div class="elmodal-desc" style="margin:0;">No members found.</div>';
+
+  // Only the workspace owner can generate/share an invite code.
+  document.getElementById('teamInviteSection').style.display = isCurrentWorkspaceOwner()?'':'none';
+  document.getElementById('teamBackToPersonalRow').style.display = isPersonal?'none':'';
+
+  document.getElementById('teamInviteCodeDisplay').textContent='— — — — — —';
+  document.getElementById('teamCopyCodeBtn').style.display='none';
+  if(currentWorkspaceId){
+    getWorkspaceDoc().get().then(snap=>{
+      const code=snap.exists?snap.data().inviteCode:null;
+      if(code){
+        document.getElementById('teamInviteCodeDisplay').textContent=code;
+        document.getElementById('teamCopyCodeBtn').style.display='';
+      }
+    }).catch(e=>console.warn('Could not load invite code:',e));
+  }
+}
+function updateTeamUI(){
+  const badge=document.getElementById('teamCountBadge');
+  const count=Object.keys(workspaceMembers).length;
+  if(count>1){ badge.style.display=''; badge.textContent=String(count); }
+  else{ badge.style.display='none'; }
+  const mineBtn=document.getElementById('mineFilterBtn');
+  if(mineBtn) mineBtn.style.display=count>1?'':'none';
+  // If the workspace shrank back to just you, don't leave the UI stuck
+  // filtered on a chip that's now hidden.
+  if(count<=1 && activeFilter==='mine'){
+    activeFilter='all';
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.toggle('active',b.dataset.filter==='all'));
+    if(typeof renderTaskList==='function') renderTaskList();
+  }
+}
+
+async function generateInviteCode(){
+  if(!auth||!auth.currentUser||!currentWorkspaceId) return;
+  const btn=document.getElementById('teamGenerateCodeBtn');
+  btn.disabled=true;
+  try{
+    const snap=await withTimeout(getWorkspaceDoc().get(),6000);
+    let code=snap.exists?snap.data().inviteCode:null;
+    if(!code){
+      code=randomInviteCode();
+      await db.collection('inviteCodes').doc(code).set({workspaceId:currentWorkspaceId,createdBy:auth.currentUser.uid});
+      await getWorkspaceDoc().set({inviteCode:code},{merge:true});
+    }
+    document.getElementById('teamInviteCodeDisplay').textContent=code;
+    document.getElementById('teamCopyCodeBtn').style.display='';
+  }catch(e){
+    console.error('Generate invite code failed:',e);
+    toast('⚠','Could not generate an invite code — check your connection',false);
+  }finally{
+    btn.disabled=false;
+  }
+}
+
+// Switches the whole dashboard over to a different workspace's data —
+// used both when joining a teammate's workspace and when switching back
+// to your own personal one.
+async function switchToWorkspace(workspaceId){
+  showLoading();
+  try{
+    currentWorkspaceId=workspaceId;
+    await refreshWorkspaceMembers();
+    const saved=await loadFromFirestore(currentWorkspaceId);
+    deletedModelsSet=new Set(saved?.deletedModels||[]);
+    archivedModelsSet=new Set(saved?.archivedModels||[]);
+    pinnedModelsSet=new Set(saved?.pinnedModels||[]);
+    modelOrder=saved?.modelOrder||[];
+    modelImages=saved?.modelImages||{};
+    recycleBin=saved?.recycleBin||{};
+    purgeExpiredRecycleItems();
+    setArchiveView(false);
+    setRecycleView(false);
+    ({tasks: state, deadlines}=loadState(saved));
+    refreshModelsList();
+    activeTab=models[0]||'';
+    localStorage.setItem('mlc_activeTab',activeTab);
+    document.getElementById('lastUpdated').textContent=formatLastUpdated(saved&&saved.updatedAt)||'';
+    listenForLastUpdated(currentWorkspaceId);
+    resetUndo();
+    editingIdx=null; selectedTasks.clear(); selectedSubtasks.clear(); expandedSubtasksSet.clear();
+    renderAll();
+    updateTeamUI();
+    if(auth&&auth.currentUser){
+      await getUserProfileDoc(auth.currentUser.uid).set({workspaceId:currentWorkspaceId},{merge:true});
+    }
+  }catch(e){
+    console.error('Switch workspace failed:',e);
+    toast('⚠','Could not switch workspace',false);
+  }finally{
+    hideLoading();
+  }
+}
+
+async function joinWorkspaceByCode(rawCode){
+  const errEl=document.getElementById('teamJoinError');
+  errEl.textContent='';
+  const code=(rawCode||'').trim().toUpperCase();
+  if(!code){ errEl.textContent='Enter a code first.'; return; }
+  if(!auth||!auth.currentUser){ errEl.textContent='You need to be signed in to join a workspace.'; return; }
+  const joinBtn=document.getElementById('teamJoinBtn');
+  joinBtn.disabled=true; joinBtn.textContent='Joining…';
+  try{
+    const lookupSnap=await withTimeout(db.collection('inviteCodes').doc(code).get(),6000);
+    if(!lookupSnap.exists){ errEl.textContent="That code doesn't match any workspace."; return; }
+    const targetId=lookupSnap.data().workspaceId;
+    if(targetId===currentWorkspaceId){ errEl.textContent="You're already in this workspace."; return; }
+    const user=auth.currentUser;
+    const myInfo={email:user.email||'',displayName:user.displayName||(user.email||'').split('@')[0]};
+    await db.collection('workspaces').doc(targetId).update({
+      memberUids: firebase.firestore.FieldValue.arrayUnion(user.uid),
+      ['members.'+user.uid]: myInfo
+    });
+    await switchToWorkspace(targetId);
+    toast('👥','Joined the shared workspace',false);
+    closeTeamModal();
+  }catch(e){
+    console.error('Join workspace failed:',e);
+    errEl.textContent='Could not join — double-check the code and your connection.';
+  }finally{
+    joinBtn.disabled=false; joinBtn.textContent='Join';
+  }
+}
+
+document.getElementById('teamMenuBtn').onclick=openTeamModal;
+document.getElementById('teamCloseBtn').onclick=closeTeamModal;
+document.getElementById('teamOverlay').addEventListener('click',e=>{ if(e.target.id==='teamOverlay') closeTeamModal(); });
+document.getElementById('teamGenerateCodeBtn').onclick=generateInviteCode;
+document.getElementById('teamCopyCodeBtn').onclick=()=>{
+  const code=document.getElementById('teamInviteCodeDisplay').textContent;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(code).then(()=>toast('📋','Code copied',false)).catch(()=>{});
+  }
+};
+document.getElementById('teamJoinBtn').onclick=()=>joinWorkspaceByCode(document.getElementById('teamJoinCodeInput').value);
+document.getElementById('teamJoinCodeInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){ e.preventDefault(); document.getElementById('teamJoinBtn').click(); }
+});
+document.getElementById('teamBackToPersonalBtn').onclick=async()=>{
+  await switchToWorkspace(personalWorkspaceId);
+  toast('🏠','Back to your personal workspace',false);
+  renderTeamModal();
+};
+</script>
+
+<script>
+// ── EXPORT-BEFORE-LOGOUT MODAL ────────────────────────────────────────────────
+(function(){
+  const overlay = document.getElementById('exportLogoutOverlay');
+
+  function openExportLogoutModal(){
+    overlay.classList.add('open');
+    document.getElementById('elCancelLogout').focus();
+  }
+
+  function closeExportLogoutModal(){
+    overlay.classList.remove('open');
+  }
+
+  function doSignOut(){
+    closeExportLogoutModal();
+    auth.signOut();
+  }
+
+  // Override logout button to open modal instead of signing out directly
+  document.getElementById('logoutBtn').onclick = function(e){
+    e.stopPropagation();
+    document.getElementById('userBadge').classList.remove('menu-open');
+    openExportLogoutModal();
+  };
+
+  // Excel export — triggers existing export button
+  document.getElementById('elExportExcel').onclick = function(){
+    const btn = this;
+    btn.disabled = true;
+    btn.innerHTML = '<span>Exporting…</span>';
+    document.getElementById('exportAllExcelBtn').click();
+    setTimeout(function(){
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#21a366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="10" y1="11" x2="10" y2="19"/></svg> <span>Excel</span>';
+    }, 2500);
+  };
+
+  // PDF export — triggers existing export button
+  document.getElementById('elExportPdf').onclick = function(){
+    document.getElementById('exportAllPdfBtn').click();
+  };
+
+  // Cloud backup — triggers the real Backup Now button (saves everything:
+  // tasks, subtasks, deadlines, model thumbnails, note screenshots, etc.
+  // to Firestore) so signing out is never the only safety net.
+  document.getElementById('elBackupNow').onclick = async function(){
+    const btn = this;
+    const label = document.getElementById('elBackupNowLabel');
+    if(btn.disabled) return;
+    btn.disabled = true;
+    label.textContent = 'Backing up…';
+    try{
+      const realBtn = document.getElementById('backupNowBtn');
+      if(realBtn) realBtn.click();
+      // backupNowBtn's own handler runs saveLastBackup() and manages its
+      // own label — just give this button a moment to reflect success.
+      await new Promise(r=>setTimeout(r,1200));
+      label.textContent = 'Backed up ✓';
+    }catch(e){
+      label.textContent = 'Backup failed';
+    }finally{
+      setTimeout(()=>{ btn.disabled = false; label.textContent = 'Backup'; }, 1800);
+    }
+  };
+
+  // Sign out without exporting
+  document.getElementById('elSignOutAnyway').onclick = doSignOut;
+
+  // Stay signed in / cancel
+  document.getElementById('elCancelLogout').onclick = closeExportLogoutModal;
+
+  // Click backdrop to cancel
+  overlay.addEventListener('click', function(e){
+    if(e.target === overlay) closeExportLogoutModal();
+  });
+
+  // Escape key to cancel
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && overlay.classList.contains('open')) closeExportLogoutModal();
+  });
+})();
+</script>
+
 </body>
 </html>
