@@ -419,6 +419,41 @@ footer {
 .kpi-card:nth-child(4) { animation-delay: 0.2s; }
 .kpi-card:nth-child(5) { animation-delay: 0.25s; }
 
+/* ── ANALYTICS VIEW ── */
+.analytics-kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 28px; }
+.analytics-kpi-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  padding: 20px 22px; position: relative; overflow: hidden; box-shadow: var(--shadow-sm);
+}
+.analytics-kpi-card .kpi-label { margin-bottom: 10px; }
+.analytics-kpi-card .kpi-value { font-size: 32px; font-weight: 300; font-variant-numeric: tabular-nums; color: var(--accent1); line-height:1; margin-bottom:6px; }
+.analytics-kpi-card .kpi-sub { font-size: 12px; color: var(--text-muted); font-weight: 300; }
+.analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 980px){ .analytics-grid{ grid-template-columns: 1fr; } .analytics-kpi-grid{ grid-template-columns: repeat(2,1fr); } }
+.analytics-panel {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  padding: 22px 24px; box-shadow: var(--shadow-sm);
+}
+.analytics-panel-hdr { margin-bottom: 14px; }
+.analytics-panel-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.analytics-panel-sub { font-size: 11.5px; color: var(--text-muted); font-weight: 300; }
+.analytics-chart-wrap { width: 100%; overflow-x: auto; }
+.analytics-chart-wrap svg { display:block; }
+.analytics-empty { padding: 32px 8px; text-align:center; color: var(--text-muted); font-size: 13px; font-weight:300; }
+.analytics-legend { display:flex; gap:18px; margin-top:10px; flex-wrap:wrap; }
+.analytics-legend-item { display:flex; align-items:center; gap:6px; font-size:11.5px; color: var(--text-muted); }
+.analytics-legend-swatch { width:12px; height:3px; border-radius:2px; display:inline-block; }
+.analytics-overdue-list { display:flex; flex-direction:column; gap:8px; max-height: 340px; overflow-y:auto; }
+.analytics-overdue-row {
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding: 10px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
+  font-size: 13px; cursor:pointer; transition: border-color .15s;
+}
+.analytics-overdue-row:hover { border-color: var(--border-hover); }
+.analytics-overdue-row .aor-name { color: var(--text); font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; }
+.analytics-overdue-row .aor-model { color: var(--text-muted); font-size:11px; font-weight:400; margin-left:8px; }
+.analytics-overdue-row .aor-days { color: var(--red); font-weight:600; font-size:12px; white-space:nowrap; background: rgba(244,63,94,0.1); padding:3px 9px; border-radius:20px; }
+
 /* ── MODEL CARDS ── */
 .models-section-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }
 .models-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-bottom: 44px; }
@@ -1474,6 +1509,52 @@ footer {
   border-radius: 20px; padding: 4px 10px; white-space: nowrap;
 }
 .overdue-empty { padding: 32px 8px; text-align: center; color: var(--text-dim); font-size: 13px; }
+.menu-item-kbd { margin-left: auto; font-size: 10px; font-weight: 600; color: var(--text-muted); background: var(--surface3); border: 1px solid var(--border); border-radius: 5px; padding: 2px 6px; letter-spacing: .3px; }
+.gsearch-input-wrap { position: relative; margin-bottom: 14px; }
+.gsearch-input-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+#globalSearchInput { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px 12px 40px; color: var(--text); font-family: inherit; font-size: 14.5px; outline: none; box-sizing: border-box; transition: border-color .15s ease; }
+#globalSearchInput:focus { border-color: var(--accent1); }
+.gsearch-body { max-height: 56vh; overflow-y: auto; }
+.gsearch-hint { padding: 28px 8px; text-align: center; color: var(--text-dim); font-size: 13px; }
+.gsearch-section-label { font-size: 10.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .6px; margin: 14px 4px 6px; }
+.gsearch-section-label:first-child { margin-top: 0; }
+.gsearch-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 12px; border-radius: 10px; border: 1px solid transparent; cursor: pointer;
+  transition: background .12s ease, border-color .12s ease;
+}
+.gsearch-row:hover, .gsearch-row.kbd-active { border-color: var(--accent1); background: var(--accent1-dim); }
+.gsearch-row-main { min-width: 0; display: flex; align-items: center; gap: 10px; }
+.gsearch-row-icon { flex-shrink: 0; color: var(--text-muted); opacity: .8; }
+.gsearch-row-text { min-width: 0; }
+.gsearch-row-name { font-size: 13.5px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gsearch-row-name mark { background: var(--accent1-dim); color: var(--accent1); border-radius: 3px; padding: 0 1px; }
+.gsearch-row-meta { font-size: 11.5px; color: var(--text-dim); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gsearch-row-badge { flex-shrink: 0; font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: .3px; }
+.gsearch-row-badge.model { color: var(--accent1); background: var(--accent1-dim); }
+.gsearch-row-badge.task { color: var(--accent2); background: rgba(96,165,250,0.1); }
+.gsearch-row-badge.subtask { color: var(--accent3); background: rgba(167,139,250,0.1); }
+.gsearch-row-badge.done { color: var(--green); background: rgba(16,185,129,0.1); }
+
+.notif-badge {
+  position: absolute; top: -4px; right: -4px; min-width: 16px; height: 16px; padding: 0 4px;
+  border-radius: 8px; background: var(--red); color: #fff; font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; line-height: 1; border: 2px solid var(--bg);
+}
+.activity-body { max-height: 60vh; overflow-y: auto; }
+.activity-empty { padding: 32px 8px; text-align: center; color: var(--text-dim); font-size: 13px; }
+.activity-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 8px; border-radius: 10px; border-bottom: 1px solid var(--border); }
+.activity-row:last-child { border-bottom: none; }
+.activity-row.unread { background: var(--accent1-dim); }
+.activity-row-icon {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--surface2);
+  display: flex; align-items: center; justify-content: center; font-size: 13px;
+}
+.activity-row-main { min-width: 0; flex: 1; }
+.activity-row-text { font-size: 13px; color: var(--text); line-height: 1.4; }
+.activity-row-text b { color: var(--accent1); font-weight: 600; }
+.activity-row-meta { font-size: 11px; color: var(--text-dim); margin-top: 3px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.activity-row-model-tag { background: var(--surface3); color: var(--text-muted); border-radius: 5px; padding: 1px 6px; font-weight: 600; }
 .modal-box {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 24px; padding: 36px; width: min(500px, 90vw);
@@ -2379,14 +2460,21 @@ document.addEventListener('keydown', e => {
   <div class="header-right">
     <div class="live-badge" id="liveBadge" title="Return to live dashboard"><span class="live-dot"></span>LIVE</div>
     <div class="last-updated" id="lastUpdated"></div>
+    <button class="hdr-btn" id="notifBellBtn" title="Activity feed &amp; notifications" style="display:none;position:relative;">
+      🔔<span class="notif-badge" id="notifBadge" style="display:none;">0</span>
+    </button>
     <div class="user-badge" id="userBadge" style="display:none;">
       <div class="user-avatar" id="userAvatar">?</div>
       <span id="userEmail" style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
       <span class="user-badge-caret">▾</span>
       <div class="user-menu" id="userMenu">
+        <button class="menu-item" id="globalSearchBtn" title="Search tasks &amp; models across your entire workspace"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Global Search</span><span class="menu-item-kbd">Ctrl K</span></button>
+        <button class="menu-item" id="activityLogMenuBtn" title="See every change across your workspace"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg><span>Activity Log</span></button>
+        <div class="menu-divider"></div>
         <button class="menu-item" id="teamMenuBtn" title="Invite teammates or manage your shared workspace"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Team</span><span class="archive-count-badge" id="teamCountBadge" style="display:none;">1</span></button>
         <button class="menu-item" id="archiveViewBtn" title="View archived models"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><line x1="10" y1="13" x2="14" y2="13"/></svg><span>Archived</span><span class="archive-count-badge" id="archiveCountBadge" style="display:none;">0</span></button>
         <button class="menu-item" id="recycleViewBtn" title="View deleted tasks (kept for 30 days)" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg><span>Recycle Bin</span><span class="archive-count-badge" id="recycleCountBadge" style="display:none;">0</span></button>
+        <button class="menu-item" id="analyticsViewBtn" title="Burndown, trends, and overdue analysis"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Analytics</span></button>
         <button class="menu-item" id="userManualBtn" title="Download the user manual (PDF)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg><span>User Manual</span></button>
         <button class="menu-item" id="freshStartBtn" title="Clear everything and start fresh" style="color:var(--red);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg><span>Fresh Start</span></button>
         <button class="menu-item" id="undoBtn" title="Undo last change" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"/></svg><span>Undo</span></button>
@@ -2521,7 +2609,7 @@ document.addEventListener('keydown', e => {
   <button class="filter-btn" data-filter="mine" id="mineFilterBtn" style="display:none;">👤 My Tasks<span class="filter-count" id="fc-mine">0</span></button>
   <button class="filter-btn select-completed-btn" id="selectCompletedBtn" title="Select all completed tasks for bulk actions, regardless of the current filter">☑ Select Completed</button>
   <button class="filter-btn select-pending-btn" id="selectPendingBtn" title="Select all pending tasks for bulk actions, regardless of the current filter">☐ Select Pending</button>
-  <div class="kbd-hint">Shortcuts: <kbd>N</kbd> new task · <kbd>/</kbd> search · <kbd>Esc</kbd> clear</div>
+  <div class="kbd-hint">Shortcuts: <kbd>N</kbd> new task · <kbd>/</kbd> search · <kbd>Ctrl K</kbd> global search · <kbd>Esc</kbd> clear</div>
 </div>
 
 <!-- BULK ACTION BAR -->
@@ -2660,12 +2748,59 @@ document.addEventListener('keydown', e => {
 </div>
 <!-- END RECYCLE BIN VIEW -->
 
+<!-- ANALYTICS VIEW -->
+<div id="analyticsView" style="display:none;">
+  <div class="models-section-hdr">
+    <div class="section-label" style="margin-bottom:0;flex:1;">Analytics</div>
+    <div class="date-field-wrap" style="width:200px;">
+      <select id="analyticsModelSelect" class="add-task-input" style="width:200px;appearance:none;cursor:pointer;"></select>
+    </div>
+  </div>
+
+  <div class="analytics-kpi-grid" id="analyticsKpiGrid"></div>
+
+  <div class="analytics-grid">
+    <div class="analytics-panel" id="panelBurndown">
+      <div class="analytics-panel-hdr">
+        <div class="analytics-panel-title">📉 Burn-down Chart</div>
+        <div class="analytics-panel-sub">Ideal vs. actual remaining tasks — <span id="burndownModelLabel">All Models</span></div>
+      </div>
+      <div class="analytics-chart-wrap" id="burndownChartWrap"></div>
+    </div>
+
+    <div class="analytics-panel" id="panelTrend">
+      <div class="analytics-panel-hdr">
+        <div class="analytics-panel-title">📈 Completion Trend</div>
+        <div class="analytics-panel-sub">Cumulative % complete, last 30 days</div>
+      </div>
+      <div class="analytics-chart-wrap" id="trendChartWrap"></div>
+    </div>
+
+    <div class="analytics-panel" id="panelWeekly">
+      <div class="analytics-panel-hdr">
+        <div class="analytics-panel-title">📊 Weekly Productivity</div>
+        <div class="analytics-panel-sub">Tasks completed per week, last 8 weeks</div>
+      </div>
+      <div class="analytics-chart-wrap" id="weeklyChartWrap"></div>
+    </div>
+
+    <div class="analytics-panel" id="panelOverdue">
+      <div class="analytics-panel-hdr">
+        <div class="analytics-panel-title">⚠ Overdue Analysis</div>
+        <div class="analytics-panel-sub">Sorted by days overdue</div>
+      </div>
+      <div class="analytics-overdue-list" id="overdueAnalysisList"></div>
+    </div>
+  </div>
+</div>
+<!-- END ANALYTICS VIEW -->
+
 
 <!-- FOOTER -->
 <div class="footer-bar" id="footerBar">
   <div>
-    <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px;">Overall Completion</div>
-    <div class="footer-text">Combined progress trajectory across all operational models</div>
+    <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px;" id="footerTitle">Overall Completion</div>
+    <div class="footer-text" id="footerSubtext">Combined progress trajectory across all operational models</div>
   </div>
   <div class="overall-progress">
     <div>
@@ -2757,6 +2892,34 @@ document.addEventListener('keydown', e => {
     <img id="shotLightboxImg" src="" alt="Screenshot preview">
     <div id="shotLightboxTitle" style="display:none;position:absolute;left:0;right:0;bottom:0;padding:10px 16px;background:rgba(0,0,0,0.65);color:#fff;font-size:14px;font-weight:600;border-radius:0 0 12px 12px;text-align:center;"></div>
     <button type="button" class="shot-lightbox-close" id="shotLightboxClose" title="Close">✕</button>
+  </div>
+</div>
+
+<!-- ACTIVITY LOG / NOTIFICATIONS MODAL -->
+<div class="modal-overlay" id="activityModal">
+  <div class="modal-box" id="activityModalBox" style="width:min(560px, 92vw);">
+    <div class="modal-title">🕓 Activity Log</div>
+    <div class="modal-subtitle" id="activitySubtitle">Every change made across your workspace, most recent first.</div>
+    <div class="activity-body" id="activityBody"></div>
+    <div class="modal-actions" style="margin-top:16px;">
+      <button class="modal-btn primary" id="activityCloseBtn">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- GLOBAL SEARCH MODAL -->
+<div class="modal-overlay" id="globalSearchModal">
+  <div class="modal-box" id="globalSearchModalBox" style="width:min(560px, 92vw);">
+    <div class="modal-title">🔍 Global Search</div>
+    <div class="modal-subtitle">Find any model, task, or sub-task across your entire workspace.</div>
+    <div class="gsearch-input-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="globalSearchInput" placeholder="Search everything…" autocomplete="off">
+    </div>
+    <div class="gsearch-body" id="globalSearchBody"></div>
+    <div class="modal-actions" style="margin-top:16px;">
+      <button class="modal-btn primary" id="globalSearchCloseBtn">Close</button>
+    </div>
   </div>
 </div>
 
@@ -3520,6 +3683,7 @@ let archiveViewActive=false;
 // Kept per-model like Archive, so switching models only shows what's relevant.
 let recycleBin={};
 let recycleViewActive=false;
+let analyticsViewActive=false;
 const RECYCLE_RETENTION_DAYS=30;
 
 // ── MERGE-SAFE PERSISTENCE ────────────────────────────────────────────────────
@@ -3635,6 +3799,7 @@ function enterPreviewMode(){
   modelImages = {};
   setArchiveView(false);
   setRecycleView(false);
+  setAnalyticsView(false);
   ({tasks: state, deadlines} = loadState(null));
   refreshModelsList();
   const _savedPreviewTab=localStorage.getItem('mlc_activeTab');
@@ -3666,6 +3831,7 @@ async function handleAuthState(user){
     emailEl.textContent=user.displayName||(user.email||'').split('@')[0];
     badge.style.display='flex';
     loginOpenBtn.style.display='none';
+    document.getElementById('notifBellBtn').style.display='';
     document.getElementById('archiveViewBtn').style.display='';
     document.getElementById('recycleViewBtn').style.display='';
 
@@ -3702,6 +3868,7 @@ async function handleAuthState(user){
     const expiredPurged=purgeExpiredRecycleItems();
     setArchiveView(false);
     setRecycleView(false);
+    setAnalyticsView(false);
     ({tasks: state, deadlines}=loadState(saved));
     refreshModelsList();
     const _savedTab=localStorage.getItem('mlc_activeTab');
@@ -3710,6 +3877,7 @@ async function handleAuthState(user){
     document.querySelector('.wrap').classList.add('unlocked');
     document.getElementById('lastUpdated').textContent=formatLastUpdated(saved&&saved.updatedAt)||'';
     listenForLastUpdated(currentWorkspaceId);
+    listenForActivity(currentWorkspaceId);
     updateTeamUI();
     resetUndo();
     renderAll();
@@ -3727,13 +3895,17 @@ async function handleAuthState(user){
     // Signed out (or never signed in) — fall back to the local preview
     // instead of locking the dashboard behind a forced gate.
     if(unsubscribeLastUpdated){ unsubscribeLastUpdated(); unsubscribeLastUpdated=null; }
+    if(unsubscribeActivity){ unsubscribeActivity(); unsubscribeActivity=null; }
+    activityFeed=[]; updateNotifBadge();
     document.getElementById('userBadge').style.display='none';
     document.getElementById('userBadge').classList.remove('menu-open');
+    document.getElementById('notifBellBtn').style.display='none';
     document.getElementById('loginOpenBtn').style.display='';
     document.getElementById('archiveViewBtn').style.display='none';
     document.getElementById('recycleViewBtn').style.display='none';
     setArchiveView(false);
     setRecycleView(false);
+    setAnalyticsView(false);
     document.getElementById('loginBtn').disabled=false;
     document.getElementById('loginBtn').textContent='Sign In';
     document.getElementById('registerBtn').disabled=false;
@@ -3866,7 +4038,7 @@ function loadState(saved) {
     // this runs (e.g. on the very next live sync after creating it).
     if(!savedModel||!Array.isArray(savedModel)) return;
     const tasks=savedModel.map(t=>({...t}));
-    tasks.forEach(t=>{if(!t.priority)t.priority='med';if(!t.notes)t.notes='';if(!t.taskDeadline)t.taskDeadline='';if(!Array.isArray(t.screenshots))t.screenshots=[];if(!t.startDate)t.startDate='';if(!Array.isArray(t.dependsOn))t.dependsOn=[];});
+    tasks.forEach(t=>{if(!t.priority)t.priority='med';if(!t.notes)t.notes='';if(!t.taskDeadline)t.taskDeadline='';if(!Array.isArray(t.screenshots))t.screenshots=[];if(!t.startDate)t.startDate='';if(!Array.isArray(t.dependsOn))t.dependsOn=[];if(!t.createdAt)t.createdAt=null;if(!t.completedAt)t.completedAt=null;});
     renumber(tasks);
     result[model]=tasks;
   });
@@ -4118,10 +4290,12 @@ function addSubtask(model,idx,name){
   const n=name.trim(); if(!n) return;
   getSubtasks(model,idx).push({name:n.toUpperCase(),done:false,priority:'med',notes:'',taskDeadline:'',screenshots:[]});
   save(); renderAll(); toast('＋','Subtask added: '+n.slice(0,28));
+  logActivity('＋',`added subtask "${n.toUpperCase()}"`,model);
 }
 function toggleSubtask(model,idx,sIdx){
   const s=getSubtasks(model,idx)[sIdx]; if(!s) return;
   s.done=!s.done; save(); renderAll();
+  logActivity(s.done?'✓':'↺',`${s.done?'completed':'reopened'} subtask "${s.name}"`,model);
 }
 function deleteSubtask(model,idx,sIdx){
   const subs=getSubtasks(model,idx);
@@ -4131,6 +4305,7 @@ function deleteSubtask(model,idx,sIdx){
   subs.splice(sIdx,1);
   clearSubSelectionsForTask(model,idx);
   save(); renderAll(); updateRecycleBadge(); toast('🗑','Moved to Recycle Bin: '+nm.slice(0,28));
+  logActivity('🗑',`deleted subtask "${nm}"`,model);
 }
 function renameSubtask(model,idx,sIdx,newName){
   const n=newName.trim(); if(!n) return;
@@ -4351,6 +4526,288 @@ document.getElementById('overdueModalCloseBtn').onclick=closeOverdueModal;
 document.getElementById('overdueModal').onclick=e=>{
   if(e.target.id==='overdueModal') closeOverdueModal();
 };
+
+// ── GLOBAL SEARCH (across every model, task & sub-task) ────────────────────
+// Flattens the whole workspace into one searchable list. Kept cheap on
+// purpose — recomputed fresh each keystroke since even large workspaces are
+// only a few hundred rows, which is instant to filter.
+function getAllSearchableItems(){
+  const out=[];
+  models.forEach(m=>{
+    out.push({type:'model', model:m});
+    (state[m]||[]).forEach((t,idx)=>{
+      out.push({type:'task', model:m, idx, task:t});
+      (Array.isArray(t.subtasks)?t.subtasks:[]).forEach((s,subIdx)=>{
+        out.push({type:'subtask', model:m, idx, subIdx, task:s, parentName:t.name});
+      });
+    });
+  });
+  return out;
+}
+function _gsearchHighlight(text,q){
+  const safe=escHtml(text);
+  if(!q) return safe;
+  const i=safe.toLowerCase().indexOf(q.toLowerCase());
+  if(i<0) return safe;
+  return safe.slice(0,i)+'<mark>'+safe.slice(i,i+q.length)+'</mark>'+safe.slice(i+q.length);
+}
+let _gsearchActiveIdx=-1;
+let _gsearchResults=[];
+function renderGlobalSearchResults(rawQuery){
+  const body=document.getElementById('globalSearchBody');
+  const q=(rawQuery||'').trim();
+  _gsearchActiveIdx=-1;
+  if(!q){
+    _gsearchResults=[];
+    body.innerHTML=`<div class="gsearch-hint">Start typing to search model names, tasks, and sub-tasks across your whole workspace.</div>`;
+    return;
+  }
+  const ql=q.toLowerCase();
+  const all=getAllSearchableItems();
+  const modelMatches=all.filter(it=>it.type==='model'&&it.model.toLowerCase().includes(ql));
+  const taskMatches=all.filter(it=>it.type==='task'&&it.task.name&&it.task.name.toLowerCase().includes(ql));
+  const subMatches=all.filter(it=>it.type==='subtask'&&it.task.name&&it.task.name.toLowerCase().includes(ql));
+  _gsearchResults=[...modelMatches,...taskMatches,...subMatches].slice(0,60);
+  if(!_gsearchResults.length){
+    body.innerHTML=`<div class="gsearch-hint">No matches for "${escHtml(q)}".</div>`;
+    return;
+  }
+  let html='';
+  if(modelMatches.length) html+=`<div class="gsearch-section-label">Models</div>`+modelMatches.map(it=>_gsearchRowHtml(it,q,_gsearchResults.indexOf(it))).join('');
+  if(taskMatches.length) html+=`<div class="gsearch-section-label">Tasks</div>`+taskMatches.map(it=>_gsearchRowHtml(it,q,_gsearchResults.indexOf(it))).join('');
+  if(subMatches.length) html+=`<div class="gsearch-section-label">Sub-tasks</div>`+subMatches.map(it=>_gsearchRowHtml(it,q,_gsearchResults.indexOf(it))).join('');
+  body.innerHTML=html;
+  body.querySelectorAll('.gsearch-row').forEach(row=>{
+    row.onclick=()=>{
+      const it=_gsearchResults[parseInt(row.dataset.i,10)];
+      jumpToSearchResult(it);
+    };
+  });
+}
+function _gsearchRowHtml(it,q,i){
+  if(it.type==='model'){
+    const list=state[it.model]||[];
+    const done=list.filter(t=>t.done).length;
+    return `<div class="gsearch-row" data-i="${i}">
+      <div class="gsearch-row-main">
+        <span class="gsearch-row-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/></svg></span>
+        <div class="gsearch-row-text">
+          <div class="gsearch-row-name">${_gsearchHighlight(it.model,q)}</div>
+          <div class="gsearch-row-meta">${list.length} task${list.length!==1?'s':''} · ${done} done</div>
+        </div>
+      </div>
+      <span class="gsearch-row-badge model">Model</span>
+    </div>`;
+  }
+  const isSub=it.type==='subtask';
+  const badgeCls=it.task.done?'done':(isSub?'subtask':'task');
+  const badgeLabel=it.task.done?'Done':(isSub?'Sub-task':'Task');
+  return `<div class="gsearch-row" data-i="${i}">
+    <div class="gsearch-row-main">
+      <span class="gsearch-row-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${isSub?'<path d="M9 6l6 6-6 6"/>':'<polyline points="20 6 9 17 4 12"/>'}</svg></span>
+      <div class="gsearch-row-text">
+        <div class="gsearch-row-name">${_gsearchHighlight(it.task.name||'',q)}</div>
+        <div class="gsearch-row-meta">${escHtml(it.model)}${isSub?` · sub-task of "${escHtml(it.parentName)}"`:''}</div>
+      </div>
+    </div>
+    <span class="gsearch-row-badge ${badgeCls}">${badgeLabel}</span>
+  </div>`;
+}
+function jumpToSearchResult(it){
+  closeGlobalSearchModal();
+  if(!it||!models.includes(it.model)) return;
+  activeTab=it.model; localStorage.setItem('mlc_activeTab',it.model);
+  editingIdx=null; selectedTasks.clear(); selectedSubtasks.clear();
+  activeFilter='all';
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  const activeBtn=document.querySelector(`.filter-btn[data-filter="all"]`);
+  if(activeBtn) activeBtn.classList.add('active');
+  const sb=document.getElementById('searchBox');
+  if(it.type==='model'){
+    sb.value=''; searchQuery='';
+  }else{
+    // Pinpoint via the (parent) task's own search box, same trick used by
+    // the overdue-tasks jump — sub-task panels live nested under their
+    // parent task row, so searching the parent's name surfaces both.
+    const parentName=it.type==='subtask'?it.parentName:it.task.name;
+    sb.value=parentName||''; searchQuery=sb.value;
+    if(it.type==='subtask') expandedSubtasksSet.add(subKey(it.model,it.idx));
+  }
+  renderTabs();
+  renderTaskList();
+  scrollToTaskChecklist();
+  if(it.type!=='model'){
+    if(_pinpointClearHandler) document.removeEventListener('click',_pinpointClearHandler);
+    setTimeout(()=>{
+      _pinpointClearHandler=e=>{
+        if(e.target===document.getElementById('searchBox')) return;
+        document.removeEventListener('click',_pinpointClearHandler);
+        _pinpointClearHandler=null;
+        document.getElementById('searchBox').value='';
+        searchQuery='';
+        renderTaskList();
+      };
+      document.addEventListener('click',_pinpointClearHandler);
+    },0);
+  }
+}
+function openGlobalSearchModal(){
+  document.getElementById('userBadge').classList.remove('menu-open');
+  const input=document.getElementById('globalSearchInput');
+  input.value='';
+  renderGlobalSearchResults('');
+  document.getElementById('globalSearchModal').classList.add('open');
+  setTimeout(()=>input.focus(),0);
+}
+function closeGlobalSearchModal(){
+  document.getElementById('globalSearchModal').classList.remove('open');
+}
+document.getElementById('globalSearchBtn').onclick=openGlobalSearchModal;
+document.getElementById('globalSearchCloseBtn').onclick=closeGlobalSearchModal;
+document.getElementById('globalSearchModal').onclick=e=>{
+  if(e.target.id==='globalSearchModal') closeGlobalSearchModal();
+};
+document.getElementById('globalSearchInput').oninput=e=>renderGlobalSearchResults(e.target.value);
+document.getElementById('globalSearchInput').addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){
+    e.preventDefault();
+    if(!_gsearchResults.length) return;
+    const rows=[...document.querySelectorAll('#globalSearchBody .gsearch-row')];
+    _gsearchActiveIdx=(_gsearchActiveIdx+(e.key==='ArrowDown'?1:-1)+rows.length)%rows.length;
+    rows.forEach((r,i)=>r.classList.toggle('kbd-active',i===_gsearchActiveIdx));
+    rows[_gsearchActiveIdx].scrollIntoView({block:'nearest'});
+  }else if(e.key==='Enter'){
+    e.preventDefault();
+    const rows=[...document.querySelectorAll('#globalSearchBody .gsearch-row')];
+    const pick=_gsearchActiveIdx>=0?rows[_gsearchActiveIdx]:rows[0];
+    if(pick) jumpToSearchResult(_gsearchResults[parseInt(pick.dataset.i,10)]);
+  }
+});
+// Ctrl/Cmd+K opens Global Search from anywhere, including while typing in
+// most fields — this mirrors the common "command palette" convention.
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){
+    e.preventDefault();
+    openGlobalSearchModal();
+  }
+});
+
+// ── ACTIVITY LOG & NOTIFICATION BELL ────────────────────────────────────────
+// Every meaningful change (task done/added/deleted, model lifecycle, team
+// membership, deadlines...) is written to a small Firestore subcollection
+// at workspaces/{id}/activity so every member of a shared workspace sees
+// the same feed in real time — this is what makes it a genuine audit trail
+// rather than just a local toast history.
+let activityFeed=[];          // most-recent-first, populated by the listener below
+let unsubscribeActivity=null;
+function getActivitySeenKey(){ return 'mlc_activitySeen_'+(currentWorkspaceId||'none'); }
+function getActivitySeenTs(){ return parseInt(localStorage.getItem(getActivitySeenKey())||'0',10); }
+function setActivitySeenNow(){ localStorage.setItem(getActivitySeenKey(), String(Date.now())); }
+
+// Fire-and-forget: never blocks the action that triggered it, and quietly
+// no-ops in local/preview mode (no signed-in user or workspace) — same
+// spirit as save()'s own "if not signed in, skip the network part" guard.
+function logActivity(icon,text,model){
+  if(!auth||!auth.currentUser||!db||!currentWorkspaceId) return;
+  const user=auth.currentUser;
+  const entry={
+    uid:user.uid,
+    userLabel:user.displayName||(user.email||'').split('@')[0]||'Someone',
+    icon:icon||'•',
+    text:String(text||'').slice(0,200),
+    model:model||null,
+    ts:firebase.firestore.FieldValue.serverTimestamp()
+  };
+  getWorkspaceDoc().collection('activity').add(entry).catch(e=>console.warn('Activity log write failed:',e));
+}
+
+function listenForActivity(workspaceId){
+  if(unsubscribeActivity) unsubscribeActivity();
+  unsubscribeActivity=getWorkspaceDocById(workspaceId).collection('activity')
+    .orderBy('ts','desc').limit(200)
+    .onSnapshot(snap=>{
+      activityFeed=snap.docs.map(d=>({id:d.id,...d.data()}));
+      updateNotifBadge();
+      if(document.getElementById('activityModal').classList.contains('open')) renderActivityFeed();
+    }, err=>console.warn('Activity listener error:',err));
+}
+
+function relativeTimeFromMillis(ms){
+  if(!ms) return '';
+  const diff=Math.max(0,Date.now()-ms);
+  const min=Math.floor(diff/60000);
+  if(min<1) return 'just now';
+  if(min<60) return `${min}m ago`;
+  const hr=Math.floor(min/60);
+  if(hr<24) return `${hr}h ago`;
+  const day=Math.floor(hr/24);
+  if(day<7) return `${day}d ago`;
+  return new Date(ms).toLocaleDateString();
+}
+function _activityTsMillis(entry){
+  // Firestore serverTimestamp() resolves asynchronously — a just-written
+  // entry may briefly have a null ts locally before the server echoes it
+  // back, so fall back to "now" rather than sorting/labeling it as epoch 0.
+  return entry.ts&&entry.ts.toMillis?entry.ts.toMillis():Date.now();
+}
+
+function updateNotifBadge(){
+  const badge=document.getElementById('notifBadge');
+  if(!badge) return;
+  const seen=getActivitySeenTs();
+  const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
+  const unread=activityFeed.filter(e=>e.uid!==myUid&&_activityTsMillis(e)>seen).length;
+  if(unread>0){
+    badge.textContent=unread>99?'99+':String(unread);
+    badge.style.display='flex';
+  }else{
+    badge.style.display='none';
+  }
+}
+
+function renderActivityFeed(){
+  const body=document.getElementById('activityBody');
+  if(!activityFeed.length){
+    body.innerHTML=`<div class="activity-empty">No activity yet — actions across your workspace will show up here.</div>`;
+    return;
+  }
+  const seen=getActivitySeenTs();
+  const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
+  body.innerHTML=activityFeed.map(e=>{
+    const ms=_activityTsMillis(e);
+    const unread=e.uid!==myUid&&ms>seen;
+    return `<div class="activity-row${unread?' unread':''}">
+      <div class="activity-row-icon">${escHtml(e.icon||'•')}</div>
+      <div class="activity-row-main">
+        <div class="activity-row-text"><b>${escHtml(e.userLabel||'Someone')}</b> ${escHtml(e.text||'')}</div>
+        <div class="activity-row-meta">
+          <span>${relativeTimeFromMillis(ms)}</span>
+          ${e.model?`<span class="activity-row-model-tag">${escHtml(e.model)}</span>`:''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openActivityModal(){
+  document.getElementById('userBadge').classList.remove('menu-open');
+  renderActivityFeed();
+  document.getElementById('activityModal').classList.add('open');
+  // Opening the log is the "read" action — clear the unread badge, but only
+  // after rendering above so this open still shows the unread highlight once.
+  setActivitySeenNow();
+  updateNotifBadge();
+}
+function closeActivityModal(){
+  document.getElementById('activityModal').classList.remove('open');
+}
+document.getElementById('notifBellBtn').onclick=openActivityModal;
+document.getElementById('activityLogMenuBtn').onclick=openActivityModal;
+document.getElementById('activityCloseBtn').onclick=closeActivityModal;
+document.getElementById('activityModal').onclick=e=>{
+  if(e.target.id==='activityModal') closeActivityModal();
+};
+
 document.getElementById('shotLightbox').onclick=e=>{
   if(e.target===document.getElementById('shotLightbox')) document.getElementById('shotLightbox').classList.remove('open');
 };
@@ -4388,10 +4845,23 @@ function renderKPIs(){
   const overdueCount=getAllOverdueTasks().length;
   document.getElementById('kpiOverdue').textContent=overdueCount;
   document.getElementById('kpiOverdueCard').classList.toggle('has-overdue',overdueCount>0);
-  document.getElementById('footerPct').textContent=g.pct+'%';
-  document.getElementById('footerFraction').textContent=`${g.done} / ${g.total} tasks`;
-  document.getElementById('ringText').textContent=g.pct+'%';
-  const offset=163.36-(g.pct/100)*163.36;
+
+  // Footer bar tracks whichever model is currently selected — the home
+  // page's active tab normally, or the Analytics page's model filter when
+  // that view is open — rather than the global combined total.
+  const scopeModel = analyticsViewActive
+    ? (analyticsSelectedModel!=='__all__' ? analyticsSelectedModel : null)
+    : activeTab;
+  const hasActiveModel = scopeModel && state[scopeModel] && !archiveViewActive && !recycleViewActive;
+  const footerStats = hasActiveModel ? stats(scopeModel) : g;
+  const footerTitleEl=document.getElementById('footerTitle');
+  const footerSubtextEl=document.getElementById('footerSubtext');
+  if(footerTitleEl) footerTitleEl.textContent = hasActiveModel ? `${scopeModel} — Completion` : 'Overall Completion';
+  if(footerSubtextEl) footerSubtextEl.textContent = hasActiveModel ? `Progress trajectory for the "${scopeModel}" model` : 'Combined progress trajectory across all operational models';
+  document.getElementById('footerPct').textContent=footerStats.pct+'%';
+  document.getElementById('footerFraction').textContent=`${footerStats.done} / ${footerStats.total} tasks`;
+  document.getElementById('ringText').textContent=footerStats.pct+'%';
+  const offset=163.36-(footerStats.pct/100)*163.36;
   document.getElementById('ringFill').style.strokeDashoffset=offset;
 }
 
@@ -4571,6 +5041,7 @@ function renderModelCards(){
         else delete deadlines[m];
         save();renderAll();
         toast(CAL_ICON,`Model deadline ${val?'set':'cleared'}`);
+        logActivity(CAL_ICON,`${val?`set deadline to ${val} for`:'cleared the deadline for'} model "${m}"`,m);
       });
     }
 
@@ -4726,6 +5197,11 @@ function setArchiveView(active){
     recycleViewActive=false;
     const recycleBtn=document.getElementById('recycleViewBtn');
     if(recycleBtn) recycleBtn.classList.remove('active-view');
+    const analyticsViewEl=document.getElementById('analyticsView');
+    if(analyticsViewEl) analyticsViewEl.style.display='none';
+    analyticsViewActive=false;
+    const analyticsBtn=document.getElementById('analyticsViewBtn');
+    if(analyticsBtn) analyticsBtn.classList.remove('active-view');
   }
   const footerBarEl=document.getElementById('footerBar');
   if(footerBarEl) footerBarEl.style.display=active?'none':'';
@@ -4737,7 +5213,7 @@ document.getElementById('archiveViewBtn').onclick=()=>{
   document.getElementById('userBadge').classList.remove('menu-open');
   setArchiveView(!archiveViewActive);
 };
-document.getElementById('liveBadge').onclick=()=>{ setArchiveView(false); setRecycleView(false); };
+document.getElementById('liveBadge').onclick=()=>{ setArchiveView(false); setRecycleView(false); setAnalyticsView(false); };
 // ── LOGO EDIT ────────────────────────────────────────────────────────────────
 (function(){
   var modal  = document.getElementById('logoEditModal');
@@ -4817,6 +5293,7 @@ function archiveModel(name){
   editingIdx=null;
   save();renderAll();updateArchiveBadge();
   toast('🗄',`Model archived: ${name}`);
+  logActivity('🗄',`archived model "${name}"`,name);
 }
 
 function restoreModel(name){
@@ -4825,6 +5302,7 @@ function restoreModel(name){
   activeTab=name; localStorage.setItem('mlc_activeTab',name);
   if(archiveViewActive) renderArchiveView();
   toast('↺',`Model restored: ${name}`);
+  logActivity('↺',`restored model "${name}" from archive`,name);
 }
 
 // ── RECYCLE BIN VIEW ──────────────────────────────────────────────────────────
@@ -4846,12 +5324,17 @@ function setRecycleView(active){
     if(archiveViewEl) archiveViewEl.style.display='none';
     archiveViewActive=false;
     document.getElementById('archiveViewBtn').classList.remove('active-view');
-  } else if(mainView && !archiveViewActive){
+    const analyticsViewEl=document.getElementById('analyticsView');
+    if(analyticsViewEl) analyticsViewEl.style.display='none';
+    analyticsViewActive=false;
+    const analyticsBtn=document.getElementById('analyticsViewBtn');
+    if(analyticsBtn) analyticsBtn.classList.remove('active-view');
+  } else if(mainView && !archiveViewActive && !analyticsViewActive){
     mainView.style.display='';
   }
   if(recycleViewEl) recycleViewEl.style.display=active?'':'none';
   const footerBarEl=document.getElementById('footerBar');
-  if(footerBarEl) footerBarEl.style.display=(active||archiveViewActive)?'none':'';
+  if(footerBarEl) footerBarEl.style.display=(active||archiveViewActive||analyticsViewActive)?'none':'';
   const btn=document.getElementById('recycleViewBtn');
   if(btn) btn.classList.toggle('active-view',active);
   if(active) renderRecycleView();
@@ -4862,6 +5345,306 @@ if(document.getElementById('recycleViewBtn')){
     document.getElementById('userBadge').classList.remove('menu-open');
     setRecycleView(!recycleViewActive);
   };
+}
+
+// ── ANALYTICS VIEW ──────────────────────────────────────────────────────────
+function setAnalyticsView(active){
+  analyticsViewActive=active;
+  const mainView=document.getElementById('mainDashboardView');
+  const archiveViewEl=document.getElementById('archiveView');
+  const recycleViewEl=document.getElementById('recycleView');
+  const analyticsViewEl=document.getElementById('analyticsView');
+  if(active){
+    if(mainView) mainView.style.display='none';
+    if(archiveViewEl) archiveViewEl.style.display='none';
+    if(recycleViewEl) recycleViewEl.style.display='none';
+    archiveViewActive=false; recycleViewActive=false;
+    const archiveBtn=document.getElementById('archiveViewBtn');
+    const recycleBtn=document.getElementById('recycleViewBtn');
+    if(archiveBtn) archiveBtn.classList.remove('active-view');
+    if(recycleBtn) recycleBtn.classList.remove('active-view');
+  } else if(mainView && !archiveViewActive && !recycleViewActive){
+    mainView.style.display='';
+  }
+  if(analyticsViewEl) analyticsViewEl.style.display=active?'':'none';
+  const footerBarEl=document.getElementById('footerBar');
+  if(footerBarEl) footerBarEl.style.display=(archiveViewActive||recycleViewActive)?'none':'';
+  const btn=document.getElementById('analyticsViewBtn');
+  if(btn) btn.classList.toggle('active-view',active);
+  if(active){
+    // Default the Analytics filter to whichever model was open on the
+    // home page — so clicking a model, then opening Analytics, shows
+    // that model's data immediately instead of "All Models".
+    if(activeTab && state[activeTab]) analyticsSelectedModel=activeTab;
+    renderAnalyticsView();
+  }
+}
+
+if(document.getElementById('analyticsViewBtn')){
+  document.getElementById('analyticsViewBtn').onclick=()=>{
+    document.getElementById('userBadge').classList.remove('menu-open');
+    setAnalyticsView(!analyticsViewActive);
+  };
+}
+
+// Which model the burndown chart focuses on. '__all__' aggregates every
+// active model's tasks against the earliest start / latest deadline span.
+let analyticsSelectedModel='__all__';
+
+function analyticsAllTasks(modelFilter){
+  const names = modelFilter && modelFilter!=='__all__' ? [modelFilter] : refreshedActiveModelNames();
+  let out=[];
+  names.forEach(m=>{ if(state[m]) out=out.concat(state[m].map(t=>({...t,__model:m}))); });
+  return out;
+}
+// Active (non-archived) model names, freshly filtered from current state —
+// small helper so analytics never accidentally includes archived models.
+function refreshedActiveModelNames(){
+  return Object.keys(state).filter(m=>!archivedModelsSet.has(m));
+}
+
+function fmtShortDate(d){ return d.toLocaleDateString(undefined,{month:'short',day:'numeric'}); }
+function startOfDay(ts){ const d=new Date(ts); d.setHours(0,0,0,0); return d.getTime(); }
+
+function renderAnalyticsView(){
+  // Populate model selector (once per open, preserving current selection if still valid)
+  const sel=document.getElementById('analyticsModelSelect');
+  if(sel){
+    const names=refreshedActiveModelNames();
+    if(!names.includes(analyticsSelectedModel)) analyticsSelectedModel='__all__';
+    sel.innerHTML = '<option value="__all__">All Models</option>' + names.map(n=>`<option value="${escHtml(n)}" ${n===analyticsSelectedModel?'selected':''}>${escHtml(n)}</option>`).join('');
+    sel.onchange=()=>{ analyticsSelectedModel=sel.value; renderAnalyticsView(); };
+  }
+
+  renderAnalyticsKpis();
+  renderBurndownChart();
+  renderTrendChart();
+  renderWeeklyChart();
+  renderOverdueAnalysis();
+  renderKPIs();
+}
+
+function renderAnalyticsKpis(){
+  const grid=document.getElementById('analyticsKpiGrid');
+  if(!grid) return;
+  const modelFilter=analyticsSelectedModel;
+  const all=analyticsAllTasks(modelFilter);
+  const withBoth=all.filter(t=>t.done && t.createdAt && t.completedAt);
+  const avgMs = withBoth.length ? withBoth.reduce((s,t)=>s+(t.completedAt-t.createdAt),0)/withBoth.length : null;
+  const avgDays = avgMs!=null ? (avgMs/86400000) : null;
+
+  const weekAgo=Date.now()-7*86400000;
+  const completedThisWeek = all.filter(t=>t.done && t.completedAt && t.completedAt>=weekAgo).length;
+
+  const overdueAllRaw=getAllOverdueTasks();
+  const overdueScoped = modelFilter==='__all__' ? overdueAllRaw : overdueAllRaw.filter(o=>o.model===modelFilter);
+  const overdueCount = overdueScoped.length;
+
+  const cards=[
+    {label:'Avg. Completion Time', value: avgDays!=null ? (avgDays<1?'<1 day':avgDays.toFixed(1)+' days') : '—', sub: avgDays!=null?'From task creation to done':'Not enough tracked data yet'},
+    {label:'Completed This Week', value: completedThisWeek, sub:'Last 7 days'},
+    {label:'Overdue Tasks', value: overdueCount, sub: modelFilter==='__all__' ? 'Across all active models' : 'In '+modelFilter}
+  ];
+
+  if(modelFilter==='__all__'){
+    const activeModels=refreshedActiveModelNames();
+    const modelsWithOverdue=new Set(overdueAllRaw.map(o=>o.model));
+    const onTrack = activeModels.filter(m=>!modelsWithOverdue.has(m)).length;
+    cards.push({label:'Models On Track', value: activeModels.length? `${onTrack}/${activeModels.length}` : '—', sub:'No overdue tasks'});
+  } else {
+    const pct = all.length ? Math.round((all.filter(t=>t.done).length/all.length)*100) : 0;
+    cards.push({label:'Completion', value: all.length? pct+'%' : '—', sub:'This model\'s progress'});
+  }
+  grid.innerHTML = cards.map(c=>`
+    <div class="analytics-kpi-card">
+      <div class="kpi-label">${c.label}</div>
+      <div class="kpi-value">${c.value}</div>
+      <div class="kpi-sub">${c.sub}</div>
+    </div>`).join('');
+}
+
+// Builds an ideal-vs-actual burndown line chart as inline SVG. Scope is
+// either one model or all active models combined. "Ideal" is a straight
+// line from total scope down to zero across the span from the earliest
+// task's createdAt (or today, if unknown) to the furthest deadline (or
+// today+14d as a sane fallback for scopes with no deadlines set yet).
+// "Actual" only drops on days we have a real completedAt timestamp for —
+// tasks created before this feature shipped won't have one, so the chart
+// is most accurate for tasks added/completed going forward.
+function renderBurndownChart(){
+  const wrap=document.getElementById('burndownChartWrap');
+  const label=document.getElementById('burndownModelLabel');
+  if(!wrap) return;
+  const modelFilter=analyticsSelectedModel;
+  if(label) label.textContent = modelFilter==='__all__' ? 'All Models' : modelFilter;
+  const tasks=analyticsAllTasks(modelFilter);
+  if(!tasks.length){ wrap.innerHTML='<div class="analytics-empty">No tasks yet in this scope.</div>'; return; }
+
+  const total=tasks.length;
+  const createdTimes=tasks.map(t=>t.createdAt).filter(Boolean);
+  const deadlineTimes=tasks.map(t=>t.taskDeadline?new Date(t.taskDeadline).getTime():null).filter(Boolean);
+  let startTs = createdTimes.length? Math.min(...createdTimes) : Date.now()-7*86400000;
+  let endTs   = deadlineTimes.length? Math.max(...deadlineTimes) : Date.now()+14*86400000;
+  startTs = startOfDay(startTs);
+  endTs = startOfDay(Math.max(endTs, Date.now()));
+  if(endTs<=startTs) endTs = startTs + 86400000;
+
+  const totalDays = Math.max(1, Math.round((endTs-startTs)/86400000));
+  const dayStep = Math.max(1, Math.ceil(totalDays/40)); // cap plotted points for very long spans
+  const days=[]; for(let d=startTs; d<=endTs; d+=dayStep*86400000) days.push(d);
+  if(days[days.length-1]!==endTs) days.push(endTs);
+
+  const idealPts = days.map((d,i)=> total - (total*(i/(days.length-1||1))) );
+  const actualPts = days.map(d=>{
+    const completedByD = tasks.filter(t=>t.completedAt && t.completedAt<=d).length;
+    return total - completedByD;
+  });
+
+  wrap.innerHTML = buildLineChartSvg({
+    days, series:[
+      {name:'Ideal', points:idealPts, color:'var(--text-muted)', dashed:true},
+      {name:'Actual', points:actualPts, color:'var(--accent1)', dashed:false}
+    ],
+    yMax: total, yLabel:'Tasks Remaining'
+  });
+}
+
+// Cumulative completion % over the last 30 days, across all active models.
+function renderTrendChart(){
+  const wrap=document.getElementById('trendChartWrap');
+  if(!wrap) return;
+  const tasks=analyticsAllTasks(analyticsSelectedModel);
+  if(!tasks.length){ wrap.innerHTML='<div class="analytics-empty">No tasks yet.</div>'; return; }
+  const total=tasks.length;
+  const todayStart=startOfDay(Date.now());
+  const days=[]; for(let i=29;i>=0;i--) days.push(todayStart-i*86400000);
+
+  const pts = days.map(d=>{
+    const completedByD = tasks.filter(t=>t.completedAt && t.completedAt<=d+86399999).length;
+    return total? Math.round((completedByD/total)*100) : 0;
+  });
+
+  wrap.innerHTML = buildLineChartSvg({
+    days, series:[ {name:'% Complete', points:pts, color:'var(--green)', dashed:false} ],
+    yMax:100, yLabel:'% Complete', yIsPercent:true
+  });
+}
+
+// Bar chart of tasks completed per week, last 8 weeks.
+function renderWeeklyChart(){
+  const wrap=document.getElementById('weeklyChartWrap');
+  if(!wrap) return;
+  const tasks=analyticsAllTasks(analyticsSelectedModel).filter(t=>t.completedAt);
+  const todayStart=startOfDay(Date.now());
+  const weeks=[];
+  for(let i=7;i>=0;i--){
+    const weekEnd = todayStart - i*7*86400000;
+    const weekStart = weekEnd - 6*86400000;
+    const count = tasks.filter(t=>t.completedAt>=weekStart && t.completedAt<=weekEnd+86399999).length;
+    weeks.push({label:fmtShortDate(new Date(weekStart)), count});
+  }
+  const hasAny = weeks.some(w=>w.count>0);
+  if(!hasAny){
+    wrap.innerHTML='<div class="analytics-empty">No completions recorded yet — this fills in as tasks get marked done.</div>';
+    return;
+  }
+  wrap.innerHTML = buildBarChartSvg(weeks);
+}
+
+function renderOverdueAnalysis(){
+  const list=document.getElementById('overdueAnalysisList');
+  if(!list) return;
+  const modelFilter=analyticsSelectedModel;
+  const overdueRaw=getAllOverdueTasks();
+  const overdue = modelFilter==='__all__' ? overdueRaw : overdueRaw.filter(o=>o.model===modelFilter);
+  if(!overdue.length){ list.innerHTML='<div class="analytics-empty">🎉 Nothing overdue right now.</div>'; return; }
+  const withDays = overdue.map(o=>({...o, name: (o.task&&o.task.name) || o.parentName || 'Task'}));
+
+  list.innerHTML = withDays.map(o=>`
+    <div class="analytics-overdue-row" data-model="${escHtml(o.model)}" data-idx="${o.idx}" data-subidx="${o.subIdx!=null?o.subIdx:''}">
+      <span class="aor-name">${escHtml(o.name)}<span class="aor-model">${escHtml(o.model)}</span></span>
+      <span class="aor-days">${o.days} day${o.days===1?'':'s'} overdue</span>
+    </div>`).join('');
+
+  list.querySelectorAll('.analytics-overdue-row').forEach(row=>{
+    row.onclick=()=>{
+      const model=row.getAttribute('data-model');
+      const idx=parseInt(row.getAttribute('data-idx'),10);
+      const subIdxRaw=row.getAttribute('data-subidx');
+      const subIdx=subIdxRaw!==''?parseInt(subIdxRaw,10):null;
+      setAnalyticsView(false);
+      jumpToOverdueTask(model, idx, subIdx);
+    };
+  });
+}
+
+// Minimal dependency-free SVG line chart builder shared by burndown + trend.
+function buildLineChartSvg(cfg){
+  const {days, series, yMax} = cfg;
+  const W=Math.max(560, days.length*34), H=260, padL=44, padR=16, padT=16, padB=34;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  const xFor=i=> padL + (days.length>1 ? (i/(days.length-1))*plotW : 0);
+  const yFor=v=> padT + plotH - (Math.max(0,Math.min(v,yMax))/ (yMax||1)) * plotH;
+
+  let gridLines='';
+  for(let g=0; g<=4; g++){
+    const y=padT+(plotH/4)*g;
+    const val=Math.round(yMax-(yMax/4)*g);
+    gridLines += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="var(--border)" stroke-width="1"/>`;
+    gridLines += `<text x="${padL-8}" y="${y+4}" text-anchor="end" font-size="10" fill="var(--text-muted)" font-family="Sora,sans-serif">${val}${cfg.yIsPercent?'%':''}</text>`;
+  }
+
+  const xLabelStep=Math.max(1,Math.ceil(days.length/6));
+  let xLabels='';
+  days.forEach((d,i)=>{
+    if(i%xLabelStep!==0 && i!==days.length-1) return;
+    xLabels += `<text x="${xFor(i)}" y="${H-10}" text-anchor="middle" font-size="10" fill="var(--text-muted)" font-family="Sora,sans-serif">${fmtShortDate(new Date(d))}</text>`;
+  });
+
+  let paths='';
+  series.forEach(s=>{
+    const pts=s.points.map((v,i)=>`${xFor(i)},${yFor(v)}`).join(' ');
+    paths += `<polyline points="${pts}" fill="none" stroke="${s.color}" stroke-width="2.5" ${s.dashed?'stroke-dasharray="6,5"':''} stroke-linecap="round" stroke-linejoin="round"/>`;
+    if(!s.dashed){
+      s.points.forEach((v,i)=>{ paths += `<circle cx="${xFor(i)}" cy="${yFor(v)}" r="2.5" fill="${s.color}"/>`; });
+    }
+  });
+
+  const legend = series.map(s=>`<span class="analytics-legend-item"><span class="analytics-legend-swatch" style="background:${s.color};${s.dashed?'background-image:linear-gradient(90deg,'+s.color+' 60%,transparent 0%);background-size:8px 3px;':''}"></span>${s.name}</span>`).join('');
+
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" preserveAspectRatio="xMinYMid meet">
+    ${gridLines}${xLabels}${paths}
+  </svg>
+  <div class="analytics-legend">${legend}</div>`;
+}
+
+// Minimal dependency-free SVG bar chart for weekly productivity.
+function buildBarChartSvg(weeks){
+  const W=Math.max(480, weeks.length*70), H=240, padL=36, padR=16, padT=16, padB=34;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  const maxVal=Math.max(1,...weeks.map(w=>w.count));
+  const barW=plotW/weeks.length*0.5;
+
+  let gridLines='';
+  for(let g=0; g<=3; g++){
+    const y=padT+(plotH/3)*g;
+    const val=Math.round(maxVal-(maxVal/3)*g);
+    gridLines += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="var(--border)" stroke-width="1"/>`;
+    gridLines += `<text x="${padL-8}" y="${y+4}" text-anchor="end" font-size="10" fill="var(--text-muted)" font-family="Sora,sans-serif">${val}</text>`;
+  }
+
+  let bars='';
+  weeks.forEach((w,i)=>{
+    const slot=plotW/weeks.length;
+    const cx=padL+slot*i+slot/2;
+    const barH=(w.count/maxVal)*plotH;
+    const y=padT+plotH-barH;
+    bars += `<rect x="${cx-barW/2}" y="${y}" width="${barW}" height="${Math.max(barH,1)}" rx="4" fill="var(--accent1)"/>`;
+    bars += `<text x="${cx}" y="${padT+plotH+16}" text-anchor="middle" font-size="10" fill="var(--text-muted)" font-family="Sora,sans-serif">${w.label}</text>`;
+    if(w.count>0) bars += `<text x="${cx}" y="${y-6}" text-anchor="middle" font-size="11" fill="var(--text)" font-family="Sora,sans-serif">${w.count}</text>`;
+  });
+
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" preserveAspectRatio="xMinYMid meet">${gridLines}${bars}</svg>`;
 }
 
 function recycleEntryLabel(entry){
@@ -5612,6 +6395,7 @@ function renderTaskList(){
         state[activeTab][idx].taskDeadline=val;
         save();renderAll();
         toast(CAL_ICON,`Task deadline ${val?'set':'cleared'}`);
+        logActivity(CAL_ICON,`${val?`set deadline to ${val} for`:'cleared the deadline for'} task "${state[activeTab][idx].name}"`,activeTab);
       };
 
       // Subtask toggle — flips CSS class only, no re-render, so transition plays
@@ -5684,12 +6468,14 @@ function renderTaskList(){
         selectedHere.forEach(k=>{const sI=Number(k.split('::')[2]); if(subs[sI])subs[sI].done=true;});
         subKeysForTask.forEach(k=>selectedSubtasks.delete(k));
         save();renderAll();toast('✓',`Marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} done`);
+        logActivity('✓',`marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} done in "${state[activeTab][idx].name}"`,activeTab);
       };
       sBar.querySelector('[data-act="pending"]').onclick=e=>{
         e.stopPropagation();
         selectedHere.forEach(k=>{const sI=Number(k.split('::')[2]); if(subs[sI])subs[sI].done=false;});
         subKeysForTask.forEach(k=>selectedSubtasks.delete(k));
         save();renderAll();toast('↺',`Marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} pending`);
+        logActivity('↺',`marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} pending in "${state[activeTab][idx].name}"`,activeTab);
       };
       sBar.querySelector('[data-act="delete"]').onclick=async e=>{
         e.stopPropagation();
@@ -5701,6 +6487,7 @@ function renderTaskList(){
         sIdxs.forEach(sI=>{ recycleSubtask(activeTab,parentTaskName,subs[sI],sI); subs.splice(sI,1); });
         clearSubSelectionsForTask(activeTab,idx);
         save();renderAll();updateRecycleBadge();toast('🗑',`Moved ${n} subtask${n===1?'':'s'} to Recycle Bin`);
+        logActivity('🗑',`deleted ${n} subtask${n===1?'':'s'} from "${parentTaskName}"`,activeTab);
       };
       sBar.querySelector('[data-act="clear"]').onclick=e=>{e.stopPropagation();subKeysForTask.forEach(k=>selectedSubtasks.delete(k));renderTaskList();};
       sBar.querySelector('[data-act="deadline"]').onclick=e=>{
@@ -5836,6 +6623,7 @@ function renderTaskList(){
       sdlNative.onchange=e=>{
         e.stopPropagation(); sub.taskDeadline=e.target.value;
         save();renderAll(); toast(CAL_ICON,`Subtask deadline ${e.target.value?'set':'cleared'}`);
+        logActivity(CAL_ICON,`${e.target.value?`set deadline to ${e.target.value} for`:'cleared the deadline for'} subtask "${sub.name}"`,activeTab);
       };
       // Edit inline
       sRow.querySelector('.row-action-btn.edit').onclick=e=>{
@@ -6402,8 +7190,10 @@ function toggleTask(model,idx){
     const timer=setTimeout(()=>{
       pendingDoneTimers.delete(task);
       task.done=true;
+      task.completedAt=Date.now();
       save();renderAll();
       toast('✓',`Marked done: ${task.name.slice(0,28)}`);
+      logActivity('✓',`completed "${task.name}"`,model);
       const s=stats(model);
       if(s.pct===100&&!archivedModelsSet.has(model)) maybePromptArchive(model);
     },1000);
@@ -6421,8 +7211,10 @@ function toggleTask(model,idx){
     const revertTimer=setTimeout(()=>{
       pendingRevertTimers.delete(task);
       task.done=false;
+      task.completedAt=null;
       save();renderAll();
       toast('↺',`Reopened: ${task.name.slice(0,28)}`);
+      logActivity('↺',`reopened "${task.name}"`,model);
     },1000);
     pendingRevertTimers.set(task,revertTimer);
     renderTaskList();
@@ -6447,7 +7239,7 @@ function addTask(model,name,position){
     toast('⚠','This task already exists. Try a different one.',false);
     return;
   }
-  const newTask={sn:tasks.length+1,name:upperName,done:false,priority:'med',notes:'',taskDeadline:'',screenshots:[],startDate:'',dependsOn:[]};
+  const newTask={sn:tasks.length+1,name:upperName,done:false,priority:'med',notes:'',taskDeadline:'',screenshots:[],startDate:'',dependsOn:[],createdAt:Date.now(),completedAt:null};
   let insertAt=tasks.length;
   if(position!==undefined&&position!==null&&position!==''){
     const p=parseInt(position,10);
@@ -6460,6 +7252,7 @@ function addTask(model,name,position){
   if(insertAt<tasks.length-1){ selectedTasks.clear(); clearSubSelectionsForModel(model); if(editingIdx!==null) editingIdx=null; }
   save();renderAll();
   toast('＋',`Task added${insertAt<tasks.length-1?` at #${insertAt+1}`:''}: ${trimmed.slice(0,28)}`);
+  logActivity('＋',`added task "${newTask.name}"`,model);
 }
 function renameTask(model,idx,newName){
   const trimmed=newName.trim();
@@ -6467,6 +7260,7 @@ function renameTask(model,idx,newName){
   if(!trimmed||trimmed.toUpperCase()===task.name.toUpperCase()){renderTaskList();return;}
   const old=task.name;task.name=trimmed.toUpperCase();
   save();renderAll();toast('✎',`Renamed: ${old.slice(0,20)} → ${task.name.slice(0,20)}`);
+  logActivity('✎',`renamed task "${old}" → "${task.name}"`,model);
 }
 async function deleteTask(model,idx){
   const task=state[model][idx];
@@ -6492,6 +7286,7 @@ async function deleteTask(model,idx){
   }
   save();renderAll();updateRecycleBadge();
   toast('🗑',`Moved to Recycle Bin: ${task.name.slice(0,28)}`);
+  logActivity('🗑',`deleted task "${task.name}"`,model);
 }
 function moveTask(model,idx,dir){
   const tasks=state[model];
@@ -6544,6 +7339,7 @@ async function addModel(name,deadline){
   deletedModelsSet.delete(trimmed);
   refreshModelsList();activeTab=trimmed;localStorage.setItem('mlc_activeTab',trimmed);editingIdx=null;save();renderAll();
   toast('＋',`Model added: ${trimmed}`);
+  logActivity('🚀',`added model "${trimmed}"`,trimmed);
 }
 async function duplicateModel(name){
   if(!(name in state)) return;
@@ -6567,6 +7363,7 @@ async function duplicateModel(name){
   refreshModelsList();
   activeTab=copyName;localStorage.setItem('mlc_activeTab',copyName);editingIdx=null;save();renderAll();
   toast('⧉',`Duplicated: ${name} → ${copyName}`);
+  logActivity('⧉',`duplicated "${name}" → "${copyName}"`,copyName);
 }
 async function deleteModel(name){
   if(!archivedModelsSet.has(name)&&models.length<=1){await showAlert({title:"Can't delete this model",message:'You need at least one model on the dashboard.',tone:'warn'});return;}
@@ -6583,6 +7380,7 @@ async function deleteModel(name){
   editingIdx=null;save();renderAll();updateRecycleBadge();
   if(archiveViewActive) renderArchiveView();
   toast('🗑',`Moved to Recycle Bin: ${name}`);
+  logActivity('🗑',`deleted model "${name}"`,name);
 }
 
 async function renameModel(oldName, newName){
@@ -6606,6 +7404,7 @@ async function renameModel(oldName, newName){
   if(activeTab===oldName){ activeTab=trimmed; localStorage.setItem('mlc_activeTab',trimmed); }
   save(); renderAll();
   toast('✎',`Renamed: ${oldName.slice(0,20)} → ${trimmed.slice(0,20)}`);
+  logActivity('✎',`renamed model "${oldName}" → "${trimmed}"`,trimmed);
 }
 
 // ── NOTES & DEADLINE MODALS ───────────────────────────────────────────────────
@@ -6662,6 +7461,7 @@ document.getElementById('modelDeadlineSaveBtn').onclick=()=>{
   save(); renderModelCards();
   document.getElementById('modelDeadlineModal').classList.remove('open');
   toast(CAL_ICON,`Deadline ${val?'set':'cleared'} for ${model}`);
+  logActivity(CAL_ICON,`${val?`set deadline to ${val} for`:'cleared the deadline for'} model "${model}"`,model);
 };
 document.getElementById('modelDeadlineClearBtn').onclick=()=>{
   const model=_modelDeadlineTarget;
@@ -6671,6 +7471,7 @@ document.getElementById('modelDeadlineClearBtn').onclick=()=>{
   save(); renderModelCards();
   document.getElementById('modelDeadlineModal').classList.remove('open');
   toast(CAL_ICON,`Deadline cleared for ${model}`);
+  logActivity(CAL_ICON,`cleared the deadline for model "${model}"`,model);
 };
 document.getElementById('modelDeadlineCancelBtn').onclick=()=>{
   document.getElementById('modelDeadlineModal').classList.remove('open');
@@ -6701,6 +7502,7 @@ document.getElementById('taskDeadlineSaveBtn').onclick=()=>{
   save();renderAll();
   document.getElementById('taskDeadlineModal').classList.remove('open');
   toast(CAL_ICON,`Task deadline ${val?'set':'cleared'}`);
+  logActivity(CAL_ICON,`${val?`set deadline to ${val} for`:'cleared the deadline for'} task "${state[model][idx].name}"`,model);
 };
 document.getElementById('taskDeadlineClearBtn').onclick=()=>{
   const{model,idx}=taskDeadlineCtx;
@@ -6708,6 +7510,7 @@ document.getElementById('taskDeadlineClearBtn').onclick=()=>{
   save();renderAll();
   document.getElementById('taskDeadlineModal').classList.remove('open');
   toast(CAL_ICON,'Task deadline cleared');
+  logActivity(CAL_ICON,`cleared the deadline for task "${state[model][idx].name}"`,model);
 };
 document.getElementById('taskDeadlineCancelBtn').onclick=()=>document.getElementById('taskDeadlineModal').classList.remove('open');
 document.getElementById('taskDeadlineModal').onclick=e=>{if(e.target===document.getElementById('taskDeadlineModal'))document.getElementById('taskDeadlineModal').classList.remove('open');};
@@ -6717,10 +7520,13 @@ document.getElementById('bulkDoneBtn').onclick=()=>{
   const n=selectedTasks.size;
   selectedTasks.forEach(i=>{state[activeTab][i].done=true;});
   selectedTasks.clear();save();renderAll();toast('✓',`Marked ${n} tasks done`);
+  logActivity('✓',`marked ${n} task${n===1?'':'s'} done`,activeTab);
 };
 document.getElementById('bulkPendingBtn').onclick=()=>{
+  const n=selectedTasks.size;
   selectedTasks.forEach(i=>{state[activeTab][i].done=false;});
   selectedTasks.clear();save();renderAll();toast('↺','Marked selected pending');
+  logActivity('↺',`marked ${n} task${n===1?'':'s'} pending`,activeTab);
 };
 document.getElementById('bulkMoveTopBtn').onclick=()=>{
   const tasks=state[activeTab];
@@ -6797,6 +7603,7 @@ function populateMoveModelList(){
 function moveSelectedTasksToModel(destModel){
   const n=selectedTasks.size;
   if(!n||!(destModel in state))return;
+  const srcModel=activeTab;
   const srcTasks=state[activeTab];
   const idxs=[...selectedTasks].sort((a,b)=>b-a); // descending so splice is safe
   const moving=idxs.map(i=>srcTasks[i]).reverse(); // restore original order
@@ -6812,10 +7619,12 @@ function moveSelectedTasksToModel(destModel){
   save();renderAll();
   document.getElementById('bulkMoveModelModal').classList.remove('open');
   toast('⇄',`Moved ${n} task${n===1?'':'s'} to ${destModel}`);
+  logActivity('⇄',`moved ${n} task${n===1?'':'s'} from "${srcModel}" to "${destModel}"`,destModel);
 }
 function copySelectedTasksToModel(destModel){
   const n=selectedTasks.size;
   if(!n||!(destModel in state))return;
+  const srcModel=activeTab;
   const srcTasks=state[activeTab];
   const idxs=[...selectedTasks].sort((a,b)=>a-b); // ascending to preserve original order
   const copying=idxs.map(i=>srcTasks[i]);
@@ -6827,6 +7636,7 @@ function copySelectedTasksToModel(destModel){
   save();renderAll();
   document.getElementById('bulkMoveModelModal').classList.remove('open');
   toast('⧉',`Copied ${n} task${n===1?'':'s'} to ${destModel}`);
+  logActivity('⧉',`copied ${n} task${n===1?'':'s'} from "${srcModel}" to "${destModel}"`,destModel);
 }
 document.getElementById('bulkMoveModelCancelBtn').onclick=()=>document.getElementById('bulkMoveModelModal').classList.remove('open');
 document.getElementById('bulkMoveModelModal').onclick=e=>{
@@ -6849,6 +7659,7 @@ document.getElementById('bulkDeleteBtn').onclick=async()=>{
   if(editingIdx!==null) editingIdx=null;
   save();renderAll();updateRecycleBadge();
   toast('🗑',`Moved ${n} task${n===1?'':'s'} to Recycle Bin`);
+  logActivity('🗑',`deleted ${n} task${n===1?'':'s'}`,activeTab);
 };
 document.getElementById('bulkClearBtn').onclick=()=>{selectedTasks.clear();updateBulkBar();renderTaskList();};
 
@@ -6896,6 +7707,7 @@ document.getElementById('bulkDeadlineSaveBtn').onclick=()=>{
     save(); renderAll();
     document.getElementById('bulkDeadlineModal').classList.remove('open');
     toast(CAL_ICON, val ? `Deadline set for ${n} subtask${n===1?'':'s'}` : `Deadline cleared for ${n} subtask${n===1?'':'s'}`);
+    logActivity(CAL_ICON,`${val?`set deadline to ${val} for`:'cleared the deadline for'} ${n} subtask${n===1?'':'s'}`,model);
     bulkModalSubCtx=null;
     return;
   }
@@ -6904,6 +7716,7 @@ document.getElementById('bulkDeadlineSaveBtn').onclick=()=>{
   save(); renderAll();
   document.getElementById('bulkDeadlineModal').classList.remove('open');
   toast(CAL_ICON, val ? `Deadline set for ${n} task${n===1?'':'s'}` : `Deadline cleared for ${n} task${n===1?'':'s'}`);
+  logActivity(CAL_ICON,`${val?`set deadline to ${val} for`:'cleared the deadline for'} ${n} task${n===1?'':'s'}`,activeTab);
 };
 document.getElementById('bulkDeadlineClearBtn').onclick=()=>{
   if(bulkModalSubCtx){
@@ -6915,6 +7728,7 @@ document.getElementById('bulkDeadlineClearBtn').onclick=()=>{
     save(); renderAll();
     document.getElementById('bulkDeadlineModal').classList.remove('open');
     toast(CAL_ICON,`Deadline cleared for ${n} subtask${n===1?'':'s'}`);
+    logActivity(CAL_ICON,`cleared the deadline for ${n} subtask${n===1?'':'s'}`,model);
     bulkModalSubCtx=null;
     return;
   }
@@ -6923,6 +7737,7 @@ document.getElementById('bulkDeadlineClearBtn').onclick=()=>{
   save(); renderAll();
   document.getElementById('bulkDeadlineModal').classList.remove('open');
   toast(CAL_ICON,`Deadline cleared for ${n} task${n===1?'':'s'}`);
+  logActivity(CAL_ICON,`cleared the deadline for ${n} task${n===1?'':'s'}`,activeTab);
 };
 document.getElementById('bulkDeadlineCancelBtn').onclick=()=>{bulkModalSubCtx=null;document.getElementById('bulkDeadlineModal').classList.remove('open');};
 document.getElementById('bulkDeadlineModal').onclick=e=>{
@@ -7717,6 +8532,8 @@ document.addEventListener('keydown',e=>{
     document.getElementById('notesModal').classList.remove('open');
     _notesObj=null; _notesObjCb=null;
     document.getElementById('overdueModal').classList.remove('open');
+    document.getElementById('globalSearchModal').classList.remove('open');
+    document.getElementById('activityModal').classList.remove('open');
     document.getElementById('userBadge').classList.remove('menu-open');
     hideAuthGate();
     if (document.activeElement) document.activeElement.blur();
@@ -7844,6 +8661,7 @@ function renderAll(){
   renderKPIs();renderModelCards();renderTabs();renderTaskList();updateBulkBar();updateArchiveBadge();updateRecycleBadge();
   if(archiveViewActive) renderArchiveView();
   if(recycleViewActive) renderRecycleView();
+  if(analyticsViewActive) renderAnalyticsView();
 }
 
 // ── FRESH START ───────────────────────────────────────────────────────────────
@@ -7876,6 +8694,7 @@ async function freshStart(){
   editingIdx = null;
   setArchiveView(false);
   setRecycleView(false);
+  setAnalyticsView(false);
   refreshModelsList();
   resetUndo();
 
@@ -8198,6 +9017,7 @@ function updateTeamUI(){
 async function removeMemberFromWorkspace(uid){
   if(!isCurrentWorkspaceOwner()||!currentWorkspaceId) return;
   try{
+    const removedLabel=(workspaceMembers[uid]&&(workspaceMembers[uid].displayName||workspaceMembers[uid].email))||'a teammate';
     await getWorkspaceDoc().update({
       memberUids: firebase.firestore.FieldValue.arrayRemove(uid),
       ['members.'+uid]: firebase.firestore.FieldValue.delete()
@@ -8206,6 +9026,7 @@ async function removeMemberFromWorkspace(uid){
     renderTeamModal();
     updateTeamUI();
     toast('👋','Removed from workspace',false);
+    logActivity('👋',`removed ${removedLabel} from the workspace`);
   }catch(e){
     console.error('Remove member failed:',e);
     toast('⚠','Could not remove member — check your connection',false);
@@ -8263,12 +9084,14 @@ async function switchToWorkspace(workspaceId){
     purgeExpiredRecycleItems();
     setArchiveView(false);
     setRecycleView(false);
+    setAnalyticsView(false);
     ({tasks: state, deadlines}=loadState(saved));
     refreshModelsList();
     activeTab=models[0]||'';
     localStorage.setItem('mlc_activeTab',activeTab);
     document.getElementById('lastUpdated').textContent=formatLastUpdated(saved&&saved.updatedAt)||'';
     listenForLastUpdated(currentWorkspaceId);
+    listenForActivity(currentWorkspaceId);
     resetUndo();
     editingIdx=null; selectedTasks.clear(); selectedSubtasks.clear(); expandedSubtasksSet.clear();
     renderAll();
@@ -8305,6 +9128,7 @@ async function joinWorkspaceByCode(rawCode){
     });
     await switchToWorkspace(targetId);
     toast('👥','Joined the shared workspace',false);
+    logActivity('👥',`joined the workspace`);
     closeTeamModal();
   }catch(e){
     console.error('Join workspace failed:',e);
