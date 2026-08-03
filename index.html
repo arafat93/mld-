@@ -454,6 +454,19 @@ footer {
 .analytics-overdue-row .aor-model { color: var(--text-muted); font-size:11px; font-weight:400; margin-left:8px; }
 .analytics-overdue-row .aor-days { color: var(--red); font-weight:600; font-size:12px; white-space:nowrap; background: rgba(244,63,94,0.1); padding:3px 9px; border-radius:20px; }
 
+/* ── TEAM WORKLOAD ── */
+.workload-list { display:flex; flex-direction:column; gap:14px; max-height:340px; overflow-y:auto; }
+.workload-row { display:flex; align-items:center; gap:10px; }
+.workload-avatar { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#0a0a0c; flex-shrink:0; box-shadow: 0 2px 6px -1px rgba(0,0,0,0.3); }
+.workload-info { flex:1; min-width:0; }
+.workload-name-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; gap:8px; }
+.workload-name { font-size:12.5px; font-weight:600; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.workload-name-meta { display:flex; align-items:center; flex-shrink:0; }
+.workload-count { font-size:11.5px; color:var(--text-muted); font-weight:500; white-space:nowrap; }
+.workload-badge-overloaded { font-size:9.5px; font-weight:700; letter-spacing:.03em; text-transform:uppercase; color:var(--red); background:rgba(244,63,94,0.12); padding:2.5px 7px; border-radius:20px; margin-right:8px; white-space:nowrap; }
+.workload-bar-track { height:7px; border-radius:6px; background:var(--surface3); overflow:hidden; }
+.workload-bar-fill { height:100%; border-radius:6px; transition:width .5s ease; }
+
 /* ── MODEL CARDS ── */
 .models-section-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }
 .models-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-bottom: 44px; }
@@ -740,10 +753,7 @@ footer {
   margin-left: 6px; letter-spacing: 0; transition: all 0.3s ease;
 }
 .filter-btn.active .filter-count { background: var(--accent1); color: var(--bg); }
-.select-completed-btn { margin-left: 4px; border-style: dashed; }
-.select-completed-btn.has-selection { border-style: solid; border-color: var(--green); color: var(--green); background: rgba(16,185,129,0.12); }
-.select-pending-btn { border-style: dashed; }
-.select-pending-btn.has-selection { border-style: solid; border-color: var(--accent1); color: var(--accent1); background: var(--accent1-dim); }
+
 
 .search-box {
   margin-left: auto; background: var(--surface); border: 1px solid var(--border);
@@ -833,6 +843,20 @@ footer {
 .gantt-bar.is-overdue { background: linear-gradient(145deg, var(--red), #d92e4e); color: #2e0510; }
 .gantt-bar.is-due-soon { background: linear-gradient(145deg, var(--yellow), #d98d0a); color: #2e1e00; }
 .gantt-bar.is-unscheduled { background: var(--surface3); color: var(--text-muted); border: 1px dashed var(--border-hover); box-shadow: none; }
+.gantt-toggle-btn {
+  width: 16px; height: 16px; flex-shrink: 0; border: none; background: none; cursor: pointer;
+  color: var(--text-muted); display: flex; align-items: center; justify-content: center;
+  padding: 0; font-size: 10px; transition: transform .15s ease, color .15s ease;
+}
+.gantt-toggle-btn:hover { color: var(--accent1); }
+.gantt-toggle-btn.expanded { transform: rotate(90deg); }
+.gantt-label-row.sub-row { padding-left: 26px; }
+.gantt-label-row.sub-row .gantt-label-name { font-size: 11.5px; color: var(--text-muted); }
+.gantt-label-row.sub-row .gantt-label-name::before { content: '↳ '; opacity: .6; }
+.gantt-bar.is-subtask { background: linear-gradient(145deg, var(--accent3), #8b6fe0); height: 22px; top: 11px; cursor: grab; }
+.gantt-bar.is-subtask.is-done { background: linear-gradient(145deg, var(--green), #0d9c6f); }
+.gantt-bar.is-subtask.is-overdue { background: linear-gradient(145deg, var(--red), #d92e4e); }
+.gantt-bar.is-subtask.is-due-soon { background: linear-gradient(145deg, var(--yellow), #d98d0a); }
 .gantt-bar-handle { position: absolute; top: 0; bottom: 0; width: 8px; cursor: ew-resize; z-index: 2; }
 .gantt-bar-handle.left { left: 0; border-radius: 8px 0 0 8px; }
 .gantt-bar-handle.right { right: 0; border-radius: 0 8px 8px 0; }
@@ -1052,16 +1076,46 @@ footer {
 
 /* notes */
 .notes-cell { display: flex; align-items: center; justify-content: center; }
-.notes-indicator {
-  width: 32px; height: 32px; border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px; cursor: pointer;
-  border: 1px solid var(--border); background: var(--surface);
-  color: var(--text-muted); transition: all 0.2s;
+.comment-count-badge {
+  position: absolute; top: -5px; right: -5px;
+  background: var(--accent1); color: var(--bg);
+  font-size: 8.5px; font-weight: 800; line-height: 1;
+  min-width: 14px; height: 14px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; padding: 0 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
 }
-.notes-indicator.has-note { color: var(--bg); border-color: var(--accent1); background: var(--accent1); }
-.notes-indicator:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); border-color: var(--border-hover); }
-.notes-indicator.has-note:hover { filter: brightness(1.1); }
+
+/* comment timeline modal */
+.comment-timeline { display: flex; flex-direction: column; gap: 4px; max-height: 320px; overflow-y: auto; padding-right: 4px; margin-top: 4px; }
+.comment-date-group { margin-bottom: 10px; }
+.comment-date-label {
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--accent1); margin-bottom: 8px; padding-left: 2px;
+}
+.comment-entry { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+.comment-entry-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 4px; }
+.comment-entry-author { font-size: 12px; font-weight: 600; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.comment-entry-meta { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.comment-entry-time { font-size: 10.5px; color: var(--text-muted); white-space: nowrap; }
+.comment-entry-delete { opacity: 0; transition: opacity 0.15s ease; cursor: pointer; color: var(--text-muted); font-size: 12px; line-height: 1; }
+.comment-entry:hover .comment-entry-delete { opacity: 1; }
+.comment-entry-delete:hover { color: var(--red); }
+.comment-entry-text { font-size: 13px; color: var(--text); line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+.comment-empty { padding: 28px 8px; text-align: center; color: var(--text-dim); font-size: 13px; }
+.comment-input-row { display: flex; gap: 8px; margin-top: 14px; align-items: flex-end; }
+.comment-textarea {
+  flex: 1; min-height: 42px; max-height: 120px; resize: vertical;
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 12px; font-family: inherit; font-size: 13px; color: var(--text);
+}
+.comment-textarea:focus { outline: none; border-color: var(--accent1); }
+.comment-post-btn {
+  flex-shrink: 0; height: 40px; padding: 0 16px; border-radius: 10px; border: none;
+  background: var(--accent1); color: var(--bg); font-weight: 700; font-size: 12.5px;
+  cursor: pointer; transition: filter 0.15s ease;
+}
+.comment-post-btn:hover { filter: brightness(1.08); }
+.comment-post-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* task deadline icon (sits beside notes icon) */
 .task-icons-cell { display: flex; align-items: center; justify-content: center; gap: 6px; }
@@ -1105,7 +1159,7 @@ footer {
   position: fixed; z-index: 500;
   background: var(--surface); border: 1px solid var(--border-hover);
   border-radius: 14px; box-shadow: 0 12px 32px rgba(0,0,0,0.35), var(--shadow-md);
-  padding: 6px; min-width: 180px; max-height: 260px; overflow-y: auto;
+  padding: 6px; min-width: 210px; max-height: 260px; overflow-y: auto;
   display: none;
 }
 .assignee-dropdown.open { display: block; }
@@ -1122,46 +1176,145 @@ footer {
   font-size: 10px; font-weight: 700; color: var(--text-muted);
   background: var(--surface2); border: 1px solid var(--border-hover);
 }
+.assignee-dropdown-count {
+  margin-left: auto; flex-shrink: 0;
+  font-size: 10.5px; font-weight: 700; color: var(--text-muted);
+  background: var(--surface2); padding: 2px 8px; border-radius: 20px;
+}
+.assignee-dropdown-item.selected .assignee-dropdown-count { background: rgba(212,175,55,0.18); color: var(--accent1); }
 
-/* Deadline icon button: a purely visual wrapper div (drawn with our own
-   ::before calendar glyph) with the *real* <input type="date"> stretched
-   fully transparent on top of it. The browser's native picker-indicator
-   icon is irrelevant because the whole input — text, fields, and its own
-   calendar glyph alike — is invisible; only our ::before glyph is ever
-   painted. This avoids relying on hiding native sub-parts (some Android/
-   WebView browsers ignore those overrides and paint their own icon
-   underneath ours, causing a double-icon look).
-*/
-.task-deadline-wrap {
-  position: relative;
-  width: 32px; height: 32px; border-radius: 8px;
+/* Header "select all" cluster — checkbox plus a caret that opens a small
+   menu for selecting subtasks only, or tasks + subtasks together. */
+.select-all-cell { display: flex; align-items: center; gap: 3px; }
+.select-all-caret {
   display: flex; align-items: center; justify-content: center;
-  border: 1px solid var(--border); background: var(--surface);
-  color: var(--text-muted);
-  cursor: pointer; transition: all 0.2s;
+  width: 16px; height: 16px; border-radius: 5px; cursor: pointer;
+  color: var(--text-muted); background: transparent; border: none; padding: 0;
+  transition: background 0.15s ease, color 0.15s ease;
 }
-.task-deadline-wrap::before {
-  content: '';
-  display: block;
-  flex: none;
-  width: 16px; height: 16px;
-  background-color: currentColor;
-  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>");
-  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>");
-  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-  -webkit-mask-position: center; mask-position: center;
-  -webkit-mask-size: contain; mask-size: contain;
-  pointer-events: none;
+.select-all-caret:hover { background: var(--surface2); color: var(--text); }
+.select-all-menu {
+  position: fixed; z-index: 500;
+  background: var(--surface); border: 1px solid var(--border-hover);
+  border-radius: 12px; box-shadow: 0 12px 32px rgba(0,0,0,0.35), var(--shadow-md);
+  padding: 6px; min-width: 190px;
+  display: none;
 }
-.task-deadline-wrap.has-date { color: var(--bg); border-color: var(--accent2); background: var(--accent2); }
-.task-deadline-wrap.is-overdue { color: var(--bg); border-color: var(--red); background: var(--red); }
-.task-deadline-wrap:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); border-color: var(--border-hover); }
-.task-deadline-wrap.has-date:hover, .task-deadline-wrap.is-overdue:hover { filter: brightness(1.1); }
-/* The real, fully-functional date input — stretched over the whole wrapper
-   and made completely invisible (zero opacity), so whatever the browser
-   draws for it (text, fields, its own calendar glyph) is never seen. Only
-   its hit area and click->showPicker() behavior matter. */
+.select-all-menu.open { display: block; }
+.select-all-menu-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 8px 10px; border-radius: 9px; cursor: pointer;
+  font-size: 12.5px; color: var(--text); white-space: nowrap;
+}
+.select-all-menu-item:hover { background: var(--surface2); }
+
+/* Real, fully-functional date input used by the model-level deadline button
+   below — stretched over its wrapper and made completely invisible (zero
+   opacity), so whatever the browser draws for it (text, fields, its own
+   calendar glyph) is never seen. Only its hit area and click->showPicker()
+   behavior matter. (Per-task/subtask deadlines now live inside the combined
+   row-menu dropdown instead of their own wrapper — see row-menu-item-deadline-input.) */
 .task-deadline-native {
+  position: absolute !important; inset: 0;
+  width: 100%; height: 100%;
+  margin: 0; padding: 0; border: none; background: transparent;
+  opacity: 0;
+  cursor: pointer;
+  -webkit-appearance: none; appearance: none;
+}
+
+/* Combined Notes / Comments / Deadline menu — replaces the three separate
+   per-row icons with a single trigger that opens a small dropdown. */
+.row-menu-trigger {
+  position: relative;
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; cursor: pointer;
+  border: 1.5px solid var(--border-hover); background: var(--surface2);
+  color: var(--text-muted); opacity: 0.7;
+  transition: transform 0.18s cubic-bezier(0.16,1,0.3,1), opacity 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+.row-menu-trigger.has-activity {
+  opacity: 1; color: #fff; border: 1.5px solid transparent;
+  background: linear-gradient(145deg, var(--accent1-hover), var(--accent1));
+  box-shadow: 0 2px 6px -1px var(--accent1-dim), inset 0 1px 0 rgba(255,255,255,0.18);
+  text-shadow: 0 1px 1px rgba(0,0,0,0.15);
+}
+.row-menu-trigger.is-overdue {
+  opacity: 1; color: #fff; border: 1.5px solid transparent;
+  background: linear-gradient(145deg, #f87171, var(--red));
+  box-shadow: 0 2px 6px -1px rgba(244,63,94,0.35), inset 0 1px 0 rgba(255,255,255,0.18);
+}
+.row-menu-trigger:hover { transform: scale(1.12); opacity: 1; border-color: var(--accent1); }
+.row-menu-trigger.has-activity:hover { box-shadow: 0 4px 10px -2px var(--accent1-dim), inset 0 1px 0 rgba(255,255,255,0.25); }
+.row-menu-trigger.is-overdue:hover { box-shadow: 0 4px 10px -2px rgba(244,63,94,0.4), inset 0 1px 0 rgba(255,255,255,0.25); }
+
+/* Standalone per-row deadline icon — sits beside the assignee picker.
+   Pulled out of the combined row-menu dropdown so the calendar is a single
+   click away instead of an extra step inside the notes/comments menu. */
+.deadline-picker {
+  position: relative; width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; cursor: pointer;
+  border: 1.5px solid var(--border-hover); background: var(--surface2);
+  color: var(--text-muted); opacity: 0.7;
+  transition: transform 0.18s cubic-bezier(0.16,1,0.3,1), opacity 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+.deadline-picker.has-date {
+  opacity: 1; color: #fff; border: 1.5px solid transparent;
+  background: linear-gradient(145deg, var(--accent2), #3b82f6);
+  box-shadow: 0 2px 6px -1px rgba(59,130,246,0.35), inset 0 1px 0 rgba(255,255,255,0.18);
+  text-shadow: 0 1px 1px rgba(0,0,0,0.15);
+}
+.deadline-picker.is-overdue {
+  opacity: 1; color: #fff; border: 1.5px solid transparent;
+  background: linear-gradient(145deg, #f87171, var(--red));
+  box-shadow: 0 2px 6px -1px rgba(244,63,94,0.35), inset 0 1px 0 rgba(255,255,255,0.18);
+}
+.deadline-picker:hover { transform: scale(1.12); opacity: 1; border-color: var(--accent1); }
+.deadline-picker.has-date:hover { box-shadow: 0 4px 10px -2px rgba(59,130,246,0.4), inset 0 1px 0 rgba(255,255,255,0.25); }
+.deadline-picker.is-overdue:hover { box-shadow: 0 4px 10px -2px rgba(244,63,94,0.4), inset 0 1px 0 rgba(255,255,255,0.25); }
+.row-menu-badge {
+  position: absolute; top: -5px; right: -5px;
+  background: var(--accent1); color: var(--bg);
+  font-size: 8.5px; font-weight: 800; line-height: 1;
+  min-width: 14px; height: 14px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; padding: 0 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+.row-menu-dropdown {
+  position: fixed; z-index: 500;
+  background: var(--surface); border: 1px solid var(--border-hover);
+  border-radius: 14px; box-shadow: 0 12px 32px rgba(0,0,0,0.35), var(--shadow-md);
+  padding: 6px; min-width: 210px;
+  display: none;
+}
+.row-menu-dropdown.open { display: block; }
+.row-menu-item {
+  position: relative;
+  display: flex; align-items: center; gap: 9px;
+  padding: 8px 10px; border-radius: 9px; cursor: pointer;
+  font-size: 13px; color: var(--text); white-space: nowrap;
+}
+.row-menu-item:hover { background: var(--surface2); }
+.row-menu-item-icon {
+  width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--text-muted); background: var(--surface2);
+  border: 1px solid var(--border-hover);
+}
+.row-menu-item.active .row-menu-item-icon { color: #fff; border-color: transparent; text-shadow: 0 1px 1px rgba(0,0,0,0.15); }
+.row-menu-item[data-kind="notes"].active .row-menu-item-icon { background: linear-gradient(145deg, var(--accent1-hover), var(--accent1)); }
+.row-menu-item[data-kind="comments"].active .row-menu-item-icon { background: linear-gradient(145deg, var(--accent2), #3b82f6); }
+.row-menu-item[data-kind="deadline"].active .row-menu-item-icon { background: linear-gradient(145deg, var(--accent2), #3b82f6); }
+.row-menu-item[data-kind="deadline"].overdue .row-menu-item-icon { background: linear-gradient(145deg, #f87171, var(--red)); }
+.row-menu-item-count {
+  margin-left: auto; flex-shrink: 0;
+  font-size: 10.5px; font-weight: 700; color: var(--text-muted);
+  background: var(--surface2); padding: 2px 8px; border-radius: 20px;
+}
+.row-menu-item-deadline-input {
   position: absolute !important; inset: 0;
   width: 100%; height: 100%;
   margin: 0; padding: 0; border: none; background: transparent;
@@ -1240,10 +1393,30 @@ footer {
 }
 .status-chip.done { background: rgba(16, 185, 129, 0.1); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.2); }
 .status-chip.pending { background: var(--surface3); color: var(--text-muted); border: 1px solid var(--border); }
+.status-chip.inprogress { background: rgba(245, 158, 11, 0.1); color: var(--yellow); border: 1px solid rgba(245, 158, 11, 0.22); }
 .status-chip:hover { transform: scale(1.04); box-shadow: var(--shadow-sm); }
 .chip-dot { width: 6px; height: 6px; border-radius: 50%; }
 .done .chip-dot { background: var(--green); }
 .pending .chip-dot { background: var(--text-muted); }
+.inprogress .chip-dot { background: var(--yellow); }
+
+/* Status chip dropdown — same floating-menu pattern as the assignee
+   dropdown, listing Pending / In Progress / Completed. */
+.status-dropdown {
+  position: fixed; z-index: 500;
+  background: var(--surface); border: 1px solid var(--border-hover);
+  border-radius: 14px; box-shadow: 0 12px 32px rgba(0,0,0,0.35), var(--shadow-md);
+  padding: 6px; min-width: 168px; display: none;
+}
+.status-dropdown.open { display: block; }
+.status-dropdown-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 8px 10px; border-radius: 9px; cursor: pointer;
+  font-size: 13px; color: var(--text); white-space: nowrap;
+}
+.status-dropdown-item:hover { background: var(--surface2); }
+.status-dropdown-item.selected { background: var(--accent1-dim); color: var(--accent1); font-weight: 600; }
+.status-dropdown-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
 /* row actions */
 .row-actions { display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
@@ -1365,6 +1538,8 @@ footer {
 .bulk-btn.bulk-btn-move-model:hover { background: rgba(212,175,55,0.14); border-color: var(--accent1); color: var(--accent1); }
 .bulk-btn.bulk-btn-copy-model { color: var(--accent2); border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.07); }
 .bulk-btn.bulk-btn-copy-model:hover { background: rgba(96,165,250,0.14); border-color: var(--accent2); color: var(--accent2); }
+.bulk-btn.bulk-btn-duplicate { color: var(--accent1); border-color: rgba(212,175,55,0.3); background: rgba(212,175,55,0.07); }
+.bulk-btn.bulk-btn-duplicate:hover { background: rgba(212,175,55,0.14); border-color: var(--accent1); color: var(--accent1); }
 
 .bulk-bar.subtask-bulk-bar {
   margin: 0 24px 10px; padding: 10px 14px; border-radius: 10px;
@@ -1536,10 +1711,41 @@ footer {
 .gsearch-row-badge.subtask { color: var(--accent3); background: rgba(167,139,250,0.1); }
 .gsearch-row-badge.done { color: var(--green); background: rgba(16,185,129,0.1); }
 
+.notif-bell-btn {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px; flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+.notif-bell-btn svg { transition: transform 0.2s ease; }
+.notif-bell-btn:hover {
+  color: var(--accent1);
+  border-color: var(--accent1-dim);
+  background: var(--accent1-dim);
+  box-shadow: 0 0 0 4px var(--accent1-dim);
+}
+.notif-bell-btn:hover svg { transform: rotate(-8deg); }
+.notif-bell-btn:active { transform: scale(0.94); }
+.notif-bell-btn.has-unread { color: var(--accent1); border-color: var(--accent1-dim); }
 .notif-badge {
-  position: absolute; top: -4px; right: -4px; min-width: 16px; height: 16px; padding: 0 4px;
-  border-radius: 8px; background: var(--red); color: #fff; font-size: 10px; font-weight: 700;
-  display: flex; align-items: center; justify-content: center; line-height: 1; border: 2px solid var(--bg);
+  position: absolute; top: -3px; right: -3px; min-width: 17px; height: 17px; padding: 0 4px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--accent1), #e5c07b);
+  color: #1a1408; font-size: 10px; font-weight: 800; letter-spacing: -.2px;
+  display: flex; align-items: center; justify-content: center; line-height: 1;
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 0 rgba(212,175,55,0.55);
+  animation: notifBadgePulse 2.2s ease-out infinite;
+}
+@keyframes notifBadgePulse {
+  0%   { box-shadow: 0 0 0 0 rgba(212,175,55,0.45); }
+  70%  { box-shadow: 0 0 0 6px rgba(212,175,55,0); }
+  100% { box-shadow: 0 0 0 0 rgba(212,175,55,0); }
 }
 .activity-body { max-height: 60vh; overflow-y: auto; }
 .activity-empty { padding: 32px 8px; text-align: center; color: var(--text-dim); font-size: 13px; }
@@ -1549,6 +1755,7 @@ footer {
 .activity-row-icon {
   flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--surface2);
   display: flex; align-items: center; justify-content: center; font-size: 13px;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
 }
 .activity-row-main { min-width: 0; flex: 1; }
 .activity-row-text { font-size: 13px; color: var(--text); line-height: 1.4; }
@@ -1655,6 +1862,12 @@ footer {
 .confirm-icon.warn { background: rgba(245, 158, 11, 0.1); color: var(--yellow); }
 .confirm-title { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 8px; letter-spacing: -0.2px; }
 .confirm-message { font-size: 14px; color: var(--text-muted); line-height: 1.55; margin-bottom: 28px; }
+.confirm-prompt-input {
+  width: 100%; box-sizing: border-box; font-size: 14px; color: var(--text);
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 12px;
+  padding: 11px 14px; margin: -14px 0 24px; text-align: center;
+}
+.confirm-prompt-input:focus { outline: none; border-color: var(--accent1); }
 .confirm-actions { display: flex; gap: 12px; justify-content: center; }
 .confirm-actions .modal-btn { flex: 1; }
 
@@ -2243,6 +2456,132 @@ img { -webkit-user-drag: none; }
 .elmodal-cancel-btn:hover { background: var(--surface3); color: var(--text); border-color: var(--border-hover); }
 
 /* ── Team / Workspace modal ── */
+#templateChooserOverlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+  padding: 20px;
+}
+#templateChooserOverlay.open { opacity: 1; pointer-events: all; }
+#templateChooserModal {
+  background: var(--surface);
+  border: 1px solid var(--border-hover);
+  border-radius: 24px;
+  padding: 32px 30px 26px;
+  max-width: 460px; width: 100%; max-height: 85vh; overflow-y: auto;
+  box-shadow: var(--shadow-md), 0 0 0 1px var(--border);
+  transform: translateY(14px) scale(0.97);
+  transition: transform 0.28s cubic-bezier(0.16,1,0.3,1);
+}
+#templateChooserOverlay.open #templateChooserModal { transform: translateY(0) scale(1); }
+.template-chooser-list { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
+.template-chooser-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; border-radius: 14px;
+  background: var(--surface2); border: 1px solid var(--border);
+  cursor: pointer; text-align: left; width: 100%;
+  font-family: inherit; transition: background 0.15s ease, border-color 0.15s ease;
+}
+.template-chooser-item:hover { background: var(--surface3); border-color: var(--border-hover); }
+.template-chooser-item-icon {
+  width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+  background: var(--accent1-dim); color: var(--accent1);
+  display: flex; align-items: center; justify-content: center; font-size: 15px;
+}
+.template-chooser-item-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.template-chooser-item-name { font-size: 13.5px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.template-chooser-item-meta { font-size: 11.5px; color: var(--text-muted); }
+.template-chooser-item-delete {
+  flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; border: 1px solid transparent;
+  color: var(--text-muted); cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.template-chooser-item-delete:hover { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.3); color: var(--red); }
+.template-chooser-item-edit {
+  flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; border: 1px solid transparent;
+  color: var(--text-muted); cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.template-chooser-item-edit:hover { background: var(--accent1-dim); border-color: var(--border-hover); color: var(--accent1); }
+#templateEditorOverlay {
+  position: fixed; inset: 0; z-index: 10000;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+  padding: 20px;
+}
+#templateEditorOverlay.open { opacity: 1; pointer-events: all; }
+#templateEditorModal {
+  background: var(--surface);
+  border: 1px solid var(--border-hover);
+  border-radius: 24px;
+  padding: 32px 30px 26px;
+  max-width: 560px; width: 100%; max-height: 85vh; overflow-y: auto;
+  box-shadow: var(--shadow-md), 0 0 0 1px var(--border);
+  transform: translateY(14px) scale(0.97);
+  transition: transform 0.28s cubic-bezier(0.16,1,0.3,1);
+}
+#templateEditorOverlay.open #templateEditorModal { transform: translateY(0) scale(1); }
+.te-name-input {
+  width: 100%; box-sizing: border-box; font-size: 16px; font-weight: 700; color: var(--text);
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 12px;
+  padding: 10px 14px; margin-top: 16px; text-align: center;
+}
+.te-name-input:focus { outline: none; border-color: var(--accent1); }
+.te-task-list { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; max-height: 46vh; overflow-y: auto; }
+.te-empty { font-size: 13px; color: var(--text-muted); text-align: center; padding: 18px 0; }
+.te-task-row { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 8px 10px; }
+.te-task-main { display: flex; align-items: center; gap: 6px; }
+.te-move-col { display: flex; flex-direction: column; gap: 1px; flex-shrink: 0; }
+.te-move-btn {
+  width: 18px; height: 15px; display: flex; align-items: center; justify-content: center;
+  background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 9px;
+  border-radius: 4px;
+}
+.te-move-btn:hover:not(:disabled) { background: var(--surface3); color: var(--text); }
+.te-move-btn:disabled { opacity: 0.25; cursor: default; }
+.te-task-name-input {
+  flex: 1; min-width: 0; font-size: 13px; font-weight: 600; color: var(--text);
+  background: transparent; border: none; border-bottom: 1px solid transparent; padding: 6px 4px;
+}
+.te-task-name-input:focus { outline: none; border-bottom-color: var(--accent1); }
+.te-priority-select {
+  flex-shrink: 0; font-size: 11.5px; color: var(--text-muted); background: var(--surface3);
+  border: 1px solid var(--border); border-radius: 8px; padding: 5px 6px; cursor: pointer;
+}
+.te-icon-btn {
+  flex-shrink: 0; width: 26px; height: 26px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; border: 1px solid transparent; color: var(--text-muted);
+  cursor: pointer; font-size: 12px; white-space: nowrap; padding: 0 4px;
+}
+.te-expand-btn { width: auto; min-width: 26px; }
+.te-icon-btn:hover { background: var(--surface3); color: var(--text); border-color: var(--border-hover); }
+.te-delete-btn:hover, .te-sub-delete-btn:hover { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.3); color: var(--red); }
+.te-subtask-list { margin: 8px 0 2px 30px; padding-left: 12px; border-left: 2px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
+.te-subtask-row { display: flex; align-items: center; gap: 6px; }
+.te-subtask-name-input {
+  flex: 1; min-width: 0; font-size: 12.5px; color: var(--text);
+  background: transparent; border: none; border-bottom: 1px solid transparent; padding: 5px 4px;
+}
+.te-subtask-name-input:focus { outline: none; border-bottom-color: var(--accent1); }
+.te-add-sub-btn, .te-add-task-btn {
+  font-size: 12px; font-weight: 600; color: var(--accent1); background: transparent;
+  border: 1px dashed var(--border-hover); border-radius: 10px; padding: 7px 10px; cursor: pointer; text-align: center;
+}
+.te-add-sub-btn:hover, .te-add-task-btn:hover { background: var(--accent1-dim); }
+.te-add-task-btn { width: 100%; margin-top: 12px; padding: 10px; }
 #teamOverlay {
   position: fixed; inset: 0; z-index: 9999;
   background: rgba(0,0,0,0.65);
@@ -2460,8 +2799,9 @@ document.addEventListener('keydown', e => {
   <div class="header-right">
     <div class="live-badge" id="liveBadge" title="Return to live dashboard"><span class="live-dot"></span>LIVE</div>
     <div class="last-updated" id="lastUpdated"></div>
-    <button class="hdr-btn" id="notifBellBtn" title="Activity feed &amp; notifications" style="display:none;position:relative;">
-      🔔<span class="notif-badge" id="notifBadge" style="display:none;">0</span>
+    <button class="notif-bell-btn" id="notifBellBtn" title="Activity feed &amp; notifications" style="display:none;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="notif-badge" id="notifBadge" style="display:none;">0</span>
     </button>
     <div class="user-badge" id="userBadge" style="display:none;">
       <div class="user-avatar" id="userAvatar">?</div>
@@ -2556,6 +2896,7 @@ document.addEventListener('keydown', e => {
       <span class="date-field-placeholder" id="newModelDeadlinePlaceholder">Set Deadline</span>
     </div>
     <button class="add-task-btn" id="addModelBtn">Add Model</button>
+    <button class="add-task-btn" id="manageTemplatesBtn" style="background:var(--surface2);color:var(--text);border:1px solid var(--border);" title="Manage saved checklist templates">📑 Templates</button>
   </div>
 </div>
 <div class="models-grid" id="modelsGrid"></div>
@@ -2580,6 +2921,7 @@ document.addEventListener('keydown', e => {
   </div>
   <div style="margin-left:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
     <button class="hdr-btn" id="ganttToggleBtn" title="Switch between List and Timeline view">📊 <span id="ganttToggleLabel">Timeline</span></button>
+    <button class="hdr-btn" id="analyticsToggleBtn" title="Burndown, trends, and overdue analysis">📈 <span>Analytics</span></button>
     <div class="export-dropdown" id="exportModelDropdown">
       <button class="hdr-btn" id="exportModelToggleBtn" title="Export current model's checklist">📤 <span>Export</span> <span class="hdr-btn-caret">▾</span></button>
       <div class="export-menu" id="exportModelMenu">
@@ -2601,14 +2943,13 @@ document.addEventListener('keydown', e => {
 <div class="filter-bar" id="filterBar">
   <button class="filter-btn active" data-filter="all">All<span class="filter-count" id="fc-all">0</span></button>
   <button class="filter-btn" data-filter="done">Done<span class="filter-count" id="fc-done">0</span></button>
+  <button class="filter-btn" data-filter="inprogress">In Progress<span class="filter-count" id="fc-inprogress">0</span></button>
   <button class="filter-btn" data-filter="pending">Pending<span class="filter-count" id="fc-pending">0</span></button>
   <button class="filter-btn" data-filter="high">High Priority<span class="filter-count" id="fc-high">0</span></button>
   <button class="filter-btn" data-filter="med">Medium<span class="filter-count" id="fc-med">0</span></button>
   <button class="filter-btn" data-filter="low">Low<span class="filter-count" id="fc-low">0</span></button>
   <button class="filter-btn filter-btn-critical" data-filter="critical">⚠ Critical<span class="filter-count" id="fc-critical">0</span></button>
   <button class="filter-btn" data-filter="mine" id="mineFilterBtn" style="display:none;">👤 My Tasks<span class="filter-count" id="fc-mine">0</span></button>
-  <button class="filter-btn select-completed-btn" id="selectCompletedBtn" title="Select all completed tasks for bulk actions, regardless of the current filter">☑ Select Completed</button>
-  <button class="filter-btn select-pending-btn" id="selectPendingBtn" title="Select all pending tasks for bulk actions, regardless of the current filter">☐ Select Pending</button>
   <div class="kbd-hint">Shortcuts: <kbd>N</kbd> new task · <kbd>/</kbd> search · <kbd>Ctrl K</kbd> global search · <kbd>Esc</kbd> clear</div>
 </div>
 
@@ -2616,6 +2957,7 @@ document.addEventListener('keydown', e => {
 <div class="bulk-bar" id="bulkBar">
   <span class="bulk-count" id="bulkCount">0 selected</span>
   <button class="bulk-btn" id="bulkDoneBtn">Mark Done</button>
+  <button class="bulk-btn" id="bulkInProgressBtn">Mark In Progress</button>
   <button class="bulk-btn" id="bulkPendingBtn">Mark Pending</button>
   <button class="bulk-btn bulk-btn-deadline" id="bulkSetDeadlineBtn">📅 Set Deadline</button>
   <button class="bulk-btn bulk-btn-priority" id="bulkSetPriorityBtn">⚑ Set Priority</button>
@@ -2628,6 +2970,7 @@ document.addEventListener('keydown', e => {
     </div>
   </div>
   <button class="bulk-btn bulk-btn-copy-model" id="bulkCopyModelBtn" title="Copy selected tasks to a different model">⧉ Copy to Model</button>
+  <button class="bulk-btn bulk-btn-duplicate" id="bulkDuplicateBtn" title="Duplicate selected tasks within this model">⧉ Duplicate</button>
   <button class="bulk-btn danger" id="bulkDeleteBtn">Delete Selected</button>
   <button class="bulk-btn" id="bulkClearBtn" style="margin-left:auto;">Clear Selection</button>
 </div>
@@ -2646,12 +2989,15 @@ document.addEventListener('keydown', e => {
 <div class="checklist-table" id="checklistTable">
   <div class="table-header">
     <div class="th-sort" data-sort="sn" title="Sort by serial number"># <span class="sort-icon"><svg class="up" width="8" height="6" viewBox="0 0 8 6"><path d="M4 0L8 6H0Z" fill="currentColor"/></svg><svg class="dn" width="8" height="6" viewBox="0 0 8 6"><path d="M4 6L0 0H8Z" fill="currentColor"/></svg></span></div>
-    <div><input type="checkbox" id="selectAllChk" class="task-checkbox" title="Select all"></div>
+    <div class="select-all-cell">
+      <input type="checkbox" id="selectAllChk" class="task-checkbox" title="Select all tasks">
+      <button type="button" class="select-all-caret" id="selectAllCaretBtn" title="More select-all options"><svg width="8" height="6" viewBox="0 0 8 6"><path d="M4 6L0 0H8Z" fill="currentColor"/></svg></button>
+    </div>
     <div class="th-sort" data-sort="name" title="Sort by task name">Task Description <span class="sort-icon"><svg class="up" width="8" height="6" viewBox="0 0 8 6"><path d="M4 0L8 6H0Z" fill="currentColor"/></svg><svg class="dn" width="8" height="6" viewBox="0 0 8 6"><path d="M4 6L0 0H8Z" fill="currentColor"/></svg></span></div>
     <div class="th-sort" data-sort="priority" title="Sort by priority">Priority <span class="sort-icon"><svg class="up" width="8" height="6" viewBox="0 0 8 6"><path d="M4 0L8 6H0Z" fill="currentColor"/></svg><svg class="dn" width="8" height="6" viewBox="0 0 8 6"><path d="M4 6L0 0H8Z" fill="currentColor"/></svg></span></div>
     <div style="justify-content:center;">Status</div>
     <div style="justify-content:center;">Due</div>
-    <div style="justify-content:center;">Notes</div>
+    <div style="justify-content:center;">Details</div>
     <div style="justify-content:center;">Actions</div>
   </div>
   <div id="taskRows"></div>
@@ -2791,6 +3137,14 @@ document.addEventListener('keydown', e => {
       </div>
       <div class="analytics-overdue-list" id="overdueAnalysisList"></div>
     </div>
+
+    <div class="analytics-panel" id="panelWorkload">
+      <div class="analytics-panel-hdr">
+        <div class="analytics-panel-title">👥 Team Workload</div>
+        <div class="analytics-panel-sub">Open tasks per teammate — shows who's overloaded</div>
+      </div>
+      <div class="workload-list" id="workloadList"></div>
+    </div>
   </div>
 </div>
 <!-- END ANALYTICS VIEW -->
@@ -2860,6 +3214,9 @@ document.addEventListener('keydown', e => {
 
 <!-- ASSIGNEE PICKER DROPDOWN (single shared instance, positioned per-click) -->
 <div class="assignee-dropdown" id="assigneeDropdown"></div>
+<div class="status-dropdown" id="statusDropdown"></div>
+<div class="row-menu-dropdown" id="rowMenuDropdown"></div>
+<div class="select-all-menu" id="selectAllMenu"></div>
 
 <!-- NOTES MODAL -->
 <div class="modal-overlay" id="notesModal">
@@ -2882,6 +3239,22 @@ document.addEventListener('keydown', e => {
     <div class="modal-actions">
       <button class="modal-btn secondary" id="notesCancelBtn">Cancel</button>
       <button class="modal-btn primary" id="notesSaveBtn">Save Notes</button>
+    </div>
+  </div>
+</div>
+
+<!-- COMMENT TIMELINE MODAL -->
+<div class="modal-overlay" id="commentsModal">
+  <div class="modal-box" id="commentsModalBox" style="width:min(520px, 92vw);">
+    <div class="modal-title">💬 Comment Timeline</div>
+    <div class="modal-subtitle" id="commentsTaskName"></div>
+    <div class="comment-timeline" id="commentsTimeline"></div>
+    <div class="comment-input-row">
+      <textarea class="comment-textarea" id="commentInputText" placeholder="Add an update to the discussion…" maxlength="600"></textarea>
+      <button type="button" class="comment-post-btn" id="commentPostBtn">Post</button>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn secondary" id="commentsCloseBtn">Close</button>
     </div>
   </div>
 </div>
@@ -3016,6 +3389,7 @@ document.addEventListener('keydown', e => {
     <div class="confirm-icon" id="confirmIcon">!</div>
     <div class="confirm-title" id="confirmTitle">Are you sure?</div>
     <div class="confirm-message" id="confirmMessage"></div>
+    <input type="text" id="confirmPromptInput" class="confirm-prompt-input" style="display:none;" maxlength="60">
     <div class="confirm-actions" id="confirmActions">
       <button class="modal-btn secondary" id="confirmCancelBtn">Cancel</button>
       <button class="modal-btn primary" id="confirmOkBtn">Confirm</button>
@@ -3342,6 +3716,8 @@ async function resolveWorkspace(user){
     tasks:(legacyData&&legacyData.tasks)||{},
     deadlines:(legacyData&&legacyData.deadlines)||{},
     modelImages:(legacyData&&legacyData.modelImages)||{},
+    templates:(legacyData&&legacyData.templates)||{'Standard Checklist':buildDefaultStandardTemplate()},
+    standardTemplateSeeded:true,
     deletedModels:(legacyData&&legacyData.deletedModels)||[],
     archivedModels:(legacyData&&legacyData.archivedModels)||[],
     pinnedModels:(legacyData&&legacyData.pinnedModels)||[],
@@ -3488,6 +3864,8 @@ function applyRemoteSnapshot(data){
   modelOrder=data.modelOrder||[];
   modelImages=data.modelImages||{};
   recycleBin=data.recycleBin||{};
+  templates=data.templates||{};
+  standardTemplateSeeded=!!data.standardTemplateSeeded;
   ({tasks: state, deadlines}=loadState(data));
   // Local state now exactly matches the server — re-baseline so the next
   // save() correctly diffs against this, not stale pre-sync keys.
@@ -3639,6 +4017,7 @@ function undo(){
   }
   renderAll();
   toast('↺','Undone',false);
+  logActivity('↺','undid the last change',activeTab);
 }
 
 function redo(){
@@ -3668,6 +4047,7 @@ function redo(){
   }
   renderAll();
   toast('↻','Redone',false);
+  logActivity('↻','redid the last change',activeTab);
 }
 
 let deletedModelsSet=new Set();
@@ -3696,13 +4076,14 @@ const RECYCLE_RETENTION_DAYS=30;
 // back, making a "deleted" model card reappear. lastSavedKeys tracks which
 // keys were last known to exist on the server so save() can explicitly
 // FieldValue.delete() any that vanished locally, instead of leaving them.
-let lastSavedKeys={tasks:new Set(),deadlines:new Set(),modelImages:new Set(),recycleBin:new Set()};
+let lastSavedKeys={tasks:new Set(),deadlines:new Set(),modelImages:new Set(),recycleBin:new Set(),templates:new Set()};
 function syncLastSavedKeysFromCurrent(){
   lastSavedKeys={
     tasks:new Set(Object.keys(state||{})),
     deadlines:new Set(Object.keys(deadlines||{})),
     modelImages:new Set(Object.keys(modelImages||{})),
-    recycleBin:new Set(Object.keys(recycleBin||{}))
+    recycleBin:new Set(Object.keys(recycleBin||{})),
+    templates:new Set(Object.keys(templates||{}))
   };
 }
 function withDeletionSentinels(currentObj,previousKeys){
@@ -3718,10 +4099,12 @@ function buildWorkspaceSavePayload(){
     deadlines:withDeletionSentinels(deadlines,lastSavedKeys.deadlines),
     modelImages:withDeletionSentinels(modelImages,lastSavedKeys.modelImages),
     recycleBin:withDeletionSentinels(recycleBin,lastSavedKeys.recycleBin),
+    templates:withDeletionSentinels(templates,lastSavedKeys.templates),
     deletedModels:[...deletedModelsSet],
     archivedModels:[...archivedModelsSet],
     pinnedModels:[...pinnedModelsSet],
     modelOrder:[...modelOrder],
+    standardTemplateSeeded:!!standardTemplateSeeded,
     updatedAt:firebase.firestore.FieldValue.serverTimestamp()
   };
 }
@@ -3797,6 +4180,9 @@ function enterPreviewMode(){
   pinnedModelsSet = new Set();
   recycleBin = {};
   modelImages = {};
+  templates = {};
+  standardTemplateSeeded = false;
+  seedStandardTemplateIfNeeded();
   setArchiveView(false);
   setRecycleView(false);
   setAnalyticsView(false);
@@ -3855,6 +4241,8 @@ async function handleAuthState(user){
     modelOrder=saved?.modelOrder||[];
     modelImages=saved?.modelImages||{};
     recycleBin=saved?.recycleBin||{};
+    templates=saved?.templates||{};
+    standardTemplateSeeded=!!(saved&&saved.standardTemplateSeeded);
     // Baseline the merge-safe key tracker against what the server *actually*
     // has, before purgeExpiredRecycleItems() (below) removes anything
     // locally — otherwise that purge's removals would never get detected
@@ -3863,8 +4251,13 @@ async function handleAuthState(user){
       tasks:new Set(Object.keys(saved&&saved.tasks||{})),
       deadlines:new Set(Object.keys(saved&&saved.deadlines||{})),
       modelImages:new Set(Object.keys(modelImages)),
-      recycleBin:new Set(Object.keys(recycleBin))
+      recycleBin:new Set(Object.keys(recycleBin)),
+      templates:new Set(Object.keys(templates))
     };
+    // One-time seed of the built-in Standard Checklist as a real, editable
+    // template — done after baselining lastSavedKeys so the next save()
+    // correctly recognizes it as a genuinely new key to write, not a stale one.
+    seedStandardTemplateIfNeeded();
     const expiredPurged=purgeExpiredRecycleItems();
     setArchiveView(false);
     setRecycleView(false);
@@ -4039,6 +4432,12 @@ function loadState(saved) {
     if(!savedModel||!Array.isArray(savedModel)) return;
     const tasks=savedModel.map(t=>({...t}));
     tasks.forEach(t=>{if(!t.priority)t.priority='med';if(!t.notes)t.notes='';if(!t.taskDeadline)t.taskDeadline='';if(!Array.isArray(t.screenshots))t.screenshots=[];if(!t.startDate)t.startDate='';if(!Array.isArray(t.dependsOn))t.dependsOn=[];if(!t.createdAt)t.createdAt=null;if(!t.completedAt)t.completedAt=null;});
+    // BACKFILL: a task marked done should always have its subtasks marked
+    // done too. This runs on every load so tasks that were already
+    // completed before this rule existed (or completed some other way that
+    // slipped past it) get their subtasks caught up automatically, not just
+    // tasks completed going forward.
+    tasks.forEach(t=>{ if(t.done) completeAllSubtasks(t); });
     renumber(tasks);
     result[model]=tasks;
   });
@@ -4051,6 +4450,23 @@ function renumber(tasks){tasks.forEach((t,i)=>{t.sn=i+1;});}
 let state = {};
 let deadlines = {};
 let modelImages = {};
+// Reusable checklist templates a person can save from any model and apply
+// when creating a new one. Structural only — no dates, assignees, done
+// status, or screenshots — see stripTaskForTemplate().
+let templates = {};
+// Tracks whether the built-in "Standard Checklist" has ever been seeded into
+// `templates` for this workspace. Seeded exactly once (see seedStandardTemplateIfNeeded)
+// so that deleting or renaming it afterward sticks instead of reappearing on
+// the next reload/sync.
+let standardTemplateSeeded = false;
+function buildDefaultStandardTemplate(){
+  return {createdAt:Date.now(),tasks:STANDARD_TASK_TEMPLATE.map(n=>({name:n,priority:'med',notes:'',subtasks:[]}))};
+}
+function seedStandardTemplateIfNeeded(){
+  if(standardTemplateSeeded) return;
+  if(!templates['Standard Checklist']) templates['Standard Checklist']=buildDefaultStandardTemplate();
+  standardTemplateSeeded=true;
+}
 let models = [];
 let activeTab = '';
 let activeFilter = 'all';
@@ -4058,6 +4474,7 @@ let searchQuery = '';
 let editingIdx = null;
 let ganttViewActive = false;
 let ganttZoom = 'week'; // 'day' | 'week' | 'month'(compact)
+let ganttExpandedSet = new Set(); // keys "model::idx" of tasks with subtasks shown in Gantt
 let ganttDepModalTaskIdx = null;
 let selectedTasks = new Set();
 // Subtask bulk-select — keyed by "model::taskIdx::subIdx" strings so selections
@@ -4135,6 +4552,9 @@ function checkDeadlinesAndNotify(){
       // BUGFIX: subtask deadlines were never checked here, so an overdue or
       // due-soon subtask never triggered a notification even though it's
       // surfaced everywhere else (KPI card, PDF export, row due-badges).
+      // BUGFIX: skip subtasks once the parent task is done, so a completed
+      // task doesn't keep firing overdue/due-soon notifications.
+      if(t.done) return;
       (Array.isArray(t.subtasks)?t.subtasks:[]).forEach(s=>{
         if(s.done||!s.taskDeadline) return;
         const d=new Date(s.taskDeadline+'T00:00:00');
@@ -4201,10 +4621,25 @@ function startDeadlineWatch(){
   _deadlineCheckInterval=setInterval(checkDeadlinesAndNotify, 60*60*1000);
 }
 
+// Marking a task done should also complete its subtasks — a "completed"
+// task shouldn't leave dangling incomplete subtasks behind (affects DONE
+// counts on the model card, filter chip counts, and the Overdue KPI).
+function completeAllSubtasks(task){
+  (Array.isArray(task.subtasks)?task.subtasks:[]).forEach(s=>{
+    if(!s.done){ s.done=true; s.status='done'; }
+  });
+}
+
 // ── STATS ─────────────────────────────────────────────────────────────────────
 function stats(model){
   const tasks=state[model];
-  const total=tasks.length, done=tasks.filter(t=>t.done).length;
+  let total=0,done=0;
+  tasks.forEach(t=>{
+    total++; if(t.done) done++;
+    (Array.isArray(t.subtasks)?t.subtasks:[]).forEach(s=>{
+      total++; if(s.done) done++;
+    });
+  });
   return{total,done,pending:total-done,pct:total?Math.round(done/total*100):0};
 }
 function globalStats(){
@@ -4228,6 +4663,11 @@ function getAllOverdueTasks(){
       // checked here, so an overdue subtask under an on-time parent task
       // was invisible to the global Overdue KPI card and modal even though
       // it's tracked everywhere else (PDF export, per-row due badges, etc).
+      // BUGFIX: once the parent task itself is marked done, its subtasks
+      // should no longer count toward the Overdue KPI even if an individual
+      // subtask's own `done` flag was never flipped — a completed task
+      // shouldn't keep inflating the overdue count.
+      if(t.done) return;
       (Array.isArray(t.subtasks)?t.subtasks:[]).forEach((s,subIdx)=>{
         if(s.done||!s.taskDeadline) return;
         const d=new Date(s.taskDeadline+'T00:00:00');
@@ -4288,14 +4728,20 @@ function subPanelId(key){ return 'sp-'+key.replace(/[^a-zA-Z0-9]/g,'_'); }
 
 function addSubtask(model,idx,name){
   const n=name.trim(); if(!n) return;
-  getSubtasks(model,idx).push({name:n.toUpperCase(),done:false,priority:'med',notes:'',taskDeadline:'',screenshots:[]});
+  getSubtasks(model,idx).push({name:n.toUpperCase(),done:false,priority:'med',notes:'',taskDeadline:'',startDate:'',screenshots:[]});
   save(); renderAll(); toast('＋','Subtask added: '+n.slice(0,28));
   logActivity('＋',`added subtask "${n.toUpperCase()}"`,model);
 }
-function toggleSubtask(model,idx,sIdx){
+function setSubtaskStatus(model,idx,sIdx,newStatus){
   const s=getSubtasks(model,idx)[sIdx]; if(!s) return;
-  s.done=!s.done; save(); renderAll();
-  logActivity(s.done?'✓':'↺',`${s.done?'completed':'reopened'} subtask "${s.name}"`,model);
+  closeStatusDropdown();
+  if((s.done?'done':(s.status==='inprogress'?'inprogress':'pending'))===newStatus) return;
+  s.done=newStatus==='done';
+  s.status=newStatus;
+  save(); renderAll();
+  const verb=newStatus==='done'?'completed':(newStatus==='inprogress'?'marked in progress':'reopened');
+  const icon=newStatus==='done'?'✓':(newStatus==='inprogress'?'⏳':'↺');
+  logActivity(icon,`${verb} subtask "${s.name}"`,model);
 }
 function deleteSubtask(model,idx,sIdx){
   const subs=getSubtasks(model,idx);
@@ -4753,6 +5199,7 @@ function _activityTsMillis(entry){
 
 function updateNotifBadge(){
   const badge=document.getElementById('notifBadge');
+  const bell=document.getElementById('notifBellBtn');
   if(!badge) return;
   const seen=getActivitySeenTs();
   const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
@@ -4760,11 +5207,23 @@ function updateNotifBadge(){
   if(unread>0){
     badge.textContent=unread>99?'99+':String(unread);
     badge.style.display='flex';
+    if(bell) bell.classList.add('has-unread');
   }else{
     badge.style.display='none';
+    if(bell) bell.classList.remove('has-unread');
   }
 }
 
+// A handful of early Activity Log entries were accidentally written with a
+// raw SVG string as the "icon" (a copy-paste of the calendar icon constant
+// used elsewhere in the UI) instead of a plain emoji/glyph. escHtml() alone
+// just renders that markup as visible garbled text rather than an icon, so
+// anything that isn't short/plain falls back to a generic bullet here.
+function _sanitizeActivityIcon(icon){
+  const s=String(icon||'').trim();
+  if(!s || s.length>4 || s.includes('<') || s.includes('>')) return '•';
+  return s;
+}
 function renderActivityFeed(){
   const body=document.getElementById('activityBody');
   if(!activityFeed.length){
@@ -4777,7 +5236,7 @@ function renderActivityFeed(){
     const ms=_activityTsMillis(e);
     const unread=e.uid!==myUid&&ms>seen;
     return `<div class="activity-row${unread?' unread':''}">
-      <div class="activity-row-icon">${escHtml(e.icon||'•')}</div>
+      <div class="activity-row-icon">${escHtml(_sanitizeActivityIcon(e.icon))}</div>
       <div class="activity-row-main">
         <div class="activity-row-text"><b>${escHtml(e.userLabel||'Someone')}</b> ${escHtml(e.text||'')}</div>
         <div class="activity-row-meta">
@@ -4911,6 +5370,7 @@ function renderModelCards(){
         <div class="model-card-actions-row">
           <button class="row-action-btn edit model-card-action-btn model-rename-btn" title="Rename model" style="width:26px;height:26px;font-size:13px;" data-model="${m}">✎</button>
           <button class="row-action-btn edit model-card-action-btn model-duplicate-btn" title="Duplicate model" style="width:26px;height:26px;font-size:13px;margin-left:-2px;" data-model="${m}">⧉</button>
+          <button class="row-action-btn edit model-card-action-btn model-save-template-btn" title="Save checklist as template" style="width:26px;height:26px;font-size:13px;margin-left:4px;" data-model="${m}">📑</button>
           <button class="row-action-btn archive model-card-action-btn model-archive-btn" title="Archive model" style="width:26px;height:26px;font-size:13px;margin-left:4px;" data-model="${m}">🗄</button>
           <button class="row-action-btn delete model-card-action-btn model-delete-btn" title="Delete model" style="width:26px;height:26px;font-size:13px;margin-left:2px;" data-model="${m}">🗑</button>
         </div>`;
@@ -5041,7 +5501,7 @@ function renderModelCards(){
         else delete deadlines[m];
         save();renderAll();
         toast(CAL_ICON,`Model deadline ${val?'set':'cleared'}`);
-        logActivity(CAL_ICON,`${val?`set deadline to ${val} for`:'cleared the deadline for'} model "${m}"`,m);
+        logActivity('📅',`${val?`set deadline to ${val} for`:'cleared the deadline for'} model "${m}"`,m);
       });
     }
 
@@ -5061,6 +5521,15 @@ function renderModelCards(){
       dupBtn.addEventListener('click',e=>{
         e.stopPropagation();
         duplicateModel(m);
+      });
+    }
+
+    // Save as Template button click
+    const saveTplBtn=card.querySelector('.model-save-template-btn');
+    if(saveTplBtn){
+      saveTplBtn.addEventListener('click',e=>{
+        e.stopPropagation();
+        saveModelAsTemplate(m);
       });
     }
 
@@ -5187,6 +5656,14 @@ function updateArchiveBadge(){
   badge.style.display=n>0?'':'none';
 }
 
+// Keeps the Analytics entry-point in the overflow menu and the toolbar
+// button beside Timeline in sync, since either one can toggle the view.
+function setAnalyticsBtnActive(active){
+  const menuBtn=document.getElementById('analyticsViewBtn');
+  const toolbarBtn=document.getElementById('analyticsToggleBtn');
+  if(menuBtn) menuBtn.classList.toggle('active-view',active);
+  if(toolbarBtn) toolbarBtn.classList.toggle('active-view',active);
+}
 function setArchiveView(active){
   archiveViewActive=active;
   document.getElementById('mainDashboardView').style.display=active?'none':'';
@@ -5200,12 +5677,12 @@ function setArchiveView(active){
     const analyticsViewEl=document.getElementById('analyticsView');
     if(analyticsViewEl) analyticsViewEl.style.display='none';
     analyticsViewActive=false;
-    const analyticsBtn=document.getElementById('analyticsViewBtn');
-    if(analyticsBtn) analyticsBtn.classList.remove('active-view');
+    setAnalyticsBtnActive(false);
   }
   const footerBarEl=document.getElementById('footerBar');
   if(footerBarEl) footerBarEl.style.display=active?'none':'';
   document.getElementById('archiveViewBtn').classList.toggle('active-view',active);
+  window.scrollTo(0,0);
   if(active) renderArchiveView();
 }
 
@@ -5300,7 +5777,7 @@ function restoreModel(name){
   archivedModelsSet.delete(name);
   refreshModelsList();
   activeTab=name; localStorage.setItem('mlc_activeTab',name);
-  if(archiveViewActive) renderArchiveView();
+  save();renderAll();updateArchiveBadge();
   toast('↺',`Model restored: ${name}`);
   logActivity('↺',`restored model "${name}" from archive`,name);
 }
@@ -5327,8 +5804,7 @@ function setRecycleView(active){
     const analyticsViewEl=document.getElementById('analyticsView');
     if(analyticsViewEl) analyticsViewEl.style.display='none';
     analyticsViewActive=false;
-    const analyticsBtn=document.getElementById('analyticsViewBtn');
-    if(analyticsBtn) analyticsBtn.classList.remove('active-view');
+    setAnalyticsBtnActive(false);
   } else if(mainView && !archiveViewActive && !analyticsViewActive){
     mainView.style.display='';
   }
@@ -5337,6 +5813,7 @@ function setRecycleView(active){
   if(footerBarEl) footerBarEl.style.display=(active||archiveViewActive||analyticsViewActive)?'none':'';
   const btn=document.getElementById('recycleViewBtn');
   if(btn) btn.classList.toggle('active-view',active);
+  window.scrollTo(0,0);
   if(active) renderRecycleView();
 }
 
@@ -5369,8 +5846,12 @@ function setAnalyticsView(active){
   if(analyticsViewEl) analyticsViewEl.style.display=active?'':'none';
   const footerBarEl=document.getElementById('footerBar');
   if(footerBarEl) footerBarEl.style.display=(archiveViewActive||recycleViewActive)?'none':'';
-  const btn=document.getElementById('analyticsViewBtn');
-  if(btn) btn.classList.toggle('active-view',active);
+  setAnalyticsBtnActive(active);
+  // Hiding/showing the large main view changes the page's scrollable
+  // height, but the browser keeps the old scroll offset — which can now
+  // overshoot past the shorter content and land on the footer. Reset to
+  // the top whenever the view switches, in either direction.
+  window.scrollTo(0,0);
   if(active){
     // Default the Analytics filter to whichever model was open on the
     // home page — so clicking a model, then opening Analytics, shows
@@ -5421,7 +5902,70 @@ function renderAnalyticsView(){
   renderTrendChart();
   renderWeeklyChart();
   renderOverdueAnalysis();
+  renderTeamWorkload();
   renderKPIs();
+}
+
+// Team Workload panel — counts open (not-done) tasks per workspace member so
+// it's obvious at a glance who's carrying too much. Respects the same model
+// filter as the rest of the Analytics view. Members with zero tasks still
+// show up (at 0) so the list reflects the full roster, and any tasks whose
+// assignee is no longer a member land in an "Unassigned" bucket alongside
+// truly unassigned tasks.
+function renderTeamWorkload(){
+  const wrap=document.getElementById('workloadList');
+  if(!wrap) return;
+
+  const memberUids=Object.keys(workspaceMembers||{});
+  if(memberUids.length<2){
+    wrap.innerHTML='<div class="analytics-empty">Invite teammates to see workload distribution.</div>';
+    return;
+  }
+
+  const modelFilter=analyticsSelectedModel;
+  const openTasks=analyticsAllTasks(modelFilter).filter(t=>!t.done);
+
+  const counts={};
+  memberUids.forEach(uid=>{ counts[uid]=0; });
+  let unassigned=0;
+  openTasks.forEach(t=>{
+    if(t.assignee && counts.hasOwnProperty(t.assignee)) counts[t.assignee]++;
+    else unassigned++;
+  });
+
+  let rows=memberUids.map(uid=>({
+    uid,
+    name:(workspaceMembers[uid]&&(workspaceMembers[uid].displayName||workspaceMembers[uid].email))||'Member',
+    count:counts[uid]
+  })).sort((a,b)=>b.count-a.count);
+  if(unassigned>0) rows.push({uid:null,name:'Unassigned',count:unassigned});
+
+  if(!rows.some(r=>r.count>0)){
+    wrap.innerHTML='<div class="analytics-empty">No open tasks assigned yet.</div>';
+    return;
+  }
+
+  const max=Math.max(1, ...rows.map(r=>r.count));
+  const withTasks=rows.filter(r=>r.count>0);
+  const avg=withTasks.length ? withTasks.reduce((s,r)=>s+r.count,0)/withTasks.length : 0;
+
+  wrap.innerHTML=rows.map(r=>{
+    const pct=Math.round((r.count/max)*100);
+    const color=r.uid ? (colorForAssignee(r.uid)||'#a1a1aa') : '#71717a';
+    const initial=escHtml((r.name.trim()[0]||'?').toUpperCase());
+    const overloaded=r.uid && r.count>=3 && r.count>=avg*1.5;
+    return `
+    <div class="workload-row">
+      <div class="workload-avatar" style="background:linear-gradient(145deg, ${color}dd, ${color});">${initial}</div>
+      <div class="workload-info">
+        <div class="workload-name-row">
+          <span class="workload-name">${escHtml(r.name)}</span>
+          <span class="workload-name-meta">${overloaded?'<span class="workload-badge-overloaded">Overloaded</span>':''}<span class="workload-count">${r.count} Task${r.count===1?'':'s'}</span></span>
+        </div>
+        <div class="workload-bar-track"><div class="workload-bar-fill" style="width:${pct}%;background:linear-gradient(90deg, ${color}, ${color}aa);"></div></div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 function renderAnalyticsKpis(){
@@ -6009,7 +6553,8 @@ function renderTabs(){
 
 function matchesFilter(task){
   if(activeFilter==='done'&&!task.done) return false;
-  if(activeFilter==='pending'&&task.done) return false;
+  if(activeFilter==='inprogress'&&(task.done||task.status!=='inprogress')) return false;
+  if(activeFilter==='pending'&&(task.done||task.status==='inprogress')) return false;
   if(activeFilter==='critical'&&!isOverdueTask(task)) return false;
   if(activeFilter==='high'&&task.priority!=='high') return false;
   if(activeFilter==='med'&&task.priority!=='med') return false;
@@ -6048,12 +6593,19 @@ function closeAssigneeDropdown(){
   const dd=document.getElementById('assigneeDropdown');
   if(dd) dd.classList.remove('open');
 }
-function openAssigneeDropdown(triggerEl, idx){
+function openAssigneeDropdown(triggerEl, idx, subIdx){
   const dd=document.getElementById('assigneeDropdown');
-  const task=(state[activeTab]||[])[idx];
+  const parentTask=(state[activeTab]||[])[idx];
+  const task=subIdx==null?parentTask:(parentTask&&Array.isArray(parentTask.subtasks)?parentTask.subtasks[subIdx]:null);
   if(!dd||!task) return;
 
   const teamIconSvg='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+  // Current open-task load per member, across every active model — so the
+  // count shown here matches "Team Workload" in Analytics and reflects real
+  // capacity, not just this one model.
+  const openTasksAll=analyticsAllTasks('__all__').filter(t=>!t.done);
+  const assignCounts={};
+  openTasksAll.forEach(t=>{ if(t.assignee) assignCounts[t.assignee]=(assignCounts[t.assignee]||0)+1; });
   const items=[{uid:'',label:'Unassigned'}].concat(
     Object.entries(workspaceMembers).map(([uid,info])=>({uid,label:info.displayName||info.email||uid}))
   );
@@ -6063,12 +6615,14 @@ function openAssigneeDropdown(triggerEl, idx){
     const avatarHtml=it.uid
       ?`<span class="assignee-dropdown-avatar" style="background:linear-gradient(145deg, ${color}dd, ${color});color:#fff;border-color:transparent;">${escHtml((it.label[0]||'?').toUpperCase())}</span>`
       :`<span class="assignee-dropdown-avatar">${teamIconSvg}</span>`;
-    return `<div class="assignee-dropdown-item${isSelected?' selected':''}" data-uid="${escHtml(it.uid)}">${avatarHtml}<span>${escHtml(it.label)}</span></div>`;
+    const countHtml=it.uid?`<span class="assignee-dropdown-count">${assignCounts[it.uid]||0}</span>`:'';
+    return `<div class="assignee-dropdown-item${isSelected?' selected':''}" data-uid="${escHtml(it.uid)}">${avatarHtml}<span>${escHtml(it.label)}</span>${countHtml}</div>`;
   }).join('');
 
   dd.querySelectorAll('.assignee-dropdown-item').forEach(item=>{
     item.onclick=()=>{
-      const t=(state[activeTab]||[])[idx];
+      const parentT=(state[activeTab]||[])[idx];
+      const t=subIdx==null?parentT:(parentT&&Array.isArray(parentT.subtasks)?parentT.subtasks[subIdx]:null);
       if(t){ t.assignee=item.dataset.uid||''; save(); renderAll(); }
       closeAssigneeDropdown();
     };
@@ -6092,6 +6646,124 @@ document.addEventListener('click',e=>{
 document.addEventListener('scroll',closeAssigneeDropdown,true);
 window.addEventListener('resize',closeAssigneeDropdown);
 
+// Status chip dropdown — same floating-menu pattern as the assignee picker,
+// letting a task or subtask be set to Pending, In Progress, or Completed.
+// subIdx is null for a top-level task, or the subtask's index within its
+// parent's subtasks array.
+const STATUS_OPTIONS=[
+  {key:'pending',   label:'Pending',     color:'var(--text-muted)'},
+  {key:'inprogress',label:'In Progress', color:'var(--yellow)'},
+  {key:'done',      label:'Completed',   color:'var(--green)'}
+];
+function closeStatusDropdown(){
+  const dd=document.getElementById('statusDropdown');
+  if(dd) dd.classList.remove('open');
+}
+function openStatusDropdown(triggerEl, idx, subIdx){
+  const dd=document.getElementById('statusDropdown');
+  const model=activeTab;
+  const task=(state[model]||[])[idx];
+  if(!dd||!task) return;
+  const target=subIdx==null?task:(getSubtasks(model,idx)[subIdx]);
+  if(!target) return;
+  const current=target.done?'done':(target.status==='inprogress'?'inprogress':'pending');
+
+  dd.innerHTML=STATUS_OPTIONS.map(opt=>`
+    <div class="status-dropdown-item${opt.key===current?' selected':''}" data-status="${opt.key}">
+      <span class="status-dropdown-dot" style="background:${opt.color};"></span>
+      <span>${opt.label}</span>
+    </div>`).join('');
+
+  dd.querySelectorAll('.status-dropdown-item').forEach(item=>{
+    item.onclick=()=>{
+      const newStatus=item.dataset.status;
+      if(subIdx==null) setTaskStatus(model,idx,newStatus);
+      else setSubtaskStatus(model,idx,subIdx,newStatus);
+    };
+  });
+
+  const rect=triggerEl.getBoundingClientRect();
+  dd.classList.add('open'); // needs to be visible to measure its width
+  const ddWidth=dd.offsetWidth||168;
+  let left=rect.left;
+  if(left+ddWidth>window.innerWidth-8) left=window.innerWidth-ddWidth-8;
+  dd.style.left=Math.max(8,left)+'px';
+  dd.style.top=(rect.bottom+6)+'px';
+}
+document.addEventListener('click',e=>{
+  const dd=document.getElementById('statusDropdown');
+  if(!dd||!dd.classList.contains('open')) return;
+  if(e.target.closest('#statusDropdown')||e.target.closest('.status-chip')) return;
+  closeStatusDropdown();
+});
+document.addEventListener('scroll',closeStatusDropdown,true);
+window.addEventListener('resize',closeStatusDropdown);
+
+// Combined Notes / Comments / Deadline dropdown — replaces the three
+// separate per-row icons with a single trigger + floating menu, following
+// the same pattern as the assignee/status dropdowns above. subIdx is null
+// for a top-level task, or the subtask's index within its parent's list.
+function closeRowMenuDropdown(){
+  const dd=document.getElementById('rowMenuDropdown');
+  if(dd) dd.classList.remove('open');
+}
+function openRowMenuDropdown(triggerEl, model, idx, subIdx){
+  const dd=document.getElementById('rowMenuDropdown');
+  const task=(state[model]||[])[idx];
+  if(!dd||!task) return;
+  const target=subIdx==null?task:(getSubtasks(model,idx)[subIdx]);
+  if(!target) return;
+
+  const hasNote=!!(target.notes||(target.screenshots&&target.screenshots.length));
+  const commentsCount=(target.comments&&target.comments.length)||0;
+
+  dd.innerHTML=`
+    <div class="row-menu-item${hasNote?' active':''}" data-kind="notes">
+      <span class="row-menu-item-icon">📝</span>
+      <span>${hasNote?'View / edit note':'Add note'}</span>
+    </div>
+    <div class="row-menu-item${commentsCount?' active':''}" data-kind="comments">
+      <span class="row-menu-item-icon">💬</span>
+      <span>${commentsCount?'Comments':'Add a comment'}</span>
+      ${commentsCount?`<span class="row-menu-item-count">${commentsCount>99?'99+':commentsCount}</span>`:''}
+    </div>`;
+
+  dd.querySelector('[data-kind="notes"]').addEventListener('click',()=>{
+    closeRowMenuDropdown();
+    if(subIdx==null) openNotesModal(model,idx);
+    else openNotesForObj(target,()=>{save();renderAll();});
+  });
+  dd.querySelector('[data-kind="comments"]').addEventListener('click',()=>{
+    closeRowMenuDropdown();
+    openCommentsModal(model,idx,subIdx);
+  });
+
+  const rect=triggerEl.getBoundingClientRect();
+  dd.classList.add('open'); // needs to be visible to measure its width
+  const ddWidth=dd.offsetWidth||210;
+  let left=rect.left;
+  if(left+ddWidth>window.innerWidth-8) left=window.innerWidth-ddWidth-8;
+  dd.style.left=Math.max(8,left)+'px';
+  dd.style.top=(rect.bottom+6)+'px';
+}
+document.addEventListener('click',e=>{
+  const dd=document.getElementById('rowMenuDropdown');
+  if(!dd||!dd.classList.contains('open')) return;
+  if(e.target.closest('#rowMenuDropdown')||e.target.closest('.row-menu-trigger')) return;
+  closeRowMenuDropdown();
+});
+// Opening the native date picker for the deadline item can itself trigger a
+// scroll or resize (mobile keyboards/pickers shifting the viewport, or the
+// browser scrolling the focused input into view) — if that happened to also
+// close this dropdown, the picker would get yanked out from under the user
+// before they could pick a date. Skip the auto-close in that case.
+function rowMenuDropdownHasFocus(){
+  const dd=document.getElementById('rowMenuDropdown');
+  return !!(dd && document.activeElement && dd.contains(document.activeElement));
+}
+document.addEventListener('scroll',e=>{ if(!rowMenuDropdownHasFocus()) closeRowMenuDropdown(); },true);
+window.addEventListener('resize',()=>{ if(!rowMenuDropdownHasFocus()) closeRowMenuDropdown(); });
+
 function renderTaskList(){
   const table=document.getElementById('checklistTable');
   const compare=document.getElementById('compareGrid');
@@ -6105,6 +6777,7 @@ function renderTaskList(){
   const filterBarEl=document.getElementById('filterBar');
   const ganttEl=document.getElementById('ganttView');
   const ganttToggleBtn=document.getElementById('ganttToggleBtn');
+  const analyticsToggleBtn=document.getElementById('analyticsToggleBtn');
 
   if(activeTab==='Compare Models'){
     table.style.display='none';addBar.style.display='none';
@@ -6114,9 +6787,11 @@ function renderTaskList(){
     searchBoxEl.style.display='none';filterBarEl.style.display='none';
     if(ganttEl) ganttEl.style.display='none';
     if(ganttToggleBtn) ganttToggleBtn.style.display='none';
+    if(analyticsToggleBtn) analyticsToggleBtn.style.display='none';
     compare.style.display='block';renderCompare();return;
   }
   if(ganttToggleBtn) ganttToggleBtn.style.display='';
+  if(analyticsToggleBtn) analyticsToggleBtn.style.display='';
   compare.style.display='none';
 
   // No models — hide task section entirely
@@ -6127,7 +6802,8 @@ function renderTaskList(){
     searchBoxEl.style.display='none';filterBarEl.style.display='none';
     if(ganttEl) ganttEl.style.display='none';
     if(ganttToggleBtn) ganttToggleBtn.style.display='none';
-    ['all','done','pending','critical','high','med','low','mine'].forEach(k=>{
+    if(analyticsToggleBtn) analyticsToggleBtn.style.display='none';
+    ['all','done','inprogress','pending','critical','high','med','low','mine'].forEach(k=>{
       const el=document.getElementById('fc-'+k); if(el) el.textContent='0';
     });
     return;
@@ -6156,15 +6832,23 @@ function renderTaskList(){
   const tasks=state[activeTab]||[];
 
   // ── UPDATE FILTER COUNTS ──
+  // Counts include subtasks alongside their parent tasks, so a task with
+  // 3 subtasks contributes 4 total items to these badges rather than just 1.
+  const allItems=tasks.reduce((acc,t)=>{
+    acc.push(t);
+    (Array.isArray(t.subtasks)?t.subtasks:[]).forEach(s=>acc.push(s));
+    return acc;
+  },[]);
   const fc={
-    all: tasks.length,
-    done: tasks.filter(t=>t.done).length,
-    pending: tasks.filter(t=>!t.done).length,
-    critical: tasks.filter(isOverdueTask).length,
-    high: tasks.filter(t=>t.priority==='high').length,
-    med: tasks.filter(t=>t.priority==='med').length,
-    low: tasks.filter(t=>t.priority==='low').length,
-    mine: (auth&&auth.currentUser)?tasks.filter(t=>t.assignee===auth.currentUser.uid).length:0,
+    all: allItems.length,
+    done: allItems.filter(t=>t.done).length,
+    inprogress: allItems.filter(t=>!t.done&&t.status==='inprogress').length,
+    pending: allItems.filter(t=>!t.done&&t.status!=='inprogress').length,
+    critical: allItems.filter(isOverdueTask).length,
+    high: allItems.filter(t=>t.priority==='high').length,
+    med: allItems.filter(t=>t.priority==='med').length,
+    low: allItems.filter(t=>t.priority==='low').length,
+    mine: (auth&&auth.currentUser)?allItems.filter(t=>t.assignee===auth.currentUser.uid).length:0,
   };
   Object.entries(fc).forEach(([key,val])=>{
     const el=document.getElementById('fc-'+key);
@@ -6220,7 +6904,7 @@ function renderTaskList(){
         va=prioritySortSnapshot&&prioritySortSnapshot.has(a.task)?prioritySortSnapshot.get(a.task):prioOrder[a.task.priority||'med'];
         vb=prioritySortSnapshot&&prioritySortSnapshot.has(b.task)?prioritySortSnapshot.get(b.task):prioOrder[b.task.priority||'med'];
       }
-      else if(sortCol==='status'){ va=a.task.done?1:0; vb=b.task.done?1:0; }
+      else if(sortCol==='status'){ const rank=t=>t.done?2:(t.status==='inprogress'?1:0); va=rank(a.task); vb=rank(b.task); }
       if(va<vb) return sortDir==='asc'?-1:1;
       if(va>vb) return sortDir==='asc'?1:-1;
       return 0;
@@ -6313,11 +6997,14 @@ function renderTaskList(){
       <div><input type="checkbox" class="task-checkbox row-chk" ${checked?'checked':''}></div>
       ${nameCell}
       <div><button class="priority-badge ${prioClass[task.priority||'med']}" data-idx="${idx}">${prioMap[task.priority||'med']}</button></div>
-      <div style="display:flex;align-items:center;justify-content:center;"><button class="status-chip ${showAsDone?'done':'pending'}" data-idx="${idx}"><span class="chip-dot"></span>${showAsDone?'Done':'Pending'}</button></div>
+      <div style="display:flex;align-items:center;justify-content:center;"><button class="status-chip ${showAsDone?'done':(task.status==='inprogress'?'inprogress':'pending')}" data-idx="${idx}"><span class="chip-dot"></span>${showAsDone?'Done':(task.status==='inprogress'?'In Progress':'Pending')}</button></div>
       ${dueCellHtml}
       <div class="task-icons-cell">
-        <div class="notes-indicator ${(task.notes||(task.screenshots&&task.screenshots.length))?'has-note':''}" data-idx="${idx}" title="${(task.notes||(task.screenshots&&task.screenshots.length))?'View/edit note':'Add note'}">📝</div>
-        <div class="task-deadline-wrap ${dlIconCls}" data-idx="${idx}" title="${dlTitle}">
+        <div class="row-menu-trigger${(task.notes||(task.screenshots&&task.screenshots.length)||(task.comments&&task.comments.length))?' has-activity':''}" data-idx="${idx}" title="Notes &amp; comments">
+          📋${(task.comments&&task.comments.length)?`<span class="row-menu-badge">${task.comments.length>99?'99+':task.comments.length}</span>`:''}
+        </div>
+        <div class="deadline-picker ${dlIconCls}" data-idx="${idx}" title="${dlTitle}">
+          ${CAL_ICON}
           <input type="date" class="task-deadline-native" tabindex="-1" value="${task.taskDeadline||''}">
         </div>
         ${Object.keys(workspaceMembers).length>1?`<div class="assignee-picker" data-idx="${idx}" title="${task.assignee&&workspaceMembers[task.assignee]?'Assigned to '+escHtml(workspaceMembers[task.assignee].displayName||workspaceMembers[task.assignee].email):'Assign to a teammate'}">
@@ -6372,6 +7059,21 @@ function renderTaskList(){
       };
     }
 
+    const deadlinePickerEl=row.querySelector('.deadline-picker');
+    if(deadlinePickerEl){
+      const deadlineNativeInput=deadlinePickerEl.querySelector('.task-deadline-native');
+      deadlinePickerEl.onclick=e=>e.stopPropagation();
+      deadlineNativeInput.onclick=e=>e.stopPropagation();
+      deadlineNativeInput.onchange=e=>{
+        e.stopPropagation();
+        const val=e.target.value;
+        task.taskDeadline=val;
+        save();renderAll();
+        toast(CAL_ICON,`Task deadline ${val?'set':'cleared'}`);
+        logActivity('📅',`${val?`set deadline to ${val} for`:'cleared the deadline for'} task "${task.name}"`,activeTab);
+      };
+    }
+
     if(isEditing){
       const input=row.querySelector('#editInput');
       const commit=()=>{editingIdx=null;renameTask(activeTab,idx,input.value);};
@@ -6381,22 +7083,12 @@ function renderTaskList(){
       input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();commit();}if(e.key==='Escape'){e.preventDefault();cancel();}});
       input.onclick=e=>e.stopPropagation();
     } else {
-      row.querySelector('.status-chip').onclick=e=>{e.stopPropagation();toggleTask(activeTab,idx);};
+      row.querySelector('.status-chip').onclick=e=>{e.stopPropagation();openStatusDropdown(e.currentTarget,idx,null);};
       row.querySelector('.edit').onclick=e=>{e.stopPropagation();editingIdx=idx;renderTaskList();};
       row.querySelector('.move-up').onclick=e=>{e.stopPropagation();moveTask(activeTab,idx,-1);};
       row.querySelector('.move-down').onclick=e=>{e.stopPropagation();moveTask(activeTab,idx,1);};
       row.querySelector('.delete').onclick=e=>{e.stopPropagation();deleteTask(activeTab,idx);};
-      row.querySelector('.notes-indicator').onclick=e=>{e.stopPropagation();openNotesModal(activeTab,idx);};
-      const dlInput=row.querySelector('.task-deadline-native');
-      dlInput.onclick=e=>e.stopPropagation();
-      dlInput.onchange=e=>{
-        e.stopPropagation();
-        const val=e.target.value;
-        state[activeTab][idx].taskDeadline=val;
-        save();renderAll();
-        toast(CAL_ICON,`Task deadline ${val?'set':'cleared'}`);
-        logActivity(CAL_ICON,`${val?`set deadline to ${val} for`:'cleared the deadline for'} task "${state[activeTab][idx].name}"`,activeTab);
-      };
+      row.querySelector('.row-menu-trigger').onclick=e=>{e.stopPropagation();openRowMenuDropdown(e.currentTarget,activeTab,idx,null);};
 
       // Subtask toggle — flips CSS class only, no re-render, so transition plays
       const toggleEl=row.querySelector('.subtask-toggle-btn');
@@ -6458,21 +7150,30 @@ function renderTaskList(){
       sBar.innerHTML=`
         <span class="bulk-count">${selectedHere.length} selected</span>
         <button class="bulk-btn" data-act="done">Mark Done</button>
+        <button class="bulk-btn" data-act="inprogress">Mark In Progress</button>
         <button class="bulk-btn" data-act="pending">Mark Pending</button>
         <button class="bulk-btn bulk-btn-deadline" data-act="deadline">📅 Set Deadline</button>
         <button class="bulk-btn bulk-btn-priority" data-act="priority">⚑ Set Priority</button>
+        <button class="bulk-btn bulk-btn-duplicate" data-act="duplicate" title="Duplicate selected subtasks within this task">⧉ Duplicate</button>
         <button class="bulk-btn danger" data-act="delete">Delete Selected</button>
         <button class="bulk-btn" data-act="clear" style="margin-left:auto;">Clear Selection</button>`;
       sBar.querySelector('[data-act="done"]').onclick=e=>{
         e.stopPropagation();
-        selectedHere.forEach(k=>{const sI=Number(k.split('::')[2]); if(subs[sI])subs[sI].done=true;});
+        selectedHere.forEach(k=>{const sI=Number(k.split('::')[2]); if(subs[sI]){subs[sI].done=true;subs[sI].status='done';}});
         subKeysForTask.forEach(k=>selectedSubtasks.delete(k));
         save();renderAll();toast('✓',`Marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} done`);
         logActivity('✓',`marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} done in "${state[activeTab][idx].name}"`,activeTab);
       };
+      sBar.querySelector('[data-act="inprogress"]').onclick=e=>{
+        e.stopPropagation();
+        selectedHere.forEach(k=>{const sI=Number(k.split('::')[2]); if(subs[sI]){subs[sI].done=false;subs[sI].status='inprogress';}});
+        subKeysForTask.forEach(k=>selectedSubtasks.delete(k));
+        save();renderAll();toast('⏳',`Marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} in progress`);
+        logActivity('⏳',`marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} in progress in "${state[activeTab][idx].name}"`,activeTab);
+      };
       sBar.querySelector('[data-act="pending"]').onclick=e=>{
         e.stopPropagation();
-        selectedHere.forEach(k=>{const sI=Number(k.split('::')[2]); if(subs[sI])subs[sI].done=false;});
+        selectedHere.forEach(k=>{const sI=Number(k.split('::')[2]); if(subs[sI]){subs[sI].done=false;subs[sI].status='pending';}});
         subKeysForTask.forEach(k=>selectedSubtasks.delete(k));
         save();renderAll();toast('↺',`Marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} pending`);
         logActivity('↺',`marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} pending in "${state[activeTab][idx].name}"`,activeTab);
@@ -6497,6 +7198,19 @@ function renderTaskList(){
       sBar.querySelector('[data-act="priority"]').onclick=e=>{
         e.stopPropagation();
         openSubBulkPriorityModal(activeTab,idx,selectedHere.map(k=>Number(k.split('::')[2])));
+      };
+      sBar.querySelector('[data-act="duplicate"]').onclick=e=>{
+        e.stopPropagation();
+        const n=selectedHere.length;
+        const sIdxs=selectedHere.map(k=>Number(k.split('::')[2])).sort((a,b)=>b-a); // descending so each insert index stays valid
+        sIdxs.forEach(sI=>{
+          const clone=JSON.parse(JSON.stringify(subs[sI]));
+          subs.splice(sI+1,0,clone);
+        });
+        clearSubSelectionsForTask(activeTab,idx);
+        save();renderAll();
+        toast('⧉',`Duplicated ${n} subtask${n===1?'':'s'}`);
+        logActivity('⧉',`duplicated ${n} subtask${n===1?'':'s'} in "${state[activeTab][idx].name}"`,activeTab);
       };
       panel.appendChild(sBar);
     }
@@ -6543,6 +7257,7 @@ function renderTaskList(){
         }
       }
 
+      const subAssigneeColor=sub.assignee?colorForAssignee(sub.assignee):null;
       const selKey=subSelKey(activeTab,idx,sIdx);
       const isSelected=selectedSubtasks.has(selKey);
       sRow.innerHTML=`
@@ -6552,13 +7267,19 @@ function renderTaskList(){
           <span class="subtask-name${sub.done?' done':''}">${escHtml(sub.name)}</span>
         </div>
         <div><button class="priority-badge ${prioClass2[sub.priority||'med']}" title="Click to cycle priority">${prioMap2[sub.priority||'med']}</button></div>
-        <div style="display:flex;align-items:center;justify-content:center;"><button class="status-chip ${sub.done?'done':'pending'}"><span class="chip-dot"></span>${sub.done?'Done':'Pending'}</button></div>
+        <div style="display:flex;align-items:center;justify-content:center;"><button class="status-chip ${sub.done?'done':(sub.status==='inprogress'?'inprogress':'pending')}"><span class="chip-dot"></span>${sub.done?'Done':(sub.status==='inprogress'?'In Progress':'Pending')}</button></div>
         ${subDueHtml}
         <div class="task-icons-cell">
-          <div class="notes-indicator ${(sub.notes||(sub.screenshots&&sub.screenshots.length))?'has-note':''}" title="${(sub.notes||(sub.screenshots&&sub.screenshots.length))?'View/edit note':'Add note'}">📝</div>
-          <div class="task-deadline-wrap ${dlIconCls2}" title="${dlTitle2}">
+          <div class="row-menu-trigger${(sub.notes||(sub.screenshots&&sub.screenshots.length)||(sub.comments&&sub.comments.length))?' has-activity':''}" title="Notes &amp; comments">
+            📋${(sub.comments&&sub.comments.length)?`<span class="row-menu-badge">${sub.comments.length>99?'99+':sub.comments.length}</span>`:''}
+          </div>
+          <div class="deadline-picker ${dlIconCls2}" title="${dlTitle2}">
+            ${CAL_ICON}
             <input type="date" class="task-deadline-native" tabindex="-1" value="${sub.taskDeadline||''}">
           </div>
+          ${Object.keys(workspaceMembers).length>1?`<div class="assignee-picker" title="${sub.assignee&&workspaceMembers[sub.assignee]?'Assigned to '+escHtml(workspaceMembers[sub.assignee].displayName||workspaceMembers[sub.assignee].email):'Assign to a teammate'}">
+            <span class="assignee-avatar-icon${sub.assignee?' is-assigned':''}"${subAssigneeColor?` style="background:linear-gradient(145deg, ${subAssigneeColor}dd, ${subAssigneeColor});box-shadow:0 2px 6px -1px ${subAssigneeColor}55, inset 0 1px 0 rgba(255,255,255,0.18);"`:''}>${sub.assignee&&workspaceMembers[sub.assignee]?escHtml(((workspaceMembers[sub.assignee].displayName||workspaceMembers[sub.assignee].email||'?')[0]||'?').toUpperCase()):'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>'}</span>
+          </div>`:''}
         </div>
         <div class="row-actions">
           <button class="row-action-btn edit" title="Rename">✎</button>
@@ -6607,24 +7328,37 @@ function renderTaskList(){
         clearSubSelectionsForTask(activeTab,idx);
         save();renderAll();
       });
-      sRow.querySelector('.status-chip').onclick=e=>{e.stopPropagation();toggleSubtask(activeTab,idx,sIdx);};
+      sRow.querySelector('.status-chip').onclick=e=>{e.stopPropagation();openStatusDropdown(e.currentTarget,idx,sIdx);};
       sRow.querySelector('.priority-badge').onclick=e=>{
         e.stopPropagation();
         const cyc={high:'low',med:'high',low:'med'};
         setSubPriority(activeTab,idx,sIdx,cyc[sub.priority||'med']);
       };
-      sRow.querySelector('.notes-indicator').onclick=e=>{
+      sRow.querySelector('.row-menu-trigger').onclick=e=>{
         e.stopPropagation();
-        openNotesForObj(sub,()=>{save();renderAll();});
+        openRowMenuDropdown(e.currentTarget,activeTab,idx,sIdx);
       };
-      // Deadline
-      const sdlNative=sRow.querySelector('.task-deadline-native');
-      sdlNative.onclick=e=>e.stopPropagation();
-      sdlNative.onchange=e=>{
-        e.stopPropagation(); sub.taskDeadline=e.target.value;
-        save();renderAll(); toast(CAL_ICON,`Subtask deadline ${e.target.value?'set':'cleared'}`);
-        logActivity(CAL_ICON,`${e.target.value?`set deadline to ${e.target.value} for`:'cleared the deadline for'} subtask "${sub.name}"`,activeTab);
-      };
+      const subDeadlinePickerEl=sRow.querySelector('.deadline-picker');
+      if(subDeadlinePickerEl){
+        const subDeadlineNativeInput=subDeadlinePickerEl.querySelector('.task-deadline-native');
+        subDeadlinePickerEl.onclick=e=>e.stopPropagation();
+        subDeadlineNativeInput.onclick=e=>e.stopPropagation();
+        subDeadlineNativeInput.onchange=e=>{
+          e.stopPropagation();
+          const val=e.target.value;
+          sub.taskDeadline=val;
+          save();renderAll();
+          toast(CAL_ICON,`Subtask deadline ${val?'set':'cleared'}`);
+          logActivity('📅',`${val?`set deadline to ${val} for`:'cleared the deadline for'} subtask "${sub.name}"`,activeTab);
+        };
+      }
+      const subAssigneePickerEl=sRow.querySelector('.assignee-picker');
+      if(subAssigneePickerEl){
+        subAssigneePickerEl.onclick=e=>{
+          e.stopPropagation();
+          openAssigneeDropdown(subAssigneePickerEl, idx, sIdx);
+        };
+      }
       // Edit inline
       sRow.querySelector('.row-action-btn.edit').onclick=e=>{
         e.stopPropagation();
@@ -6667,7 +7401,14 @@ function renderTaskList(){
   // under the active filter/search, so it doesn't float alone when a filter
   // hides every completed row. Clicking it toggles whether the done rows
   // below are rendered; state is kept per model in expandedCompletedSet.
-  const visibleDoneCount=doneEntries.filter(e=>matchesFilter(e.task)).length;
+  // Counts each visible completed task plus its (done) subtasks, so the
+  // label reflects total completed items rather than just top-level tasks —
+  // consistent with how DONE is counted everywhere else (model card, filter
+  // chip counts).
+  const visibleDoneCount=doneEntries.filter(e=>matchesFilter(e.task)).reduce((sum,e)=>{
+    const doneSubCount=(Array.isArray(e.task.subtasks)?e.task.subtasks:[]).filter(s=>s.done).length;
+    return sum+1+doneSubCount;
+  },0);
   const isExpanded=expandedCompletedSet.has(activeTab);
   if(visibleDoneCount>0){
     const divider=document.createElement('div');
@@ -6751,6 +7492,11 @@ function renderGantt(){
     const {start,end}=ganttEffectiveDates(t);
     if(start && (!minD||start<minD)) minD=start;
     if(end && (!maxD||end>maxD)) maxD=end;
+    (Array.isArray(t.subtasks)?t.subtasks:[]).forEach(s=>{
+      const sd=ganttEffectiveDates(s);
+      if(sd.start && (!minD||sd.start<minD)) minD=sd.start;
+      if(sd.end && (!maxD||sd.end>maxD)) maxD=sd.end;
+    });
   });
   if(!minD) minD=new Date(today);
   if(!maxD) maxD=ganttAddDays(today,14);
@@ -6786,13 +7532,30 @@ function renderGantt(){
   const labelFrag=document.createDocumentFragment();
   const rowsFrag=document.createDocumentFragment();
   const barEls=[];
+  let rowCount=0;
 
   tasks.forEach((task,idx)=>{
+    const subs=Array.isArray(task.subtasks)?task.subtasks:[];
+    const gKey=subKey(activeTab,idx);
+    const expanded=ganttExpandedSet.has(gKey);
+
     const lrow=document.createElement('div');
     lrow.className='gantt-label-row'+(task.done?' is-done':'');
+    if(subs.length){
+      const toggleBtn=document.createElement('button');
+      toggleBtn.className='gantt-toggle-btn'+(expanded?' expanded':'');
+      toggleBtn.title=expanded?'Hide sub-tasks':'Show sub-tasks';
+      toggleBtn.textContent='▸';
+      toggleBtn.onclick=()=>{
+        if(ganttExpandedSet.has(gKey)) ganttExpandedSet.delete(gKey);
+        else ganttExpandedSet.add(gKey);
+        renderGantt();
+      };
+      lrow.appendChild(toggleBtn);
+    }
     const nameSpan=document.createElement('span');
     nameSpan.className='gantt-label-name';
-    nameSpan.textContent=`${task.sn}. ${task.name}`;
+    nameSpan.textContent=`${task.sn}. ${task.name}`+(subs.length?` (${subs.filter(s=>s.done).length}/${subs.length})`:'');
     nameSpan.title='Open in task list';
     nameSpan.onclick=()=>{ setGanttView(false); };
     const depBtn=document.createElement('button');
@@ -6803,6 +7566,7 @@ function renderGantt(){
     lrow.appendChild(nameSpan);
     lrow.appendChild(depBtn);
     labelFrag.appendChild(lrow);
+    rowCount++;
 
     const rowBg=document.createElement('div');
     rowBg.className='gantt-row-bg';
@@ -6854,12 +7618,80 @@ function renderGantt(){
       attachGanttBarInteractions(bar,task);
     }
     rowsFrag.appendChild(rowBg);
+
+    if(subs.length&&expanded){
+      subs.forEach((sub,sIdx)=>{
+        const slrow=document.createElement('div');
+        slrow.className='gantt-label-row sub-row'+(sub.done?' is-done':'');
+        const snameSpan=document.createElement('span');
+        snameSpan.className='gantt-label-name';
+        snameSpan.textContent=sub.name;
+        snameSpan.title='Open in task list';
+        snameSpan.onclick=()=>{
+          expandedSubtasksSet.add(gKey);
+          setGanttView(false);
+        };
+        slrow.appendChild(snameSpan);
+        labelFrag.appendChild(slrow);
+        rowCount++;
+
+        const srowBg=document.createElement('div');
+        srowBg.className='gantt-row-bg';
+        srowBg.style.width=totalWidth+'px';
+
+        const sd=ganttEffectiveDates(sub);
+        if(!sd.start||!sd.end){
+          const hint=document.createElement('div');
+          hint.className='gantt-empty-row-hint';
+          hint.style.left='12px';
+          hint.textContent='Click to schedule this sub-task →';
+          srowBg.style.cursor='pointer';
+          srowBg.title='Click to give this sub-task a start/due date';
+          srowBg.onclick=()=>{
+            sub.startDate=sub.startDate||ganttFmt(today);
+            sub.taskDeadline=sub.taskDeadline||ganttFmt(ganttAddDays(today,2));
+            save();renderGantt();
+          };
+          srowBg.appendChild(hint);
+        } else {
+          const sOffsetDays=ganttDayDiff(minD,sd.start);
+          const sSpanDays=ganttDayDiff(sd.start,sd.end)+1;
+          const sbar=document.createElement('div');
+          const sOverdue=!sub.done && sd.end<today;
+          const sDueSoon=!sub.done && !sOverdue && ganttDayDiff(today,sd.end)<=3;
+          let scls='gantt-bar is-subtask';
+          if(sub.done) scls+=' is-done';
+          else if(sOverdue) scls+=' is-overdue';
+          else if(sDueSoon) scls+=' is-due-soon';
+          sbar.className=scls;
+          const sBarLeft=sOffsetDays*dayWidth;
+          const sBarWidth=Math.max(dayWidth-2,sSpanDays*dayWidth-4);
+          sbar.style.left=sBarLeft+'px';
+          sbar.style.width=sBarWidth+'px';
+          sbar.title=`${sub.name}\n${sub.startDate||ganttFmt(sd.start)} → ${sub.taskDeadline||ganttFmt(sd.end)}${sOverdue?`\n⚠ ${ganttDayDiff(sd.end,today)}d overdue`:''}`;
+          if(dayWidth>=18){ sbar.textContent=sub.name; }
+          const slh=document.createElement('div'); slh.className='gantt-bar-handle left';
+          const srh=document.createElement('div'); srh.className='gantt-bar-handle right';
+          sbar.appendChild(slh); sbar.appendChild(srh);
+          srowBg.appendChild(sbar);
+          if(sOverdue){
+            const stag=document.createElement('div');
+            stag.className='gantt-bar-delay-tag';
+            stag.style.left=(sBarLeft+sBarWidth+6)+'px';
+            stag.textContent=`⚠ ${ganttDayDiff(sd.end,today)}d overdue`;
+            srowBg.appendChild(stag);
+          }
+          attachGanttBarInteractions(sbar,sub);
+        }
+        rowsFrag.appendChild(srowBg);
+      });
+    }
   });
 
   labelsWrap.appendChild(labelFrag);
   rowsWrap.appendChild(rowsFrag);
 
-  const totalHeight=52+tasks.length*44;
+  const totalHeight=52+rowCount*44;
   const inner=document.getElementById('ganttInner');
   const todayOffset=ganttDayDiff(minD,today);
   if(todayOffset>=0 && todayOffset<totalDays){
@@ -7033,6 +7865,7 @@ document.getElementById('depModalSave').addEventListener('click',()=>{
   save();renderGantt();
 });
 document.getElementById('ganttToggleBtn').addEventListener('click',()=>setGanttView(!ganttViewActive));
+document.getElementById('analyticsToggleBtn').addEventListener('click',()=>setAnalyticsView(!analyticsViewActive));
 document.getElementById('ganttTodayBtn').addEventListener('click',()=>{
   const scrollWrap=document.getElementById('ganttTimelineScroll');
   if(scrollWrap) scrollWrap.dataset.scrolledOnce='';
@@ -7052,20 +7885,6 @@ function updateBulkBar(){
   const bar=document.getElementById('bulkBar');
   document.getElementById('bulkCount').textContent=`${selectedTasks.size} selected`;
   bar.classList.toggle('visible',selectedTasks.size>0);
-
-  const selCompletedBtn=document.getElementById('selectCompletedBtn');
-  const selPendingBtn=document.getElementById('selectPendingBtn');
-  const tasks=(activeTab && activeTab!=='Compare Models' && state[activeTab])?state[activeTab]:[];
-  if(selCompletedBtn){
-    const doneIdxs=tasks.reduce((arr,t,i)=>{if(t.done)arr.push(i);return arr;},[]);
-    const allDoneSelected=doneIdxs.length>0&&doneIdxs.every(i=>selectedTasks.has(i));
-    selCompletedBtn.classList.toggle('has-selection',allDoneSelected);
-  }
-  if(selPendingBtn){
-    const pendingIdxs=tasks.reduce((arr,t,i)=>{if(!t.done)arr.push(i);return arr;},[]);
-    const allPendingSelected=pendingIdxs.length>0&&pendingIdxs.every(i=>selectedTasks.has(i));
-    selPendingBtn.classList.toggle('has-selection',allPendingSelected);
-  }
 }
 
 // ── COMPARE VIEW ──────────────────────────────────────────────────────────────
@@ -7129,7 +7948,7 @@ function renderCompare(){
       btn.onclick=()=>{
         const m=btn.dataset.model, n=btn.dataset.name;
         const t=state[m].find(x=>x.name===n);
-        if(t){t.done=!t.done;save();renderAll();}
+        if(t){t.done=!t.done;if(t.done)completeAllSubtasks(t);save();renderAll();}
       };
     });
     tbody.appendChild(row);
@@ -7169,20 +7988,20 @@ let sortDir='asc'; // 'asc'|'desc'
 // stable until the user explicitly re-clicks the Priority header.
 let prioritySortSnapshot=null; // Map<task, rank> | null
 
-function toggleTask(model,idx){
+function setTaskStatus(model,idx,newStatus){
   const task=state[model][idx];
+  if(!task) return;
+  closeStatusDropdown();
 
-  if(pendingDoneTimers.has(task)){
-    // Clicked again while still in the "about to move" preview window —
-    // treat as cancel: revert to pending immediately, no delay needed
-    // since nothing has actually moved yet.
-    clearTimeout(pendingDoneTimers.get(task));
-    pendingDoneTimers.delete(task);
-    renderTaskList();
-    return;
-  }
+  // Cancel any in-flight settle animation first — a fresh choice from the
+  // dropdown always wins over whatever transition was mid-flight.
+  if(pendingDoneTimers.has(task)){ clearTimeout(pendingDoneTimers.get(task)); pendingDoneTimers.delete(task); }
+  if(pendingRevertTimers.has(task)){ clearTimeout(pendingRevertTimers.get(task)); pendingRevertTimers.delete(task); }
 
-  if(!task.done){
+  const current=task.done?'done':(task.status==='inprogress'?'inprogress':'pending');
+  if(current===newStatus){ renderTaskList(); return; }
+
+  if(newStatus==='done'){
     // Marking done: render the completed look immediately in place, then
     // actually move it into the Completed section after a short delay so
     // the change is visible before the row relocates — instead of the row
@@ -7190,7 +8009,9 @@ function toggleTask(model,idx){
     const timer=setTimeout(()=>{
       pendingDoneTimers.delete(task);
       task.done=true;
+      task.status='done';
       task.completedAt=Date.now();
+      completeAllSubtasks(task);
       save();renderAll();
       toast('✓',`Marked done: ${task.name.slice(0,28)}`);
       logActivity('✓',`completed "${task.name}"`,model);
@@ -7199,25 +8020,28 @@ function toggleTask(model,idx){
     },1000);
     pendingDoneTimers.set(task,timer);
     renderTaskList(); // re-render now so buildRow shows the done preview immediately
-  } else {
-    // Reverting done→pending: keep row visible in completed section briefly,
-    // same delay feel as marking done, so it doesn’t vanish instantly.
-    if(pendingRevertTimers.has(task)){
-      clearTimeout(pendingRevertTimers.get(task));
-      pendingRevertTimers.delete(task);
-      renderTaskList();
-      return;
-    }
+  } else if(task.done){
+    // Reverting done→(pending/in-progress): keep row visible in completed
+    // section briefly, same delay feel as marking done, so it doesn’t
+    // vanish instantly.
     const revertTimer=setTimeout(()=>{
       pendingRevertTimers.delete(task);
       task.done=false;
+      task.status=newStatus;
       task.completedAt=null;
       save();renderAll();
-      toast('↺',`Reopened: ${task.name.slice(0,28)}`);
-      logActivity('↺',`reopened "${task.name}"`,model);
+      toast('↺', newStatus==='inprogress'?`In progress: ${task.name.slice(0,28)}`:`Reopened: ${task.name.slice(0,28)}`);
+      logActivity('↺',`${newStatus==='inprogress'?'marked in progress':'reopened'} "${task.name}"`,model);
     },1000);
     pendingRevertTimers.set(task,revertTimer);
     renderTaskList();
+  } else {
+    // Switching directly between Pending and In Progress — no section
+    // change involved, so no delay/animation is needed.
+    task.status=newStatus;
+    save(); renderAll();
+    toast(newStatus==='inprogress'?'⏳':'○', `${newStatus==='inprogress'?'In progress':'Pending'}: ${task.name.slice(0,28)}`);
+    logActivity(newStatus==='inprogress'?'⏳':'○',`marked "${task.name}" as ${newStatus==='inprogress'?'In Progress':'Pending'}`,model);
   }
 }
 async function maybePromptArchive(model){
@@ -7309,6 +8133,290 @@ function moveTask(model,idx,dir){
   if(editingIdx!==null) editingIdx=null;
   save();renderAll();
 }
+// ── CHECKLIST TEMPLATES ───────────────────────────────────────────────────────
+// Strips a task down to just its reusable structure — name, priority, notes,
+// and subtask names/priorities — dropping anything tied to a specific launch
+// run (done status, dates, assignee, screenshots, dependencies).
+function stripTaskForTemplate(t){
+  return {
+    name:t.name,
+    priority:t.priority||'med',
+    notes:t.notes||'',
+    subtasks:(Array.isArray(t.subtasks)?t.subtasks:[]).map(s=>({name:s.name,priority:s.priority||'med'}))
+  };
+}
+// Turns a saved template back into a fresh, ready-to-use task list — every
+// task and subtask starts pending/undone, with its own blank dates/screenshots.
+function instantiateTemplateTasks(templateName){
+  const tpl=templates[templateName];
+  if(!tpl||!Array.isArray(tpl.tasks)) return [];
+  return tpl.tasks.map((t,i)=>({
+    sn:i+1,name:t.name,done:false,priority:t.priority||'med',notes:t.notes||'',taskDeadline:'',screenshots:[],
+    subtasks:(Array.isArray(t.subtasks)?t.subtasks:[]).map(s=>({name:s.name,done:false,priority:s.priority||'med',notes:'',taskDeadline:'',startDate:'',screenshots:[],status:'pending'}))
+  }));
+}
+async function saveModelAsTemplate(modelName){
+  const tasks=state[modelName]||[];
+  if(!tasks.length){await showAlert({title:'Nothing to save',message:`"${modelName}" doesn't have any tasks yet.`,tone:'warn'});return;}
+  const name=await showTextPrompt({
+    icon:'📑',
+    title:'Save as template',
+    message:`Give this checklist template a name. Any new model can reuse it later.`,
+    placeholder:'e.g. Standard Kettle Launch',
+    defaultValue:modelName,
+    confirmText:'Save Template'
+  });
+  const key=(name||'').trim();
+  if(!key) return;
+  if(templates[key]){
+    const overwrite=await showConfirm({icon:'📑',title:'Template already exists',message:`A template named "${key}" already exists. Overwrite it with this model's current checklist?`,confirmText:'Overwrite',danger:true});
+    if(!overwrite) return;
+  }
+  templates[key]={createdAt:Date.now(),tasks:tasks.map(stripTaskForTemplate)};
+  save();
+  toast('📑',`Template saved: ${key}`);
+  logActivity('📑',`saved model "${modelName}" as template "${key}"`,modelName);
+}
+async function deleteTemplate(name){
+  if(!templates[name]) return;
+  const ok=await showConfirm({icon:'🗑',title:'Delete template?',message:`"${name}" will be permanently deleted. Models already created from it are not affected.`,confirmText:'Delete',danger:true});
+  if(!ok) return false;
+  delete templates[name];
+  save();
+  toast('🗑',`Template deleted: ${name}`);
+  return true;
+}
+
+// ── TEMPLATE EDITOR ───────────────────────────────────────────────────────────
+// A working draft of the template's tasks, edited in memory and only written
+// back to `templates[name]` when Save Template is clicked — Cancel discards
+// everything. `teExpandedSet` tracks which task rows have their subtasks open.
+let teDraftTasks=[];
+let teDraftOriginalName='';
+let teExpandedSet=new Set();
+let teOnCloseRefresh=null;
+
+function openTemplateEditor(name,onCloseRefresh){
+  const tpl=templates[name];
+  if(!tpl) return;
+  teDraftOriginalName=name;
+  teDraftTasks=JSON.parse(JSON.stringify(tpl.tasks||[]));
+  teExpandedSet=new Set();
+  teOnCloseRefresh=typeof onCloseRefresh==='function'?onCloseRefresh:null;
+  document.getElementById('templateEditorNameInput').value=name;
+  renderTemplateEditor();
+  document.getElementById('templateEditorOverlay').classList.add('open');
+}
+function closeTemplateEditor(){
+  document.getElementById('templateEditorOverlay').classList.remove('open');
+}
+function renderTemplateEditor(){
+  const listEl=document.getElementById('templateEditorTaskList');
+  if(!teDraftTasks.length){
+    listEl.innerHTML='<div class="te-empty">No tasks yet — add one below.</div>';
+  } else {
+    listEl.innerHTML=teDraftTasks.map((t,i)=>{
+      const expanded=teExpandedSet.has(i);
+      const subs=Array.isArray(t.subtasks)?t.subtasks:[];
+      return `
+      <div class="te-task-row" data-idx="${i}">
+        <div class="te-task-main">
+          <div class="te-move-col">
+            <button class="te-move-btn" data-act="up" ${i===0?'disabled':''} title="Move up">▲</button>
+            <button class="te-move-btn" data-act="down" ${i===teDraftTasks.length-1?'disabled':''} title="Move down">▼</button>
+          </div>
+          <input type="text" class="te-task-name-input" value="${escHtml(t.name)}" placeholder="Task name">
+          <select class="te-priority-select">
+            <option value="high" ${t.priority==='high'?'selected':''}>High</option>
+            <option value="med" ${(!t.priority||t.priority==='med')?'selected':''}>Med</option>
+            <option value="low" ${t.priority==='low'?'selected':''}>Low</option>
+          </select>
+          <button class="te-icon-btn te-expand-btn" data-act="expand" title="Subtasks">${expanded?'▾':'▸'}${subs.length?' '+subs.length:''}</button>
+          <button class="te-icon-btn te-delete-btn" data-act="delete" title="Delete task">🗑</button>
+        </div>
+        ${expanded?`
+        <div class="te-subtask-list">
+          ${subs.map((s,si)=>`
+            <div class="te-subtask-row" data-sidx="${si}">
+              <input type="text" class="te-subtask-name-input" value="${escHtml(s.name)}" placeholder="Subtask name">
+              <select class="te-priority-select">
+                <option value="high" ${s.priority==='high'?'selected':''}>High</option>
+                <option value="med" ${(!s.priority||s.priority==='med')?'selected':''}>Med</option>
+                <option value="low" ${s.priority==='low'?'selected':''}>Low</option>
+              </select>
+              <button class="te-icon-btn te-sub-delete-btn" data-act="delete-sub" title="Delete subtask">🗑</button>
+            </div>
+          `).join('')}
+          <button class="te-add-sub-btn" data-act="add-sub">＋ Add Subtask</button>
+        </div>`:''}
+      </div>`;
+    }).join('');
+  }
+  wireTemplateEditorEvents();
+}
+function wireTemplateEditorEvents(){
+  const listEl=document.getElementById('templateEditorTaskList');
+  listEl.querySelectorAll('.te-task-row').forEach(row=>{
+    const idx=Number(row.dataset.idx);
+    const mainEl=row.querySelector('.te-task-main');
+    const nameInput=mainEl.querySelector('.te-task-name-input');
+    if(nameInput) nameInput.oninput=()=>{ teDraftTasks[idx].name=nameInput.value; };
+    const prioSelect=mainEl.querySelector('.te-priority-select');
+    if(prioSelect) prioSelect.onchange=()=>{ teDraftTasks[idx].priority=prioSelect.value; };
+    mainEl.querySelector('[data-act="up"]').onclick=()=>{
+      if(idx>0){ [teDraftTasks[idx-1],teDraftTasks[idx]]=[teDraftTasks[idx],teDraftTasks[idx-1]]; renderTemplateEditor(); }
+    };
+    mainEl.querySelector('[data-act="down"]').onclick=()=>{
+      if(idx<teDraftTasks.length-1){ [teDraftTasks[idx+1],teDraftTasks[idx]]=[teDraftTasks[idx],teDraftTasks[idx+1]]; renderTemplateEditor(); }
+    };
+    mainEl.querySelector('[data-act="delete"]').onclick=()=>{
+      teDraftTasks.splice(idx,1); teExpandedSet.delete(idx); renderTemplateEditor();
+    };
+    mainEl.querySelector('[data-act="expand"]').onclick=()=>{
+      if(teExpandedSet.has(idx)) teExpandedSet.delete(idx); else teExpandedSet.add(idx);
+      renderTemplateEditor();
+    };
+
+    row.querySelectorAll('.te-subtask-row').forEach(subRow=>{
+      const sidx=Number(subRow.dataset.sidx);
+      const subNameInput=subRow.querySelector('.te-subtask-name-input');
+      if(subNameInput) subNameInput.oninput=()=>{ teDraftTasks[idx].subtasks[sidx].name=subNameInput.value; };
+      const subPrioSelect=subRow.querySelector('.te-priority-select');
+      if(subPrioSelect) subPrioSelect.onchange=()=>{ teDraftTasks[idx].subtasks[sidx].priority=subPrioSelect.value; };
+      const subDelBtn=subRow.querySelector('[data-act="delete-sub"]');
+      if(subDelBtn) subDelBtn.onclick=()=>{ teDraftTasks[idx].subtasks.splice(sidx,1); renderTemplateEditor(); };
+    });
+    const addSubBtn=row.querySelector('[data-act="add-sub"]');
+    if(addSubBtn) addSubBtn.onclick=()=>{
+      if(!Array.isArray(teDraftTasks[idx].subtasks)) teDraftTasks[idx].subtasks=[];
+      teDraftTasks[idx].subtasks.push({name:'NEW SUBTASK',priority:'med'});
+      teExpandedSet.add(idx);
+      renderTemplateEditor();
+    };
+  });
+}
+document.getElementById('templateEditorAddTaskBtn').onclick=()=>{
+  teDraftTasks.push({name:'NEW TASK',priority:'med',notes:'',subtasks:[]});
+  renderTemplateEditor();
+};
+document.getElementById('templateEditorCancelBtn').onclick=closeTemplateEditor;
+document.getElementById('templateEditorSaveBtn').onclick=async()=>{
+  const newName=(document.getElementById('templateEditorNameInput').value||'').trim();
+  if(!newName){ await showAlert({title:'Name required',message:'Give the template a name before saving.',tone:'warn'}); return; }
+  const cleanedTasks=teDraftTasks.map(t=>({
+    name:(t.name||'').trim()||'UNTITLED TASK',
+    priority:t.priority||'med',
+    notes:t.notes||'',
+    subtasks:(Array.isArray(t.subtasks)?t.subtasks:[]).map(s=>({name:(s.name||'').trim()||'UNTITLED SUBTASK',priority:s.priority||'med'}))
+  }));
+  if(newName!==teDraftOriginalName && templates[newName]){
+    const overwrite=await showConfirm({icon:'📑',title:'Template already exists',message:`A template named "${newName}" already exists. Overwrite it?`,confirmText:'Overwrite',danger:true});
+    if(!overwrite) return;
+  }
+  const createdAt=(templates[teDraftOriginalName]&&templates[teDraftOriginalName].createdAt)||Date.now();
+  if(newName!==teDraftOriginalName) delete templates[teDraftOriginalName];
+  templates[newName]={createdAt,tasks:cleanedTasks};
+  save();
+  toast('📑',`Template saved: ${newName}`);
+  closeTemplateEditor();
+  if(teOnCloseRefresh) teOnCloseRefresh();
+};
+document.getElementById('templateEditorOverlay').onclick=e=>{
+  if(e.target===document.getElementById('templateEditorOverlay')) closeTemplateEditor();
+};
+
+// showTemplateChooser(modelName, manageOnly) -> Promise<'blank'|templateName|null>
+// Presented when a new model is created (manageOnly=false), or from the
+// "Manage Templates" button (manageOnly=true, no model involved — clicking
+// a template opens the editor instead of picking it, and there's no
+// "Blank" option since there's nothing to manage there).
+// Every template — including the built-in "Standard Checklist" — is stored
+// in `templates` and gets the same Edit/Delete controls; nothing is special-
+// cased anymore, which is what makes Standard Checklist itself editable.
+function showTemplateChooser(modelName,manageOnly){
+  return new Promise(resolveOuter=>{
+    const overlay=document.getElementById('templateChooserOverlay');
+    const titleEl=document.getElementById('templateChooserTitle');
+    const descEl=document.getElementById('templateChooserDesc');
+    const listEl=document.getElementById('templateChooserList');
+    const cancelBtn=document.getElementById('templateChooserCancelBtn');
+    titleEl.textContent=manageOnly?'Manage Templates':'Set up tasks';
+    descEl.textContent=manageOnly
+      ? 'Click a template to edit it, or delete ones you no longer need.'
+      : `"${modelName}" is ready. Choose how to start it.`;
+    cancelBtn.textContent=manageOnly?'Close':'Cancel';
+
+    function renderList(){
+      const customNames=Object.keys(templates).sort((a,b)=>{
+        // Standard Checklist always floats to the top; the rest alphabetical.
+        if(a==='Standard Checklist') return -1;
+        if(b==='Standard Checklist') return 1;
+        return a.localeCompare(b);
+      });
+      const rows=[
+        ...(manageOnly?[]:[{choice:'blank',icon:'◻',name:'Blank',meta:'Start with no tasks',editable:false,deletable:false}]),
+        ...customNames.map(n=>{
+          const tpl=templates[n];
+          const taskCount=(tpl.tasks||[]).length;
+          const subCount=(tpl.tasks||[]).reduce((s,t)=>s+((t.subtasks||[]).length),0);
+          return {choice:n,icon:n==='Standard Checklist'?'📋':'📑',name:n,meta:`${taskCount} task${taskCount===1?'':'s'}${subCount?` · ${subCount} subtask${subCount===1?'':'s'}`:''}`,editable:true,deletable:true};
+        })
+      ];
+      if(!rows.length){
+        listEl.innerHTML='<div class="te-empty">No templates saved yet — use "Save as Template" on any model.</div>';
+        return;
+      }
+      listEl.innerHTML=rows.map(r=>`
+        <button class="template-chooser-item" data-choice="${escHtml(r.choice)}">
+          <span class="template-chooser-item-icon">${r.icon}</span>
+          <span class="template-chooser-item-info">
+            <span class="template-chooser-item-name">${escHtml(r.name)}</span>
+            <span class="template-chooser-item-meta">${escHtml(r.meta)}</span>
+          </span>
+          ${r.editable?'<span class="template-chooser-item-edit" data-edit="'+escHtml(r.choice)+'" title="Edit template">✎</span>':''}
+          ${r.deletable?'<span class="template-chooser-item-delete" data-delete="'+escHtml(r.choice)+'" title="Delete template">🗑</span>':''}
+        </button>
+      `).join('');
+      listEl.querySelectorAll('.template-chooser-item').forEach(btn=>{
+        btn.onclick=e=>{
+          if(e.target.closest('[data-delete],[data-edit]')) return;
+          const choice=btn.dataset.choice;
+          if(manageOnly) openTemplateEditor(choice,renderList);
+          else cleanup(choice);
+        };
+      });
+      listEl.querySelectorAll('[data-edit]').forEach(editBtn=>{
+        editBtn.onclick=e=>{
+          e.stopPropagation();
+          openTemplateEditor(editBtn.dataset.edit,renderList);
+        };
+      });
+      listEl.querySelectorAll('[data-delete]').forEach(delBtn=>{
+        delBtn.onclick=async e=>{
+          e.stopPropagation();
+          const name=delBtn.dataset.delete;
+          const deleted=await deleteTemplate(name);
+          if(deleted) renderList(); // stay open, just refresh the list
+        };
+      });
+    }
+
+    function cleanup(result){
+      overlay.classList.remove('open');
+      cancelBtn.onclick=null;overlay.onclick=null;
+      document.removeEventListener('keydown',escHandler);
+      resolveOuter(result);
+    }
+    function escHandler(e){ if(e.key==='Escape') cleanup(null); }
+
+    cancelBtn.onclick=()=>cleanup(null);
+    overlay.onclick=e=>{ if(e.target===overlay) cleanup(null); };
+    document.addEventListener('keydown',escHandler);
+    renderList();
+    overlay.classList.add('open');
+  });
+}
+
 // Model names are stored directly as Firestore field names (tasks.<name>,
 // deadlines.<name>, modelImages.<name>, recycleBin.<name>) — Firestore
 // rejects any field name that both starts AND ends with "__", so block
@@ -7323,18 +8431,10 @@ async function addModel(name,deadline){
   const key=trimmed.toUpperCase();
   if(Object.keys(state).some(m=>m.toUpperCase()===key)){await showAlert({title:'Model already exists',message:`A model named "${trimmed}" is already on your list.`,tone:'warn'});return;}
 
-  const useDefault=await showConfirm({
-    icon:'📋',
-    title:'Set up tasks for this model?',
-    message:`"${trimmed}" is ready. Load the standard task checklist, or start with a blank slate and add tasks manually?`,
-    confirmText:'Use Default Tasks',
-    cancelText:'Start Blank',
-    danger:false
-  });
+  const choice=await showTemplateChooser(trimmed,false);
+  if(choice===null) return; // cancelled — nothing has been written to state[trimmed] yet, so this is a full no-op
 
-  state[trimmed]=useDefault
-    ? STANDARD_TASK_TEMPLATE.map((n,i)=>({sn:i+1,name:n,done:false,priority:'med',notes:'',taskDeadline:'',screenshots:[]}))
-    : [];
+  state[trimmed]=choice==='blank' ? [] : instantiateTemplateTasks(choice);
   if(deadline)deadlines[trimmed]=deadline;
   deletedModelsSet.delete(trimmed);
   refreshModelsList();activeTab=trimmed;localStorage.setItem('mlc_activeTab',trimmed);editingIdx=null;save();renderAll();
@@ -7446,6 +8546,128 @@ document.getElementById('notesSaveBtn').onclick=()=>{
 document.getElementById('notesCancelBtn').onclick=()=>closeNotesModal();
 document.getElementById('notesModal').onclick=e=>{if(e.target===document.getElementById('notesModal'))closeNotesModal();};
 
+// ── COMMENT TIMELINE ───────────────────────────────────────────────────────────
+// Each task/subtask can carry its own dated discussion thread — a running log
+// of updates (e.g. "Supplier confirmed mold completion.") separate from the
+// free-form Notes field. Entries are addressed the same way the status
+// dropdown resolves its target: model + task idx, with subIdx null for a
+// top-level task or the subtask's index within its parent.
+let commentsCtx={model:null,idx:null,subIdx:null};
+
+function getComments(model,idx,subIdx){
+  const task=state[model]&&state[model][idx];
+  if(!task) return [];
+  const target=subIdx==null?task:(getSubtasks(model,idx)[subIdx]);
+  if(!target) return [];
+  if(!Array.isArray(target.comments)) target.comments=[];
+  return target.comments;
+}
+function fmtCommentDateLabel(ts){
+  const d=new Date(ts);
+  const today=new Date(); today.setHours(0,0,0,0);
+  const dOnly=new Date(d); dOnly.setHours(0,0,0,0);
+  const diffDays=Math.round((today-dOnly)/86400000);
+  if(diffDays===0) return 'Today';
+  if(diffDays===1) return 'Yesterday';
+  return d.toLocaleDateString(undefined,{month:'short',day:'numeric'});
+}
+function fmtCommentTime(ts){
+  return new Date(ts).toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+}
+function openCommentsModal(model,idx,subIdx){
+  commentsCtx={model,idx,subIdx};
+  const task=state[model][idx];
+  const target=subIdx==null?task:(getSubtasks(model,idx)[subIdx]);
+  if(!task||!target) return;
+  document.getElementById('commentsTaskName').textContent=subIdx==null?task.name:`${task.name} — ${target.name}`;
+  document.getElementById('commentInputText').value='';
+  renderCommentsTimeline();
+  document.getElementById('commentsModal').classList.add('open');
+  setTimeout(()=>document.getElementById('commentInputText').focus(),100);
+}
+function closeCommentsModal(){
+  document.getElementById('commentsModal').classList.remove('open');
+}
+function renderCommentsTimeline(){
+  const wrap=document.getElementById('commentsTimeline');
+  if(!wrap) return;
+  const{model,idx,subIdx}=commentsCtx;
+  const comments=getComments(model,idx,subIdx).slice().sort((a,b)=>a.ts-b.ts);
+  if(!comments.length){
+    wrap.innerHTML='<div class="comment-empty">No comments yet — start the discussion below.</div>';
+    return;
+  }
+  // Group consecutive entries under the same date label, mirroring a chat
+  // timeline: one date header, then every comment posted that day beneath it.
+  let html='';
+  let lastLabel=null;
+  comments.forEach(c=>{
+    const label=fmtCommentDateLabel(c.ts);
+    if(label!==lastLabel){
+      if(lastLabel!==null) html+='</div>';
+      html+=`<div class="comment-date-group"><div class="comment-date-label">${escHtml(label)}</div>`;
+      lastLabel=label;
+    }
+    html+=`
+      <div class="comment-entry" data-id="${escHtml(c.id)}">
+        <div class="comment-entry-header">
+          <span class="comment-entry-author">${escHtml(c.authorName||'Someone')}</span>
+          <span class="comment-entry-meta">
+            <span class="comment-entry-time">${fmtCommentTime(c.ts)}</span>
+            <span class="comment-entry-delete" data-id="${escHtml(c.id)}" title="Delete comment">✕</span>
+          </span>
+        </div>
+        <div class="comment-entry-text">${escHtml(c.text)}</div>
+      </div>`;
+  });
+  if(lastLabel!==null) html+='</div>';
+  wrap.innerHTML=html;
+
+  wrap.querySelectorAll('.comment-entry-delete').forEach(btn=>{
+    btn.onclick=()=>deleteComment(btn.dataset.id);
+  });
+  wrap.scrollTop=wrap.scrollHeight;
+}
+function postComment(){
+  const input=document.getElementById('commentInputText');
+  const text=input.value.trim();
+  if(!text) return;
+  const{model,idx,subIdx}=commentsCtx;
+  const comments=getComments(model,idx,subIdx);
+  const authorName=(auth&&auth.currentUser&&(auth.currentUser.displayName||(auth.currentUser.email||'').split('@')[0]))||'Someone';
+  const authorUid=auth&&auth.currentUser?auth.currentUser.uid:null;
+  comments.push({
+    id:'c'+Date.now()+Math.random().toString(36).slice(2,7),
+    text:text.slice(0,600),
+    authorName,
+    authorUid,
+    ts:Date.now()
+  });
+  input.value='';
+  save();
+  renderCommentsTimeline();
+  const task=state[model][idx];
+  const target=subIdx==null?task:(getSubtasks(model,idx)[subIdx]);
+  logActivity('💬',`commented on "${(target&&target.name)||task.name}"`,model);
+  renderTaskList();
+}
+function deleteComment(id){
+  const{model,idx,subIdx}=commentsCtx;
+  const comments=getComments(model,idx,subIdx);
+  const pos=comments.findIndex(c=>c.id===id);
+  if(pos===-1) return;
+  comments.splice(pos,1);
+  save();
+  renderCommentsTimeline();
+  renderTaskList();
+}
+document.getElementById('commentPostBtn').onclick=()=>postComment();
+document.getElementById('commentInputText').addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); postComment(); }
+});
+document.getElementById('commentsCloseBtn').onclick=()=>closeCommentsModal();
+document.getElementById('commentsModal').onclick=e=>{if(e.target===document.getElementById('commentsModal'))closeCommentsModal();};
+
 // ── MODEL DEADLINE (header "Set Deadline" button) ─────────────────────────────
 // Real, fully-functional <input type="date"> stretched invisibly over the
 // header button — clicking the button opens the native picker directly on
@@ -7461,7 +8683,7 @@ document.getElementById('modelDeadlineSaveBtn').onclick=()=>{
   save(); renderModelCards();
   document.getElementById('modelDeadlineModal').classList.remove('open');
   toast(CAL_ICON,`Deadline ${val?'set':'cleared'} for ${model}`);
-  logActivity(CAL_ICON,`${val?`set deadline to ${val} for`:'cleared the deadline for'} model "${model}"`,model);
+  logActivity('📅',`${val?`set deadline to ${val} for`:'cleared the deadline for'} model "${model}"`,model);
 };
 document.getElementById('modelDeadlineClearBtn').onclick=()=>{
   const model=_modelDeadlineTarget;
@@ -7471,7 +8693,7 @@ document.getElementById('modelDeadlineClearBtn').onclick=()=>{
   save(); renderModelCards();
   document.getElementById('modelDeadlineModal').classList.remove('open');
   toast(CAL_ICON,`Deadline cleared for ${model}`);
-  logActivity(CAL_ICON,`cleared the deadline for model "${model}"`,model);
+  logActivity('📅',`cleared the deadline for model "${model}"`,model);
 };
 document.getElementById('modelDeadlineCancelBtn').onclick=()=>{
   document.getElementById('modelDeadlineModal').classList.remove('open');
@@ -7502,7 +8724,7 @@ document.getElementById('taskDeadlineSaveBtn').onclick=()=>{
   save();renderAll();
   document.getElementById('taskDeadlineModal').classList.remove('open');
   toast(CAL_ICON,`Task deadline ${val?'set':'cleared'}`);
-  logActivity(CAL_ICON,`${val?`set deadline to ${val} for`:'cleared the deadline for'} task "${state[model][idx].name}"`,model);
+  logActivity('📅',`${val?`set deadline to ${val} for`:'cleared the deadline for'} task "${state[model][idx].name}"`,model);
 };
 document.getElementById('taskDeadlineClearBtn').onclick=()=>{
   const{model,idx}=taskDeadlineCtx;
@@ -7510,7 +8732,7 @@ document.getElementById('taskDeadlineClearBtn').onclick=()=>{
   save();renderAll();
   document.getElementById('taskDeadlineModal').classList.remove('open');
   toast(CAL_ICON,'Task deadline cleared');
-  logActivity(CAL_ICON,`cleared the deadline for task "${state[model][idx].name}"`,model);
+  logActivity('📅',`cleared the deadline for task "${state[model][idx].name}"`,model);
 };
 document.getElementById('taskDeadlineCancelBtn').onclick=()=>document.getElementById('taskDeadlineModal').classList.remove('open');
 document.getElementById('taskDeadlineModal').onclick=e=>{if(e.target===document.getElementById('taskDeadlineModal'))document.getElementById('taskDeadlineModal').classList.remove('open');};
@@ -7518,13 +8740,23 @@ document.getElementById('taskDeadlineModal').onclick=e=>{if(e.target===document.
 // ── BULK ACTIONS ──────────────────────────────────────────────────────────────
 document.getElementById('bulkDoneBtn').onclick=()=>{
   const n=selectedTasks.size;
-  selectedTasks.forEach(i=>{state[activeTab][i].done=true;});
+  selectedTasks.forEach(i=>{
+    const t=state[activeTab][i];
+    t.done=true;t.status='done';t.completedAt=Date.now();
+    completeAllSubtasks(t);
+  });
   selectedTasks.clear();save();renderAll();toast('✓',`Marked ${n} tasks done`);
   logActivity('✓',`marked ${n} task${n===1?'':'s'} done`,activeTab);
 };
+document.getElementById('bulkInProgressBtn').onclick=()=>{
+  const n=selectedTasks.size;
+  selectedTasks.forEach(i=>{state[activeTab][i].done=false;state[activeTab][i].status='inprogress';state[activeTab][i].completedAt=null;});
+  selectedTasks.clear();save();renderAll();toast('⏳',`Marked ${n} task${n===1?'':'s'} in progress`);
+  logActivity('⏳',`marked ${n} task${n===1?'':'s'} in progress`,activeTab);
+};
 document.getElementById('bulkPendingBtn').onclick=()=>{
   const n=selectedTasks.size;
-  selectedTasks.forEach(i=>{state[activeTab][i].done=false;});
+  selectedTasks.forEach(i=>{state[activeTab][i].done=false;state[activeTab][i].status='pending';state[activeTab][i].completedAt=null;});
   selectedTasks.clear();save();renderAll();toast('↺','Marked selected pending');
   logActivity('↺',`marked ${n} task${n===1?'':'s'} pending`,activeTab);
 };
@@ -7643,6 +8875,26 @@ document.getElementById('bulkMoveModelModal').onclick=e=>{
   if(e.target===document.getElementById('bulkMoveModelModal'))
     document.getElementById('bulkMoveModelModal').classList.remove('open');
 };
+// Duplicates each selected task in place — right after its original —
+// within the current model. Sits beside Copy to Model in the bulk bar, but
+// unlike Copy to Model this never leaves the model you're on.
+function duplicateSelectedTasks(){
+  const tasks=state[activeTab];
+  const n=selectedTasks.size;
+  if(!n||!tasks) return;
+  const idxs=[...selectedTasks].sort((a,b)=>b-a); // descending so each insert index stays valid
+  idxs.forEach(i=>{
+    const clone=JSON.parse(JSON.stringify(tasks[i]));
+    tasks.splice(i+1,0,clone);
+  });
+  renumber(tasks);
+  selectedTasks.clear();
+  clearSubSelectionsForModel(activeTab);
+  save();renderAll();
+  toast('⧉',`Duplicated ${n} task${n===1?'':'s'}`);
+  logActivity('⧉',`duplicated ${n} task${n===1?'':'s'}`,activeTab);
+}
+document.getElementById('bulkDuplicateBtn').onclick=()=>duplicateSelectedTasks();
 document.getElementById('bulkDeleteBtn').onclick=async()=>{
   const n=selectedTasks.size;
   const ok=await showConfirm({title:'Delete selected tasks?',message:`${n} task${n===1?'':'s'} will be moved to the Recycle Bin (kept for 30 days).`,confirmText:`Delete ${n}`,danger:true,icon:'🗑'});
@@ -7707,7 +8959,7 @@ document.getElementById('bulkDeadlineSaveBtn').onclick=()=>{
     save(); renderAll();
     document.getElementById('bulkDeadlineModal').classList.remove('open');
     toast(CAL_ICON, val ? `Deadline set for ${n} subtask${n===1?'':'s'}` : `Deadline cleared for ${n} subtask${n===1?'':'s'}`);
-    logActivity(CAL_ICON,`${val?`set deadline to ${val} for`:'cleared the deadline for'} ${n} subtask${n===1?'':'s'}`,model);
+    logActivity('📅',`${val?`set deadline to ${val} for`:'cleared the deadline for'} ${n} subtask${n===1?'':'s'}`,model);
     bulkModalSubCtx=null;
     return;
   }
@@ -7716,7 +8968,7 @@ document.getElementById('bulkDeadlineSaveBtn').onclick=()=>{
   save(); renderAll();
   document.getElementById('bulkDeadlineModal').classList.remove('open');
   toast(CAL_ICON, val ? `Deadline set for ${n} task${n===1?'':'s'}` : `Deadline cleared for ${n} task${n===1?'':'s'}`);
-  logActivity(CAL_ICON,`${val?`set deadline to ${val} for`:'cleared the deadline for'} ${n} task${n===1?'':'s'}`,activeTab);
+  logActivity('📅',`${val?`set deadline to ${val} for`:'cleared the deadline for'} ${n} task${n===1?'':'s'}`,activeTab);
 };
 document.getElementById('bulkDeadlineClearBtn').onclick=()=>{
   if(bulkModalSubCtx){
@@ -7728,7 +8980,7 @@ document.getElementById('bulkDeadlineClearBtn').onclick=()=>{
     save(); renderAll();
     document.getElementById('bulkDeadlineModal').classList.remove('open');
     toast(CAL_ICON,`Deadline cleared for ${n} subtask${n===1?'':'s'}`);
-    logActivity(CAL_ICON,`cleared the deadline for ${n} subtask${n===1?'':'s'}`,model);
+    logActivity('📅',`cleared the deadline for ${n} subtask${n===1?'':'s'}`,model);
     bulkModalSubCtx=null;
     return;
   }
@@ -7737,7 +8989,7 @@ document.getElementById('bulkDeadlineClearBtn').onclick=()=>{
   save(); renderAll();
   document.getElementById('bulkDeadlineModal').classList.remove('open');
   toast(CAL_ICON,`Deadline cleared for ${n} task${n===1?'':'s'}`);
-  logActivity(CAL_ICON,`cleared the deadline for ${n} task${n===1?'':'s'}`,activeTab);
+  logActivity('📅',`cleared the deadline for ${n} task${n===1?'':'s'}`,activeTab);
 };
 document.getElementById('bulkDeadlineCancelBtn').onclick=()=>{bulkModalSubCtx=null;document.getElementById('bulkDeadlineModal').classList.remove('open');};
 document.getElementById('bulkDeadlineModal').onclick=e=>{
@@ -7801,6 +9053,102 @@ document.getElementById('selectAllChk').onchange=e=>{
   else selectedTasks.clear();
   updateBulkBar();renderTaskList();
 };
+
+// "Select all" caret menu — lets the user select every subtask only, or
+// every task plus every subtask, in one click (instead of the checkbox's
+// default which only selects top-level tasks).
+function closeSelectAllMenu(){
+  const menu=document.getElementById('selectAllMenu');
+  if(menu) menu.classList.remove('open');
+}
+function openSelectAllMenu(triggerEl){
+  const menu=document.getElementById('selectAllMenu');
+  if(!menu) return;
+  menu.innerHTML=`
+    <div class="select-all-menu-item" data-mode="subtasks-only">Select all subtasks only</div>
+    <div class="select-all-menu-item" data-mode="all">Select all tasks &amp; subtasks</div>
+    <div class="select-all-menu-item" data-mode="completed">Select Completed</div>
+    <div class="select-all-menu-item" data-mode="pending">Select Pending</div>
+    <div class="select-all-menu-item" data-mode="none">Unselect all</div>`;
+  menu.querySelector('[data-mode="subtasks-only"]').onclick=()=>{
+    selectAllSubtasksOnly();
+    closeSelectAllMenu();
+  };
+  menu.querySelector('[data-mode="all"]').onclick=()=>{
+    selectAllTasksAndSubtasks();
+    closeSelectAllMenu();
+  };
+  menu.querySelector('[data-mode="completed"]').onclick=()=>{
+    toggleSelectCompleted();
+    closeSelectAllMenu();
+  };
+  menu.querySelector('[data-mode="pending"]').onclick=()=>{
+    toggleSelectPending();
+    closeSelectAllMenu();
+  };
+  menu.querySelector('[data-mode="none"]').onclick=()=>{
+    unselectAll();
+    closeSelectAllMenu();
+  };
+  const rect=triggerEl.getBoundingClientRect();
+  menu.classList.add('open');
+  const menuWidth=menu.offsetWidth||190;
+  let left=rect.left;
+  if(left+menuWidth>window.innerWidth-8) left=window.innerWidth-menuWidth-8;
+  menu.style.left=Math.max(8,left)+'px';
+  menu.style.top=(rect.bottom+6)+'px';
+}
+function unselectAll(){
+  const hadSelection=selectedTasks.size>0||selectedSubtasks.size>0;
+  selectedTasks.clear();
+  selectedSubtasks.clear();
+  expandedSubtasksSet.clear();
+  updateBulkBar();renderTaskList();
+  if(hadSelection) toast('✓','Selection cleared');
+}
+function selectAllSubtasksOnly(){
+  const tasks=state[activeTab]; if(!tasks) return;
+  selectedTasks.clear();
+  selectedSubtasks.clear();
+  tasks.forEach((t,i)=>{
+    if(!matchesFilter(t)) return;
+    const subs=Array.isArray(t.subtasks)?t.subtasks:[];
+    if(!subs.length) return;
+    subs.forEach((s,si)=>{ selectedSubtasks.add(subSelKey(activeTab,i,si)); });
+    expandedSubtasksSet.add(subKey(activeTab,i));
+  });
+  updateBulkBar();renderTaskList();
+  toast('✓',`${selectedSubtasks.size} subtask${selectedSubtasks.size===1?'':'s'} selected`);
+}
+function selectAllTasksAndSubtasks(){
+  const tasks=state[activeTab]; if(!tasks) return;
+  selectedTasks.clear();
+  selectedSubtasks.clear();
+  tasks.forEach((t,i)=>{
+    if(!matchesFilter(t)) return;
+    selectedTasks.add(i);
+    const subs=Array.isArray(t.subtasks)?t.subtasks:[];
+    if(!subs.length) return;
+    subs.forEach((s,si)=>{ selectedSubtasks.add(subSelKey(activeTab,i,si)); });
+    expandedSubtasksSet.add(subKey(activeTab,i));
+  });
+  updateBulkBar();renderTaskList();
+  toast('✓',`${selectedTasks.size} task${selectedTasks.size===1?'':'s'} & ${selectedSubtasks.size} subtask${selectedSubtasks.size===1?'':'s'} selected`);
+}
+document.getElementById('selectAllCaretBtn').onclick=e=>{
+  e.stopPropagation();
+  const menu=document.getElementById('selectAllMenu');
+  if(menu.classList.contains('open')) closeSelectAllMenu();
+  else openSelectAllMenu(e.currentTarget);
+};
+document.addEventListener('click',e=>{
+  const menu=document.getElementById('selectAllMenu');
+  if(!menu||!menu.classList.contains('open')) return;
+  if(e.target.closest('#selectAllMenu')||e.target.closest('#selectAllCaretBtn')) return;
+  closeSelectAllMenu();
+});
+document.addEventListener('scroll',closeSelectAllMenu,true);
+window.addEventListener('resize',closeSelectAllMenu);
 
 // ── EXPORT / IMPORT ───────────────────────────────────────────────────────────
 // ── EXCEL EXPORT (all models — header button) ────────────────────────────────
@@ -7959,7 +9307,15 @@ document.getElementById('importFile').onchange=async e=>{
   const reader=new FileReader();
   reader.onload=async ev=>{
     try{
-      const wb=XLSX.read(ev.target.result,{type:'array',cellDates:true});
+      // cellDates intentionally omitted: with it on, SheetJS hands back a
+      // JS Date object for date cells, and reading that back out (whether
+      // via toISOString or local getters) round-trips through a timezone
+      // and can land on the wrong calendar day depending on the browser's
+      // offset. Leaving it off keeps date cells as the raw Excel serial
+      // number, which normDate() below converts with pure date arithmetic
+      // (XLSX.SSF.parse_date_code) — no Date object, no timezone, no
+      // off-by-one.
+      const wb=XLSX.read(ev.target.result,{type:'array'});
       if(!wb.SheetNames.length){await showAlert({title:'Empty workbook',message:'The workbook appears to be empty.',tone:'warn'});e.target.value='';return;}
 
       // Merge into the existing dashboard rather than replacing it:
@@ -8003,7 +9359,8 @@ function buildFullBackupPayload(){
     archivedModels:[...archivedModelsSet],
     pinnedModels:[...pinnedModelsSet],
     modelOrder:[...modelOrder],
-    recycleBin:JSON.parse(JSON.stringify(recycleBin))
+    recycleBin:JSON.parse(JSON.stringify(recycleBin)),
+    templates:JSON.parse(JSON.stringify(templates))
   };
 }
 
@@ -8090,6 +9447,14 @@ async function updateRestoreBackupBtn(){
 function mergeFullBackupIntoState(payload){
   let modelsAdded=0, modelsUpdated=0, tasksAdded=0, tasksSkipped=0, subtasksAdded=0, subtasksSkipped=0, extrasRestored=0;
   const backupModels=Object.keys(payload.tasks||{});
+
+  // Templates aren't tied to any model, so just fill in any missing ones —
+  // never overwrites a template that already exists under that name.
+  if(payload.templates){
+    Object.keys(payload.templates).forEach(name=>{
+      if(!templates[name]){ templates[name]=payload.templates[name]; extrasRestored++; }
+    });
+  }
 
   backupModels.forEach(m=>{
     const backupTasks=Array.isArray(payload.tasks[m])?payload.tasks[m]:[];
@@ -8294,7 +9659,17 @@ function normDone(val){
 }
 function normDate(val){
   if(!val) return '';
-  if(val instanceof Date) return val.toISOString().slice(0,10);
+  if(val instanceof Date){
+    // SheetJS hands back date cells as a Date object set to local midnight
+    // of the intended day (not UTC midnight). Reading it back with
+    // .toISOString() converts to UTC first, which pushes the date back by
+    // one day for any timezone ahead of UTC (e.g. UTC+6) — exactly the
+    // "deadline is one day earlier after import" bug. Reading the local
+    // getters instead matches how the Date was built, so the calendar day
+    // the user sees in Excel is the day that gets stored.
+    const y=val.getFullYear(), m=val.getMonth()+1, d=val.getDate();
+    return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  }
   if(typeof val==='number'){
     const d=XLSX.SSF.parse_date_code(val);
     if(d) return `${d.y}-${String(d.m).padStart(2,'0')}-${String(d.d).padStart(2,'0')}`;
@@ -8313,7 +9688,11 @@ document.getElementById('importExcelFile').onchange=async e=>{
   const reader=new FileReader();
   reader.onload=async ev=>{
     try{
-      const wb=XLSX.read(ev.target.result,{type:'array',cellDates:true});
+      // cellDates intentionally omitted — see the merge-import handler above
+      // for why: it keeps date cells as raw Excel serial numbers so
+      // normDate() can convert them with pure date arithmetic instead of a
+      // timezone-dependent Date object round-trip.
+      const wb=XLSX.read(ev.target.result,{type:'array'});
       const ws=wb.Sheets[wb.SheetNames[0]];
       const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
       if(!rows.length){await showAlert({title:'Empty file',message:'The file appears to be empty.',tone:'warn'});e.target.value='';return;}
@@ -8436,9 +9815,9 @@ document.getElementById('searchBox').oninput=e=>{searchQuery=e.target.value;rend
 
 // Selects (or deselects) every completed task in the current model for bulk
 // actions, independent of whatever filter/search is currently applied. This
-// is a separate control from the header "select all" checkbox, which only
-// selects tasks matching the active filter/search view.
-document.getElementById('selectCompletedBtn').onclick=()=>{
+// lives in the header "select all" dropdown menu, alongside its Pending
+// counterpart.
+function toggleSelectCompleted(){
   if(!activeTab || activeTab==='Compare Models' || !state[activeTab]) return;
   const tasks=state[activeTab];
   const doneIdxs=tasks.reduce((arr,t,i)=>{if(t.done)arr.push(i);return arr;},[]);
@@ -8450,11 +9829,11 @@ document.getElementById('selectCompletedBtn').onclick=()=>{
     doneIdxs.forEach(i=>selectedTasks.add(i));
   }
   updateBulkBar();renderTaskList();
-};
+}
 
 // Selects (or deselects) every pending task in the current model for bulk
 // actions, independent of whatever filter/search is currently applied.
-document.getElementById('selectPendingBtn').onclick=()=>{
+function toggleSelectPending(){
   if(!activeTab || activeTab==='Compare Models' || !state[activeTab]) return;
   const tasks=state[activeTab];
   const pendingIdxs=tasks.reduce((arr,t,i)=>{if(!t.done)arr.push(i);return arr;},[]);
@@ -8466,7 +9845,7 @@ document.getElementById('selectPendingBtn').onclick=()=>{
     pendingIdxs.forEach(i=>selectedTasks.add(i));
   }
   updateBulkBar();renderTaskList();
-};
+}
 
 // ── ADD BUTTONS ───────────────────────────────────────────────────────────────
 document.getElementById('addTaskBtn').onclick=()=>{
@@ -8487,6 +9866,7 @@ document.getElementById('addModelBtn').onclick=()=>{
   const dl=dlInput.value;
   addModel(inp.value,dl);inp.value='';dlInput.value='';dlInput.classList.remove('has-value');
 };
+document.getElementById('manageTemplatesBtn').onclick=()=>{ showTemplateChooser(null,true); };
 document.getElementById('newModelInput').addEventListener('keydown',e=>{
   if(e.key==='Enter'){e.preventDefault();document.getElementById('addModelBtn').click();}
 });
@@ -8584,6 +9964,7 @@ function showConfirm(opts){
       okBtn.className='modal-btn '+(opts.danger?'danger':'primary');
       actionsEl.style.display='flex';
       cancelBtn.style.display='';
+      document.getElementById('confirmPromptInput').style.display='none';
 
       function cleanup(result){
         overlay.classList.remove('open');
@@ -8623,6 +10004,7 @@ function showAlert(opts){
       okBtn.textContent='OK';
       okBtn.className='modal-btn primary';
       cancelBtn.style.display='none';
+      document.getElementById('confirmPromptInput').style.display='none';
 
       function cleanup(){
         overlay.classList.remove('open');
@@ -8639,6 +10021,61 @@ function showAlert(opts){
       document.addEventListener('keydown',escHandler);
       overlay.classList.add('open');
       okBtn.focus();
+    });
+    _runConfirmModalQueue();
+  });
+}
+
+// showTextPrompt({title,message,placeholder,defaultValue,confirmText,icon}) -> Promise<string|null>
+// Shares the same confirm modal, just reveals the text input and resolves
+// with its trimmed value (or null if cancelled/closed with nothing useful).
+function showTextPrompt(opts){
+  return new Promise(resolveOuter=>{
+    _confirmModalQueue.push(done=>{
+      const overlay=document.getElementById('confirmModal');
+      const iconEl=document.getElementById('confirmIcon');
+      const titleEl=document.getElementById('confirmTitle');
+      const msgEl=document.getElementById('confirmMessage');
+      const inputEl=document.getElementById('confirmPromptInput');
+      const okBtn=document.getElementById('confirmOkBtn');
+      const cancelBtn=document.getElementById('confirmCancelBtn');
+      const actionsEl=document.getElementById('confirmActions');
+
+      titleEl.textContent=opts.title||'Enter a name';
+      msgEl.textContent=opts.message||'';
+      iconEl.textContent=opts.icon||'✎';
+      iconEl.className='confirm-icon warn';
+      okBtn.textContent=opts.confirmText||'Save';
+      cancelBtn.textContent=opts.cancelText||'Cancel';
+      okBtn.className='modal-btn primary';
+      actionsEl.style.display='flex';
+      cancelBtn.style.display='';
+      inputEl.style.display='';
+      inputEl.placeholder=opts.placeholder||'';
+      inputEl.value=opts.defaultValue||'';
+
+      function cleanup(result){
+        overlay.classList.remove('open');
+        okBtn.onclick=null;cancelBtn.onclick=null;
+        overlay.onclick=null;inputEl.onkeydown=null;
+        inputEl.style.display='none';
+        document.removeEventListener('keydown',escHandler);
+        resolveOuter(result);
+        done();
+      }
+      function commit(){
+        const v=inputEl.value.trim();
+        cleanup(v||null);
+      }
+      function escHandler(e){ if(e.key==='Escape') cleanup(null); }
+
+      okBtn.onclick=commit;
+      cancelBtn.onclick=()=>cleanup(null);
+      overlay.onclick=e=>{ if(e.target===overlay) cleanup(null); };
+      inputEl.onkeydown=e=>{ if(e.key==='Enter'){e.preventDefault();commit();} };
+      document.addEventListener('keydown',escHandler);
+      overlay.classList.add('open');
+      setTimeout(()=>{ inputEl.focus(); inputEl.select(); },50);
     });
     _runConfirmModalQueue();
   });
@@ -8882,6 +10319,33 @@ updateStickyBarPin();
   </div>
 </div>
 
+<div id="templateChooserOverlay" role="dialog" aria-modal="true" aria-labelledby="templateChooserTitle">
+  <div id="templateChooserModal">
+    <div class="elmodal-icon" style="background:var(--accent1-dim);border-color:var(--border-hover);">📋</div>
+    <div class="elmodal-title" id="templateChooserTitle">Set up tasks</div>
+    <div class="elmodal-desc" id="templateChooserDesc">Choose how to start this model.</div>
+    <div class="template-chooser-list" id="templateChooserList"></div>
+    <div class="elmodal-actions" style="margin-top:20px;">
+      <button class="elmodal-cancel-btn" id="templateChooserCancelBtn" style="width:100%;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div id="templateEditorOverlay" role="dialog" aria-modal="true" aria-labelledby="templateEditorTitle">
+  <div id="templateEditorModal">
+    <div class="elmodal-icon" style="background:var(--accent1-dim);border-color:var(--border-hover);">📑</div>
+    <div class="elmodal-title" id="templateEditorTitle">Edit Template</div>
+    <input type="text" id="templateEditorNameInput" class="te-name-input" maxlength="60" placeholder="Template name">
+    <div class="elmodal-desc">Edit tasks, priorities, and subtasks. Nothing is saved until you click Save Template.</div>
+    <div class="te-task-list" id="templateEditorTaskList"></div>
+    <button class="te-add-task-btn" id="templateEditorAddTaskBtn">＋ Add Task</button>
+    <div class="elmodal-actions" style="margin-top:20px;">
+      <button class="elmodal-cancel-btn" id="templateEditorCancelBtn" style="flex:1;">Cancel</button>
+      <button class="modal-btn primary" id="templateEditorSaveBtn" style="flex:1;">Save Template</button>
+    </div>
+  </div>
+</div>
+
 <div id="teamOverlay" role="dialog" aria-modal="true" aria-labelledby="teamModalTitle">
   <div id="teamModal">
     <div class="elmodal-icon" style="background:var(--accent1-dim);border-color:var(--border-hover);">👥</div>
@@ -9071,6 +10535,8 @@ async function switchToWorkspace(workspaceId){
     modelOrder=saved?.modelOrder||[];
     modelImages=saved?.modelImages||{};
     recycleBin=saved?.recycleBin||{};
+    templates=saved?.templates||{};
+    standardTemplateSeeded=!!(saved&&saved.standardTemplateSeeded);
     // Re-baseline against the NEWLY loaded workspace's actual server data —
     // otherwise a later save() in this workspace would still be diffing
     // against the previous workspace's keys, which could wrongly delete
@@ -9079,8 +10545,10 @@ async function switchToWorkspace(workspaceId){
       tasks:new Set(Object.keys(saved&&saved.tasks||{})),
       deadlines:new Set(Object.keys(saved&&saved.deadlines||{})),
       modelImages:new Set(Object.keys(modelImages)),
-      recycleBin:new Set(Object.keys(recycleBin))
+      recycleBin:new Set(Object.keys(recycleBin)),
+      templates:new Set(Object.keys(templates))
     };
+    seedStandardTemplateIfNeeded();
     purgeExpiredRecycleItems();
     setArchiveView(false);
     setRecycleView(false);
