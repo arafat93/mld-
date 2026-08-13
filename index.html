@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Model Launch Dashboard</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#09090b">
@@ -47,6 +47,41 @@
   --card-glow2: rgba(96, 165, 250, 0.03);
   --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+}
+
+/* ── PREMIUM POLISH: motion + scrollbar + selection ── */
+:root {
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { scrollbar-width: thin; scrollbar-color: var(--border-hover) transparent; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--border-hover);
+  border-radius: 100px;
+  border: 2px solid var(--bg);
+  background-clip: padding-box;
+  transition: background 0.2s ease;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--accent1); background-clip: padding-box; }
+
+::selection { background: var(--accent1); color: var(--bg); }
+
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent1);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 [data-theme="light"] {
@@ -249,6 +284,7 @@ body {
   color: var(--text);
   font-family: 'Sora', sans-serif;
   min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: hidden;
   transition: background 0.4s ease, color 0.4s ease;
   -webkit-font-smoothing: antialiased;
@@ -294,6 +330,12 @@ header {
   display: flex; align-items: center; justify-content: center;
   font-size: 20px; flex-shrink: 0;
   box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.4s var(--ease-soft), transform 0.4s var(--ease-soft), border-color 0.4s ease;
+}
+.logo-group:hover .logo-icon {
+  box-shadow: var(--shadow-sm), 0 0 0 1px var(--accent1-dim), 0 0 24px -4px var(--accent1-dim);
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
 }
 
 h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.5px; color: var(--text); }
@@ -321,9 +363,10 @@ h1 span { color: var(--accent1); font-weight: 400; }
   background: var(--surface);
   color: var(--text-muted);
   font-family: inherit; font-size: 12px; font-weight: 500;
-  cursor: pointer; transition: all 0.3s ease; white-space: nowrap;
+  cursor: pointer; transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.15s var(--ease-soft); white-space: nowrap;
 }
-.hdr-btn:hover { color: var(--text); border-color: var(--border-hover); background: var(--surface2); box-shadow: var(--shadow-sm); }
+.hdr-btn:hover { color: var(--text); border-color: var(--border-hover); background: var(--surface2); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+.hdr-btn:active { transform: translateY(0) scale(0.96); transition-duration: 0.08s; }
 .hdr-btn.accent { color: var(--accent1); border-color: var(--accent1-dim); background: var(--surface); }
 .hdr-btn.accent:hover { background: var(--accent1-dim); border-color: var(--accent1); }
 .hdr-btn.active-view { color: var(--accent1); border-color: var(--accent1); background: var(--accent1-dim); }
@@ -383,6 +426,12 @@ footer {
   .footer-right { gap: 14px; }
 }
 
+@container app-root (max-width: 700px) {
+  footer { flex-direction: column; align-items: flex-start; text-align: left; }
+  .footer-mid { order: 3; }
+  .footer-right { gap: 14px; }
+}
+
 /* ── KPI CARDS ── */
 .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; margin-bottom: 44px; }
 .kpi-card {
@@ -430,6 +479,8 @@ footer {
 .analytics-kpi-card .kpi-sub { font-size: 12px; color: var(--text-muted); font-weight: 300; }
 .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 @media (max-width: 980px){ .analytics-grid{ grid-template-columns: 1fr; } .analytics-kpi-grid{ grid-template-columns: repeat(2,1fr); } }
+
+@container app-root (max-width: 980px) { .analytics-grid{ grid-template-columns: 1fr; } .analytics-kpi-grid{ grid-template-columns: repeat(2,1fr); } }
 .analytics-panel {
   background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
   padding: 22px 24px; box-shadow: var(--shadow-sm);
@@ -470,15 +521,22 @@ footer {
 /* ── MODEL CARDS ── */
 .models-section-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }
 .models-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-bottom: 44px; }
+.models-grid > .model-card:nth-child(1) { animation-delay: 0.08s; }
+.models-grid > .model-card:nth-child(2) { animation-delay: 0.14s; }
+.models-grid > .model-card:nth-child(3) { animation-delay: 0.20s; }
+.models-grid > .model-card:nth-child(4) { animation-delay: 0.26s; }
+.models-grid > .model-card:nth-child(5) { animation-delay: 0.32s; }
+.models-grid > .model-card:nth-child(6) { animation-delay: 0.38s; }
+.models-grid > .model-card:nth-child(n+7) { animation-delay: 0.42s; }
 .model-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 20px; padding: 28px;
   position: relative; overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: fadeUp 0.6s ease both; animation-delay: 0.25s;
+  transition: transform 0.45s var(--ease-premium), box-shadow 0.45s var(--ease-premium), border-color 0.3s ease;
+  animation: fadeUp 0.6s var(--ease-soft) both; animation-delay: 0.25s;
   cursor: pointer; box-shadow: var(--shadow-sm);
 }
-.model-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--border-hover); }
+.model-card:hover { transform: translateY(-4px) scale(1.005); box-shadow: var(--shadow-md); border-color: var(--border-hover); }
 .model-pin-btn {
   position: absolute; top: 14px; right: 14px; z-index: 3;
   width: 32px; height: 32px; border-radius: 50%;
@@ -565,7 +623,10 @@ footer {
 .model-card:hover .model-thumb-preview { opacity: 1; transform: scale(1); }
 .model-thumb-preview:hover { background: var(--accent1); color: #fff; transform: scale(1.12); box-shadow: 0 2px 10px var(--accent1-dim), 0 0 0 1px rgba(255,255,255,0.04); }
 .model-thumb-input { display: none; }
-.model-name { font-size: 18px; font-weight: 600; color: var(--text); letter-spacing: -0.3px; }
+.model-name {
+  font-size: 18px; font-weight: 600; color: var(--text); letter-spacing: -0.3px;
+  overflow-wrap: anywhere; word-break: break-word; min-width: 0;
+}
 .model-deadline { font-size: 11px; color: var(--text-muted); margin-top: 6px; display: flex; align-items: center; gap: 6px; font-weight: 400; }
 .model-deadline-btn {
   background: none; border: 1px solid transparent; border-radius: 8px;
@@ -683,6 +744,12 @@ footer {
 .recycle-row-actions { display: flex; gap: 10px; flex-shrink: 0; }
 .recycle-row-actions .row-action-btn { width: auto; height: 36px; padding: 0 14px; font-size: 12px; font-weight: 600; white-space: nowrap; gap: 6px; }
 @media (max-width: 640px) {
+  .recycle-row { flex-wrap: wrap; }
+  .recycle-row-actions { width: 100%; }
+  .recycle-row-actions .row-action-btn { flex: 1; }
+}
+
+@container app-root (max-width: 640px) {
   .recycle-row { flex-wrap: wrap; }
   .recycle-row-actions { width: 100%; }
   .recycle-row-actions .row-action-btn { flex: 1; }
@@ -892,6 +959,12 @@ footer {
 .dep-modal-empty { font-size: 12.5px; color: var(--text-muted); font-style: italic; padding: 10px 0; }
 .dep-modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
 @media (max-width: 768px) {
+  .gantt-labels { width: 150px; }
+  .gantt-toolbar { border-radius: 16px 16px 0 0; }
+  .gantt-wrap { border-radius: 0 0 16px 16px; }
+}
+
+@container app-root (max-width: 768px) {
   .gantt-labels { width: 150px; }
   .gantt-toolbar { border-radius: 16px 16px 0 0; }
   .gantt-wrap { border-radius: 0 0 16px 16px; }
@@ -1116,6 +1189,27 @@ footer {
 }
 .comment-post-btn:hover { filter: brightness(1.08); }
 .comment-post-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* @mention autocomplete popover — anchored above the comment textarea */
+.mention-autocomplete {
+  display: none; position: absolute; left: 0; bottom: calc(100% + 6px); width: 260px; max-height: 180px;
+  overflow-y: auto; background: var(--surface2); border: 1px solid var(--border-hover); border-radius: 10px;
+  box-shadow: var(--shadow-md); z-index: 20; padding: 4px;
+}
+.mention-autocomplete.open { display: block; }
+.mention-autocomplete-item {
+  display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 7px; cursor: pointer; font-size: 12.5px; color: var(--text);
+}
+.mention-autocomplete-item:hover, .mention-autocomplete-item.active { background: var(--accent1-dim); }
+.mention-autocomplete-avatar {
+  width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: #fff;
+}
+.mention-autocomplete-empty { padding: 10px 8px; font-size: 12px; color: var(--text-dim); text-align: center; }
+
+/* highlighted @Name tag inside a posted comment */
+.comment-mention-tag { color: var(--accent1); font-weight: 700; background: var(--accent1-dim); padding: 0 3px; border-radius: 4px; }
+.comment-mention-tag.is-me { color: var(--bg); background: var(--accent1); }
 
 /* task deadline icon (sits beside notes icon) */
 .task-icons-cell { display: flex; align-items: center; justify-content: center; gap: 6px; }
@@ -1512,6 +1606,14 @@ footer {
   box-shadow: 0 4px 14px var(--accent1-dim);
 }
 .add-task-btn:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent1-dim); }
+.template-select-btn {
+  padding: 12px 20px; border-radius: 12px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--text);
+  font-family: inherit; font-size: 14px; font-weight: 400; cursor: pointer;
+  white-space: nowrap; transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+.template-select-btn:hover { border-color: var(--accent1); box-shadow: 0 0 0 3px var(--accent1-dim); }
 .add-model-bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 
 /* ── BULK ACTION BAR ── */
@@ -1601,6 +1703,52 @@ footer {
 .move-model-option .move-model-arrow { opacity: 0; transition: opacity 0.2s ease; font-size: 16px; }
 .move-model-option:hover .move-model-arrow { opacity: 1; }
 .move-model-empty { color: var(--text-muted); font-size: 13px; text-align: center; padding: 24px 0; }
+/* Cross-Model Bulk Update modal */
+.crossmodel-field-group { margin-top: 18px; }
+.crossmodel-field-label {
+  font-size: 11px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: .5px; display: block; margin-bottom: 8px;
+}
+.crossmodel-select {
+  width: 100%; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 14px; color: var(--text);
+  font-family: inherit; font-size: 14px; outline: none; cursor: pointer;
+}
+.crossmodel-select:focus { border-color: var(--accent1); box-shadow: 0 0 0 3px var(--accent1-dim); }
+.crossmodel-list {
+  display: flex; flex-direction: column; gap: 6px;
+  margin-top: 4px; max-height: 260px; overflow-y: auto;
+  border: 1px solid var(--border); border-radius: 12px; padding: 8px;
+}
+.crossmodel-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 10px; border-radius: 9px; transition: background .15s ease;
+}
+.crossmodel-row:hover { background: var(--surface2); }
+.crossmodel-row .cm-name { flex: 1; font-size: 13.5px; font-weight: 600; color: var(--text); }
+.crossmodel-row .cm-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.crossmodel-row .cm-tag {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px;
+  padding: 3px 8px; border-radius: 6px; white-space: nowrap;
+}
+.crossmodel-row .cm-tag.status-done { color: var(--green); background: rgba(16,185,129,0.12); }
+.crossmodel-row .cm-tag.status-inprogress { color: var(--accent2); background: rgba(96,165,250,0.12); }
+.crossmodel-row .cm-tag.status-pending { color: var(--text-muted); background: rgba(161,161,170,0.12); }
+.crossmodel-row .cm-tag.prio-high { color: var(--red); background: rgba(244,63,94,0.12); }
+.crossmodel-row .cm-tag.prio-med { color: var(--yellow); background: rgba(245,158,11,0.12); }
+.crossmodel-row .cm-tag.prio-low { color: var(--text-muted); background: rgba(161,161,170,0.12); }
+.crossmodel-row .cm-dl { font-size: 11px; color: var(--text-muted); }
+.crossmodel-empty { color: var(--text-muted); font-size: 13px; text-align: center; padding: 24px 0; }
+.crossmodel-select-all-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 14px; padding: 0 2px;
+}
+.crossmodel-select-all-row label { font-size: 12.5px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.crossmodal-scroll-body {
+  overflow-y: auto; overflow-x: hidden;
+  flex: 1 1 auto; min-height: 0;
+  padding-right: 4px; margin-right: -4px;
+}
 .task-checkbox {
   -webkit-appearance: none; -moz-appearance: none; appearance: none;
   width: 19px; height: 19px; min-width: 19px; cursor: pointer;
@@ -1666,7 +1814,13 @@ footer {
   align-items: center; justify-content: center;
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
 }
-.modal-overlay.open { display: flex; }
+.modal-overlay.open { display: flex; animation: overlayFadeIn 0.25s var(--ease-soft) both; }
+@keyframes overlayFadeIn { from { opacity: 0; } to { opacity: 1; } }
+/* The shared confirm/alert modal (showConfirm/showAlert) can be triggered
+   from inside other modals — e.g. deleting a template from the template
+   chooser (z-index 9999) or editor (z-index 10000). It must always render
+   above every other modal layer or it opens invisibly behind them. */
+#confirmModal { z-index: 10500; }
 .overdue-modal-body { max-height: 60vh; overflow-y: auto; margin-top: 10px; }
 .overdue-row {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
@@ -1684,6 +1838,28 @@ footer {
   border-radius: 20px; padding: 4px 10px; white-space: nowrap;
 }
 .overdue-empty { padding: 32px 8px; text-align: center; color: var(--text-dim); font-size: 13px; }
+.mytasks-modal-body { max-height: 60vh; overflow-y: auto; margin-top: 10px; }
+.mytask-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--surface2); margin-bottom: 8px; cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.mytask-row:hover { border-color: var(--accent1); background: rgba(96,165,250,0.08); }
+.mytask-row.is-done { opacity: 0.6; }
+.mytask-row-main { min-width: 0; }
+.mytask-row-name { font-size: 13.5px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mytask-row-name.is-done-text { text-decoration: line-through; }
+.mytask-row-model { font-size: 11.5px; color: var(--text-dim); margin-top: 2px; }
+.mytask-row-badge {
+  flex-shrink: 0; font-size: 11.5px; font-weight: 700;
+  border-radius: 20px; padding: 4px 10px; white-space: nowrap; border: 1px solid;
+}
+.mytask-row-badge.st-done { color: #10b981; background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.3); }
+.mytask-row-badge.st-overdue { color: var(--red); background: rgba(244,63,94,0.12); border-color: rgba(244,63,94,0.3); }
+.mytask-row-badge.st-soon { color: #f59e0b; background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.3); }
+.mytask-row-badge.st-open { color: var(--text-muted); background: var(--surface3); border-color: var(--border); }
+.mytasks-empty { padding: 32px 8px; text-align: center; color: var(--text-dim); font-size: 13px; }
 .menu-item-kbd { margin-left: auto; font-size: 10px; font-weight: 600; color: var(--text-muted); background: var(--surface3); border: 1px solid var(--border); border-radius: 5px; padding: 2px 6px; letter-spacing: .3px; }
 .gsearch-input-wrap { position: relative; margin-bottom: 14px; }
 .gsearch-input-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
@@ -1732,6 +1908,8 @@ footer {
 .notif-bell-btn:hover svg { transform: rotate(-8deg); }
 .notif-bell-btn:active { transform: scale(0.94); }
 .notif-bell-btn.has-unread { color: var(--accent1); border-color: var(--accent1-dim); }
+.notif-bell-btn.has-mention { color: var(--red); border-color: rgba(244,63,94,0.3); background: rgba(244,63,94,0.08); }
+.notif-bell-btn.has-mention:hover { color: var(--red); border-color: rgba(244,63,94,0.4); background: rgba(244,63,94,0.14); box-shadow: 0 0 0 4px rgba(244,63,94,0.1); }
 .notif-badge {
   position: absolute; top: -3px; right: -3px; min-width: 17px; height: 17px; padding: 0 4px;
   border-radius: 9px;
@@ -1741,6 +1919,11 @@ footer {
   border: 2px solid var(--bg);
   box-shadow: 0 0 0 0 rgba(212,175,55,0.55);
   animation: notifBadgePulse 2.2s ease-out infinite;
+}
+.notif-badge.mention-badge {
+  background: linear-gradient(135deg, var(--red), #fb7185);
+  color: #fff;
+  box-shadow: 0 0 0 0 rgba(244,63,94,0.55);
 }
 @keyframes notifBadgePulse {
   0%   { box-shadow: 0 0 0 0 rgba(212,175,55,0.45); }
@@ -1752,6 +1935,30 @@ footer {
 .activity-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 8px; border-radius: 10px; border-bottom: 1px solid var(--border); }
 .activity-row:last-child { border-bottom: none; }
 .activity-row.unread { background: var(--accent1-dim); }
+.activity-row.mentioned-me { background: rgba(244,63,94,0.08); }
+.activity-row.mentioned-me.unread { background: rgba(244,63,94,0.14); }
+.activity-row-view-btn {
+  flex-shrink: 0; align-self: center; display: flex; align-items: center; gap: 4px;
+  background: transparent; color: var(--red); border: 1px solid rgba(244,63,94,0.3);
+  border-radius: 7px; padding: 5px 10px; font-size: 11px; font-weight: 600;
+  font-family: 'Sora', sans-serif; cursor: pointer; white-space: nowrap;
+}
+.activity-row-view-btn:hover { background: rgba(244,63,94,0.12); }
+
+.activity-filter-tabs { display: flex; gap: 6px; margin: 12px 0 4px; }
+.activity-filter-tab {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted);
+  border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 600;
+  font-family: 'Sora', sans-serif; cursor: pointer; transition: all 0.15s ease;
+}
+.activity-filter-tab:hover { border-color: var(--border-hover); color: var(--text); }
+.activity-filter-tab.active { background: var(--accent1-dim); border-color: var(--accent1); color: var(--accent1); }
+.activity-filter-tab[data-filter="mentions"].active { background: rgba(244,63,94,0.1); border-color: var(--red); color: var(--red); }
+.activity-filter-tab-count {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 16px; height: 16px; padding: 0 4px;
+  border-radius: 8px; background: var(--red); color: #fff; font-size: 10px; font-weight: 800;
+}
 .activity-row-icon {
   flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--surface2);
   display: flex; align-items: center; justify-content: center; font-size: 13px;
@@ -1762,6 +1969,14 @@ footer {
 .activity-row-text b { color: var(--accent1); font-weight: 600; }
 .activity-row-meta { font-size: 11px; color: var(--text-dim); margin-top: 3px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 .activity-row-model-tag { background: var(--surface3); color: var(--text-muted); border-radius: 5px; padding: 1px 6px; font-weight: 600; }
+.activity-restore-btn {
+  flex-shrink: 0; align-self: center; display: flex; align-items: center; gap: 4px;
+  background: transparent; color: var(--accent1); border: 1px solid var(--accent1-dim);
+  border-radius: 7px; padding: 5px 10px; font-size: 11px; font-weight: 600;
+  font-family: 'Sora', sans-serif; cursor: pointer; white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+.activity-restore-btn:hover { background: var(--accent1-dim); border-color: var(--accent1); }
 .modal-box {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 24px; padding: 36px; width: min(500px, 90vw);
@@ -1782,14 +1997,16 @@ footer {
 .modal-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; }
 .modal-btn {
   padding: 10px 24px; border-radius: 10px; font-family: inherit;
-  font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; border: none;
+  font-size: 14px; font-weight: 600; cursor: pointer; border: none;
+  transition: filter 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s var(--ease-soft);
 }
 .modal-btn.primary { background: var(--accent1); color: var(--bg); box-shadow: 0 4px 14px var(--accent1-dim); }
-.modal-btn.primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.modal-btn.primary:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent1-dim); }
 .modal-btn.secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-.modal-btn.secondary:hover { background: var(--surface3); border-color: var(--border-hover); }
+.modal-btn.secondary:hover { background: var(--surface3); border-color: var(--border-hover); transform: translateY(-1px); }
 .modal-btn.danger { background: var(--red); color: #fff; box-shadow: 0 4px 14px rgba(244, 63, 94, 0.3); }
 .modal-btn.danger:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.modal-btn:active { transform: translateY(0) scale(0.96) !important; transition-duration: 0.08s; }
 
 /* ── NOTES: SCREENSHOTS GALLERY ── */
 .notes-shots-section { margin-top: 18px; }
@@ -1954,6 +2171,12 @@ footer {
   animation: spin 0.8s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+.btn-spinner {
+  width: 13px; height: 13px; border: 2px solid var(--border);
+  border-top-color: var(--accent1); border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0; display: inline-block;
+}
 #authLoading p { font-size: 14px; color: var(--text-muted); }
 /* User info in header */
 .user-badge {
@@ -2218,6 +2441,13 @@ kbd {
   .subtask-panel-title, .subtask-add-bar { padding-left: 102px; }
   .subtask-title-row { grid-template-columns: 30px 48px 1fr; }
 }
+
+@container app-root (max-width: 1200px) {
+  .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+  .table-header, .task-row, .subtask-row { grid-template-columns: 30px 48px 1fr 100px 120px 80px 80px 150px; }
+  .subtask-panel-title, .subtask-add-bar { padding-left: 102px; }
+  .subtask-title-row { grid-template-columns: 30px 48px 1fr; }
+}
 @media(max-width: 900px) {
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
   .models-grid { grid-template-columns: 1fr; }
@@ -2244,7 +2474,42 @@ kbd {
   .compare-header, .compare-row { grid-template-columns: 40px 1fr 140px; }
   .compare-header > *:last-child, .compare-row > *:last-child { display: none; }
 }
+
+@container app-root (max-width: 900px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .models-grid { grid-template-columns: 1fr; }
+  .table-header { grid-template-columns: 26px 40px 1fr 100px 110px; }
+  .table-header > *:nth-child(6), .table-header > *:nth-child(7), .table-header > *:nth-child(8) { display: none; }
+  .task-row, .subtask-row {
+    grid-template-columns: 26px 40px 1fr 100px 110px;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "sn chk name prio status"
+      "spacer1 spacer2 icons actions actions";
+    row-gap: 8px; padding-top: 12px; padding-bottom: 12px;
+  }
+  .task-row > *:nth-child(1), .subtask-row > *:nth-child(1) { grid-area: sn; }
+  .task-row > *:nth-child(2), .subtask-row > *:nth-child(2) { grid-area: chk; }
+  .task-row > *:nth-child(3), .subtask-row > *:nth-child(3) { grid-area: name; }
+  .task-row > *:nth-child(4), .subtask-row > *:nth-child(4) { grid-area: prio; }
+  .task-row > *:nth-child(5), .subtask-row > *:nth-child(5) { grid-area: status; }
+  .task-row > *:nth-child(6), .subtask-row > *:nth-child(6) { display: none; } /* Due column */
+  .task-row > .task-icons-cell, .subtask-row > .task-icons-cell { grid-area: icons; justify-content: flex-start; }
+  .task-row > .row-actions, .subtask-row > .row-actions { grid-area: actions; justify-content: flex-end; }
+  .subtask-panel-title, .subtask-add-bar { padding-left: 90px; }
+  .subtask-title-row { grid-template-columns: 26px 40px 1fr; }
+  .compare-header, .compare-row { grid-template-columns: 40px 1fr 140px; }
+  .compare-header > *:last-child, .compare-row > *:last-child { display: none; }
+}
 @media(max-width: 600px) {
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  h1 { font-size: 20px; }
+  .search-box { width: 140px; }
+  .hdr-btn span { display: none; }
+  .wrap { padding: 0 16px 40px; }
+}
+
+@container app-root (max-width: 600px) {
   .kpi-grid { grid-template-columns: 1fr 1fr; }
   h1 { font-size: 20px; }
   .search-box { width: 140px; }
@@ -2312,6 +2577,281 @@ kbd {
   }
 }
 
+@container app-root (max-width: 480px) {
+  .wrap { padding: 0 12px 32px; }
+
+  /* Header: restore labels but allow wrapping across rows instead of
+     a single overflowing line. */
+  .header-right { width: 100%; flex-basis: 100%; }
+  .hdr-btn span { display: inline; }
+  .hdr-btn { padding: 7px 12px; font-size: 11.5px; }
+  .search-box { width: 100%; }
+
+  /* Tab-bar action buttons (Set Deadline / Export / Import / Archive /
+     Delete) — same .hdr-btn class, restore labels and allow wrap. */
+  .hdr-deadline-btn span,
+  #exportModelToggleBtn span,
+  #importExcelLabel span { display: inline; }
+
+  /* Task table: drop the serial-number column entirely (least essential
+     on a phone) and shrink padding so the remaining columns fit. */
+  .table-header, .task-row, .subtask-row { padding: 0 12px; }
+  .table-header { grid-template-columns: 32px 1fr 72px; }
+  .table-header > *:nth-child(1) { display: none; } /* # column header */
+  .table-header > *:nth-child(5) { display: none; } /* status column header */
+  .task-row, .subtask-row {
+    grid-template-columns: 32px 1fr 72px;
+    grid-template-areas:
+      "chk name prio"
+      "spacer icons actions"
+      "spacer status status";
+    row-gap: 6px;
+  }
+  .task-row > *:nth-child(1) { display: none; } /* serial number cell (task rows only — subtask numbering stays visible) */
+  .subtask-row > *:nth-child(1) { grid-area: chk; justify-self: start; }
+  .subtask-row > *:nth-child(2) { display: none; } /* checkbox hidden on phone to make room; tap status chip to toggle */
+  .task-row > *:nth-child(2), .subtask-row > *:nth-child(2) { grid-area: chk; }
+  .task-row > *:nth-child(3), .subtask-row > *:nth-child(3) { grid-area: name; }
+  .task-row > *:nth-child(4), .subtask-row > *:nth-child(4) { grid-area: prio; justify-self: end; }
+  .task-row > *:nth-child(5), .subtask-row > *:nth-child(5) { grid-area: status; justify-self: start; margin-top: 2px; }
+  .task-row > .task-icons-cell, .subtask-row > .task-icons-cell { grid-area: icons; justify-content: flex-start; }
+  .task-row > .row-actions, .subtask-row > .row-actions { grid-area: actions; justify-content: flex-end; }
+  .priority-badge { width: auto; padding: 6px 10px; }
+  .subtask-panel-title, .subtask-add-bar { padding: 0 12px; }
+  .subtask-title-row { display: flex; align-items: center; gap: 10px; grid-template-columns: unset; padding: 0 12px 0 44px; }
+  .subtask-title-row .subtask-panel-title { grid-column: unset; }
+  .bulk-bar.subtask-bulk-bar { margin: 0 12px 10px; }
+
+  /* Toast: full-width banner instead of a fixed min-width box that can
+     clip or sit awkwardly close to the viewport edge. */
+  .toast {
+    left: 12px; right: 12px; bottom: 16px;
+    min-width: 0; width: auto;
+    padding: 14px 16px;
+  }
+}
+
+/* ── MOBILE UX POLISH (touch targets, zoom-prevention, modal ergonomics) ──
+   Applies on top of the breakpoints above: fixes iOS input auto-zoom,
+   enlarges tap targets to the ~40-44px comfort zone, makes modals behave
+   like proper mobile sheets (capped height, scrollable, stacked actions,
+   safe-area aware), and tames a few remaining desktop-only layouts. ── */
+@media (max-width: 768px) {
+  /* Prevent iOS Safari from auto-zooming the page when a <16px input
+     is focused — every text input/textarea/select gets bumped to 16px. */
+  input, textarea, select { font-size: 16px !important; }
+  .search-box, .modal-textarea, #globalSearchInput { font-size: 16px !important; }
+
+  /* Kill the sticky grey tap-flash on buttons/links; we already have
+     our own hover/active states so the native highlight just looks buggy. */
+  a, button, .hdr-btn, .tab-btn, .filter-btn, .row-action-btn,
+  .kpi-card, .model-card, .task-row, .subtask-row {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Bigger, easier-to-hit row action icons (edit/delete/archive/etc). */
+  .row-action-btn { width: 38px; height: 38px; font-size: 15px; }
+  .subtask-toggle-btn { width: 26px; height: 26px; }
+
+  /* Header buttons get a touch-friendly minimum height. */
+  .hdr-btn { min-height: 40px; }
+  .notif-bell-btn { width: 40px; height: 40px; }
+
+  /* Tab bar: wrap onto multiple lines on mobile instead of scrolling
+     horizontally — a horizontal-scroll strip was slicing the last tab's
+     text off at the screen edge with no visible cue to swipe. Wrapping
+     keeps every model name fully readable without any hidden content. */
+  .tab-bar {
+    flex-wrap: wrap; overflow-x: visible; max-width: 100%;
+  }
+  .tab-btn { white-space: normal; min-height: 38px; word-break: break-word; }
+
+  /* The bar and its flex-item wrappers need explicit width/min-width
+     rules, otherwise flex items refuse to shrink below their content
+     size and the tab strip pushes the whole page wider instead of
+     staying within the screen. This is what actually makes the
+     model bar "shrink" to fit the phone screen. */
+  #taskSectionWrap > div:first-of-type { width: 100%; }
+  .sticky-model-bar { flex: 1 1 100%; width: 100%; min-width: 0; }
+  .sticky-model-bar.is-pinned { width: 100% !important; left: 0 !important; padding-left: 0 !important; }
+  #stickyModelBarSpacer { width: 100%; }
+
+  /* Pinned/frozen state is disabled on mobile via JS (updateStickyBarPin),
+     but as a CSS-level safety net also stop it visually locking in place
+     if that JS path is ever bypassed. */
+  .sticky-model-bar.is-pinned { position: static !important; top: auto !important; }
+
+  /* Filter bar: search box drops to full width below the filter chips
+     rather than squeezing into whatever space is left. */
+  .filter-bar { gap: 8px 10px; }
+  .search-box { margin-left: 0; flex: 1 1 100%; order: 99; }
+  .filter-btn { min-height: 36px; padding: 8px 14px; }
+
+  /* Modals: behave like a mobile sheet — capped to the viewport, own
+     scroll for long content, comfortably padded but not wasteful,
+     and safe-area aware for notched phones. */
+  .modal-overlay { padding: 12px; align-items: flex-end; }
+  .modal-box {
+    width: 100%; max-width: 100%;
+    max-height: 88vh; overflow-y: auto;
+    padding: 24px 20px calc(20px + env(safe-area-inset-bottom));
+    border-radius: 20px 20px 0 0;
+    animation: modalInMobile 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes modalInMobile { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .modal-title { font-size: 18px; }
+  .modal-actions { flex-direction: column-reverse; gap: 10px; }
+  .modal-actions .modal-btn { width: 100%; min-height: 46px; }
+  .confirm-actions.modal-actions { flex-direction: column-reverse; }
+
+  /* KPI cards: tighter padding + smaller figure so 2-up rows stay
+     comfortable, instead of desktop sizing squeezed into half-width. */
+  .kpi-card { padding: 18px 16px; border-radius: 14px; }
+  .kpi-value { font-size: 30px; }
+  .kpi-label { font-size: 10px; margin-bottom: 8px; }
+
+  /* Model cards: stack stats/actions with enough breathing room and
+     make sure any inline action rows keep full-width tap targets. */
+  .model-card { padding: 20px; }
+  .model-header-main { gap: 10px; }
+  .model-thumb-wrap, .model-thumb { width: 46px; height: 46px; }
+  .model-name { font-size: 16px; }
+  .model-stats { gap: 16px; flex-wrap: wrap; }
+  .archive-card-actions button { min-height: 42px; }
+
+  /* Gantt view is inherently a wide-canvas tool; make sure it scrolls
+     rather than crushing bars unreadably, and hint that it's scrollable. */
+  .gantt-toolbar { padding: 12px 14px; }
+  .gantt-labels { width: 120px; }
+  .gantt-label-name { font-size: 11.5px; }
+
+  /* User menu ("Arafat" badge): on desktop it opens right-anchored
+     (right:0), which is fine because there's room to its left. On mobile
+     the badge sits at the far-left edge of the header row, so a
+     right-anchored menu expands leftward off the screen and gets
+     clipped by body{overflow-x:hidden} — the "Search"/"e Bin"/"tart"
+     truncation. Anchor from the left instead so it opens rightward,
+     into the open space, and stays fully on-screen. */
+  .user-menu {
+    left: 0; right: auto;
+    max-width: calc(100vw - 48px);
+  }
+}
+
+@container app-root (max-width: 768px) {
+  /* Prevent iOS Safari from auto-zooming the page when a <16px input
+     is focused — every text input/textarea/select gets bumped to 16px. */
+  input, textarea, select { font-size: 16px !important; }
+  .search-box, .modal-textarea, #globalSearchInput { font-size: 16px !important; }
+
+  /* Kill the sticky grey tap-flash on buttons/links; we already have
+     our own hover/active states so the native highlight just looks buggy. */
+  a, button, .hdr-btn, .tab-btn, .filter-btn, .row-action-btn,
+  .kpi-card, .model-card, .task-row, .subtask-row {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Bigger, easier-to-hit row action icons (edit/delete/archive/etc). */
+  .row-action-btn { width: 38px; height: 38px; font-size: 15px; }
+  .subtask-toggle-btn { width: 26px; height: 26px; }
+
+  /* Header buttons get a touch-friendly minimum height. */
+  .hdr-btn { min-height: 40px; }
+  .notif-bell-btn { width: 40px; height: 40px; }
+
+  /* Tab bar: wrap onto multiple lines on mobile instead of scrolling
+     horizontally — a horizontal-scroll strip was slicing the last tab's
+     text off at the screen edge with no visible cue to swipe. Wrapping
+     keeps every model name fully readable without any hidden content. */
+  .tab-bar {
+    flex-wrap: wrap; overflow-x: visible; max-width: 100%;
+  }
+  .tab-btn { white-space: normal; min-height: 38px; word-break: break-word; }
+
+  /* The bar and its flex-item wrappers need explicit width/min-width
+     rules, otherwise flex items refuse to shrink below their content
+     size and the tab strip pushes the whole page wider instead of
+     staying within the screen. This is what actually makes the
+     model bar "shrink" to fit the phone screen. */
+  #taskSectionWrap > div:first-of-type { width: 100%; }
+  .sticky-model-bar { flex: 1 1 100%; width: 100%; min-width: 0; }
+  .sticky-model-bar.is-pinned { width: 100% !important; left: 0 !important; padding-left: 0 !important; }
+  #stickyModelBarSpacer { width: 100%; }
+
+  /* Pinned/frozen state is disabled on mobile via JS (updateStickyBarPin),
+     but as a CSS-level safety net also stop it visually locking in place
+     if that JS path is ever bypassed. */
+  .sticky-model-bar.is-pinned { position: static !important; top: auto !important; }
+
+  /* Filter bar: search box drops to full width below the filter chips
+     rather than squeezing into whatever space is left. */
+  .filter-bar { gap: 8px 10px; }
+  .search-box { margin-left: 0; flex: 1 1 100%; order: 99; }
+  .filter-btn { min-height: 36px; padding: 8px 14px; }
+
+  /* Modals: behave like a mobile sheet — capped to the viewport, own
+     scroll for long content, comfortably padded but not wasteful,
+     and safe-area aware for notched phones. */
+  .modal-overlay { padding: 12px; align-items: flex-end; }
+  .modal-box {
+    width: 100%; max-width: 100%;
+    max-height: 88vh; overflow-y: auto;
+    padding: 24px 20px calc(20px + env(safe-area-inset-bottom));
+    border-radius: 20px 20px 0 0;
+    animation: modalInMobile 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes modalInMobile { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .modal-title { font-size: 18px; }
+  .modal-actions { flex-direction: column-reverse; gap: 10px; }
+  .modal-actions .modal-btn { width: 100%; min-height: 46px; }
+  .confirm-actions.modal-actions { flex-direction: column-reverse; }
+
+  /* KPI cards: tighter padding + smaller figure so 2-up rows stay
+     comfortable, instead of desktop sizing squeezed into half-width. */
+  .kpi-card { padding: 18px 16px; border-radius: 14px; }
+  .kpi-value { font-size: 30px; }
+  .kpi-label { font-size: 10px; margin-bottom: 8px; }
+
+  /* Model cards: stack stats/actions with enough breathing room and
+     make sure any inline action rows keep full-width tap targets. */
+  .model-card { padding: 20px; }
+  .model-header-main { gap: 10px; }
+  .model-thumb-wrap, .model-thumb { width: 46px; height: 46px; }
+  .model-name { font-size: 16px; }
+  .model-stats { gap: 16px; flex-wrap: wrap; }
+  .archive-card-actions button { min-height: 42px; }
+
+  /* Gantt view is inherently a wide-canvas tool; make sure it scrolls
+     rather than crushing bars unreadably, and hint that it's scrollable. */
+  .gantt-toolbar { padding: 12px 14px; }
+  .gantt-labels { width: 120px; }
+  .gantt-label-name { font-size: 11.5px; }
+
+  /* User menu ("Arafat" badge): on desktop it opens right-anchored
+     (right:0), which is fine because there's room to its left. On mobile
+     the badge sits at the far-left edge of the header row, so a
+     right-anchored menu expands leftward off the screen and gets
+     clipped by body{overflow-x:hidden} — the "Search"/"e Bin"/"tart"
+     truncation. Anchor from the left instead so it opens rightward,
+     into the open space, and stays fully on-screen. */
+  .user-menu {
+    left: 0; right: auto;
+    max-width: calc(100vw - 48px);
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-box { padding: 20px 16px calc(18px + env(safe-area-inset-bottom)); }
+  .kpi-value { font-size: 26px; }
+  .filter-btn { font-size: 11.5px; padding: 7px 12px; }
+}
+
+@container app-root (max-width: 480px) {
+  .modal-box { padding: 20px 16px calc(18px + env(safe-area-inset-bottom)); }
+  .kpi-value { font-size: 26px; }
+  .filter-btn { font-size: 11.5px; padding: 7px 12px; }
+}
+
 /* ── COPY PROTECTION: disable text selection/drag ── */
 html, body, * {
   -webkit-user-select: none;
@@ -2375,6 +2915,49 @@ img { -webkit-user-drag: none; }
   .print-table tr.pt-subtask td:nth-child(2) { padding-left: 22px; }
   .print-table tr.pt-subtask.pt-done td { color: #999; }
   @page { margin: 18mm 14mm; }
+
+  /* ── EXECUTIVE SUMMARY (one page per model) ── */
+  .exec-summary { display: flex; flex-direction: column; min-height: 253mm; }
+  .es-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: #d4af37; text-transform: uppercase; margin-bottom: 4px; }
+  .es-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #111; padding-bottom: 14px; margin-bottom: 20px; }
+  .es-header-left { display: flex; align-items: flex-start; gap: 16px; }
+  .es-photo { width: 64px; height: 64px; object-fit: cover; border-radius: 12px; border: 1px solid #ccc; flex-shrink: 0; }
+  .es-header h1 { font-size: 26px; font-weight: 800; margin: 0 0 8px 0; color: #111; }
+  .es-status-pill { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; border: 1.5px solid; border-radius: 20px; padding: 3px 12px; }
+  .es-header-right { text-align: right; }
+  .es-deadline-label { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: #888; text-transform: uppercase; margin-bottom: 3px; }
+  .es-deadline-val { font-size: 17px; font-weight: 700; color: #111; }
+  .es-deadline-sub { font-size: 11px; color: #b00020; font-weight: 600; margin-top: 2px; }
+  .es-body { display: flex; gap: 28px; flex: 1; }
+  .es-col-left { width: 40%; flex-shrink: 0; }
+  .es-col-right { width: 60%; display: flex; flex-direction: column; gap: 16px; }
+  .es-ring-wrap { display: flex; justify-content: center; margin-bottom: 14px; }
+  .es-kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 20px; }
+  .es-kpi { text-align: center; background: #f7f7f7; border-radius: 8px; padding: 8px 4px; }
+  .es-kpi-val { font-size: 18px; font-weight: 800; color: #111; }
+  .es-kpi.es-danger .es-kpi-val { color: #b00020; }
+  .es-kpi-label { font-size: 8px; font-weight: 700; letter-spacing: 0.5px; color: #888; text-transform: uppercase; margin-top: 2px; }
+  .es-section-title { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: #888; text-transform: uppercase; margin: 14px 0 8px; }
+  .es-prio-row { display: flex; align-items: center; gap: 8px; font-size: 12px; padding: 4px 0; }
+  .es-prio-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .es-prio-label { flex: 1; color: #333; }
+  .es-prio-count { font-weight: 700; color: #111; }
+  .es-team-wrap { display: flex; flex-direction: column; gap: 6px; }
+  .es-team-chip { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #333; }
+  .es-team-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .es-team-count { margin-left: auto; font-size: 10px; color: #888; font-weight: 600; }
+  .es-panel { border: 1px solid #ccc; border-radius: 10px; padding: 14px 16px; flex: 1; }
+  .es-panel-danger { border-color: #e5989b; background: #fdf2f2; }
+  .es-panel-title { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: #888; text-transform: uppercase; margin-bottom: 8px; }
+  .es-panel-danger .es-panel-title { color: #b00020; }
+  .es-list { list-style: none; margin: 0; padding: 0; }
+  .es-list li { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; padding: 5px 0; border-bottom: 1px dashed #ddd; }
+  .es-list li:last-child { border-bottom: none; }
+  .es-li-name { color: #222; }
+  .es-li-date { color: #666; white-space: nowrap; }
+  .es-li-date.es-danger { color: #b00020; font-weight: 700; }
+  .es-empty { color: #999; font-style: italic; padding: 5px 0; }
+  .es-footer { margin-top: 20px; font-size: 10px; color: #888; text-align: right; border-top: 1px solid #ddd; padding-top: 8px; }
 }
 
 /* ── EXPORT-BEFORE-LOGOUT MODAL ── */
@@ -2652,9 +3235,121 @@ img { -webkit-user-drag: none; }
 }
 .team-join-input:focus { outline: none; border-color: var(--accent1); }
 .team-join-error { font-size: 12px; color: var(--red); margin-top: 6px; min-height: 14px; }
+
+/* ── FORCE-PORTRAIT LOCK (mobile app view) ───────────────────────────────
+   The Screen Orientation API (attempted in JS below) can truly lock
+   rotation, but only on Android when this is opened as an installed PWA
+   — iOS Safari ignores it completely, and a plain browser tab can't use
+   it at all. So instead of blocking landscape with a message, this pure
+   CSS trick rotates the whole page -90° and re-fits it to the physical
+   screen whenever the phone is turned sideways, so the dashboard keeps
+   rendering upright and portrait no matter which way the phone is held.
+   width/height are swapped (100vh/100vw) to match the rotated box, and
+   the position:absolute + top:100% shift re-centers it in the new
+   (landscape) viewport. Scoped to phone-sized landscape widths so a
+   desktop/tablet browser window in landscape is unaffected. */
+/* Detection moved to JS (see script right after </head> opens, below).
+   CSS media features like (hover:none)/(pointer:coarse) turned out to be
+   unreliable inside some mobile "app" WebViews — they didn't match on a
+   real device even though it's a touchscreen phone, so the rotate never
+   engaged and the desktop grid rendered at full (unrotated) landscape
+   width instead. JS touch-detection (ontouchstart / maxTouchPoints) is
+   reliable across normal mobile browsers AND embedded WebViews, so the
+   html.force-portrait-lock class below is toggled from JS instead. */
+html.force-portrait-lock {
+  transform: rotate(-90deg);
+  transform-origin: left top;
+  width: 100vh;
+  height: 100vw;
+  overflow-x: hidden;
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+
+/* body is ALWAYS a query container (not just while rotated). In the
+   normal (non-rotated) state its inline-size just equals the real
+   viewport width, so @container behaves identically to a plain @media
+   check. While rotated, its inline-size becomes the swapped 100vh
+   (phone's true short/physical width), so the mobile layout rules
+   below (converted from @media to @container) correctly detect "narrow"
+   instead of measuring the real, unrotated device width — that mismatch
+   is what let the desktop grid render squashed inside the rotated box. */
+body {
+  container-type: inline-size;
+  container-name: app-root;
+}
+
 </style>
 </head>
 <body>
+<script>
+// ── FORCE-PORTRAIT CLASS TOGGLE ── Drives the html.force-portrait-lock
+// CSS rotate trick (see <style> above). Detection is done here in JS,
+// not via CSS (hover:none)/(pointer:coarse) media features, because
+// those didn't reliably match inside some mobile "app" WebViews on real
+// devices — touch phones sometimes reported as if they had a fine
+// pointer/hover capability, so the rotate never engaged and the desktop
+// grid rendered at full landscape width instead.
+// navigator.maxTouchPoints / 'ontouchstart' in window are checked
+// directly instead, which works consistently across normal mobile
+// browsers and embedded WebViews alike.
+(function () {
+  function isTouchDevice() {
+    return ('ontouchstart' in window) ||
+      (navigator.maxTouchPoints > 0) ||
+      (navigator.msMaxTouchPoints > 0);
+  }
+  let wasLocked = false;
+  function evalPortraitLock() {
+    const landscape = window.innerWidth > window.innerHeight;
+    const shortSide = Math.min(window.innerWidth, window.innerHeight);
+    // shortSide cap keeps this to phone-class screens (physical width
+    // when held portrait), so tablets/desktops in a landscape window
+    // aren't force-rotated.
+    const shouldLock = isTouchDevice() && landscape && shortSide <= 500;
+    document.documentElement.classList.toggle('force-portrait-lock', shouldLock);
+    // Going from locked (rotated, position:absolute/top:100%) back to
+    // normal portrait can leave the page at a leftover scroll offset,
+    // which reads as the app having "zoomed in" even though the scale
+    // itself didn't change. Snapping scroll back to the top on unlock
+    // fixes that. A tiny delay lets the browser finish reflowing the
+    // now-unrotated layout before we scroll.
+    if (wasLocked && !shouldLock) {
+      window.scrollTo(0, 0);
+      setTimeout(() => window.scrollTo(0, 0), 50);
+    }
+    wasLocked = shouldLock;
+  }
+  evalPortraitLock();
+  window.addEventListener('resize', evalPortraitLock);
+  window.addEventListener('orientationchange', evalPortraitLock);
+  document.addEventListener('DOMContentLoaded', evalPortraitLock);
+})();
+</script>
+<script>
+// ── ORIENTATION LOCK ATTEMPT ── Works on Android when this is opened as
+// an installed PWA (standalone display mode); throws/rejects everywhere
+// else (regular browser tabs, iOS Safari), which we just swallow — the
+// CSS force-portrait rotate trick above is what actually keeps the
+// dashboard upright everywhere else.
+(function lockPortrait(){
+  try{
+    const so = screen.orientation;
+    if (so && typeof so.lock === 'function') {
+      so.lock('portrait').catch(()=>{});
+    }
+  }catch(e){}
+})();
+window.addEventListener('DOMContentLoaded', () => {
+  try{
+    if (screen.orientation && typeof screen.orientation.lock === 'function') {
+      screen.orientation.lock('portrait').catch(()=>{});
+    }
+
+  }catch(e){}
+});
+</script>
 <script>
 // ── COPY PROTECTION (deters casual copying — not a real security measure) ──
 document.addEventListener('contextmenu', e => e.preventDefault());
@@ -2809,9 +3504,11 @@ document.addEventListener('keydown', e => {
       <span class="user-badge-caret">▾</span>
       <div class="user-menu" id="userMenu">
         <button class="menu-item" id="globalSearchBtn" title="Search tasks &amp; models across your entire workspace"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Global Search</span><span class="menu-item-kbd">Ctrl K</span></button>
+        <button class="menu-item" id="crossModelBulkBtn" title="Update the same task across all your models at once"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Bulk Update by Task</span></button>
         <button class="menu-item" id="activityLogMenuBtn" title="See every change across your workspace"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg><span>Activity Log</span></button>
         <div class="menu-divider"></div>
         <button class="menu-item" id="teamMenuBtn" title="Invite teammates or manage your shared workspace"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Team</span><span class="archive-count-badge" id="teamCountBadge" style="display:none;">1</span></button>
+        <button class="menu-item" id="myTasksMenuBtn" title="See every task assigned to you, across all models, in one window" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M9 14l2 2 4-4"/></svg><span>My Tasks</span><span class="archive-count-badge" id="myTasksCountBadge" style="display:none;">0</span></button>
         <button class="menu-item" id="archiveViewBtn" title="View archived models"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><line x1="10" y1="13" x2="14" y2="13"/></svg><span>Archived</span><span class="archive-count-badge" id="archiveCountBadge" style="display:none;">0</span></button>
         <button class="menu-item" id="recycleViewBtn" title="View deleted tasks (kept for 30 days)" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg><span>Recycle Bin</span><span class="archive-count-badge" id="recycleCountBadge" style="display:none;">0</span></button>
         <button class="menu-item" id="analyticsViewBtn" title="Burndown, trends, and overdue analysis"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Analytics</span></button>
@@ -2843,7 +3540,10 @@ document.addEventListener('keydown', e => {
         <button class="menu-item" id="exportAllExcelBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#21a366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="10" y1="11" x2="10" y2="19"/></svg><span>Export as Excel</span></button>
         <button class="menu-item" id="exportAllPdfBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="#e5484d" stroke-width="2"/><polyline points="14 2 14 8 20 8" stroke="#e5484d" stroke-width="2"/><line x1="7.5" y1="13" x2="16.5" y2="13" stroke="#e5484d" stroke-width="1.6"/><line x1="7.5" y1="16" x2="16.5" y2="16" stroke="#e5484d" stroke-width="1.6"/><line x1="7.5" y1="19" x2="13" y2="19" stroke="#e5484d" stroke-width="1.6"/></svg><span>Export as PDF</span></button>
         <div class="menu-divider"></div>
-        <button class="menu-item" id="backupNowBtn" title="Save a local backup right now (replaces the previous one — only the latest is ever kept)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span id="backupNowLabel">Backup Now</span></button>
+        <button class="menu-item" id="exportAllExecPdfBtn" title="One page per model — executive summary (PDF)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg><span>Executive Summaries (PDF)</span></button>
+        <button class="menu-item" id="exportAllExecPptxBtn" title="One slide per model — executive summary deck (PowerPoint)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97b3f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><rect x="2" y="4" width="20" height="14" rx="1.5"/><path d="M8 20h8"/><path d="M6 9l3 3-3 3" stroke-width="1.6"/><path d="M12 15h4" stroke-width="1.6"/></svg><span>Executive Summaries (PPTX)</span></button>
+        <div class="menu-divider"></div>
+        <button class="menu-item" id="backupNowBtn" title="Save a local backup right now (replaces the previous one — only the latest is ever kept)"><svg id="backupNowIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span class="btn-spinner" id="backupNowSpinner" style="display:none;"></span><span id="backupNowLabel">Backup Now</span></button>
         <button class="menu-item" id="restoreBackupBtn" title="No backup yet — use &quot;Backup Now&quot; once to create one"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"/></svg><span id="restoreBackupLabel">Restore Last Backup</span></button>
       </div>
     </div>
@@ -2895,8 +3595,8 @@ document.addEventListener('keydown', e => {
       <input type="date" id="newModelDeadline" class="add-task-input" title="Set target launch date">
       <span class="date-field-placeholder" id="newModelDeadlinePlaceholder">Set Deadline</span>
     </div>
+    <button class="template-select-btn" id="manageTemplatesBtn" title="Manage saved checklist templates"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:-2px;margin-right:6px;"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>Templates</button>
     <button class="add-task-btn" id="addModelBtn">Add Model</button>
-    <button class="add-task-btn" id="manageTemplatesBtn" style="background:var(--surface2);color:var(--text);border:1px solid var(--border);" title="Manage saved checklist templates">📑 Templates</button>
   </div>
 </div>
 <div class="models-grid" id="modelsGrid"></div>
@@ -2927,6 +3627,9 @@ document.addEventListener('keydown', e => {
       <div class="export-menu" id="exportModelMenu">
         <button class="menu-item" id="exportExcelBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#21a366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="10" y1="11" x2="10" y2="19"/></svg><span>Export as Excel</span></button>
         <button class="menu-item" id="exportPdfBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="#e5484d" stroke-width="2"/><polyline points="14 2 14 8 20 8" stroke="#e5484d" stroke-width="2"/><line x1="7.5" y1="13" x2="16.5" y2="13" stroke="#e5484d" stroke-width="1.6"/><line x1="7.5" y1="16" x2="16.5" y2="16" stroke="#e5484d" stroke-width="1.6"/><line x1="7.5" y1="19" x2="13" y2="19" stroke="#e5484d" stroke-width="1.6"/></svg><span>Export as PDF</span></button>
+        <div class="menu-divider"></div>
+        <button class="menu-item" id="exportExecPdfBtn" title="One-page executive summary for this model (PDF)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg><span>Executive Summary (PDF)</span></button>
+        <button class="menu-item" id="exportExecPptxBtn" title="One-slide executive summary for this model (PowerPoint)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97b3f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><rect x="2" y="4" width="20" height="14" rx="1.5"/><path d="M8 20h8"/><path d="M6 9l3 3-3 3" stroke-width="1.6"/><path d="M12 15h4" stroke-width="1.6"/></svg><span>Executive Summary (PPTX)</span></button>
       </div>
     </div>
     <label class="hdr-btn" id="importExcelLabel" title="Import tasks from Excel into the current model" style="cursor:pointer;">
@@ -2966,6 +3669,7 @@ document.addEventListener('keydown', e => {
     <div class="bulk-move-menu" id="bulkMoveMenu">
       <button class="menu-item" id="bulkMoveTopBtn" title="Move selected tasks to the top of the list"><span>↑</span><span>Move to Top</span></button>
       <button class="menu-item" id="bulkMoveBottomBtn" title="Move selected tasks to the bottom of the list"><span>↓</span><span>Move to Bottom</span></button>
+      <button class="menu-item" id="bulkMoveToPositionBtn" title="Move selected tasks to a specific serial number"><span>#</span><span>Move to Position…</span></button>
       <button class="menu-item" id="bulkMoveModelBtn" title="Move selected tasks to a different model"><span>⇄</span><span>Move to Model</span></button>
     </div>
   </div>
@@ -3249,8 +3953,9 @@ document.addEventListener('keydown', e => {
     <div class="modal-title">💬 Comment Timeline</div>
     <div class="modal-subtitle" id="commentsTaskName"></div>
     <div class="comment-timeline" id="commentsTimeline"></div>
-    <div class="comment-input-row">
-      <textarea class="comment-textarea" id="commentInputText" placeholder="Add an update to the discussion…" maxlength="600"></textarea>
+    <div class="comment-input-row" style="position:relative;">
+      <div class="mention-autocomplete" id="mentionAutocomplete"></div>
+      <textarea class="comment-textarea" id="commentInputText" placeholder="Add an update to the discussion… (type @ to mention someone)" maxlength="600"></textarea>
       <button type="button" class="comment-post-btn" id="commentPostBtn">Post</button>
     </div>
     <div class="modal-actions">
@@ -3273,8 +3978,13 @@ document.addEventListener('keydown', e => {
   <div class="modal-box" id="activityModalBox" style="width:min(560px, 92vw);">
     <div class="modal-title">🕓 Activity Log</div>
     <div class="modal-subtitle" id="activitySubtitle">Every change made across your workspace, most recent first.</div>
+    <div class="activity-filter-tabs" id="activityFilterTabs">
+      <button type="button" class="activity-filter-tab active" data-filter="all">All</button>
+      <button type="button" class="activity-filter-tab" data-filter="mentions">🔔 Mentions<span class="activity-filter-tab-count" id="activityMentionTabCount" style="display:none;">0</span></button>
+    </div>
     <div class="activity-body" id="activityBody"></div>
     <div class="modal-actions" style="margin-top:16px;">
+      <button class="modal-btn secondary" id="activityClearBtn" style="color:var(--red);border-color:rgba(244,63,94,0.25);" title="Permanently delete every entry in this workspace's activity log">Clear Log</button>
       <button class="modal-btn primary" id="activityCloseBtn">Close</button>
     </div>
   </div>
@@ -3304,6 +4014,18 @@ document.addEventListener('keydown', e => {
     <div class="overdue-modal-body" id="overdueModalBody"></div>
     <div class="modal-actions" style="margin-top:16px;">
       <button class="modal-btn primary" id="overdueModalCloseBtn">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- MY TASKS MODAL -->
+<div class="modal-overlay" id="myTasksModal">
+  <div class="modal-box" id="myTasksModalBox" style="width:min(560px, 92vw);">
+    <div class="modal-title">🗂️ My Tasks</div>
+    <div class="modal-subtitle" id="myTasksModalCount">Everything assigned to you, across every model.</div>
+    <div class="mytasks-modal-body" id="myTasksModalBody"></div>
+    <div class="modal-actions" style="margin-top:16px;">
+      <button class="modal-btn primary" id="myTasksModalCloseBtn">Close</button>
     </div>
   </div>
 </div>
@@ -3379,6 +4101,74 @@ document.addEventListener('keydown', e => {
     <div class="move-model-list" id="moveModelList"></div>
     <div class="modal-actions" style="margin-top:24px;">
       <button class="modal-btn secondary" id="bulkMoveModelCancelBtn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- CROSS-MODEL BULK UPDATE MODAL — pick a task name shared across models, choose which
+     models to touch, then update status/deadline/priority for all of them in one go. -->
+<div class="modal-overlay" id="crossModelBulkModal">
+  <div class="modal-box" style="width:min(560px, 92vw); max-height:88vh; display:flex; flex-direction:column; padding-bottom:24px;">
+    <div class="modal-title">Bulk Update by Task</div>
+    <div class="modal-subtitle">Pick a task that appears in more than one model, choose which models to update, then set the new status, deadline, or priority.</div>
+
+    <div class="crossmodal-scroll-body">
+      <div class="crossmodel-field-group" style="margin-top:0;">
+        <label class="crossmodel-field-label" for="crossTaskSelect">Task</label>
+        <select class="crossmodel-select" id="crossTaskSelect"></select>
+      </div>
+
+      <div class="crossmodel-select-all-row">
+        <label><input type="checkbox" class="task-checkbox" id="crossSelectAllChk">Select all models</label>
+        <span class="cm-dl" id="crossMatchCount"></span>
+      </div>
+      <div class="crossmodel-list" id="crossModelList"></div>
+
+      <div class="crossmodel-field-group" id="crossSubtaskSection" style="display:none;">
+        <div class="crossmodel-select-all-row" style="margin-top:0;">
+          <label><input type="checkbox" class="task-checkbox" id="crossIncludeSubtasksChk">Also apply to subtasks</label>
+          <span class="cm-dl" id="crossSubtaskCount"></span>
+        </div>
+        <div class="crossmodel-select-all-row" id="crossSubtaskSelectAllRow" style="display:none;margin-top:8px;">
+          <label><input type="checkbox" class="task-checkbox" id="crossSubtaskSelectAllChk" checked>Select all subtasks</label>
+        </div>
+        <div class="crossmodel-list" id="crossSubtaskList" style="display:none;"></div>
+      </div>
+
+      <div class="crossmodel-field-group">
+        <label class="crossmodel-field-label" for="crossStatusSelect">Status</label>
+        <select class="crossmodel-select" id="crossStatusSelect">
+          <option value="nochange">— No change —</option>
+          <option value="pending">Pending</option>
+          <option value="inprogress">In Progress</option>
+          <option value="done">Completed</option>
+        </select>
+      </div>
+
+      <div class="crossmodel-field-group">
+        <label class="crossmodel-field-label" for="crossPrioritySelect">Priority</label>
+        <select class="crossmodel-select" id="crossPrioritySelect">
+          <option value="nochange">— No change —</option>
+          <option value="high">High</option>
+          <option value="med">Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+
+      <div class="crossmodel-field-group">
+        <label class="crossmodel-field-label" for="crossDeadlineSelect">Deadline</label>
+        <select class="crossmodel-select" id="crossDeadlineSelect">
+          <option value="nochange">— No change —</option>
+          <option value="set">Set date…</option>
+          <option value="clear">Clear deadline</option>
+        </select>
+        <input type="date" class="deadline-input" id="crossDeadlinePicker" style="margin-top:8px;display:none;">
+      </div>
+    </div>
+
+    <div class="modal-actions" style="margin-top:20px;flex-shrink:0;">
+      <button class="modal-btn secondary" id="crossModelBulkCancelBtn">Cancel</button>
+      <button class="modal-btn primary" id="crossModelBulkApplyBtn">Apply</button>
     </div>
   </div>
 </div>
@@ -3589,10 +4379,81 @@ document.getElementById('forgotLink').onclick=async()=>{
 // Logout — intercepted by export-before-logout modal (wired up below)
 // The modal handler re-assigns logoutBtn.onclick after DOM is ready.
 
+// ── DROPDOWN MENU VIEWPORT CLAMP ────────────────────────────────────────────
+// .user-menu / .export-menu / .bulk-move-menu are all CSS-anchored
+// (left:0 or right:0) to whichever button opens them. On mobile, header
+// and toolbar buttons wrap onto different rows depending on screen width,
+// so a fixed anchor can push the menu off either edge of the viewport —
+// body{overflow-x:hidden} then silently clips its content (text like
+// "Global Search" or "Export as Excel" gets truncated with no visible
+// cue). This re-measures the menu right after it opens and, only if it's
+// actually off-screen, nudges it back in with an inline `left`.
+//
+// These menus can open two different ways — a JS class toggle on touch
+// (see the click handlers below) or a pure-CSS :hover rule on devices
+// that report real hover support (a mouse, or a resized desktop
+// browser) — so this checks the menu's own rendered visibility rather
+// than the 'menu-open' class, and is wired to both triggers below.
+function clampMenuToViewport(anchorEl,menu){
+  if(!anchorEl||!menu) return;
+  const doClamp=()=>{
+    const cs=getComputedStyle(menu);
+    if(cs.visibility==='hidden'||parseFloat(cs.opacity)===0) return;
+    menu.style.left=''; menu.style.right='';
+    const margin=10;
+    const rect=menu.getBoundingClientRect();
+    let desiredLeft=rect.left;
+    if(rect.right>window.innerWidth-margin) desiredLeft=window.innerWidth-margin-rect.width;
+    if(rect.left<margin) desiredLeft=margin;
+    if(Math.round(desiredLeft)!==Math.round(rect.left)){
+      const parentRect=(menu.offsetParent||anchorEl).getBoundingClientRect();
+      menu.style.left=(desiredLeft-parentRect.left)+'px';
+      menu.style.right='auto';
+    }
+  };
+  // Two rAFs (not one): the open transition's transform/opacity is still
+  // animating on the very first frame on some devices, which can throw
+  // off the measured box. Waiting a frame further, plus a small timeout
+  // as a final safety net, makes sure we measure the settled layout.
+  requestAnimationFrame(()=>requestAnimationFrame(doClamp));
+  setTimeout(doClamp,220);
+}
+window.addEventListener('resize',()=>{
+  document.querySelectorAll('.export-dropdown.menu-open, .user-badge.menu-open, .bulk-move-dropdown.menu-open').forEach(dd=>{
+    const menu=dd.querySelector(':scope > .user-menu, :scope > .export-menu, :scope > .bulk-move-menu');
+    if(menu) clampMenuToViewport(dd,menu);
+  });
+});
+// Hover-opened path: CSS reveals these menus on mouseenter with no JS
+// class change, so clamp on mouseenter too — harmless no-op on touch
+// devices, which generally don't fire mouseenter on tap.
+document.getElementById('userBadge').addEventListener('mouseenter',()=>{
+  const badge=document.getElementById('userBadge');
+  clampMenuToViewport(badge,document.getElementById('userMenu'));
+});
+document.getElementById('themeDropdown').addEventListener('mouseenter',()=>{
+  const dd=document.getElementById('themeDropdown');
+  clampMenuToViewport(dd,document.getElementById('themeMenu'));
+});
+document.getElementById('exportAllDropdown').addEventListener('mouseenter',()=>{
+  const dd=document.getElementById('exportAllDropdown');
+  clampMenuToViewport(dd,document.getElementById('exportAllMenu'));
+});
+document.getElementById('exportModelDropdown').addEventListener('mouseenter',()=>{
+  const dd=document.getElementById('exportModelDropdown');
+  clampMenuToViewport(dd,document.getElementById('exportModelMenu'));
+});
+document.getElementById('bulkMoveDropdown').addEventListener('mouseenter',()=>{
+  const dd=document.getElementById('bulkMoveDropdown');
+  clampMenuToViewport(dd,dd.querySelector('.bulk-move-menu'));
+});
+
 // User badge dropdown: click the name/avatar to reveal the Sign Out menu
 document.getElementById('userBadge').addEventListener('click',(e)=>{
   e.stopPropagation();
-  document.getElementById('userBadge').classList.toggle('menu-open');
+  const badge=document.getElementById('userBadge');
+  badge.classList.toggle('menu-open');
+  clampMenuToViewport(badge,document.getElementById('userMenu'));
 });
 
 // Export format dropdowns: hover reveals the menu on desktop. On touch
@@ -3602,14 +4463,18 @@ document.getElementById('exportAllToggleBtn').addEventListener('click',(e)=>{
   e.stopPropagation();
   document.getElementById('exportModelDropdown').classList.remove('menu-open');
   document.getElementById('themeDropdown').classList.remove('menu-open');
-  document.getElementById('exportAllDropdown').classList.toggle('menu-open');
+  const dd=document.getElementById('exportAllDropdown');
+  dd.classList.toggle('menu-open');
+  clampMenuToViewport(dd,document.getElementById('exportAllMenu'));
 });
 document.getElementById('exportModelToggleBtn').addEventListener('click',(e)=>{
   if(window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   e.stopPropagation();
   document.getElementById('exportAllDropdown').classList.remove('menu-open');
   document.getElementById('themeDropdown').classList.remove('menu-open');
-  document.getElementById('exportModelDropdown').classList.toggle('menu-open');
+  const dd=document.getElementById('exportModelDropdown');
+  dd.classList.toggle('menu-open');
+  clampMenuToViewport(dd,document.getElementById('exportModelMenu'));
 });
 
 // Bulk "Move" dropdown: hover reveals Move to Top/Bottom/Model on desktop.
@@ -3617,7 +4482,9 @@ document.getElementById('exportModelToggleBtn').addEventListener('click',(e)=>{
 document.getElementById('bulkMoveToggleBtn').addEventListener('click',(e)=>{
   if(window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   e.stopPropagation();
-  document.getElementById('bulkMoveDropdown').classList.toggle('menu-open');
+  const dd=document.getElementById('bulkMoveDropdown');
+  dd.classList.toggle('menu-open');
+  clampMenuToViewport(dd,dd.querySelector('.bulk-move-menu'));
 });
 
 document.addEventListener('click',()=>{
@@ -4017,7 +4884,11 @@ function undo(){
   }
   renderAll();
   toast('↺','Undone',false);
-  logActivity('↺','undid the last change',activeTab);
+  // Explicit null: undo() pops undoStack by hand rather than going through
+  // pushUndoSnapshot(), so undoStack's top can't be trusted as "state right
+  // before this undo" here — and restoring to before an undo is redundant
+  // with just hitting Redo, so skip offering a restore point for this entry.
+  logActivity('↺','undid the last change',activeTab,null);
 }
 
 function redo(){
@@ -4047,7 +4918,9 @@ function redo(){
   }
   renderAll();
   toast('↻','Redone',false);
-  logActivity('↻','redid the last change',activeTab);
+  // Same reasoning as undo() above: redoStack was popped by hand, so
+  // there's no trustworthy "before this change" snapshot to offer here.
+  logActivity('↻','redid the last change',activeTab,null);
 }
 
 let deletedModelsSet=new Set();
@@ -4407,7 +5280,36 @@ const INITIAL_DATA = {
   ]
 };
 
-const STANDARD_TASK_TEMPLATE = Object.values(INITIAL_DATA)[0].map(t=>t.name);
+// Standard checklist template seeded for every new user/workspace (with or
+// without login). Sourced from the MINI SIZE KETTLE launch checklist:
+// 23 top-level tasks with 93 nested subtasks, all starting at Med priority
+// and Pending status. This is intentionally separate from INITIAL_DATA,
+// which only supplies the three demo models' sample data.
+const STANDARD_CHECKLIST_TEMPLATE = [
+  {name:"MODEL SELECTION",priority:"med",notes:"",subtasks:[{name:"SAMPLE COLLECTION",priority:"med"},{name:"PRIMARY TEST",priority:"med"},{name:"TEST FEEDBACK TO SUPPLIER",priority:"med"},{name:"TEST FEEDBACK FROM SUPPLIER",priority:"med"},{name:"TARGET PRICE",priority:"med"},{name:"SALES FORECAST",priority:"med"},{name:"SAMPLE CONFIRMATION FROM MANAGEMENT",priority:"med"}]},
+  {name:"PRICE LOCK",priority:"med",notes:"",subtasks:[{name:"SPEC FINALIZATION",priority:"med"},{name:"BOM FINALIZATION",priority:"med"},{name:"SKD BREAKDOWN FINALIZE",priority:"med"},{name:"PACKAGING FINALIZATION",priority:"med"},{name:"ORDER QUANTITY LOCK",priority:"med"},{name:"PRICE LOCK",priority:"med"},{name:"AGREEMENT",priority:"med"},{name:"UPCOMING WEBSITE UPLOAD APPROVAL",priority:"med"}]},
+  {name:"MODEL PRE COSTING",priority:"med",notes:"",subtasks:[{name:"PRICE BREAKDOWN",priority:"med"},{name:"COSTING",priority:"med"},{name:"PRICE DRAFT APPROVAL",priority:"med"}]},
+  {name:"MODEL NAME SELECTION",priority:"med",notes:"",subtasks:[]},
+  {name:"CODE",priority:"med",notes:"",subtasks:[{name:"FG CODE OPEN",priority:"med"},{name:"RM CODE OPEN",priority:"med"},{name:"SFG CODE OPEN",priority:"med"},{name:"SFG CARTON CODE OPEN",priority:"med"},{name:"SFG MASTER CARTON CODE OPEN",priority:"med"},{name:"SFG MANUAL CODE OPEN",priority:"med"}]},
+  {name:"PACKAGING DESIGN & DEMAND",priority:"med",notes:"",subtasks:[{name:"PACKAGING DESIGN REQUISITION",priority:"med"},{name:"FEATURE DESIGN REQUISITION",priority:"med"},{name:"CARTON DESIGN",priority:"med"},{name:"CARTON DESIGN APPROVAL",priority:"med"},{name:"CARTON DESIGN LAYOUT CONFIRM",priority:"med"},{name:"CARTON DEMO MAKE",priority:"med"},{name:"CARTON CUTTING DIE CONFIRM",priority:"med"},{name:"CARTON SAMPLE CONFIRMATION",priority:"med"},{name:"CARTON DEMAND",priority:"med"},{name:"MASTER CARTON DEMAND",priority:"med"},{name:"MANUAL DEMAND",priority:"med"}]},
+  {name:"FINAL SAMPLE COLLECT FROM SUPPLIER",priority:"med",notes:"",subtasks:[]},
+  {name:"LOCAL RM ORDER",priority:"med",notes:"",subtasks:[]},
+  {name:"SERVICE",priority:"med",notes:"",subtasks:[{name:"COMPONENT MATRIX",priority:"med"},{name:"SERVICE PERCENTAGE FORECAST",priority:"med"},{name:"SERVICE PARTS ORDER",priority:"med"}]},
+  {name:"FIXTURE DESIGN & MAKE",priority:"med",notes:"",subtasks:[]},
+  {name:"LC & PSI & SHIPMENT",priority:"med",notes:"",subtasks:[{name:"PR",priority:"med"},{name:"PI",priority:"med"},{name:"PO",priority:"med"},{name:"LC DRAFT",priority:"med"},{name:"LC FINAL",priority:"med"},{name:"SUPPLIER PRODUCTION",priority:"med"},{name:"PSI CHECKLIST",priority:"med"},{name:"PSI",priority:"med"},{name:"SHIPMENT CONFIRMATION",priority:"med"},{name:"SHIPMENT BOOKING",priority:"med"},{name:"ETD",priority:"med"},{name:"ETA",priority:"med"},{name:"CUSTOMS CLEARANCE",priority:"med"}]},
+  {name:"MATERIAL RECEIVE",priority:"med",notes:"",subtasks:[{name:"FACTORY RECEIVE",priority:"med"},{name:"GRN",priority:"med"},{name:"IQC",priority:"med"},{name:"SOFTWARE RECEIVE",priority:"med"}]},
+  {name:"FINAL COSTING",priority:"med",notes:"",subtasks:[{name:"EXCEL BOM MAKING",priority:"med"},{name:"FINAL COSTING",priority:"med"},{name:"PRICE FINAL APPROVAL",priority:"med"},{name:"RESOURCE FROM COSTING",priority:"med"}]},
+  {name:"TESTING",priority:"med",notes:"",subtasks:[{name:"INTERNAL USER TEST",priority:"med"},{name:"EXTERNAL USER TEST",priority:"med"},{name:"SERVICE TEST",priority:"med"},{name:"NUSDAT PERFORMANCE TEST",priority:"med"},{name:"NUSDAT PACKAGING TEST",priority:"med"},{name:"QC CLEARANCE",priority:"med"},{name:"R&I TESTING",priority:"med"},{name:"QM TESTING",priority:"med"}]},
+  {name:"MODEL LAUNCH APPROVAL",priority:"med",notes:"",subtasks:[]},
+  {name:"BOM",priority:"med",notes:"",subtasks:[{name:"BOM REVIEW & FINALIZATION",priority:"med"},{name:"BOM UPLOAD",priority:"med"},{name:"BOM MEETING",priority:"med"},{name:"BOM APPROVAL",priority:"med"}]},
+  {name:"DO JOB",priority:"med",notes:"",subtasks:[]},
+  {name:"STICKER",priority:"med",notes:"",subtasks:[{name:"RATING STICKER DESIGN",priority:"med"},{name:"RATING STICKER UPLOAD",priority:"med"},{name:"BARCODE MAIL",priority:"med"},{name:"WBST ADD",priority:"med"},{name:"MRP STICKER DESIGN",priority:"med"},{name:"MRP STICKER CONFIRM",priority:"med"}]},
+  {name:"MASTER SAMPLE MAKE",priority:"med",notes:"",subtasks:[]},
+  {name:"VAT & MRP DECLARATION",priority:"med",notes:"",subtasks:[{name:"BOM FOR VAT",priority:"med"},{name:"FACTORY VAT DECLARATION",priority:"med"},{name:"CORPORATE VAT DECLARATION",priority:"med"},{name:"PRICE ADD",priority:"med"},{name:"PRICE DECELERATION",priority:"med"}]},
+  {name:"PRODUCTION",priority:"med",notes:"",subtasks:[{name:"TRIAL PRODUCTION",priority:"med"},{name:"SOP REVIEW",priority:"med"},{name:"SOP APPROVAL",priority:"med"},{name:"MASS PRODUCTION",priority:"med"},{name:"QUALITY REVIEW",priority:"med"},{name:"QUALITY FEEDBACK TO SUPPLIER",priority:"med"},{name:"PROBLEM IDENTIFY & SOLUTION",priority:"med"},{name:"NEXT LOT IMPROVEMENT",priority:"med"}]},
+  {name:"WEBSITE MANAGEMENT",priority:"med",notes:"",subtasks:[{name:"ETA HIDE",priority:"med"},{name:"WEBSITE UPLOAD",priority:"med"},{name:"UPLOAD REVIEW & FINALIZATION",priority:"med"}]},
+  {name:"LAUNCH ACKNOWLEDGEMENT",priority:"med",notes:"",subtasks:[]},
+];
 
 // ── STATE LOAD ─────────────────────────────────────────────────────────────────
 function loadState(saved) {
@@ -4460,7 +5362,10 @@ let templates = {};
 // the next reload/sync.
 let standardTemplateSeeded = false;
 function buildDefaultStandardTemplate(){
-  return {createdAt:Date.now(),tasks:STANDARD_TASK_TEMPLATE.map(n=>({name:n,priority:'med',notes:'',subtasks:[]}))};
+  return {createdAt:Date.now(),tasks:STANDARD_CHECKLIST_TEMPLATE.map(t=>({
+    name:t.name,priority:t.priority||'med',notes:t.notes||'',
+    subtasks:(t.subtasks||[]).map(s=>({name:s.name,priority:s.priority||'med'}))
+  }))};
 }
 function seedStandardTemplateIfNeeded(){
   if(standardTemplateSeeded) return;
@@ -4732,12 +5637,57 @@ function addSubtask(model,idx,name){
   save(); renderAll(); toast('＋','Subtask added: '+n.slice(0,28));
   logActivity('＋',`added subtask "${n.toUpperCase()}"`,model);
 }
+// Auto-derive a task's own status from the status of its subtasks. Called
+// any time a subtask's status changes — single toggle, bulk actions, or
+// deletion — so the parent task never drifts out of sync with what's
+// actually done underneath it:
+//   • at least one subtask Done or In Progress  → task becomes In Progress
+//   • every subtask Done                        → task becomes Completed
+//   • no subtask has any progress                → task falls back to Pending
+// Tasks with no subtasks are left alone — there's nothing to derive from,
+// so manual status changes on subtask-less tasks are never touched here.
+// `beforeSnapshot` (optional): every caller of this function runs it BEFORE
+// its own save(), so undoStack's top at logActivity()-time here would still
+// be the OLD entry from whatever action came before this one — not "state
+// right before this change" — which meant the restore button on these
+// auto-status entries either pointed too far back or (once undoStack was
+// empty) never appeared at all. Callers now capture snapshotNow() right
+// before they start mutating anything and pass it through here so these
+// entries get a correct, present restore point same as everything else.
+function syncTaskStatusFromSubtasks(model,idx,beforeSnapshot){
+  const task=state[model]&&state[model][idx];
+  if(!task) return;
+  const subs=getSubtasks(model,idx);
+  if(!subs.length) return;
+
+  const allDone=subs.every(s=>s.done);
+  const anyActive=subs.some(s=>s.done||s.status==='inprogress');
+
+  if(allDone){
+    if(!task.done){
+      task.done=true; task.status='done'; task.completedAt=Date.now();
+      logActivity('✓',`auto-completed "${task.name}" — all subtasks done`,model,beforeSnapshot);
+    }
+  } else if(anyActive){
+    if(task.done||task.status!=='inprogress'){
+      task.done=false; task.status='inprogress'; task.completedAt=null;
+      logActivity('⏳',`auto-marked "${task.name}" in progress — subtask activity detected`,model,beforeSnapshot);
+    }
+  } else {
+    if(task.done||task.status==='inprogress'){
+      task.done=false; task.status='pending'; task.completedAt=null;
+      logActivity('↺',`auto-reset "${task.name}" to pending — no active subtasks`,model,beforeSnapshot);
+    }
+  }
+}
 function setSubtaskStatus(model,idx,sIdx,newStatus){
   const s=getSubtasks(model,idx)[sIdx]; if(!s) return;
   closeStatusDropdown();
   if((s.done?'done':(s.status==='inprogress'?'inprogress':'pending'))===newStatus) return;
+  const _before=snapshotNow(); // captured before any mutation, for the auto-status log entry below
   s.done=newStatus==='done';
   s.status=newStatus;
+  syncTaskStatusFromSubtasks(model,idx,_before);
   save(); renderAll();
   const verb=newStatus==='done'?'completed':(newStatus==='inprogress'?'marked in progress':'reopened');
   const icon=newStatus==='done'?'✓':(newStatus==='inprogress'?'⏳':'↺');
@@ -4747,9 +5697,11 @@ function deleteSubtask(model,idx,sIdx){
   const subs=getSubtasks(model,idx);
   const parentTask=state[model][idx];
   const nm=subs[sIdx].name;
+  const _before=snapshotNow(); // captured before any mutation, for the auto-status log entry below
   recycleSubtask(model,parentTask.name,subs[sIdx],sIdx);
   subs.splice(sIdx,1);
   clearSubSelectionsForTask(model,idx);
+  syncTaskStatusFromSubtasks(model,idx,_before);
   save(); renderAll(); updateRecycleBadge(); toast('🗑','Moved to Recycle Bin: '+nm.slice(0,28));
   logActivity('🗑',`deleted subtask "${nm}"`,model);
 }
@@ -4973,6 +5925,145 @@ document.getElementById('overdueModal').onclick=e=>{
   if(e.target.id==='overdueModal') closeOverdueModal();
 };
 
+// ── MY TASKS MODAL ───────────────────────────────────────────────────────────
+// Everything assigned to the signed-in teammate, flattened across every
+// model (top-level tasks and sub-tasks alike), so they can see their whole
+// workload in one window instead of hunting model-by-model.
+function getAllMyTasks(){
+  const out=[];
+  const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
+  if(!myUid) return out;
+  models.forEach(m=>{
+    (state[m]||[]).forEach((t,idx)=>{
+      if(t.assignee===myUid) out.push({model:m, idx, task:t});
+      (Array.isArray(t.subtasks)?t.subtasks:[]).forEach((s,subIdx)=>{
+        if(s.assignee===myUid) out.push({model:m, idx, subIdx, task:s, parentName:t.name});
+      });
+    });
+  });
+  // Open items first (overdue, then soonest deadline, then no deadline),
+  // completed items last so the list leads with what still needs doing.
+  const today=new Date(); today.setHours(0,0,0,0);
+  const rank=item=>{
+    if(item.task.done) return 3;
+    if(!item.task.taskDeadline) return 2;
+    const d=new Date(item.task.taskDeadline+'T00:00:00');
+    return d<today?0:1;
+  };
+  out.sort((a,b)=>{
+    const r=rank(a)-rank(b);
+    if(r!==0) return r;
+    const da=a.task.taskDeadline||'9999-99-99', db=b.task.taskDeadline||'9999-99-99';
+    return da<db?-1:da>db?1:0;
+  });
+  return out;
+}
+function myTaskStatusBadge(task){
+  if(task.done) return{text:'Done',cls:'st-done'};
+  if(!task.taskDeadline) return{text:'No deadline',cls:'st-open'};
+  const today=new Date(); today.setHours(0,0,0,0);
+  const d=new Date(task.taskDeadline+'T00:00:00');
+  const diff=Math.round((d-today)/(1000*60*60*24));
+  if(diff<0) return{text:`${-diff}d overdue`,cls:'st-overdue'};
+  if(diff===0) return{text:'Due today',cls:'st-soon'};
+  if(diff<=7) return{text:`${diff}d left`,cls:'st-soon'};
+  return{text:`Due ${task.taskDeadline}`,cls:'st-open'};
+}
+function renderMyTasksModal(){
+  const list=getAllMyTasks();
+  const countEl=document.getElementById('myTasksModalCount');
+  const body=document.getElementById('myTasksModalBody');
+  if(!auth||!auth.currentUser){
+    countEl.textContent='Sign in to see tasks assigned to you.';
+    body.innerHTML=`<div class="mytasks-empty">Sign in to see your assigned tasks.</div>`;
+    return;
+  }
+  if(!list.length){
+    countEl.textContent='Nothing assigned to you yet.';
+    body.innerHTML=`<div class="mytasks-empty">🎉 No tasks assigned to you across any model.</div>`;
+    return;
+  }
+  const openCount=list.filter(x=>!x.task.done).length;
+  countEl.textContent=`${openCount} open, ${list.length-openCount} done — ${list.length} total across ${new Set(list.map(x=>x.model)).size} model${new Set(list.map(x=>x.model)).size>1?'s':''}.`;
+  body.innerHTML=list.map((item,i)=>{
+    const badge=myTaskStatusBadge(item.task);
+    return `
+    <div class="mytask-row${item.task.done?' is-done':''}" data-i="${i}">
+      <div class="mytask-row-main">
+        <div class="mytask-row-name${item.task.done?' is-done-text':''}">${escHtml(item.task.name)}</div>
+        <div class="mytask-row-model">${escHtml(item.model)}${item.parentName?` · sub-task of "${escHtml(item.parentName)}"`:''}</div>
+      </div>
+      <div class="mytask-row-badge ${badge.cls}">${badge.text}</div>
+    </div>`;
+  }).join('');
+  body.querySelectorAll('.mytask-row').forEach(row=>{
+    row.onclick=()=>{
+      const item=list[parseInt(row.dataset.i,10)];
+      jumpToMyTask(item.model,item.idx,item.subIdx);
+    };
+  });
+}
+function jumpToMyTask(model,idx,subIdx){
+  closeMyTasksModal();
+  if(!models.includes(model)) return;
+  activeTab=model; localStorage.setItem('mlc_activeTab',model);
+  editingIdx=null; selectedTasks.clear(); selectedSubtasks.clear();
+  const task=(state[model]||[])[idx];
+  const isSubtaskJump=(typeof subIdx==='number');
+  // The "mine" filter only ever matches top-level tasks, so when
+  // pinpointing a subtask we fall back to "all" the same way the Overdue
+  // modal does, otherwise the row would be filtered out of view.
+  activeFilter=isSubtaskJump?'all':'mine';
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  const activeBtn=document.querySelector(`.filter-btn[data-filter="${activeFilter}"]`);
+  if(activeBtn) activeBtn.classList.add('active');
+  const sb=document.getElementById('searchBox');
+  sb.value=task?task.name:'';
+  searchQuery=sb.value;
+  if(isSubtaskJump && task) expandedSubtasksSet.add(subKey(model,idx));
+  renderTabs();
+  renderTaskList();
+  scrollToTaskChecklist();
+  if(_pinpointClearHandler) document.removeEventListener('click',_pinpointClearHandler);
+  setTimeout(()=>{
+    _pinpointClearHandler=e=>{
+      if(e.target===document.getElementById('searchBox')) return;
+      document.removeEventListener('click',_pinpointClearHandler);
+      _pinpointClearHandler=null;
+      document.getElementById('searchBox').value='';
+      searchQuery='';
+      renderTaskList();
+    };
+    document.addEventListener('click',_pinpointClearHandler);
+  },0);
+}
+function openMyTasksModal(){
+  renderMyTasksModal();
+  document.getElementById('myTasksModal').classList.add('open');
+}
+function closeMyTasksModal(){
+  document.getElementById('myTasksModal').classList.remove('open');
+}
+// Badge count on the "My Tasks" menu item mirrors open (not-done) items
+// assigned to the signed-in teammate; visibility itself is driven by
+// updateTeamUI() below since assignment only makes sense once you've
+// actually got teammates.
+function updateMyTasksBadge(){
+  const badge=document.getElementById('myTasksCountBadge');
+  if(!badge) return;
+  const openCount=getAllMyTasks().filter(x=>!x.task.done).length;
+  if(openCount>0){ badge.style.display=''; badge.textContent=String(openCount); }
+  else{ badge.style.display='none'; }
+}
+document.getElementById('myTasksMenuBtn').onclick=()=>{
+  document.getElementById('userBadge').classList.remove('menu-open');
+  openMyTasksModal();
+};
+document.getElementById('myTasksModalCloseBtn').onclick=closeMyTasksModal;
+document.getElementById('myTasksModal').onclick=e=>{
+  if(e.target.id==='myTasksModal') closeMyTasksModal();
+};
+
 // ── GLOBAL SEARCH (across every model, task & sub-task) ────────────────────
 // Flattens the whole workspace into one searchable list. Kept cheap on
 // purpose — recomputed fresh each keystroke since even large workspaces are
@@ -5109,6 +6200,10 @@ function closeGlobalSearchModal(){
   document.getElementById('globalSearchModal').classList.remove('open');
 }
 document.getElementById('globalSearchBtn').onclick=openGlobalSearchModal;
+document.getElementById('crossModelBulkBtn').onclick=()=>{
+  document.getElementById('userBadge').classList.remove('menu-open');
+  openCrossModelBulkModal();
+};
 document.getElementById('globalSearchCloseBtn').onclick=closeGlobalSearchModal;
 document.getElementById('globalSearchModal').onclick=e=>{
   if(e.target.id==='globalSearchModal') closeGlobalSearchModal();
@@ -5153,9 +6248,37 @@ function setActivitySeenNow(){ localStorage.setItem(getActivitySeenKey(), String
 // Fire-and-forget: never blocks the action that triggered it, and quietly
 // no-ops in local/preview mode (no signed-in user or workspace) — same
 // spirit as save()'s own "if not signed in, skip the network part" guard.
-function logActivity(icon,text,model){
+// Local-session-only map of Firestore activity-doc-id -> a deep-cloned
+// "state right before this change" snapshot, so the Activity Log can offer
+// a Restore button next to entries this browser tab itself produced. Other
+// people's entries (and entries from before a page reload) simply won't
+// have one — there's no way to recover the exact pre-change state for
+// those without persisting a full snapshot per log entry, which would
+// bloat the Firestore activity collection far beyond what it's meant for.
+let activityUndoSnapshots=new Map();
+const ACTIVITY_UNDO_CAP=60; // keep memory bounded; oldest restore points drop off first
+// Optional 4th arg `beforeSnapshot`:
+//  - omitted (undefined)  → derive it from undoStack, as before (correct
+//    for the common "mutate → save() → logActivity()" call order, since
+//    save()'s pushUndoSnapshot() has, by then, already pushed "state right
+//    before this change" onto the top of undoStack).
+//  - an object            → use it as-is. Needed for call sites where
+//    logActivity() fires BEFORE save() has run for this change (e.g. the
+//    auto-status logActivity() calls inside syncTaskStatusFromSubtasks(),
+//    which execute before the outer handler's own save()) — undoStack's
+//    top at that moment still reflects the change-before-last, not this
+//    one, so those callers capture snapshotNow() themselves beforehand
+//    and pass it through explicitly.
+//  - explicit null         → no restore point at all for this entry (used
+//    by undo()/redo(), where undoStack was just popped/pushed by hand
+//    rather than via pushUndoSnapshot(), so its top can't be trusted —
+//    and "restore to before an undo" is redundant with hitting Redo anyway).
+function logActivity(icon,text,model,beforeSnapshot,extra){
   if(!auth||!auth.currentUser||!db||!currentWorkspaceId) return;
   const user=auth.currentUser;
+  const restorePoint=beforeSnapshot!==undefined
+    ? (beforeSnapshot?JSON.parse(JSON.stringify(beforeSnapshot)):null)
+    : (undoStack.length ? JSON.parse(JSON.stringify(undoStack[undoStack.length-1])) : null);
   const entry={
     uid:user.uid,
     userLabel:user.displayName||(user.email||'').split('@')[0]||'Someone',
@@ -5164,7 +6287,37 @@ function logActivity(icon,text,model){
     model:model||null,
     ts:firebase.firestore.FieldValue.serverTimestamp()
   };
-  getWorkspaceDoc().collection('activity').add(entry).catch(e=>console.warn('Activity log write failed:',e));
+  // Optional: who this entry specifically notifies (e.g. an @mention in a
+  // comment) and where to jump to view it. Kept out of the base entry shape
+  // when unused so ordinary activity rows stay lean.
+  if(extra&&Array.isArray(extra.mentions)&&extra.mentions.length){
+    entry.mentions=extra.mentions.slice(0,20);
+  }
+  if(extra&&extra.commentRef){
+    entry.commentRef=extra.commentRef;
+  }
+  // .doc() (no args) generates a fresh document ID entirely client-side —
+  // no network round-trip needed for that part. Registering the restore
+  // point under it BEFORE the write even starts means it's already sitting
+  // in activityUndoSnapshots by the time the realtime listener's local-cache
+  // echo of this same write reaches renderActivityFeed(), which is normally
+  // near-instant. Previously we only learned the ID from .add()'s resolved
+  // promise, i.e. after the full round-trip — the entry would appear in the
+  // feed first, sans Restore button, and only gain one once that later
+  // promise resolved (the visible "delay" this replaces).
+  const docRef=getWorkspaceDoc().collection('activity').doc();
+  if(restorePoint){
+    activityUndoSnapshots.set(docRef.id,restorePoint);
+    if(activityUndoSnapshots.size>ACTIVITY_UNDO_CAP){
+      activityUndoSnapshots.delete(activityUndoSnapshots.keys().next().value);
+    }
+  }
+  docRef.set(entry).catch(e=>{
+    console.warn('Activity log write failed:',e);
+    // The write never made it — drop the now-orphaned restore point so it
+    // doesn't linger under an ID that'll never appear in the feed.
+    activityUndoSnapshots.delete(docRef.id);
+  });
 }
 
 function listenForActivity(workspaceId){
@@ -5203,14 +6356,25 @@ function updateNotifBadge(){
   if(!badge) return;
   const seen=getActivitySeenTs();
   const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
-  const unread=activityFeed.filter(e=>e.uid!==myUid&&_activityTsMillis(e)>seen).length;
+  const unreadEntries=activityFeed.filter(e=>e.uid!==myUid&&_activityTsMillis(e)>seen);
+  const unread=unreadEntries.length;
+  const mentionUnread=unreadEntries.filter(e=>Array.isArray(e.mentions)&&myUid&&e.mentions.includes(myUid)).length;
   if(unread>0){
-    badge.textContent=unread>99?'99+':String(unread);
+    // A mention takes priority over generic activity noise — different
+    // color, and the count shown is just the mentions if any exist, so
+    // "you were mentioned" doesn't get buried under unrelated updates.
+    badge.textContent=(mentionUnread>0?mentionUnread:unread)>99?'99+':String(mentionUnread>0?mentionUnread:unread);
     badge.style.display='flex';
-    if(bell) bell.classList.add('has-unread');
+    badge.classList.toggle('mention-badge',mentionUnread>0);
+    if(bell){
+      bell.classList.add('has-unread');
+      bell.classList.toggle('has-mention',mentionUnread>0);
+      bell.title=mentionUnread>0?`${mentionUnread} mention${mentionUnread===1?'':'s'} — Activity feed & notifications`:'Activity feed & notifications';
+    }
   }else{
     badge.style.display='none';
-    if(bell) bell.classList.remove('has-unread');
+    badge.classList.remove('mention-badge');
+    if(bell){ bell.classList.remove('has-unread'); bell.classList.remove('has-mention'); bell.title='Activity feed & notifications'; }
   }
 }
 
@@ -5224,18 +6388,28 @@ function _sanitizeActivityIcon(icon){
   if(!s || s.length>4 || s.includes('<') || s.includes('>')) return '•';
   return s;
 }
+let _activityFilter='all'; // 'all' | 'mentions'
 function renderActivityFeed(){
   const body=document.getElementById('activityBody');
-  if(!activityFeed.length){
-    body.innerHTML=`<div class="activity-empty">No activity yet — actions across your workspace will show up here.</div>`;
+  const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
+  updateActivityMentionTabCount();
+  const feed=_activityFilter==='mentions'
+    ? activityFeed.filter(e=>Array.isArray(e.mentions)&&myUid&&e.mentions.includes(myUid))
+    : activityFeed;
+  if(!feed.length){
+    body.innerHTML=_activityFilter==='mentions'
+      ? `<div class="activity-empty">No mentions yet — you'll see it here whenever someone @-mentions you in a comment.</div>`
+      : `<div class="activity-empty">No activity yet — actions across your workspace will show up here.</div>`;
     return;
   }
   const seen=getActivitySeenTs();
-  const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
-  body.innerHTML=activityFeed.map(e=>{
+  body.innerHTML=feed.map(e=>{
     const ms=_activityTsMillis(e);
     const unread=e.uid!==myUid&&ms>seen;
-    return `<div class="activity-row${unread?' unread':''}">
+    const canRestore=e.id&&activityUndoSnapshots.has(e.id);
+    const mentionsMe=Array.isArray(e.mentions)&&myUid&&e.mentions.includes(myUid);
+    const canView=mentionsMe&&e.commentRef&&e.commentRef.model;
+    return `<div class="activity-row${unread?' unread':''}${mentionsMe?' mentioned-me':''}">
       <div class="activity-row-icon">${escHtml(_sanitizeActivityIcon(e.icon))}</div>
       <div class="activity-row-main">
         <div class="activity-row-text"><b>${escHtml(e.userLabel||'Someone')}</b> ${escHtml(e.text||'')}</div>
@@ -5244,10 +6418,90 @@ function renderActivityFeed(){
           ${e.model?`<span class="activity-row-model-tag">${escHtml(e.model)}</span>`:''}
         </div>
       </div>
+      ${canView?`<button class="activity-row-view-btn" data-view-id="${escHtml(e.id)}" title="Open this comment thread">💬 View</button>`
+        :(canRestore?`<button class="activity-restore-btn" data-restore-id="${escHtml(e.id)}" title="Put the workspace back exactly as it was right before this change">↩ Restore</button>`:'')}
     </div>`;
   }).join('');
+  body.querySelectorAll('.activity-row-view-btn').forEach(btn=>{
+    btn.onclick=()=>jumpToMentionComment(btn.getAttribute('data-view-id'));
+  });
+  body.querySelectorAll('.activity-restore-btn').forEach(btn=>{
+    btn.onclick=()=>restoreToActivity(btn.getAttribute('data-restore-id'));
+  });
+}
+// Keeps the "Mentions" tab's little count badge in sync — counts unread
+// mentions specifically, same figure the bell itself uses, so the two never
+// disagree.
+function updateActivityMentionTabCount(){
+  const countEl=document.getElementById('activityMentionTabCount');
+  if(!countEl) return;
+  const seen=getActivitySeenTs();
+  const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
+  const n=activityFeed.filter(e=>Array.isArray(e.mentions)&&myUid&&e.mentions.includes(myUid)&&_activityTsMillis(e)>seen).length;
+  if(n>0){ countEl.textContent=n>99?'99+':String(n); countEl.style.display='inline-flex'; }
+  else{ countEl.style.display='none'; }
+}
+document.getElementById('activityFilterTabs').addEventListener('click',e=>{
+  const btn=e.target.closest('.activity-filter-tab');
+  if(!btn) return;
+  _activityFilter=btn.dataset.filter;
+  document.querySelectorAll('.activity-filter-tab').forEach(t=>t.classList.toggle('active',t===btn));
+  renderActivityFeed();
+});
+
+// Reverts the whole workspace to the local snapshot captured right before
+// the given activity entry's change — i.e. undoes that change and anything
+// that happened after it. Only ever available for this browser session's
+// own actions (see activityUndoSnapshots above).
+async function restoreToActivity(entryId){
+  const snap=activityUndoSnapshots.get(entryId);
+  if(!snap){
+    toast('⚠','Restore is only available for your own actions from this session',false);
+    return;
+  }
+  const entry=activityFeed.find(e=>e.id===entryId);
+  const ok=await showConfirm({
+    title:'Restore this change?',
+    message:`This puts the workspace back exactly as it was right before ${entry?`"${entry.text}"`:'this change'}. Anything done since then will be reverted — you can still hit Undo afterward if you change your mind.`,
+    confirmText:'Restore',
+    danger:true,
+    icon:'↩'
+  });
+  if(!ok) return;
+  state=JSON.parse(JSON.stringify(snap.state));
+  deadlines=JSON.parse(JSON.stringify(snap.deadlines));
+  modelImages=JSON.parse(JSON.stringify(snap.modelImages||{}));
+  deletedModelsSet=new Set(snap.deletedModels||[]);
+  archivedModelsSet=new Set(snap.archivedModels||[]);
+  pinnedModelsSet=new Set(snap.pinnedModels||[]);
+  modelOrder=snap.modelOrder?[...snap.modelOrder]:modelOrder;
+  recycleBin=JSON.parse(JSON.stringify(snap.recycleBin||{}));
+  refreshModelsList();
+  activeTab=models.includes(snap.activeTab)?snap.activeTab:(models[0]||'');
+  localStorage.setItem('mlc_activeTab',activeTab);
+  selectedTasks.clear();selectedSubtasks.clear();editingIdx=null;
+  save(); // pushes an undo point for "state right before this restore" and persists
+  renderAll();
+  closeActivityModal();
+  toast('↩','Restored to before that change',false);
+  logActivity('↩',`restored the workspace to before "${(entry&&entry.text||'a previous change').slice(0,80)}"`,activeTab);
 }
 
+// Opens the comment thread referenced by a mention activity entry. Falls
+// back gracefully if the task/subtask has since been deleted or moved to a
+// model the ref no longer resolves against — the idx could go stale the
+// same way Restore's snapshot pointers can.
+function jumpToMentionComment(entryId){
+  const entry=activityFeed.find(e=>e.id===entryId);
+  const ref=entry&&entry.commentRef;
+  if(!ref||!ref.model){ toast('⚠','That comment thread is no longer available',false); return; }
+  const task=state[ref.model]&&state[ref.model][ref.idx];
+  const target=ref.subIdx==null?task:(task&&Array.isArray(task.subtasks)?task.subtasks[ref.subIdx]:null);
+  if(!task||!target){ toast('⚠','That comment thread is no longer available',false); return; }
+  closeActivityModal();
+  if(activeTab!==ref.model){ activeTab=ref.model; localStorage.setItem('mlc_activeTab',ref.model); renderAll(); }
+  openCommentsModal(ref.model,ref.idx,ref.subIdx==null?null:ref.subIdx);
+}
 function openActivityModal(){
   document.getElementById('userBadge').classList.remove('menu-open');
   renderActivityFeed();
@@ -5260,9 +6514,53 @@ function openActivityModal(){
 function closeActivityModal(){
   document.getElementById('activityModal').classList.remove('open');
 }
+async function clearActivityLog(){
+  // Local/preview mode (no signed-in user or workspace): nothing is
+  // persisted server-side, so just clear the in-memory feed — same
+  // "no-op gracefully" spirit as logActivity()'s own guard.
+  if(!auth||!auth.currentUser||!db||!currentWorkspaceId){
+    if(!activityFeed.length){ toast('×','Activity log is already empty',false); return; }
+    activityFeed=[];
+    renderActivityFeed();
+    updateNotifBadge();
+    toast('🗑','Activity log cleared',false);
+    return;
+  }
+  if(!activityFeed.length){ toast('×','Activity log is already empty',false); return; }
+  const n=activityFeed.length;
+  const ok=await showConfirm({
+    title:'Clear activity log?',
+    message:`This will permanently delete all ${n} activity ${n===1?'entry':'entries'} for this workspace. This can't be undone.`,
+    confirmText:'Clear Log',
+    danger:true,
+    icon:'🗑'
+  });
+  if(!ok) return;
+  try{
+    // Firestore has no "delete whole subcollection" call from the client
+    // SDK — batch-delete every doc currently loaded (the listener caps
+    // at 200, i.e. everything visible in the log).
+    const batch=db.batch();
+    activityFeed.forEach(e=>{
+      if(e.id) batch.delete(getWorkspaceDoc().collection('activity').doc(e.id));
+    });
+    await batch.commit();
+    // The onSnapshot listener (listenForActivity) will pick up the
+    // deletions and re-render on its own; clear the local copy too so
+    // the modal reflects "empty" instantly rather than waiting on it.
+    activityFeed=[];
+    renderActivityFeed();
+    updateNotifBadge();
+    toast('🗑','Activity log cleared',false);
+  }catch(e){
+    console.warn('Clear activity log failed:',e);
+    toast('!','Could not clear activity log — try again',false);
+  }
+}
 document.getElementById('notifBellBtn').onclick=openActivityModal;
 document.getElementById('activityLogMenuBtn').onclick=openActivityModal;
 document.getElementById('activityCloseBtn').onclick=closeActivityModal;
+document.getElementById('activityClearBtn').onclick=clearActivityLog;
 document.getElementById('activityModal').onclick=e=>{
   if(e.target.id==='activityModal') closeActivityModal();
 };
@@ -5370,7 +6668,7 @@ function renderModelCards(){
         <div class="model-card-actions-row">
           <button class="row-action-btn edit model-card-action-btn model-rename-btn" title="Rename model" style="width:26px;height:26px;font-size:13px;" data-model="${m}">✎</button>
           <button class="row-action-btn edit model-card-action-btn model-duplicate-btn" title="Duplicate model" style="width:26px;height:26px;font-size:13px;margin-left:-2px;" data-model="${m}">⧉</button>
-          <button class="row-action-btn edit model-card-action-btn model-save-template-btn" title="Save checklist as template" style="width:26px;height:26px;font-size:13px;margin-left:4px;" data-model="${m}">📑</button>
+          <button class="row-action-btn edit model-card-action-btn model-save-template-btn" title="Save checklist as template" style="width:26px;height:26px;margin-left:4px;" data-model="${m}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg></button>
           <button class="row-action-btn archive model-card-action-btn model-archive-btn" title="Archive model" style="width:26px;height:26px;font-size:13px;margin-left:4px;" data-model="${m}">🗄</button>
           <button class="row-action-btn delete model-card-action-btn model-delete-btn" title="Delete model" style="width:26px;height:26px;font-size:13px;margin-left:2px;" data-model="${m}">🗑</button>
         </div>`;
@@ -5573,8 +6871,7 @@ function renderModelCards(){
     card.addEventListener('click',()=>{
       if(_didDrag||isRenaming){ _didDrag=false; return; }
       activeTab=m;localStorage.setItem('mlc_activeTab',m);editingIdx=null;selectedTasks.clear();selectedSubtasks.clear();renderAll();
-      const target=document.getElementById('taskChecklistLabel');
-      if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+      scrollToTaskChecklist();
     });
 
     // ── Drag & Drop ──
@@ -6354,7 +7651,14 @@ if(document.getElementById('emptyRecycleBinBtn')){
 
 // ── TABS & FILTERS ────────────────────────────────────────────────────────────
 function scrollToTaskChecklist(){
-  const target=document.getElementById('taskChecklistLabel');
+  // On mobile the tab bar now wraps onto multiple lines and the toolbar
+  // buttons (Timeline/Analytics/Export/etc.) wrap too, so scrolling only to
+  // the "Task Checklist" label still leaves the actual tasks hidden below
+  // several extra rows. Scroll straight to the task list itself instead.
+  const isMobile=window.innerWidth<=768;
+  const target=isMobile
+    ? document.getElementById('checklistTable')
+    : document.getElementById('taskChecklistLabel');
   if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
@@ -6465,6 +7769,264 @@ function _buildModelPrintSection(modelName){
     </table>
     <div class="print-footer">Model Launch Dashboard</div>
   `;
+}
+
+// ── EXECUTIVE SUMMARY (one-page-per-model PDF / PPTX) ─────────────────────────
+// Gathers everything a stakeholder skim needs for one model: overall progress,
+// status, priority mix of what's still open, who owns the open work, and the
+// two lists that actually matter — what's overdue and what's coming up next.
+function execSummaryData(modelName){
+  const tasks=state[modelName]||[];
+  const s=stats(modelName);
+  const dl=deadlines[modelName];
+  const today=new Date(); today.setHours(0,0,0,0);
+  let dlText='No deadline set', dlSub='';
+  if(dl){
+    const d=new Date(dl+'T00:00:00');
+    const diff=Math.round((d-today)/(1000*60*60*24));
+    dlText=d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});
+    dlSub = diff<0?`Overdue by ${-diff}d`:diff===0?'Due today':`${diff}d remaining`;
+  }
+  const [statusText,statusColor]=statusLabel(s.pct);
+
+  // Priority mix of everything still open (tasks + subtasks).
+  const prio={high:0,med:0,low:0};
+  const allOpen=[];
+  tasks.forEach(t=>{
+    if(!t.done){ prio[t.priority||'med']++; allOpen.push(t); }
+    (Array.isArray(t.subtasks)?t.subtasks:[]).forEach(sub=>{
+      if(!sub.done){ prio[sub.priority||'med']++; allOpen.push({...sub,_parent:t.name}); }
+    });
+  });
+
+  // Overdue, most urgent first (soonest-passed deadline last isn't useful —
+  // sort by deadline ascending so the longest-overdue item leads).
+  const overdue=allOpen
+    .filter(t=>isOverdueTask(t))
+    .sort((a,b)=>new Date(a.taskDeadline)-new Date(b.taskDeadline))
+    .map(t=>({name:t._parent?`↳ ${t.name}`:t.name, taskDeadline:t.taskDeadline}));
+
+  // Coming up: open, has a deadline, not yet overdue — nearest first.
+  const upcoming=allOpen
+    .filter(t=>t.taskDeadline && !isOverdueTask(t))
+    .sort((a,b)=>new Date(a.taskDeadline)-new Date(b.taskDeadline))
+    .map(t=>({name:t._parent?`↳ ${t.name}`:t.name, taskDeadline:t.taskDeadline}));
+
+  // Who's carrying the open work right now, for this model.
+  const teamCounts={};
+  allOpen.forEach(t=>{ if(t.assignee) teamCounts[t.assignee]=(teamCounts[t.assignee]||0)+1; });
+  const team=Object.entries(teamCounts).map(([uid,count])=>({
+    uid,count,
+    name:(workspaceMembers[uid]&&(workspaceMembers[uid].displayName||workspaceMembers[uid].email))||'Unknown',
+    color:colorForAssignee(uid)
+  })).sort((a,b)=>b.count-a.count);
+
+  return{modelName,stats:s,dlText,dlSub,statusText,statusColor,prio,
+    overdue:overdue.slice(0,6),upcoming:upcoming.slice(0,6),team:team.slice(0,6),
+    photo:modelImages[modelName]||null};
+}
+
+function _svgProgressRing(pct,color){
+  const r=52,c=2*Math.PI*r;
+  const off=c*(1-Math.max(0,Math.min(100,pct))/100);
+  return `<svg viewBox="0 0 130 130" width="150" height="150">
+    <circle cx="65" cy="65" r="${r}" fill="none" stroke="#e9e9e9" stroke-width="13"/>
+    <circle cx="65" cy="65" r="${r}" fill="none" stroke="${color}" stroke-width="13" stroke-linecap="round"
+      stroke-dasharray="${c.toFixed(2)}" stroke-dashoffset="${off.toFixed(2)}" transform="rotate(-90 65 65)"/>
+    <text x="65" y="61" text-anchor="middle" font-size="27" font-weight="800" fill="#111" font-family="Sora,sans-serif">${pct}%</text>
+    <text x="65" y="79" text-anchor="middle" font-size="9" letter-spacing="1" fill="#888" font-family="Sora,sans-serif">COMPLETE</text>
+  </svg>`;
+}
+
+function _buildExecSummarySection(modelName){
+  const d=execSummaryData(modelName);
+  const prioRow=(label,count,color)=>`<div class="es-prio-row"><span class="es-prio-dot" style="background:${color}"></span><span class="es-prio-label">${label}</span><span class="es-prio-count">${count}</span></div>`;
+  const fmtDl=v=>v?new Date(v+'T00:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric'}):'—';
+
+  const overdueList=d.overdue.length
+    ? d.overdue.map(o=>`<li><span class="es-li-name">${escHtml(o.name)}</span><span class="es-li-date es-danger">${fmtDl(o.taskDeadline)}</span></li>`).join('')
+    : `<li class="es-empty">No overdue tasks 🎉</li>`;
+  const upcomingList=d.upcoming.length
+    ? d.upcoming.map(t=>`<li><span class="es-li-name">${escHtml(t.name)}</span><span class="es-li-date">${fmtDl(t.taskDeadline)}</span></li>`).join('')
+    : `<li class="es-empty">Nothing scheduled</li>`;
+  const teamList=d.team.length
+    ? d.team.map(m=>`<div class="es-team-chip"><span class="es-team-dot" style="background:${m.color}"></span>${escHtml(m.name)}<span class="es-team-count">${m.count} open</span></div>`).join('')
+    : `<div class="es-empty">No assignees yet</div>`;
+
+  return `
+    <div class="es-header">
+      <div class="es-header-left">
+        ${d.photo?`<img class="es-photo" src="${d.photo}" alt="">`:''}
+        <div>
+          <div class="es-eyebrow">Executive Summary</div>
+          <h1>${escHtml(modelName)}</h1>
+          <div class="es-status-pill" style="color:${d.statusColor};border-color:${d.statusColor};">${d.statusText}</div>
+        </div>
+      </div>
+      <div class="es-header-right">
+        <div class="es-deadline-label">Target Launch</div>
+        <div class="es-deadline-val">${d.dlText}</div>
+        ${d.dlSub?`<div class="es-deadline-sub">${d.dlSub}</div>`:''}
+      </div>
+    </div>
+    <div class="es-body">
+      <div class="es-col es-col-left">
+        <div class="es-ring-wrap">${_svgProgressRing(d.stats.pct,d.statusColor)}</div>
+        <div class="es-kpi-grid">
+          <div class="es-kpi"><div class="es-kpi-val">${d.stats.total}</div><div class="es-kpi-label">Total</div></div>
+          <div class="es-kpi"><div class="es-kpi-val">${d.stats.done}</div><div class="es-kpi-label">Done</div></div>
+          <div class="es-kpi"><div class="es-kpi-val">${d.stats.pending}</div><div class="es-kpi-label">Pending</div></div>
+          <div class="es-kpi es-danger"><div class="es-kpi-val">${d.overdue.length}</div><div class="es-kpi-label">Overdue</div></div>
+        </div>
+        <div class="es-section-title">Priority Breakdown (Open)</div>
+        ${prioRow('High',d.prio.high,'#e5484d')}
+        ${prioRow('Medium',d.prio.med,'#f5a623')}
+        ${prioRow('Low',d.prio.low,'#3ea36e')}
+        <div class="es-section-title">Team Snapshot</div>
+        <div class="es-team-wrap">${teamList}</div>
+      </div>
+      <div class="es-col es-col-right">
+        <div class="es-panel es-panel-danger">
+          <div class="es-panel-title">Overdue (${d.overdue.length})</div>
+          <ul class="es-list">${overdueList}</ul>
+        </div>
+        <div class="es-panel">
+          <div class="es-panel-title">Coming Up</div>
+          <ul class="es-list">${upcomingList}</ul>
+        </div>
+      </div>
+    </div>
+    <div class="es-footer">Model Launch Dashboard · Executive Summary · Generated ${new Date().toLocaleString()}</div>
+  `;
+}
+
+function exportExecSummaryPdf(modelName){
+  if(!modelName||!state[modelName]){ toast('⚠','Select a model first to export its summary',false); return; }
+  const printArea=document.getElementById('printArea');
+  printArea.innerHTML=`<div class="print-model-section exec-summary">${_buildExecSummarySection(modelName)}</div>`;
+  window.print();
+}
+
+function exportExecSummaryPdfAll(){
+  if(!models.length){ toast('⚠','Add at least one model before exporting',false); return; }
+  const printArea=document.getElementById('printArea');
+  printArea.innerHTML=models
+    .map(m=>`<div class="print-model-section exec-summary">${_buildExecSummarySection(m)}</div>`)
+    .join('');
+  window.print();
+  toast('📋',`Prepared executive summaries for ${models.length} model${models.length===1?'':'s'}`,false);
+}
+
+// ── LAZY-LOAD PPTXGENJS (only needed for the PowerPoint executive summary) ──
+let _pptxLoadPromise=null;
+function loadPptxGen(){
+  if(window.PptxGenJS) return Promise.resolve();
+  if(_pptxLoadPromise) return _pptxLoadPromise;
+  _pptxLoadPromise=new Promise((resolve,reject)=>{
+    const s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js';
+    s.onload=()=>resolve();
+    s.onerror=()=>{_pptxLoadPromise=null;reject(new Error('Failed to load PowerPoint library'));};
+    document.head.appendChild(s);
+  });
+  return _pptxLoadPromise;
+}
+
+// Draws one dark, gold-accented executive-summary slide for `modelName` onto
+// an already-created pptxgenjs presentation (LAYOUT_WIDE, 13.33in × 7.5in).
+function _addExecSummarySlide(pres,modelName){
+  const d=execSummaryData(modelName);
+  const C={bg:'09090B',surface:'131316',surface2:'1E1E24',border:'27272A',gold:'D4AF37',
+    text:'FAFAFA',muted:'A1A1AA',green:'10B981',red:'F43F5E',amber:'F59E0B',blue:'60A5FA'};
+  const statusHex=(d.statusColor||'#a1a1aa').replace('#','').toUpperCase();
+  const fmtDl=v=>v?new Date(v+'T00:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric'}):'—';
+
+  const slide=pres.addSlide();
+  slide.background={color:C.bg};
+
+  const titleX=d.photo?1.55:0.5;
+  if(d.photo){
+    slide.addShape('roundRect',{x:0.5,y:0.32,w:0.9,h:0.9,rectRadius:0.08,fill:{color:C.surface2},line:{color:C.gold,width:1}});
+    slide.addImage({data:d.photo,x:0.55,y:0.37,w:0.8,h:0.8,rounding:true});
+  }
+  slide.addText('EXECUTIVE SUMMARY',{x:titleX,y:0.32,w:6,h:0.3,fontSize:11,color:C.gold,bold:true,charSpacing:2,fontFace:'Arial'});
+  slide.addText(modelName,{x:titleX,y:0.6,w:7.6,h:0.6,fontSize:30,color:C.text,bold:true,fontFace:'Arial'});
+  slide.addShape('roundRect',{x:titleX,y:1.28,w:1.9,h:0.34,rectRadius:0.06,fill:{color:C.surface2},line:{color:statusHex,width:1}});
+  slide.addText(d.statusText,{x:titleX,y:1.28,w:1.9,h:0.34,align:'center',valign:'middle',fontSize:10,bold:true,color:statusHex,fontFace:'Arial'});
+
+  slide.addText('TARGET LAUNCH',{x:8.4,y:0.32,w:4.4,h:0.25,fontSize:10,color:C.muted,align:'right',charSpacing:1,fontFace:'Arial'});
+  slide.addText(d.dlText,{x:8.4,y:0.58,w:4.4,h:0.4,fontSize:18,color:C.text,bold:true,align:'right',fontFace:'Arial'});
+  if(d.dlSub) slide.addText(d.dlSub,{x:8.4,y:0.98,w:4.4,h:0.28,fontSize:11,color:C.red,align:'right',fontFace:'Arial'});
+
+  // Progress donut (native pptxgenjs chart) with the % centered on top.
+  slide.addChart('doughnut',[{name:'Progress',labels:['Complete','Remaining'],values:[d.stats.pct,100-d.stats.pct]}],{
+    x:0.4,y:1.85,w:2.7,h:2.7,chartColors:[statusHex,C.surface2],
+    showLegend:false,showTitle:false,showValue:false,dataLabelColor:C.text,holeSize:72
+  });
+  slide.addText(`${d.stats.pct}%`,{x:0.4,y:2.85,w:2.7,h:0.5,align:'center',fontSize:22,bold:true,color:C.text,fontFace:'Arial'});
+
+  const kpis=[['Total',d.stats.total,C.text],['Done',d.stats.done,C.green],['Pending',d.stats.pending,C.blue],['Overdue',d.overdue.length,C.red]];
+  kpis.forEach((k,i)=>{
+    const x=3.35+i*1.02;
+    slide.addText(String(k[1]),{x,y:1.9,w:1.0,h:0.5,align:'center',fontSize:20,bold:true,color:k[2],fontFace:'Arial'});
+    slide.addText(k[0].toUpperCase(),{x,y:2.42,w:1.0,h:0.3,align:'center',fontSize:8,color:C.muted,charSpacing:1,fontFace:'Arial'});
+  });
+
+  slide.addText('PRIORITY BREAKDOWN (OPEN)',{x:3.35,y:2.95,w:4,h:0.25,fontSize:9,color:C.muted,charSpacing:1,fontFace:'Arial'});
+  [['High',d.prio.high,C.red],['Medium',d.prio.med,C.amber],['Low',d.prio.low,C.green]].forEach((p,i)=>{
+    const y=3.25+i*0.32;
+    slide.addShape('ellipse',{x:3.35,y:y+0.07,w:0.12,h:0.12,fill:{color:p[2]},line:{type:'none'}});
+    slide.addText(p[0],{x:3.58,y,h:0.28,w:1.2,fontSize:11,color:C.text,valign:'middle',fontFace:'Arial'});
+    slide.addText(String(p[1]),{x:4.75,y,h:0.28,w:0.6,fontSize:11,bold:true,color:C.text,align:'right',valign:'middle',fontFace:'Arial'});
+  });
+
+  slide.addText('TEAM SNAPSHOT',{x:3.35,y:4.35,w:4,h:0.25,fontSize:9,color:C.muted,charSpacing:1,fontFace:'Arial'});
+  if(d.team.length){
+    d.team.slice(0,4).forEach((m,i)=>{
+      const y=4.65+i*0.32;
+      slide.addShape('ellipse',{x:3.35,y:y+0.06,w:0.14,h:0.14,fill:{color:(m.color||'#888888').replace('#','')},line:{type:'none'}});
+      slide.addText(m.name,{x:3.6,y,h:0.28,w:1.9,fontSize:10,color:C.text,valign:'middle',fontFace:'Arial'});
+      slide.addText(`${m.count} open`,{x:5.5,y,h:0.28,w:0.9,fontSize:9,color:C.muted,align:'right',valign:'middle',fontFace:'Arial'});
+    });
+  }else{
+    slide.addText('No assignees yet',{x:3.35,y:4.65,w:2.6,h:0.28,fontSize:10,color:C.muted,italic:true,fontFace:'Arial'});
+  }
+
+  slide.addShape('roundRect',{x:7.9,y:1.85,w:4.9,h:2.55,rectRadius:0.05,fill:{color:C.surface},line:{color:C.red,width:0.75}});
+  slide.addText(`OVERDUE (${d.overdue.length})`,{x:8.15,y:2.0,w:4.4,h:0.25,fontSize:10,bold:true,color:C.red,charSpacing:1,fontFace:'Arial'});
+  slide.addText(
+    d.overdue.length?d.overdue.map(o=>`•  ${o.name}  —  ${fmtDl(o.taskDeadline)}`).join('\n'):'No overdue tasks',
+    {x:8.15,y:2.3,w:4.4,h:2.0,fontSize:10.5,color:C.text,valign:'top',lineSpacingMultiple:1.3,fontFace:'Arial'}
+  );
+
+  slide.addShape('roundRect',{x:7.9,y:4.6,w:4.9,h:2.35,rectRadius:0.05,fill:{color:C.surface},line:{color:C.border,width:0.75}});
+  slide.addText('COMING UP',{x:8.15,y:4.75,w:4.4,h:0.25,fontSize:10,bold:true,color:C.gold,charSpacing:1,fontFace:'Arial'});
+  slide.addText(
+    d.upcoming.length?d.upcoming.map(t=>`•  ${t.name}  —  ${fmtDl(t.taskDeadline)}`).join('\n'):'Nothing scheduled',
+    {x:8.15,y:5.05,w:4.4,h:1.85,fontSize:10.5,color:C.text,valign:'top',lineSpacingMultiple:1.3,fontFace:'Arial'}
+  );
+
+  slide.addText(`Model Launch Dashboard  ·  Generated ${new Date().toLocaleDateString()}`,{x:0.5,y:7.08,w:12.3,h:0.3,fontSize:8,color:C.muted,fontFace:'Arial'});
+}
+
+async function exportExecSummaryPptx(modelName){
+  if(!modelName||!state[modelName]){ toast('⚠','Select a model first to export its summary',false); return; }
+  try{ await loadPptxGen(); }catch(e){ await showAlert({title:'Could not load PowerPoint library',message:'Check your internet connection and try again.',tone:'error'}); return; }
+  const pres=new window.PptxGenJS();
+  pres.layout='LAYOUT_WIDE';
+  _addExecSummarySlide(pres,modelName);
+  await pres.writeFile({fileName:`${modelName.replace(/[^a-z0-9]+/gi,'_')}_exec_summary.pptx`});
+  toast('📊','Executive summary slide downloaded',false);
+}
+
+async function exportExecSummaryPptxAll(){
+  if(!models.length){ toast('⚠','Add at least one model before exporting',false); return; }
+  try{ await loadPptxGen(); }catch(e){ await showAlert({title:'Could not load PowerPoint library',message:'Check your internet connection and try again.',tone:'error'}); return; }
+  const pres=new window.PptxGenJS();
+  pres.layout='LAYOUT_WIDE';
+  models.forEach(m=>_addExecSummarySlide(pres,m));
+  await pres.writeFile({fileName:'All_Models_Exec_Summary.pptx'});
+  toast('📊',`Executive summary deck ready — ${models.length} slide${models.length===1?'':'s'}`,false);
 }
 
 function exportChecklistToPdf(){
@@ -7155,26 +8717,33 @@ function renderTaskList(){
         <button class="bulk-btn bulk-btn-deadline" data-act="deadline">📅 Set Deadline</button>
         <button class="bulk-btn bulk-btn-priority" data-act="priority">⚑ Set Priority</button>
         <button class="bulk-btn bulk-btn-duplicate" data-act="duplicate" title="Duplicate selected subtasks within this task">⧉ Duplicate</button>
+        <button class="bulk-btn" data-act="moveto" title="Move selected subtasks to a specific serial number">🔢 Move to Position…</button>
         <button class="bulk-btn danger" data-act="delete">Delete Selected</button>
         <button class="bulk-btn" data-act="clear" style="margin-left:auto;">Clear Selection</button>`;
       sBar.querySelector('[data-act="done"]').onclick=e=>{
         e.stopPropagation();
+        const _before=snapshotNow(); // captured before any mutation, for the auto-status log entry below
         selectedHere.forEach(k=>{const sI=Number(k.split('::')[2]); if(subs[sI]){subs[sI].done=true;subs[sI].status='done';}});
         subKeysForTask.forEach(k=>selectedSubtasks.delete(k));
+        syncTaskStatusFromSubtasks(activeTab,idx,_before);
         save();renderAll();toast('✓',`Marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} done`);
         logActivity('✓',`marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} done in "${state[activeTab][idx].name}"`,activeTab);
       };
       sBar.querySelector('[data-act="inprogress"]').onclick=e=>{
         e.stopPropagation();
+        const _before=snapshotNow();
         selectedHere.forEach(k=>{const sI=Number(k.split('::')[2]); if(subs[sI]){subs[sI].done=false;subs[sI].status='inprogress';}});
         subKeysForTask.forEach(k=>selectedSubtasks.delete(k));
+        syncTaskStatusFromSubtasks(activeTab,idx,_before);
         save();renderAll();toast('⏳',`Marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} in progress`);
         logActivity('⏳',`marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} in progress in "${state[activeTab][idx].name}"`,activeTab);
       };
       sBar.querySelector('[data-act="pending"]').onclick=e=>{
         e.stopPropagation();
+        const _before=snapshotNow();
         selectedHere.forEach(k=>{const sI=Number(k.split('::')[2]); if(subs[sI]){subs[sI].done=false;subs[sI].status='pending';}});
         subKeysForTask.forEach(k=>selectedSubtasks.delete(k));
+        syncTaskStatusFromSubtasks(activeTab,idx,_before);
         save();renderAll();toast('↺',`Marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} pending`);
         logActivity('↺',`marked ${selectedHere.length} subtask${selectedHere.length===1?'':'s'} pending in "${state[activeTab][idx].name}"`,activeTab);
       };
@@ -7191,6 +8760,31 @@ function renderTaskList(){
         logActivity('🗑',`deleted ${n} subtask${n===1?'':'s'} from "${parentTaskName}"`,activeTab);
       };
       sBar.querySelector('[data-act="clear"]').onclick=e=>{e.stopPropagation();subKeysForTask.forEach(k=>selectedSubtasks.delete(k));renderTaskList();};
+      sBar.querySelector('[data-act="moveto"]').onclick=async e=>{
+        e.stopPropagation();
+        const sIdxs=selectedHere.map(k=>Number(k.split('::')[2])).sort((a,b)=>a-b);
+        if(!sIdxs.length)return;
+        const moving=sIdxs.map(sI=>subs[sI]);
+        const remaining=subs.filter((_,sI)=>!sIdxs.includes(sI));
+        const maxPos=remaining.length+1;
+        const raw=await showTextPrompt({
+          title:'Move to Position',
+          message:`${moving.length} subtask${moving.length===1?'':'s'} selected — enter target serial number (1–${maxPos}).`,
+          placeholder:`1–${maxPos}`,
+          confirmText:'Move',
+          icon:'#'
+        });
+        if(raw===null)return;
+        const n=parseInt(raw,10);
+        if(!Number.isFinite(n)||n<1){toast('⚠','Enter a valid serial number');return;}
+        const insertPos=Math.min(Math.max(n-1,0),remaining.length);
+        const newSubs=[...remaining.slice(0,insertPos),...moving,...remaining.slice(insertPos)];
+        subs.length=0; subs.push(...newSubs);
+        clearSubSelectionsForTask(activeTab,idx);
+        save();renderAll();
+        toast('#',`Moved ${moving.length} subtask${moving.length===1?'':'s'} to position ${insertPos+1}`);
+        logActivity('#',`moved ${moving.length} subtask${moving.length===1?'':'s'} to position ${insertPos+1} in "${state[activeTab][idx].name}"`,activeTab);
+      };
       sBar.querySelector('[data-act="deadline"]').onclick=e=>{
         e.stopPropagation();
         openSubBulkDeadlineModal(activeTab,idx,selectedHere.map(k=>Number(k.split('::')[2])));
@@ -8295,12 +9889,12 @@ function wireTemplateEditorEvents(){
     };
   });
 }
-document.getElementById('templateEditorAddTaskBtn').onclick=()=>{
-  teDraftTasks.push({name:'NEW TASK',priority:'med',notes:'',subtasks:[]});
-  renderTemplateEditor();
-};
-document.getElementById('templateEditorCancelBtn').onclick=closeTemplateEditor;
-document.getElementById('templateEditorSaveBtn').onclick=async()=>{
+// NOTE: these buttons live in HTML that's parsed AFTER this script block
+// closes, so getElementById(...) would be null here — the actual
+// addEventListener wiring for #templateEditorAddTaskBtn/CancelBtn/SaveBtn/
+// Overlay happens later, right after that HTML exists (search
+// "TEMPLATE EDITOR BUTTON WIRING").
+async function commitTemplateEditorSave(){
   const newName=(document.getElementById('templateEditorNameInput').value||'').trim();
   if(!newName){ await showAlert({title:'Name required',message:'Give the template a name before saving.',tone:'warn'}); return; }
   const cleanedTasks=teDraftTasks.map(t=>({
@@ -8320,10 +9914,7 @@ document.getElementById('templateEditorSaveBtn').onclick=async()=>{
   toast('📑',`Template saved: ${newName}`);
   closeTemplateEditor();
   if(teOnCloseRefresh) teOnCloseRefresh();
-};
-document.getElementById('templateEditorOverlay').onclick=e=>{
-  if(e.target===document.getElementById('templateEditorOverlay')) closeTemplateEditor();
-};
+}
 
 // showTemplateChooser(modelName, manageOnly) -> Promise<'blank'|templateName|null>
 // Presented when a new model is created (manageOnly=false), or from the
@@ -8353,13 +9944,15 @@ function showTemplateChooser(modelName,manageOnly){
         if(b==='Standard Checklist') return 1;
         return a.localeCompare(b);
       });
+      const ICON_LAYERS='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>';
+      const ICON_CLIPBOARD_CHECK='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"/><path d="m9 14 2 2 4-4"/></svg>';
       const rows=[
         ...(manageOnly?[]:[{choice:'blank',icon:'◻',name:'Blank',meta:'Start with no tasks',editable:false,deletable:false}]),
         ...customNames.map(n=>{
           const tpl=templates[n];
           const taskCount=(tpl.tasks||[]).length;
           const subCount=(tpl.tasks||[]).reduce((s,t)=>s+((t.subtasks||[]).length),0);
-          return {choice:n,icon:n==='Standard Checklist'?'📋':'📑',name:n,meta:`${taskCount} task${taskCount===1?'':'s'}${subCount?` · ${subCount} subtask${subCount===1?'':'s'}`:''}`,editable:true,deletable:true};
+          return {choice:n,icon:n==='Standard Checklist'?ICON_CLIPBOARD_CHECK:ICON_LAYERS,name:n,meta:`${taskCount} task${taskCount===1?'':'s'}${subCount?` · ${subCount} subtask${subCount===1?'':'s'}`:''}`,editable:true,deletable:true};
         })
       ];
       if(!rows.length){
@@ -8553,6 +10146,117 @@ document.getElementById('notesModal').onclick=e=>{if(e.target===document.getElem
 // dropdown resolves its target: model + task idx, with subIdx null for a
 // top-level task or the subtask's index within its parent.
 let commentsCtx={model:null,idx:null,subIdx:null};
+// Mentions attached to the comment currently being composed. Populated by
+// picking a teammate from the @ autocomplete popover (see wireMentionAutocomplete
+// below) — not by parsing free text, since names can collide or contain spaces.
+let _pendingMentionUids=new Set();
+
+// Returns [{uid,name}] for every teammate whose name is present as an
+// "@Name" token inside the given text — used to render highlighted mention
+// tags in a posted comment regardless of whether the mention was picked via
+// autocomplete or typed by hand.
+function detectMentionsInText(text){
+  if(!text) return [];
+  const found=[];
+  Object.entries(workspaceMembers).forEach(([uid,info])=>{
+    const name=(info.displayName||info.email||'').trim();
+    if(!name) return;
+    if(text.indexOf('@'+name)!==-1) found.push({uid,name});
+  });
+  return found;
+}
+
+// Wraps every "@Name" occurrence (for a known teammate) in a highlighted
+// span. Runs after escHtml() so it operates on already-escaped text — hence
+// matching against the escaped name too.
+function highlightMentionsHtml(escapedText){
+  const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
+  let html=escapedText;
+  Object.entries(workspaceMembers).forEach(([uid,info])=>{
+    const name=(info.displayName||info.email||'').trim();
+    if(!name) return;
+    const escName=escHtml(name);
+    const token='@'+escName;
+    if(html.indexOf(token)===-1) return;
+    const cls='comment-mention-tag'+(uid===myUid?' is-me':'');
+    html=html.split(token).join(`<span class="${cls}">${token}</span>`);
+  });
+  return html;
+}
+
+// ── @MENTION AUTOCOMPLETE ────────────────────────────────────────────────────
+// Watches the comment textarea for an "@" trigger and shows a small popover
+// of teammates to pick from. Selecting one inserts "@FullName " into the
+// text and records the uid in _pendingMentionUids for this draft.
+function wireMentionAutocomplete(){
+  const textarea=document.getElementById('commentInputText');
+  const pop=document.getElementById('mentionAutocomplete');
+  if(!textarea||!pop) return;
+  let activeIndex=0;
+
+  function currentTrigger(){
+    const caret=textarea.selectionStart;
+    const upToCaret=textarea.value.slice(0,caret);
+    const m=upToCaret.match(/(?:^|\s)@([^\s@]*)$/);
+    if(!m) return null;
+    return {query:m[1].toLowerCase(),start:caret-m[1].length};
+  }
+
+  function closePopover(){ pop.classList.remove('open'); pop.innerHTML=''; }
+
+  function renderPopover(query){
+    const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
+    const matches=Object.entries(workspaceMembers)
+      .filter(([uid])=>uid!==myUid)
+      .map(([uid,info])=>({uid,name:info.displayName||info.email||uid}))
+      .filter(m=>m.name.toLowerCase().includes(query))
+      .slice(0,6);
+    if(!matches.length){ closePopover(); return; }
+    activeIndex=0;
+    pop.innerHTML=matches.map((m,i)=>{
+      const color=colorForAssignee(m.uid);
+      return `<div class="mention-autocomplete-item${i===0?' active':''}" data-uid="${escHtml(m.uid)}" data-name="${escHtml(m.name)}">
+        <span class="mention-autocomplete-avatar" style="background:linear-gradient(145deg, ${color}dd, ${color});">${escHtml((m.name[0]||'?').toUpperCase())}</span>
+        <span>${escHtml(m.name)}</span>
+      </div>`;
+    }).join('');
+    pop.classList.add('open');
+    pop.querySelectorAll('.mention-autocomplete-item').forEach(item=>{
+      item.onclick=()=>pickMention(item.dataset.uid,item.dataset.name);
+    });
+  }
+
+  function pickMention(uid,name){
+    const trig=currentTrigger();
+    if(!trig){ closePopover(); return; }
+    const before=textarea.value.slice(0,trig.start);
+    const after=textarea.value.slice(textarea.selectionStart);
+    const insertion='@'+name+' ';
+    textarea.value=before+insertion+after;
+    const newCaret=(before+insertion).length;
+    textarea.setSelectionRange(newCaret,newCaret);
+    _pendingMentionUids.add(uid);
+    closePopover();
+    textarea.focus();
+  }
+
+  textarea.addEventListener('input',()=>{
+    const trig=currentTrigger();
+    if(trig) renderPopover(trig.query); else closePopover();
+  });
+  textarea.addEventListener('keydown',e=>{
+    if(!pop.classList.contains('open')) return;
+    const items=[...pop.querySelectorAll('.mention-autocomplete-item')];
+    if(!items.length) return;
+    if(e.key==='ArrowDown'){ e.preventDefault(); activeIndex=(activeIndex+1)%items.length; items.forEach((it,i)=>it.classList.toggle('active',i===activeIndex)); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); activeIndex=(activeIndex-1+items.length)%items.length; items.forEach((it,i)=>it.classList.toggle('active',i===activeIndex)); }
+    else if(e.key==='Enter'||e.key==='Tab'){ e.preventDefault(); const it=items[activeIndex]; pickMention(it.dataset.uid,it.dataset.name); }
+    else if(e.key==='Escape'){ closePopover(); }
+  });
+  textarea.addEventListener('blur',()=>setTimeout(closePopover,150));
+}
+wireMentionAutocomplete();
+
 
 function getComments(model,idx,subIdx){
   const task=state[model]&&state[model][idx];
@@ -8581,12 +10285,14 @@ function openCommentsModal(model,idx,subIdx){
   if(!task||!target) return;
   document.getElementById('commentsTaskName').textContent=subIdx==null?task.name:`${task.name} — ${target.name}`;
   document.getElementById('commentInputText').value='';
+  _pendingMentionUids=new Set();
   renderCommentsTimeline();
   document.getElementById('commentsModal').classList.add('open');
   setTimeout(()=>document.getElementById('commentInputText').focus(),100);
 }
 function closeCommentsModal(){
   document.getElementById('commentsModal').classList.remove('open');
+  _pendingMentionUids=new Set();
 }
 function renderCommentsTimeline(){
   const wrap=document.getElementById('commentsTimeline');
@@ -8617,7 +10323,7 @@ function renderCommentsTimeline(){
             <span class="comment-entry-delete" data-id="${escHtml(c.id)}" title="Delete comment">✕</span>
           </span>
         </div>
-        <div class="comment-entry-text">${escHtml(c.text)}</div>
+        <div class="comment-entry-text">${highlightMentionsHtml(escHtml(c.text))}</div>
       </div>`;
   });
   if(lastLabel!==null) html+='</div>';
@@ -8636,19 +10342,30 @@ function postComment(){
   const comments=getComments(model,idx,subIdx);
   const authorName=(auth&&auth.currentUser&&(auth.currentUser.displayName||(auth.currentUser.email||'').split('@')[0]))||'Someone';
   const authorUid=auth&&auth.currentUser?auth.currentUser.uid:null;
+  // Union of mentions picked via the autocomplete popover and any "@Name"
+  // typed by hand that happens to match a real teammate — either path
+  // should notify the person, and excludes mentioning yourself.
+  const detected=detectMentionsInText(text).map(m=>m.uid);
+  const mentionUids=[...new Set([..._pendingMentionUids,...detected])].filter(u=>u&&u!==authorUid);
   comments.push({
     id:'c'+Date.now()+Math.random().toString(36).slice(2,7),
     text:text.slice(0,600),
     authorName,
     authorUid,
+    mentions:mentionUids,
     ts:Date.now()
   });
   input.value='';
+  _pendingMentionUids=new Set();
   save();
   renderCommentsTimeline();
   const task=state[model][idx];
   const target=subIdx==null?task:(getSubtasks(model,idx)[subIdx]);
-  logActivity('💬',`commented on "${(target&&target.name)||task.name}"`,model);
+  const targetName=(target&&target.name)||task.name;
+  logActivity('💬',`commented on "${targetName}"`,model);
+  if(mentionUids.length){
+    logActivity('🔔',`mentioned you in "${targetName}"`,model,undefined,{mentions:mentionUids,commentRef:{model,idx,subIdx:subIdx==null?null:subIdx}});
+  }
   renderTaskList();
 }
 function deleteComment(id){
@@ -8789,6 +10506,33 @@ document.getElementById('bulkMoveBottomBtn').onclick=()=>{
   document.getElementById('bulkMoveDropdown').classList.remove('menu-open');
   toast('↓',`Moved ${moving.length} tasks to bottom`);
 };
+document.getElementById('bulkMoveToPositionBtn').onclick=async()=>{
+  document.getElementById('bulkMoveDropdown').classList.remove('menu-open');
+  const tasks=state[activeTab];
+  const idxs=[...selectedTasks].sort((a,b)=>a-b);
+  if(!idxs.length)return;
+  const moving=idxs.map(i=>tasks[i]);
+  const remaining=tasks.filter((_,i)=>!selectedTasks.has(i));
+  const maxPos=remaining.length+1;
+  const raw=await showTextPrompt({
+    title:'Move to Position',
+    message:`${moving.length} task${moving.length===1?'':'s'} selected — enter target serial number (1–${maxPos}).`,
+    placeholder:`1–${maxPos}`,
+    confirmText:'Move',
+    icon:'#'
+  });
+  if(raw===null)return;
+  const n=parseInt(raw,10);
+  if(!Number.isFinite(n)||n<1){toast('⚠','Enter a valid serial number');return;}
+  const insertPos=Math.min(Math.max(n-1,0),remaining.length);
+  state[activeTab]=[...remaining.slice(0,insertPos),...moving,...remaining.slice(insertPos)];
+  renumber(state[activeTab]);
+  selectedTasks.clear();moving.forEach((_,i)=>selectedTasks.add(insertPos+i));
+  clearSubSelectionsForModel(activeTab);
+  save();renderAll();
+  toast('#',`Moved ${moving.length} task${moving.length===1?'':'s'} to position ${insertPos+1}`);
+  logActivity('#',`moved ${moving.length} task${moving.length===1?'':'s'} to position ${insertPos+1}`,activeTab);
+};
 let _moveModelAction='move'; // 'move' or 'copy' — tracks which bulk action opened the shared modal
 document.getElementById('bulkMoveModelBtn').onclick=()=>{
   const n=selectedTasks.size;
@@ -8874,6 +10618,216 @@ document.getElementById('bulkMoveModelCancelBtn').onclick=()=>document.getElemen
 document.getElementById('bulkMoveModelModal').onclick=e=>{
   if(e.target===document.getElementById('bulkMoveModelModal'))
     document.getElementById('bulkMoveModelModal').classList.remove('open');
+};
+
+// ── CROSS-MODEL BULK UPDATE ─────────────────────────────────────────────────
+// Lets you pick one task NAME (e.g. "CODE") that recurs across multiple
+// models' identical launch checklists, choose which of those models to
+// touch, and push a status / deadline / priority change to all of them in
+// one action — instead of repeating the same edit inside each model's tab.
+function getCommonTaskNames(){
+  // Only task names that appear as a top-level task in 2+ active models
+  // count as "common" — a name unique to one model has nothing to bulk-update.
+  const counts={};
+  models.forEach(m=>{
+    const seenInModel=new Set();
+    (state[m]||[]).forEach(t=>{
+      if(seenInModel.has(t.name))return; // count each name once per model
+      seenInModel.add(t.name);
+      counts[t.name]=(counts[t.name]||0)+1;
+    });
+  });
+  return Object.keys(counts).filter(n=>counts[n]>=2).sort((a,b)=>a.localeCompare(b));
+}
+function openCrossModelBulkModal(){
+  const sel=document.getElementById('crossTaskSelect');
+  const names=getCommonTaskNames();
+  sel.innerHTML = names.length
+    ? names.map(n=>`<option value="${escHtml(n)}">${escHtml(n)}</option>`).join('')
+    : `<option value="">No shared tasks found</option>`;
+  document.getElementById('crossStatusSelect').value='nochange';
+  document.getElementById('crossPrioritySelect').value='nochange';
+  document.getElementById('crossDeadlineSelect').value='nochange';
+  document.getElementById('crossDeadlinePicker').style.display='none';
+  document.getElementById('crossDeadlinePicker').value='';
+  document.getElementById('crossIncludeSubtasksChk').checked=false;
+  document.getElementById('crossSubtaskSelectAllChk').checked=true;
+  renderCrossModelList();
+  document.getElementById('crossModelBulkModal').classList.add('open');
+}
+function renderCrossModelList(){
+  const taskName=document.getElementById('crossTaskSelect').value;
+  const list=document.getElementById('crossModelList');
+  const matches=models
+    .map(m=>({model:m, task:(state[m]||[]).find(t=>t.name===taskName)}))
+    .filter(x=>x.task);
+  document.getElementById('crossMatchCount').textContent =
+    matches.length ? `${matches.length} model${matches.length===1?'':'s'} have this task` : '';
+  if(!taskName || !matches.length){
+    list.innerHTML=`<div class="crossmodel-empty">No models have a matching task.</div>`;
+    document.getElementById('crossSelectAllChk').checked=false;
+    renderCrossSubtaskList([]);
+    return;
+  }
+  const statusLabel={done:'Completed',inprogress:'In Progress',pending:'Pending'};
+  const prioLabel={high:'High',med:'Med',low:'Low'};
+  list.innerHTML = matches.map(({model,task})=>{
+    const status=task.status || (task.done?'done':'pending');
+    const dl = task.taskDeadline
+      ? new Date(task.taskDeadline+'T00:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric'})
+      : 'No date';
+    return `
+      <label class="crossmodel-row">
+        <input type="checkbox" class="task-checkbox cm-row-chk" data-model="${escHtml(model)}" checked>
+        <span class="cm-name">${escHtml(model)}</span>
+        <span class="cm-meta">
+          <span class="cm-tag status-${status}">${statusLabel[status]||status}</span>
+          <span class="cm-tag prio-${task.priority||'med'}">${prioLabel[task.priority||'med']}</span>
+          <span class="cm-dl">${dl}</span>
+        </span>
+      </label>`;
+  }).join('');
+  document.getElementById('crossSelectAllChk').checked=true;
+  renderCrossSubtaskList(matches);
+}
+// Builds the "Also apply to subtasks" list — every distinct subtask name
+// found under the matched task, across whichever models have it. Hidden
+// entirely when the selected task has no subtasks anywhere.
+function renderCrossSubtaskList(matches){
+  const section=document.getElementById('crossSubtaskSection');
+  const subList=document.getElementById('crossSubtaskList');
+  const selectAllRow=document.getElementById('crossSubtaskSelectAllRow');
+  const includeChk=document.getElementById('crossIncludeSubtasksChk');
+  const names=[];
+  const seen=new Set();
+  matches.forEach(({task})=>{
+    (task.subtasks||[]).forEach(s=>{
+      if(!seen.has(s.name)){ seen.add(s.name); names.push(s.name); }
+    });
+  });
+  if(!names.length){
+    section.style.display='none';
+    includeChk.checked=false;
+    subList.style.display='none';
+    selectAllRow.style.display='none';
+    subList.innerHTML='';
+    return;
+  }
+  section.style.display='';
+  document.getElementById('crossSubtaskCount').textContent=`${names.length} subtask${names.length===1?'':'s'}`;
+  subList.innerHTML = names.map(n=>`
+    <label class="crossmodel-row">
+      <input type="checkbox" class="task-checkbox cm-sub-chk" data-subname="${escHtml(n)}" checked>
+      <span class="cm-name">${escHtml(n)}</span>
+    </label>`).join('');
+  // Collapsed by default until "Also apply to subtasks" is checked.
+  subList.style.display = includeChk.checked ? '' : 'none';
+  selectAllRow.style.display = includeChk.checked ? '' : 'none';
+}
+document.getElementById('crossTaskSelect').onchange=renderCrossModelList;
+document.getElementById('crossSelectAllChk').onchange=e=>{
+  document.querySelectorAll('#crossModelList .cm-row-chk').forEach(chk=>{chk.checked=e.target.checked;});
+};
+document.getElementById('crossIncludeSubtasksChk').onchange=e=>{
+  document.getElementById('crossSubtaskList').style.display = e.target.checked ? '' : 'none';
+  document.getElementById('crossSubtaskSelectAllRow').style.display = e.target.checked ? '' : 'none';
+};
+document.getElementById('crossSubtaskSelectAllChk').onchange=e=>{
+  document.querySelectorAll('#crossSubtaskList .cm-sub-chk').forEach(chk=>{chk.checked=e.target.checked;});
+};
+document.getElementById('crossDeadlineSelect').onchange=e=>{
+  document.getElementById('crossDeadlinePicker').style.display = e.target.value==='set' ? 'block' : 'none';
+};
+document.getElementById('crossModelBulkCancelBtn').onclick=()=>document.getElementById('crossModelBulkModal').classList.remove('open');
+document.getElementById('crossModelBulkModal').onclick=e=>{
+  if(e.target===document.getElementById('crossModelBulkModal'))
+    document.getElementById('crossModelBulkModal').classList.remove('open');
+};
+document.getElementById('crossModelBulkApplyBtn').onclick=()=>{
+  const taskName=document.getElementById('crossTaskSelect').value;
+  if(!taskName)return;
+  const targetModels=[...document.querySelectorAll('#crossModelList .cm-row-chk:checked')].map(c=>c.dataset.model);
+  if(!targetModels.length){ toast('⚠','Select at least one model'); return; }
+
+  const statusMode=document.getElementById('crossStatusSelect').value;     // nochange|pending|inprogress|done
+  const prioMode=document.getElementById('crossPrioritySelect').value;     // nochange|high|med|low
+  const deadlineMode=document.getElementById('crossDeadlineSelect').value; // nochange|set|clear
+  const deadlineVal=document.getElementById('crossDeadlinePicker').value;
+
+  if(statusMode==='nochange' && prioMode==='nochange' && deadlineMode==='nochange'){
+    toast('⚠','Choose at least one field to update');
+    return;
+  }
+  if(deadlineMode==='set' && !deadlineVal){
+    toast('⚠','Pick a date first');
+    return;
+  }
+
+  let updated=0, subtasksUpdated=0, heldBack=0;
+  const includeSubtasks=document.getElementById('crossIncludeSubtasksChk').checked;
+  const selectedSubtaskNames = includeSubtasks
+    ? [...document.querySelectorAll('#crossSubtaskList .cm-sub-chk:checked')].map(c=>c.dataset.subname)
+    : [];
+  targetModels.forEach(model=>{
+    const task=(state[model]||[]).find(t=>t.name===taskName);
+    if(!task)return;
+
+    // Subtasks are applied FIRST — whether the parent is allowed to become
+    // Completed below depends on every subtask's final done state, so that
+    // decision has to see the post-update subtasks, not the stale ones.
+    // Subtasks are only ever touched if "Also apply to subtasks" is checked,
+    // and then only the specific ones left checked — unchecking a subtask
+    // must leave it completely untouched.
+    let subCountForModel=0;
+    if(includeSubtasks && selectedSubtaskNames.length && Array.isArray(task.subtasks)){
+      task.subtasks.forEach(sub=>{
+        if(!selectedSubtaskNames.includes(sub.name))return;
+        if(statusMode!=='nochange'){
+          sub.done = statusMode==='done';
+          sub.status = statusMode;
+        }
+        if(prioMode!=='nochange') sub.priority=prioMode;
+        if(deadlineMode==='set') sub.taskDeadline=deadlineVal;
+        else if(deadlineMode==='clear') sub.taskDeadline='';
+        subCountForModel++;
+      });
+      subtasksUpdated+=subCountForModel;
+    }
+
+    let wasHeldBack=false;
+    if(statusMode!=='nochange'){
+      if(statusMode==='done'){
+        // A task can't land in the Completed section while it still has
+        // an open subtask — same rule the rest of the dashboard follows.
+        // If any subtask (touched or not) is still incomplete, keep the
+        // task active instead of forcing it done.
+        const hasSubtasks = Array.isArray(task.subtasks) && task.subtasks.length>0;
+        const allSubtasksDone = !hasSubtasks || task.subtasks.every(s=>s.done);
+        if(allSubtasksDone){
+          task.done=true;task.status='done';task.completedAt=Date.now();
+        } else {
+          task.done=false;task.status='inprogress';task.completedAt=null;
+          wasHeldBack=true; heldBack++;
+        }
+      } else {
+        task.done=false;task.status=statusMode;task.completedAt=null;
+      }
+    }
+    if(prioMode!=='nochange') task.priority=prioMode;
+    if(deadlineMode==='set') task.taskDeadline=deadlineVal;
+    else if(deadlineMode==='clear') task.taskDeadline='';
+
+    updated++;
+    const subNote=subCountForModel?' and its subtasks':'';
+    const heldNote=wasHeldBack?' (kept In Progress — open subtasks remain)':'';
+    logActivity('🔁',`bulk-updated task "${taskName}"${subNote}${heldNote}`,model);
+  });
+
+  save();renderAll();
+  document.getElementById('crossModelBulkModal').classList.remove('open');
+  const subtaskNote = subtasksUpdated ? ` (+${subtasksUpdated} subtask${subtasksUpdated===1?'':'s'})` : '';
+  const heldNote = heldBack ? ` — ${heldBack} kept In Progress (open subtasks)` : '';
+  toast('✓',`Updated "${taskName}" in ${updated} model${updated===1?'':'s'}${subtaskNote}${heldNote}`);
 };
 // Duplicates each selected task in place — right after its original —
 // within the current model. Sits beside Copy to Model in the bulk bar, but
@@ -9433,8 +11387,20 @@ async function updateRestoreBackupBtn(){
   const d=new Date(backup.ts);
   const dateStr=d.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
   const whereStr=backup.cloud?'saved to your account':'saved on this device only — sign in to back up online';
-  btn.title=`Full backup taken ${dateStr} — ${backup.models} model${backup.models===1?'':'s'}, ${backup.tasks} task${backup.tasks===1?'':'s'} (incl. photos, notes, deadlines) — ${whereStr}`;
-  if(label) label.textContent=`Restore Last Backup (${dateStr})`;
+  const sizeStr=formatBackupSize(backup.payload);
+  btn.title=`Full backup taken ${dateStr} — ${backup.models} model${backup.models===1?'':'s'}, ${backup.tasks} task${backup.tasks===1?'':'s'} (incl. photos, notes, deadlines) — ${sizeStr} — ${whereStr}`;
+  if(label) label.textContent=`Restore Last Backup (${dateStr} · ${sizeStr})`;
+}
+// Human-readable size of a backup payload (photos/screenshots are the bulk
+// of it, so this is the number people actually care about — e.g. whether
+// they're getting close to localStorage's ~5MB local-only ceiling).
+function formatBackupSize(payload){
+  let bytes;
+  try{ bytes=new Blob([JSON.stringify(payload||{})]).size; }
+  catch(e){ bytes=JSON.stringify(payload||{}).length; } // Blob unavailable — length is a close-enough fallback for mostly-ASCII JSON
+  if(bytes<1024) return bytes+' B';
+  if(bytes<1024*1024) return (bytes/1024).toFixed(1)+' KB';
+  return (bytes/(1024*1024)).toFixed(2)+' MB';
 }
 
 // Merges a full backup payload back into the current dashboard. Same safe,
@@ -9526,6 +11492,14 @@ function fullBackupStatsToMessage(stats){
 document.getElementById('backupNowBtn').onclick=async()=>{
   document.getElementById('exportAllDropdown').classList.remove('menu-open');
   if(!models.length){await showAlert({title:'Nothing to back up',message:'Add at least one model before backing up.',tone:'warn'});return;}
+  const btn=document.getElementById('backupNowBtn');
+  const icon=document.getElementById('backupNowIcon');
+  const spinner=document.getElementById('backupNowSpinner');
+  const label=document.getElementById('backupNowLabel');
+  btn.disabled=true;
+  icon.style.display='none';
+  spinner.style.display='inline-block';
+  label.textContent='Backing up…';
   try{
     const wentToCloud=await saveLastBackup();
     // Restart the hourly timer from now, so this manual backup counts as
@@ -9533,9 +11507,15 @@ document.getElementById('backupNowBtn').onclick=async()=>{
     startAutoBackup();
     const totalTasks=models.reduce((n,m)=>n+state[m].length,0);
     const whereMsg=wentToCloud?'saved to your account':'saved on this device only — sign in to back up online';
-    toast('💾',`Backed up everything — ${models.length} model${models.length===1?'':'s'}, ${totalTasks} tasks, photos & notes — ${whereMsg}`);
+    const sizeStr=formatBackupSize(buildFullBackupPayload());
+    toast('💾',`Backed up everything — ${models.length} model${models.length===1?'':'s'}, ${totalTasks} tasks, photos & notes (${sizeStr}) — ${whereMsg}`);
   }catch(err){
     await showAlert({title:'Backup failed',message:'Something went wrong while creating the backup. Please try again.',tone:'error'});
+  }finally{
+    btn.disabled=false;
+    icon.style.display='';
+    spinner.style.display='none';
+    label.textContent='Backup Now';
   }
 };
 
@@ -9644,6 +11624,26 @@ document.getElementById('exportPdfBtn').onclick=()=>{
 document.getElementById('exportAllPdfBtn').onclick=()=>{
   document.getElementById('exportAllDropdown').classList.remove('menu-open');
   exportAllModelsToPdf();
+};
+
+// ── EXECUTIVE SUMMARY EXPORTS (PDF + PPTX, one page/slide per model) ────────
+document.getElementById('exportExecPdfBtn').onclick=()=>{
+  document.getElementById('exportModelDropdown').classList.remove('menu-open');
+  if(activeTab==='Compare Models'){ toast('⚠','Select a model first to export its summary',false); return; }
+  exportExecSummaryPdf(activeTab);
+};
+document.getElementById('exportExecPptxBtn').onclick=()=>{
+  document.getElementById('exportModelDropdown').classList.remove('menu-open');
+  if(activeTab==='Compare Models'){ toast('⚠','Select a model first to export its summary',false); return; }
+  exportExecSummaryPptx(activeTab);
+};
+document.getElementById('exportAllExecPdfBtn').onclick=()=>{
+  document.getElementById('exportAllDropdown').classList.remove('menu-open');
+  exportExecSummaryPdfAll();
+};
+document.getElementById('exportAllExecPptxBtn').onclick=()=>{
+  document.getElementById('exportAllDropdown').classList.remove('menu-open');
+  exportExecSummaryPptxAll();
 };
 
 // ── EXCEL IMPORT (append tasks to current model) ─────────────────────────────
@@ -9795,7 +11795,9 @@ document.getElementById('themeToggleBtn').addEventListener('click',(e)=>{
   e.stopPropagation();
   document.getElementById('exportAllDropdown').classList.remove('menu-open');
   document.getElementById('exportModelDropdown').classList.remove('menu-open');
-  document.getElementById('themeDropdown').classList.toggle('menu-open');
+  const dd=document.getElementById('themeDropdown');
+  dd.classList.toggle('menu-open');
+  clampMenuToViewport(dd,document.getElementById('themeMenu'));
 });
 
 // ── FILTER & SEARCH ───────────────────────────────────────────────────────────
@@ -9912,6 +11914,7 @@ document.addEventListener('keydown',e=>{
     document.getElementById('notesModal').classList.remove('open');
     _notesObj=null; _notesObjCb=null;
     document.getElementById('overdueModal').classList.remove('open');
+    document.getElementById('myTasksModal').classList.remove('open');
     document.getElementById('globalSearchModal').classList.remove('open');
     document.getElementById('activityModal').classList.remove('open');
     document.getElementById('userBadge').classList.remove('menu-open');
@@ -10095,10 +12098,12 @@ function toast(icon,msg,showUndo){
 
 // ── RENDER ALL ────────────────────────────────────────────────────────────────
 function renderAll(){
-  renderKPIs();renderModelCards();renderTabs();renderTaskList();updateBulkBar();updateArchiveBadge();updateRecycleBadge();
+  renderKPIs();renderModelCards();renderTabs();renderTaskList();updateBulkBar();updateArchiveBadge();updateRecycleBadge();updateMyTasksBadge();
   if(archiveViewActive) renderArchiveView();
   if(recycleViewActive) renderRecycleView();
   if(analyticsViewActive) renderAnalyticsView();
+  const myTasksModalEl=document.getElementById('myTasksModal');
+  if(myTasksModalEl&&myTasksModalEl.classList.contains('open')) renderMyTasksModal();
 }
 
 // ── FRESH START ───────────────────────────────────────────────────────────────
@@ -10196,6 +12201,19 @@ function captureStickyBarOrigin(){
 }
 
 function updateStickyBarPin(){
+  // On mobile, freezing the model bar eats the vertical space needed to see
+  // tasks/subtasks, so never pin it below the 768px breakpoint used
+  // elsewhere in the app — just let it scroll away normally.
+  if(window.innerWidth<=768){
+    if(stickyBarEl.classList.contains('is-pinned')){
+      stickyBarEl.classList.remove('is-pinned');
+      stickyBarEl.style.left='';
+      stickyBarEl.style.width='';
+      stickyBarEl.style.paddingLeft='';
+      stickyBarSpacer.classList.remove('show');
+    }
+    return;
+  }
   if(stickyBarOriginalTop===null) captureStickyBarOrigin();
   const shouldPin=window.scrollY>=stickyBarOriginalTop;
   if(shouldPin&&!stickyBarEl.classList.contains('is-pinned')){
@@ -10463,6 +12481,9 @@ function updateTeamUI(){
   else{ badge.style.display='none'; }
   const mineBtn=document.getElementById('mineFilterBtn');
   if(mineBtn) mineBtn.style.display=count>1?'':'none';
+  const myTasksBtn=document.getElementById('myTasksMenuBtn');
+  if(myTasksBtn) myTasksBtn.style.display=count>1?'':'none';
+  if(count>1) updateMyTasksBadge();
   // If the workspace shrank back to just you, don't leave the UI stuck
   // filtered on a chip that's now hidden.
   if(count<=1 && activeFilter==='mine'){
@@ -10609,6 +12630,22 @@ async function joinWorkspaceByCode(rawCode){
 document.getElementById('teamMenuBtn').onclick=openTeamModal;
 document.getElementById('teamCloseBtn').onclick=closeTeamModal;
 document.getElementById('teamOverlay').addEventListener('click',e=>{ if(e.target.id==='teamOverlay') closeTeamModal(); });
+
+// ── TEMPLATE EDITOR BUTTON WIRING ──
+// (openTemplateEditor/renderTemplateEditor/commitTemplateEditorSave/
+// closeTemplateEditor are defined earlier in the file; this just has to run
+// after #templateEditorOverlay's HTML exists, which is why it's wired here
+// rather than alongside those function definitions.)
+document.getElementById('templateEditorAddTaskBtn').onclick=()=>{
+  teDraftTasks.push({name:'NEW TASK',priority:'med',notes:'',subtasks:[]});
+  renderTemplateEditor();
+};
+document.getElementById('templateEditorCancelBtn').onclick=closeTemplateEditor;
+document.getElementById('templateEditorSaveBtn').onclick=commitTemplateEditorSave;
+document.getElementById('templateEditorOverlay').addEventListener('click',e=>{
+  if(e.target.id==='templateEditorOverlay') closeTemplateEditor();
+});
+
 document.getElementById('teamGenerateCodeBtn').onclick=generateInviteCode;
 document.getElementById('teamCopyCodeBtn').onclick=()=>{
   const code=document.getElementById('teamInviteCodeDisplay').textContent;
