@@ -49,41 +49,6 @@
   --shadow-md: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
 }
 
-/* ── PREMIUM POLISH: motion + scrollbar + selection ── */
-:root {
-  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-* { scrollbar-width: thin; scrollbar-color: var(--border-hover) transparent; }
-*::-webkit-scrollbar { width: 10px; height: 10px; }
-*::-webkit-scrollbar-track { background: transparent; }
-*::-webkit-scrollbar-thumb {
-  background: var(--border-hover);
-  border-radius: 100px;
-  border: 2px solid var(--bg);
-  background-clip: padding-box;
-  transition: background 0.2s ease;
-}
-*::-webkit-scrollbar-thumb:hover { background: var(--accent1); background-clip: padding-box; }
-
-::selection { background: var(--accent1); color: var(--bg); }
-
-button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible {
-  outline: 2px solid var(--accent1);
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
 [data-theme="light"] {
   /* Elegant Light Theme (Soft Whites with Dark Gold accents) */
   --bg: #f8f9fa;
@@ -330,12 +295,6 @@ header {
   display: flex; align-items: center; justify-content: center;
   font-size: 20px; flex-shrink: 0;
   box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.4s var(--ease-soft), transform 0.4s var(--ease-soft), border-color 0.4s ease;
-}
-.logo-group:hover .logo-icon {
-  box-shadow: var(--shadow-sm), 0 0 0 1px var(--accent1-dim), 0 0 24px -4px var(--accent1-dim);
-  border-color: var(--border-hover);
-  transform: translateY(-1px);
 }
 
 h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.5px; color: var(--text); }
@@ -363,10 +322,9 @@ h1 span { color: var(--accent1); font-weight: 400; }
   background: var(--surface);
   color: var(--text-muted);
   font-family: inherit; font-size: 12px; font-weight: 500;
-  cursor: pointer; transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.15s var(--ease-soft); white-space: nowrap;
+  cursor: pointer; transition: all 0.3s ease; white-space: nowrap;
 }
-.hdr-btn:hover { color: var(--text); border-color: var(--border-hover); background: var(--surface2); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
-.hdr-btn:active { transform: translateY(0) scale(0.96); transition-duration: 0.08s; }
+.hdr-btn:hover { color: var(--text); border-color: var(--border-hover); background: var(--surface2); box-shadow: var(--shadow-sm); }
 .hdr-btn.accent { color: var(--accent1); border-color: var(--accent1-dim); background: var(--surface); }
 .hdr-btn.accent:hover { background: var(--accent1-dim); border-color: var(--accent1); }
 .hdr-btn.active-view { color: var(--accent1); border-color: var(--accent1); background: var(--accent1-dim); }
@@ -521,22 +479,15 @@ footer {
 /* ── MODEL CARDS ── */
 .models-section-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }
 .models-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-bottom: 44px; }
-.models-grid > .model-card:nth-child(1) { animation-delay: 0.08s; }
-.models-grid > .model-card:nth-child(2) { animation-delay: 0.14s; }
-.models-grid > .model-card:nth-child(3) { animation-delay: 0.20s; }
-.models-grid > .model-card:nth-child(4) { animation-delay: 0.26s; }
-.models-grid > .model-card:nth-child(5) { animation-delay: 0.32s; }
-.models-grid > .model-card:nth-child(6) { animation-delay: 0.38s; }
-.models-grid > .model-card:nth-child(n+7) { animation-delay: 0.42s; }
 .model-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 20px; padding: 28px;
   position: relative; overflow: hidden;
-  transition: transform 0.45s var(--ease-premium), box-shadow 0.45s var(--ease-premium), border-color 0.3s ease;
-  animation: fadeUp 0.6s var(--ease-soft) both; animation-delay: 0.25s;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeUp 0.6s ease both; animation-delay: 0.25s;
   cursor: pointer; box-shadow: var(--shadow-sm);
 }
-.model-card:hover { transform: translateY(-4px) scale(1.005); box-shadow: var(--shadow-md); border-color: var(--border-hover); }
+.model-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--border-hover); }
 .model-pin-btn {
   position: absolute; top: 14px; right: 14px; z-index: 3;
   width: 32px; height: 32px; border-radius: 50%;
@@ -1190,27 +1141,6 @@ footer {
 .comment-post-btn:hover { filter: brightness(1.08); }
 .comment-post-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-/* @mention autocomplete popover — anchored above the comment textarea */
-.mention-autocomplete {
-  display: none; position: absolute; left: 0; bottom: calc(100% + 6px); width: 260px; max-height: 180px;
-  overflow-y: auto; background: var(--surface2); border: 1px solid var(--border-hover); border-radius: 10px;
-  box-shadow: var(--shadow-md); z-index: 20; padding: 4px;
-}
-.mention-autocomplete.open { display: block; }
-.mention-autocomplete-item {
-  display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 7px; cursor: pointer; font-size: 12.5px; color: var(--text);
-}
-.mention-autocomplete-item:hover, .mention-autocomplete-item.active { background: var(--accent1-dim); }
-.mention-autocomplete-avatar {
-  width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 700; color: #fff;
-}
-.mention-autocomplete-empty { padding: 10px 8px; font-size: 12px; color: var(--text-dim); text-align: center; }
-
-/* highlighted @Name tag inside a posted comment */
-.comment-mention-tag { color: var(--accent1); font-weight: 700; background: var(--accent1-dim); padding: 0 3px; border-radius: 4px; }
-.comment-mention-tag.is-me { color: var(--bg); background: var(--accent1); }
-
 /* task deadline icon (sits beside notes icon) */
 .task-icons-cell { display: flex; align-items: center; justify-content: center; gap: 6px; }
 .assignee-picker {
@@ -1814,8 +1744,7 @@ footer {
   align-items: center; justify-content: center;
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
 }
-.modal-overlay.open { display: flex; animation: overlayFadeIn 0.25s var(--ease-soft) both; }
-@keyframes overlayFadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal-overlay.open { display: flex; }
 /* The shared confirm/alert modal (showConfirm/showAlert) can be triggered
    from inside other modals — e.g. deleting a template from the template
    chooser (z-index 9999) or editor (z-index 10000). It must always render
@@ -1838,28 +1767,6 @@ footer {
   border-radius: 20px; padding: 4px 10px; white-space: nowrap;
 }
 .overdue-empty { padding: 32px 8px; text-align: center; color: var(--text-dim); font-size: 13px; }
-.mytasks-modal-body { max-height: 60vh; overflow-y: auto; margin-top: 10px; }
-.mytask-row {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border);
-  background: var(--surface2); margin-bottom: 8px; cursor: pointer;
-  transition: border-color 0.15s ease, background 0.15s ease;
-}
-.mytask-row:hover { border-color: var(--accent1); background: rgba(96,165,250,0.08); }
-.mytask-row.is-done { opacity: 0.6; }
-.mytask-row-main { min-width: 0; }
-.mytask-row-name { font-size: 13.5px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.mytask-row-name.is-done-text { text-decoration: line-through; }
-.mytask-row-model { font-size: 11.5px; color: var(--text-dim); margin-top: 2px; }
-.mytask-row-badge {
-  flex-shrink: 0; font-size: 11.5px; font-weight: 700;
-  border-radius: 20px; padding: 4px 10px; white-space: nowrap; border: 1px solid;
-}
-.mytask-row-badge.st-done { color: #10b981; background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.3); }
-.mytask-row-badge.st-overdue { color: var(--red); background: rgba(244,63,94,0.12); border-color: rgba(244,63,94,0.3); }
-.mytask-row-badge.st-soon { color: #f59e0b; background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.3); }
-.mytask-row-badge.st-open { color: var(--text-muted); background: var(--surface3); border-color: var(--border); }
-.mytasks-empty { padding: 32px 8px; text-align: center; color: var(--text-dim); font-size: 13px; }
 .menu-item-kbd { margin-left: auto; font-size: 10px; font-weight: 600; color: var(--text-muted); background: var(--surface3); border: 1px solid var(--border); border-radius: 5px; padding: 2px 6px; letter-spacing: .3px; }
 .gsearch-input-wrap { position: relative; margin-bottom: 14px; }
 .gsearch-input-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
@@ -1908,8 +1815,6 @@ footer {
 .notif-bell-btn:hover svg { transform: rotate(-8deg); }
 .notif-bell-btn:active { transform: scale(0.94); }
 .notif-bell-btn.has-unread { color: var(--accent1); border-color: var(--accent1-dim); }
-.notif-bell-btn.has-mention { color: var(--red); border-color: rgba(244,63,94,0.3); background: rgba(244,63,94,0.08); }
-.notif-bell-btn.has-mention:hover { color: var(--red); border-color: rgba(244,63,94,0.4); background: rgba(244,63,94,0.14); box-shadow: 0 0 0 4px rgba(244,63,94,0.1); }
 .notif-badge {
   position: absolute; top: -3px; right: -3px; min-width: 17px; height: 17px; padding: 0 4px;
   border-radius: 9px;
@@ -1919,11 +1824,6 @@ footer {
   border: 2px solid var(--bg);
   box-shadow: 0 0 0 0 rgba(212,175,55,0.55);
   animation: notifBadgePulse 2.2s ease-out infinite;
-}
-.notif-badge.mention-badge {
-  background: linear-gradient(135deg, var(--red), #fb7185);
-  color: #fff;
-  box-shadow: 0 0 0 0 rgba(244,63,94,0.55);
 }
 @keyframes notifBadgePulse {
   0%   { box-shadow: 0 0 0 0 rgba(212,175,55,0.45); }
@@ -1935,30 +1835,6 @@ footer {
 .activity-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 8px; border-radius: 10px; border-bottom: 1px solid var(--border); }
 .activity-row:last-child { border-bottom: none; }
 .activity-row.unread { background: var(--accent1-dim); }
-.activity-row.mentioned-me { background: rgba(244,63,94,0.08); }
-.activity-row.mentioned-me.unread { background: rgba(244,63,94,0.14); }
-.activity-row-view-btn {
-  flex-shrink: 0; align-self: center; display: flex; align-items: center; gap: 4px;
-  background: transparent; color: var(--red); border: 1px solid rgba(244,63,94,0.3);
-  border-radius: 7px; padding: 5px 10px; font-size: 11px; font-weight: 600;
-  font-family: 'Sora', sans-serif; cursor: pointer; white-space: nowrap;
-}
-.activity-row-view-btn:hover { background: rgba(244,63,94,0.12); }
-
-.activity-filter-tabs { display: flex; gap: 6px; margin: 12px 0 4px; }
-.activity-filter-tab {
-  display: flex; align-items: center; gap: 6px;
-  background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted);
-  border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 600;
-  font-family: 'Sora', sans-serif; cursor: pointer; transition: all 0.15s ease;
-}
-.activity-filter-tab:hover { border-color: var(--border-hover); color: var(--text); }
-.activity-filter-tab.active { background: var(--accent1-dim); border-color: var(--accent1); color: var(--accent1); }
-.activity-filter-tab[data-filter="mentions"].active { background: rgba(244,63,94,0.1); border-color: var(--red); color: var(--red); }
-.activity-filter-tab-count {
-  display: inline-flex; align-items: center; justify-content: center; min-width: 16px; height: 16px; padding: 0 4px;
-  border-radius: 8px; background: var(--red); color: #fff; font-size: 10px; font-weight: 800;
-}
 .activity-row-icon {
   flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--surface2);
   display: flex; align-items: center; justify-content: center; font-size: 13px;
@@ -1997,16 +1873,14 @@ footer {
 .modal-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; }
 .modal-btn {
   padding: 10px 24px; border-radius: 10px; font-family: inherit;
-  font-size: 14px; font-weight: 600; cursor: pointer; border: none;
-  transition: filter 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s var(--ease-soft);
+  font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; border: none;
 }
 .modal-btn.primary { background: var(--accent1); color: var(--bg); box-shadow: 0 4px 14px var(--accent1-dim); }
-.modal-btn.primary:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent1-dim); }
+.modal-btn.primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
 .modal-btn.secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-.modal-btn.secondary:hover { background: var(--surface3); border-color: var(--border-hover); transform: translateY(-1px); }
+.modal-btn.secondary:hover { background: var(--surface3); border-color: var(--border-hover); }
 .modal-btn.danger { background: var(--red); color: #fff; box-shadow: 0 4px 14px rgba(244, 63, 94, 0.3); }
 .modal-btn.danger:hover { filter: brightness(1.1); transform: translateY(-1px); }
-.modal-btn:active { transform: translateY(0) scale(0.96) !important; transition-duration: 0.08s; }
 
 /* ── NOTES: SCREENSHOTS GALLERY ── */
 .notes-shots-section { margin-top: 18px; }
@@ -3209,6 +3083,41 @@ img { -webkit-user-drag: none; }
   margin-left: auto; font-size: 10.5px; color: var(--accent1);
   background: var(--accent1-dim); padding: 2px 8px; border-radius: 20px; font-weight: 600;
 }
+.team-member-role-tag {
+  margin-left: auto; flex-shrink: 0; font-size: 10.5px; color: var(--green);
+  background: rgba(16,185,129,0.12); padding: 2px 8px; border-radius: 20px; font-weight: 600;
+}
+.team-member-role-tag.is-viewer { color: var(--text-muted); background: var(--surface3); }
+.team-member-role-toggle-btn {
+  flex-shrink: 0; font-size: 11px; font-weight: 600; white-space: nowrap;
+  padding: 5px 10px; border-radius: 20px; cursor: pointer;
+  background: var(--surface3); border: 1px solid var(--border); color: var(--text);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.team-member-role-toggle-btn:hover { border-color: var(--border-hover); background: var(--accent1-dim); }
+/* ── VIEW-ONLY MODE ── */
+#viewOnlyBanner {
+  display: none; align-items: center; gap: 8px;
+  padding: 8px 16px; font-size: 12.5px; font-weight: 600;
+  color: var(--text-muted); background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+body.viewer-mode .add-task-bar,
+body.viewer-mode #addModelBtn,
+body.viewer-mode #modelsEmptyStateBtn,
+body.viewer-mode .model-card-action-btn,
+body.viewer-mode #duplicateModelBtn,
+body.viewer-mode #archiveModelBtn,
+body.viewer-mode #deleteModelBtn {
+  opacity: 0.45; pointer-events: none; filter: grayscale(0.3);
+}
+body.viewer-mode .row-action-btn:not(.team-member-role-toggle-btn),
+body.viewer-mode .assignee-picker,
+body.viewer-mode .task-checkbox,
+body.viewer-mode [draggable="true"] {
+  opacity: 0.55; cursor: not-allowed !important;
+}
+body.viewer-mode [draggable="true"] { cursor: default !important; }
 .team-member-remove-btn {
   margin-left: auto; flex-shrink: 0;
   width: 24px; height: 24px; border-radius: 50%;
@@ -3283,6 +3192,10 @@ body {
 </style>
 </head>
 <body>
+<div id="viewOnlyBanner">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+  <span>View only — ask the workspace owner for edit access to make changes</span>
+</div>
 <script>
 // ── FORCE-PORTRAIT CLASS TOGGLE ── Drives the html.force-portrait-lock
 // CSS rotate trick (see <style> above). Detection is done here in JS,
@@ -3508,7 +3421,6 @@ document.addEventListener('keydown', e => {
         <button class="menu-item" id="activityLogMenuBtn" title="See every change across your workspace"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg><span>Activity Log</span></button>
         <div class="menu-divider"></div>
         <button class="menu-item" id="teamMenuBtn" title="Invite teammates or manage your shared workspace"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Team</span><span class="archive-count-badge" id="teamCountBadge" style="display:none;">1</span></button>
-        <button class="menu-item" id="myTasksMenuBtn" title="See every task assigned to you, across all models, in one window" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M9 14l2 2 4-4"/></svg><span>My Tasks</span><span class="archive-count-badge" id="myTasksCountBadge" style="display:none;">0</span></button>
         <button class="menu-item" id="archiveViewBtn" title="View archived models"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><line x1="10" y1="13" x2="14" y2="13"/></svg><span>Archived</span><span class="archive-count-badge" id="archiveCountBadge" style="display:none;">0</span></button>
         <button class="menu-item" id="recycleViewBtn" title="View deleted tasks (kept for 30 days)" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg><span>Recycle Bin</span><span class="archive-count-badge" id="recycleCountBadge" style="display:none;">0</span></button>
         <button class="menu-item" id="analyticsViewBtn" title="Burndown, trends, and overdue analysis"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Analytics</span></button>
@@ -3669,7 +3581,6 @@ document.addEventListener('keydown', e => {
     <div class="bulk-move-menu" id="bulkMoveMenu">
       <button class="menu-item" id="bulkMoveTopBtn" title="Move selected tasks to the top of the list"><span>↑</span><span>Move to Top</span></button>
       <button class="menu-item" id="bulkMoveBottomBtn" title="Move selected tasks to the bottom of the list"><span>↓</span><span>Move to Bottom</span></button>
-      <button class="menu-item" id="bulkMoveToPositionBtn" title="Move selected tasks to a specific serial number"><span>#</span><span>Move to Position…</span></button>
       <button class="menu-item" id="bulkMoveModelBtn" title="Move selected tasks to a different model"><span>⇄</span><span>Move to Model</span></button>
     </div>
   </div>
@@ -3953,9 +3864,8 @@ document.addEventListener('keydown', e => {
     <div class="modal-title">💬 Comment Timeline</div>
     <div class="modal-subtitle" id="commentsTaskName"></div>
     <div class="comment-timeline" id="commentsTimeline"></div>
-    <div class="comment-input-row" style="position:relative;">
-      <div class="mention-autocomplete" id="mentionAutocomplete"></div>
-      <textarea class="comment-textarea" id="commentInputText" placeholder="Add an update to the discussion… (type @ to mention someone)" maxlength="600"></textarea>
+    <div class="comment-input-row">
+      <textarea class="comment-textarea" id="commentInputText" placeholder="Add an update to the discussion…" maxlength="600"></textarea>
       <button type="button" class="comment-post-btn" id="commentPostBtn">Post</button>
     </div>
     <div class="modal-actions">
@@ -3978,10 +3888,6 @@ document.addEventListener('keydown', e => {
   <div class="modal-box" id="activityModalBox" style="width:min(560px, 92vw);">
     <div class="modal-title">🕓 Activity Log</div>
     <div class="modal-subtitle" id="activitySubtitle">Every change made across your workspace, most recent first.</div>
-    <div class="activity-filter-tabs" id="activityFilterTabs">
-      <button type="button" class="activity-filter-tab active" data-filter="all">All</button>
-      <button type="button" class="activity-filter-tab" data-filter="mentions">🔔 Mentions<span class="activity-filter-tab-count" id="activityMentionTabCount" style="display:none;">0</span></button>
-    </div>
     <div class="activity-body" id="activityBody"></div>
     <div class="modal-actions" style="margin-top:16px;">
       <button class="modal-btn secondary" id="activityClearBtn" style="color:var(--red);border-color:rgba(244,63,94,0.25);" title="Permanently delete every entry in this workspace's activity log">Clear Log</button>
@@ -4014,18 +3920,6 @@ document.addEventListener('keydown', e => {
     <div class="overdue-modal-body" id="overdueModalBody"></div>
     <div class="modal-actions" style="margin-top:16px;">
       <button class="modal-btn primary" id="overdueModalCloseBtn">Close</button>
-    </div>
-  </div>
-</div>
-
-<!-- MY TASKS MODAL -->
-<div class="modal-overlay" id="myTasksModal">
-  <div class="modal-box" id="myTasksModalBox" style="width:min(560px, 92vw);">
-    <div class="modal-title">🗂️ My Tasks</div>
-    <div class="modal-subtitle" id="myTasksModalCount">Everything assigned to you, across every model.</div>
-    <div class="mytasks-modal-body" id="myTasksModalBody"></div>
-    <div class="modal-actions" style="margin-top:16px;">
-      <button class="modal-btn primary" id="myTasksModalCloseBtn">Close</button>
     </div>
   </div>
 </div>
@@ -4527,6 +4421,55 @@ function getWorkspaceDoc(){ return db.collection('workspaces').doc(currentWorksp
 function getUserProfileDoc(uid){ return db.collection('users').doc(uid); }
 function isCurrentWorkspaceOwner(){ return !!auth&&!!auth.currentUser&&workspaceOwnerUid===auth.currentUser.uid; }
 
+// ── VIEW-ONLY / EDIT PERMISSIONS ──────────────────────────────────────────
+// Every member of a shared workspace has a role of 'editor' or 'viewer',
+// stored per-member at members.{uid}.role. The owner is always an editor.
+// Anyone who joins via an invite code starts out as a 'viewer' (can see
+// everything, can't change anything) until the owner grants them edit
+// access — teammates who were added before this feature existed have no
+// role field at all, so we default a missing role to 'editor' to avoid
+// silently locking out people who already had full access.
+function myMemberRole(){
+  if(!auth||!auth.currentUser) return 'editor';
+  const uid=auth.currentUser.uid;
+  if(workspaceOwnerUid===uid) return 'editor';
+  const info=workspaceMembers[uid];
+  if(!info) return 'editor';
+  return info.role==='viewer'?'viewer':'editor';
+}
+function canEdit(){ return myMemberRole()==='editor'; }
+function notifyViewOnly(){ toast('👁','View-only access — ask the workspace owner for edit permission',false); }
+
+// Toggles a body-level class + banner so the whole UI visually reflects
+// view-only status, and (re)wires a capture-phase guard that blocks clicks
+// on edit-affecting controls before their own handlers ever run.
+function applyViewOnlyMode(){
+  const viewOnly=!canEdit();
+  document.body.classList.toggle('viewer-mode',viewOnly);
+  const banner=document.getElementById('viewOnlyBanner');
+  if(banner) banner.style.display=viewOnly?'':'none';
+}
+const VIEW_ONLY_BLOCK_SELECTOR=[
+  '.add-task-btn','.add-task-bar input','.add-task-bar select',
+  '.row-action-btn','.task-checkbox','.assignee-picker',
+  '[draggable="true"]','.model-thumb-preview','.model-card-action-btn',
+  '#addModelBtn','#modelsEmptyStateBtn','#newModelInput','#newModelDeadline',
+  '#newTaskInput','#newTaskPosition'
+].join(',');
+document.addEventListener('click',e=>{
+  if(!document.body.classList.contains('viewer-mode')) return;
+  const el=e.target.closest(VIEW_ONLY_BLOCK_SELECTOR);
+  if(!el) return;
+  // Team modal (viewing/leaving), theme, export, and other read-safe
+  // controls live outside this selector set, so anything caught here is
+  // an edit action — stop it and explain why.
+  e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+  notifyViewOnly();
+},true);
+document.addEventListener('dragstart',e=>{
+  if(document.body.classList.contains('viewer-mode')) e.preventDefault();
+},true);
+
 function randomInviteCode(){
   const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no 0/O/1/I to avoid ambiguity
   let out='';
@@ -4758,6 +4701,17 @@ function listenForLastUpdated(workspaceId){
       document.getElementById('lastUpdated').textContent=formatLastUpdated(data.updatedAt);
     }
 
+    // Members/roles are kept live regardless of the task-diff short-circuit
+    // below, so a permission change (e.g. the owner granting edit access)
+    // takes effect immediately without waiting for an unrelated task edit.
+    if(data.members){
+      workspaceMembers=data.members;
+      workspaceOwnerUid=data.ownerUid||workspaceOwnerUid;
+      applyViewOnlyMode();
+      updateTeamUI();
+      if(document.getElementById('teamOverlay').classList.contains('open')) renderTeamModal();
+    }
+
     // Don't be intrusive: if the person is busy right now (typing, a modal
     // is open, mid-drag, or just recently clicked/scrolled/typed anywhere),
     // hold this snapshot and retry it automatically once they go idle,
@@ -4783,6 +4737,10 @@ let lastPersistedVersion=0;
 function hasUnsavedLocalEdit(){ return unsavedEditVersion!==lastPersistedVersion; }
 
 function save(){
+  // Defense in depth: the UI already blocks edit actions for view-only
+  // members (see applyViewOnlyMode), but this stops any write from ever
+  // reaching Firestore even if something slipped past that guard.
+  if(!canEdit()){ notifyViewOnly(); return; }
   // Undo history is purely local state, so it should track every change
   // whether or not the person is signed in — only the Firestore write
   // below is conditional on having an account to save to.
@@ -5108,6 +5066,7 @@ async function handleAuthState(user){
       : (currentWorkspaceId===user.uid ? await speculativeLoad : await loadFromFirestore(currentWorkspaceId));
     workspaceMembers=(saved&&saved.members)||{[user.uid]:{email:user.email||'',displayName:user.displayName||(user.email||'').split('@')[0]}};
     workspaceOwnerUid=(saved&&saved.ownerUid)||user.uid;
+    applyViewOnlyMode();
     deletedModelsSet=new Set(saved?.deletedModels||[]);
     archivedModelsSet=new Set(saved?.archivedModels||[]);
     pinnedModelsSet=new Set(saved?.pinnedModels||[]);
@@ -5163,6 +5122,8 @@ async function handleAuthState(user){
     if(unsubscribeLastUpdated){ unsubscribeLastUpdated(); unsubscribeLastUpdated=null; }
     if(unsubscribeActivity){ unsubscribeActivity(); unsubscribeActivity=null; }
     activityFeed=[]; updateNotifBadge();
+    workspaceOwnerUid=null; workspaceMembers={};
+    applyViewOnlyMode();
     document.getElementById('userBadge').style.display='none';
     document.getElementById('userBadge').classList.remove('menu-open');
     document.getElementById('notifBellBtn').style.display='none';
@@ -5925,145 +5886,6 @@ document.getElementById('overdueModal').onclick=e=>{
   if(e.target.id==='overdueModal') closeOverdueModal();
 };
 
-// ── MY TASKS MODAL ───────────────────────────────────────────────────────────
-// Everything assigned to the signed-in teammate, flattened across every
-// model (top-level tasks and sub-tasks alike), so they can see their whole
-// workload in one window instead of hunting model-by-model.
-function getAllMyTasks(){
-  const out=[];
-  const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
-  if(!myUid) return out;
-  models.forEach(m=>{
-    (state[m]||[]).forEach((t,idx)=>{
-      if(t.assignee===myUid) out.push({model:m, idx, task:t});
-      (Array.isArray(t.subtasks)?t.subtasks:[]).forEach((s,subIdx)=>{
-        if(s.assignee===myUid) out.push({model:m, idx, subIdx, task:s, parentName:t.name});
-      });
-    });
-  });
-  // Open items first (overdue, then soonest deadline, then no deadline),
-  // completed items last so the list leads with what still needs doing.
-  const today=new Date(); today.setHours(0,0,0,0);
-  const rank=item=>{
-    if(item.task.done) return 3;
-    if(!item.task.taskDeadline) return 2;
-    const d=new Date(item.task.taskDeadline+'T00:00:00');
-    return d<today?0:1;
-  };
-  out.sort((a,b)=>{
-    const r=rank(a)-rank(b);
-    if(r!==0) return r;
-    const da=a.task.taskDeadline||'9999-99-99', db=b.task.taskDeadline||'9999-99-99';
-    return da<db?-1:da>db?1:0;
-  });
-  return out;
-}
-function myTaskStatusBadge(task){
-  if(task.done) return{text:'Done',cls:'st-done'};
-  if(!task.taskDeadline) return{text:'No deadline',cls:'st-open'};
-  const today=new Date(); today.setHours(0,0,0,0);
-  const d=new Date(task.taskDeadline+'T00:00:00');
-  const diff=Math.round((d-today)/(1000*60*60*24));
-  if(diff<0) return{text:`${-diff}d overdue`,cls:'st-overdue'};
-  if(diff===0) return{text:'Due today',cls:'st-soon'};
-  if(diff<=7) return{text:`${diff}d left`,cls:'st-soon'};
-  return{text:`Due ${task.taskDeadline}`,cls:'st-open'};
-}
-function renderMyTasksModal(){
-  const list=getAllMyTasks();
-  const countEl=document.getElementById('myTasksModalCount');
-  const body=document.getElementById('myTasksModalBody');
-  if(!auth||!auth.currentUser){
-    countEl.textContent='Sign in to see tasks assigned to you.';
-    body.innerHTML=`<div class="mytasks-empty">Sign in to see your assigned tasks.</div>`;
-    return;
-  }
-  if(!list.length){
-    countEl.textContent='Nothing assigned to you yet.';
-    body.innerHTML=`<div class="mytasks-empty">🎉 No tasks assigned to you across any model.</div>`;
-    return;
-  }
-  const openCount=list.filter(x=>!x.task.done).length;
-  countEl.textContent=`${openCount} open, ${list.length-openCount} done — ${list.length} total across ${new Set(list.map(x=>x.model)).size} model${new Set(list.map(x=>x.model)).size>1?'s':''}.`;
-  body.innerHTML=list.map((item,i)=>{
-    const badge=myTaskStatusBadge(item.task);
-    return `
-    <div class="mytask-row${item.task.done?' is-done':''}" data-i="${i}">
-      <div class="mytask-row-main">
-        <div class="mytask-row-name${item.task.done?' is-done-text':''}">${escHtml(item.task.name)}</div>
-        <div class="mytask-row-model">${escHtml(item.model)}${item.parentName?` · sub-task of "${escHtml(item.parentName)}"`:''}</div>
-      </div>
-      <div class="mytask-row-badge ${badge.cls}">${badge.text}</div>
-    </div>`;
-  }).join('');
-  body.querySelectorAll('.mytask-row').forEach(row=>{
-    row.onclick=()=>{
-      const item=list[parseInt(row.dataset.i,10)];
-      jumpToMyTask(item.model,item.idx,item.subIdx);
-    };
-  });
-}
-function jumpToMyTask(model,idx,subIdx){
-  closeMyTasksModal();
-  if(!models.includes(model)) return;
-  activeTab=model; localStorage.setItem('mlc_activeTab',model);
-  editingIdx=null; selectedTasks.clear(); selectedSubtasks.clear();
-  const task=(state[model]||[])[idx];
-  const isSubtaskJump=(typeof subIdx==='number');
-  // The "mine" filter only ever matches top-level tasks, so when
-  // pinpointing a subtask we fall back to "all" the same way the Overdue
-  // modal does, otherwise the row would be filtered out of view.
-  activeFilter=isSubtaskJump?'all':'mine';
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  const activeBtn=document.querySelector(`.filter-btn[data-filter="${activeFilter}"]`);
-  if(activeBtn) activeBtn.classList.add('active');
-  const sb=document.getElementById('searchBox');
-  sb.value=task?task.name:'';
-  searchQuery=sb.value;
-  if(isSubtaskJump && task) expandedSubtasksSet.add(subKey(model,idx));
-  renderTabs();
-  renderTaskList();
-  scrollToTaskChecklist();
-  if(_pinpointClearHandler) document.removeEventListener('click',_pinpointClearHandler);
-  setTimeout(()=>{
-    _pinpointClearHandler=e=>{
-      if(e.target===document.getElementById('searchBox')) return;
-      document.removeEventListener('click',_pinpointClearHandler);
-      _pinpointClearHandler=null;
-      document.getElementById('searchBox').value='';
-      searchQuery='';
-      renderTaskList();
-    };
-    document.addEventListener('click',_pinpointClearHandler);
-  },0);
-}
-function openMyTasksModal(){
-  renderMyTasksModal();
-  document.getElementById('myTasksModal').classList.add('open');
-}
-function closeMyTasksModal(){
-  document.getElementById('myTasksModal').classList.remove('open');
-}
-// Badge count on the "My Tasks" menu item mirrors open (not-done) items
-// assigned to the signed-in teammate; visibility itself is driven by
-// updateTeamUI() below since assignment only makes sense once you've
-// actually got teammates.
-function updateMyTasksBadge(){
-  const badge=document.getElementById('myTasksCountBadge');
-  if(!badge) return;
-  const openCount=getAllMyTasks().filter(x=>!x.task.done).length;
-  if(openCount>0){ badge.style.display=''; badge.textContent=String(openCount); }
-  else{ badge.style.display='none'; }
-}
-document.getElementById('myTasksMenuBtn').onclick=()=>{
-  document.getElementById('userBadge').classList.remove('menu-open');
-  openMyTasksModal();
-};
-document.getElementById('myTasksModalCloseBtn').onclick=closeMyTasksModal;
-document.getElementById('myTasksModal').onclick=e=>{
-  if(e.target.id==='myTasksModal') closeMyTasksModal();
-};
-
 // ── GLOBAL SEARCH (across every model, task & sub-task) ────────────────────
 // Flattens the whole workspace into one searchable list. Kept cheap on
 // purpose — recomputed fresh each keystroke since even large workspaces are
@@ -6273,7 +6095,7 @@ const ACTIVITY_UNDO_CAP=60; // keep memory bounded; oldest restore points drop o
 //    by undo()/redo(), where undoStack was just popped/pushed by hand
 //    rather than via pushUndoSnapshot(), so its top can't be trusted —
 //    and "restore to before an undo" is redundant with hitting Redo anyway).
-function logActivity(icon,text,model,beforeSnapshot,extra){
+function logActivity(icon,text,model,beforeSnapshot){
   if(!auth||!auth.currentUser||!db||!currentWorkspaceId) return;
   const user=auth.currentUser;
   const restorePoint=beforeSnapshot!==undefined
@@ -6287,15 +6109,6 @@ function logActivity(icon,text,model,beforeSnapshot,extra){
     model:model||null,
     ts:firebase.firestore.FieldValue.serverTimestamp()
   };
-  // Optional: who this entry specifically notifies (e.g. an @mention in a
-  // comment) and where to jump to view it. Kept out of the base entry shape
-  // when unused so ordinary activity rows stay lean.
-  if(extra&&Array.isArray(extra.mentions)&&extra.mentions.length){
-    entry.mentions=extra.mentions.slice(0,20);
-  }
-  if(extra&&extra.commentRef){
-    entry.commentRef=extra.commentRef;
-  }
   // .doc() (no args) generates a fresh document ID entirely client-side —
   // no network round-trip needed for that part. Registering the restore
   // point under it BEFORE the write even starts means it's already sitting
@@ -6356,25 +6169,14 @@ function updateNotifBadge(){
   if(!badge) return;
   const seen=getActivitySeenTs();
   const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
-  const unreadEntries=activityFeed.filter(e=>e.uid!==myUid&&_activityTsMillis(e)>seen);
-  const unread=unreadEntries.length;
-  const mentionUnread=unreadEntries.filter(e=>Array.isArray(e.mentions)&&myUid&&e.mentions.includes(myUid)).length;
+  const unread=activityFeed.filter(e=>e.uid!==myUid&&_activityTsMillis(e)>seen).length;
   if(unread>0){
-    // A mention takes priority over generic activity noise — different
-    // color, and the count shown is just the mentions if any exist, so
-    // "you were mentioned" doesn't get buried under unrelated updates.
-    badge.textContent=(mentionUnread>0?mentionUnread:unread)>99?'99+':String(mentionUnread>0?mentionUnread:unread);
+    badge.textContent=unread>99?'99+':String(unread);
     badge.style.display='flex';
-    badge.classList.toggle('mention-badge',mentionUnread>0);
-    if(bell){
-      bell.classList.add('has-unread');
-      bell.classList.toggle('has-mention',mentionUnread>0);
-      bell.title=mentionUnread>0?`${mentionUnread} mention${mentionUnread===1?'':'s'} — Activity feed & notifications`:'Activity feed & notifications';
-    }
+    if(bell) bell.classList.add('has-unread');
   }else{
     badge.style.display='none';
-    badge.classList.remove('mention-badge');
-    if(bell){ bell.classList.remove('has-unread'); bell.classList.remove('has-mention'); bell.title='Activity feed & notifications'; }
+    if(bell) bell.classList.remove('has-unread');
   }
 }
 
@@ -6388,28 +6190,19 @@ function _sanitizeActivityIcon(icon){
   if(!s || s.length>4 || s.includes('<') || s.includes('>')) return '•';
   return s;
 }
-let _activityFilter='all'; // 'all' | 'mentions'
 function renderActivityFeed(){
   const body=document.getElementById('activityBody');
-  const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
-  updateActivityMentionTabCount();
-  const feed=_activityFilter==='mentions'
-    ? activityFeed.filter(e=>Array.isArray(e.mentions)&&myUid&&e.mentions.includes(myUid))
-    : activityFeed;
-  if(!feed.length){
-    body.innerHTML=_activityFilter==='mentions'
-      ? `<div class="activity-empty">No mentions yet — you'll see it here whenever someone @-mentions you in a comment.</div>`
-      : `<div class="activity-empty">No activity yet — actions across your workspace will show up here.</div>`;
+  if(!activityFeed.length){
+    body.innerHTML=`<div class="activity-empty">No activity yet — actions across your workspace will show up here.</div>`;
     return;
   }
   const seen=getActivitySeenTs();
-  body.innerHTML=feed.map(e=>{
+  const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
+  body.innerHTML=activityFeed.map(e=>{
     const ms=_activityTsMillis(e);
     const unread=e.uid!==myUid&&ms>seen;
     const canRestore=e.id&&activityUndoSnapshots.has(e.id);
-    const mentionsMe=Array.isArray(e.mentions)&&myUid&&e.mentions.includes(myUid);
-    const canView=mentionsMe&&e.commentRef&&e.commentRef.model;
-    return `<div class="activity-row${unread?' unread':''}${mentionsMe?' mentioned-me':''}">
+    return `<div class="activity-row${unread?' unread':''}">
       <div class="activity-row-icon">${escHtml(_sanitizeActivityIcon(e.icon))}</div>
       <div class="activity-row-main">
         <div class="activity-row-text"><b>${escHtml(e.userLabel||'Someone')}</b> ${escHtml(e.text||'')}</div>
@@ -6418,36 +6211,13 @@ function renderActivityFeed(){
           ${e.model?`<span class="activity-row-model-tag">${escHtml(e.model)}</span>`:''}
         </div>
       </div>
-      ${canView?`<button class="activity-row-view-btn" data-view-id="${escHtml(e.id)}" title="Open this comment thread">💬 View</button>`
-        :(canRestore?`<button class="activity-restore-btn" data-restore-id="${escHtml(e.id)}" title="Put the workspace back exactly as it was right before this change">↩ Restore</button>`:'')}
+      ${canRestore?`<button class="activity-restore-btn" data-restore-id="${escHtml(e.id)}" title="Put the workspace back exactly as it was right before this change">↩ Restore</button>`:''}
     </div>`;
   }).join('');
-  body.querySelectorAll('.activity-row-view-btn').forEach(btn=>{
-    btn.onclick=()=>jumpToMentionComment(btn.getAttribute('data-view-id'));
-  });
   body.querySelectorAll('.activity-restore-btn').forEach(btn=>{
     btn.onclick=()=>restoreToActivity(btn.getAttribute('data-restore-id'));
   });
 }
-// Keeps the "Mentions" tab's little count badge in sync — counts unread
-// mentions specifically, same figure the bell itself uses, so the two never
-// disagree.
-function updateActivityMentionTabCount(){
-  const countEl=document.getElementById('activityMentionTabCount');
-  if(!countEl) return;
-  const seen=getActivitySeenTs();
-  const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
-  const n=activityFeed.filter(e=>Array.isArray(e.mentions)&&myUid&&e.mentions.includes(myUid)&&_activityTsMillis(e)>seen).length;
-  if(n>0){ countEl.textContent=n>99?'99+':String(n); countEl.style.display='inline-flex'; }
-  else{ countEl.style.display='none'; }
-}
-document.getElementById('activityFilterTabs').addEventListener('click',e=>{
-  const btn=e.target.closest('.activity-filter-tab');
-  if(!btn) return;
-  _activityFilter=btn.dataset.filter;
-  document.querySelectorAll('.activity-filter-tab').forEach(t=>t.classList.toggle('active',t===btn));
-  renderActivityFeed();
-});
 
 // Reverts the whole workspace to the local snapshot captured right before
 // the given activity entry's change — i.e. undoes that change and anything
@@ -6487,21 +6257,6 @@ async function restoreToActivity(entryId){
   logActivity('↩',`restored the workspace to before "${(entry&&entry.text||'a previous change').slice(0,80)}"`,activeTab);
 }
 
-// Opens the comment thread referenced by a mention activity entry. Falls
-// back gracefully if the task/subtask has since been deleted or moved to a
-// model the ref no longer resolves against — the idx could go stale the
-// same way Restore's snapshot pointers can.
-function jumpToMentionComment(entryId){
-  const entry=activityFeed.find(e=>e.id===entryId);
-  const ref=entry&&entry.commentRef;
-  if(!ref||!ref.model){ toast('⚠','That comment thread is no longer available',false); return; }
-  const task=state[ref.model]&&state[ref.model][ref.idx];
-  const target=ref.subIdx==null?task:(task&&Array.isArray(task.subtasks)?task.subtasks[ref.subIdx]:null);
-  if(!task||!target){ toast('⚠','That comment thread is no longer available',false); return; }
-  closeActivityModal();
-  if(activeTab!==ref.model){ activeTab=ref.model; localStorage.setItem('mlc_activeTab',ref.model); renderAll(); }
-  openCommentsModal(ref.model,ref.idx,ref.subIdx==null?null:ref.subIdx);
-}
 function openActivityModal(){
   document.getElementById('userBadge').classList.remove('menu-open');
   renderActivityFeed();
@@ -8717,7 +8472,6 @@ function renderTaskList(){
         <button class="bulk-btn bulk-btn-deadline" data-act="deadline">📅 Set Deadline</button>
         <button class="bulk-btn bulk-btn-priority" data-act="priority">⚑ Set Priority</button>
         <button class="bulk-btn bulk-btn-duplicate" data-act="duplicate" title="Duplicate selected subtasks within this task">⧉ Duplicate</button>
-        <button class="bulk-btn" data-act="moveto" title="Move selected subtasks to a specific serial number">🔢 Move to Position…</button>
         <button class="bulk-btn danger" data-act="delete">Delete Selected</button>
         <button class="bulk-btn" data-act="clear" style="margin-left:auto;">Clear Selection</button>`;
       sBar.querySelector('[data-act="done"]').onclick=e=>{
@@ -8760,31 +8514,6 @@ function renderTaskList(){
         logActivity('🗑',`deleted ${n} subtask${n===1?'':'s'} from "${parentTaskName}"`,activeTab);
       };
       sBar.querySelector('[data-act="clear"]').onclick=e=>{e.stopPropagation();subKeysForTask.forEach(k=>selectedSubtasks.delete(k));renderTaskList();};
-      sBar.querySelector('[data-act="moveto"]').onclick=async e=>{
-        e.stopPropagation();
-        const sIdxs=selectedHere.map(k=>Number(k.split('::')[2])).sort((a,b)=>a-b);
-        if(!sIdxs.length)return;
-        const moving=sIdxs.map(sI=>subs[sI]);
-        const remaining=subs.filter((_,sI)=>!sIdxs.includes(sI));
-        const maxPos=remaining.length+1;
-        const raw=await showTextPrompt({
-          title:'Move to Position',
-          message:`${moving.length} subtask${moving.length===1?'':'s'} selected — enter target serial number (1–${maxPos}).`,
-          placeholder:`1–${maxPos}`,
-          confirmText:'Move',
-          icon:'#'
-        });
-        if(raw===null)return;
-        const n=parseInt(raw,10);
-        if(!Number.isFinite(n)||n<1){toast('⚠','Enter a valid serial number');return;}
-        const insertPos=Math.min(Math.max(n-1,0),remaining.length);
-        const newSubs=[...remaining.slice(0,insertPos),...moving,...remaining.slice(insertPos)];
-        subs.length=0; subs.push(...newSubs);
-        clearSubSelectionsForTask(activeTab,idx);
-        save();renderAll();
-        toast('#',`Moved ${moving.length} subtask${moving.length===1?'':'s'} to position ${insertPos+1}`);
-        logActivity('#',`moved ${moving.length} subtask${moving.length===1?'':'s'} to position ${insertPos+1} in "${state[activeTab][idx].name}"`,activeTab);
-      };
       sBar.querySelector('[data-act="deadline"]').onclick=e=>{
         e.stopPropagation();
         openSubBulkDeadlineModal(activeTab,idx,selectedHere.map(k=>Number(k.split('::')[2])));
@@ -10146,117 +9875,6 @@ document.getElementById('notesModal').onclick=e=>{if(e.target===document.getElem
 // dropdown resolves its target: model + task idx, with subIdx null for a
 // top-level task or the subtask's index within its parent.
 let commentsCtx={model:null,idx:null,subIdx:null};
-// Mentions attached to the comment currently being composed. Populated by
-// picking a teammate from the @ autocomplete popover (see wireMentionAutocomplete
-// below) — not by parsing free text, since names can collide or contain spaces.
-let _pendingMentionUids=new Set();
-
-// Returns [{uid,name}] for every teammate whose name is present as an
-// "@Name" token inside the given text — used to render highlighted mention
-// tags in a posted comment regardless of whether the mention was picked via
-// autocomplete or typed by hand.
-function detectMentionsInText(text){
-  if(!text) return [];
-  const found=[];
-  Object.entries(workspaceMembers).forEach(([uid,info])=>{
-    const name=(info.displayName||info.email||'').trim();
-    if(!name) return;
-    if(text.indexOf('@'+name)!==-1) found.push({uid,name});
-  });
-  return found;
-}
-
-// Wraps every "@Name" occurrence (for a known teammate) in a highlighted
-// span. Runs after escHtml() so it operates on already-escaped text — hence
-// matching against the escaped name too.
-function highlightMentionsHtml(escapedText){
-  const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
-  let html=escapedText;
-  Object.entries(workspaceMembers).forEach(([uid,info])=>{
-    const name=(info.displayName||info.email||'').trim();
-    if(!name) return;
-    const escName=escHtml(name);
-    const token='@'+escName;
-    if(html.indexOf(token)===-1) return;
-    const cls='comment-mention-tag'+(uid===myUid?' is-me':'');
-    html=html.split(token).join(`<span class="${cls}">${token}</span>`);
-  });
-  return html;
-}
-
-// ── @MENTION AUTOCOMPLETE ────────────────────────────────────────────────────
-// Watches the comment textarea for an "@" trigger and shows a small popover
-// of teammates to pick from. Selecting one inserts "@FullName " into the
-// text and records the uid in _pendingMentionUids for this draft.
-function wireMentionAutocomplete(){
-  const textarea=document.getElementById('commentInputText');
-  const pop=document.getElementById('mentionAutocomplete');
-  if(!textarea||!pop) return;
-  let activeIndex=0;
-
-  function currentTrigger(){
-    const caret=textarea.selectionStart;
-    const upToCaret=textarea.value.slice(0,caret);
-    const m=upToCaret.match(/(?:^|\s)@([^\s@]*)$/);
-    if(!m) return null;
-    return {query:m[1].toLowerCase(),start:caret-m[1].length};
-  }
-
-  function closePopover(){ pop.classList.remove('open'); pop.innerHTML=''; }
-
-  function renderPopover(query){
-    const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
-    const matches=Object.entries(workspaceMembers)
-      .filter(([uid])=>uid!==myUid)
-      .map(([uid,info])=>({uid,name:info.displayName||info.email||uid}))
-      .filter(m=>m.name.toLowerCase().includes(query))
-      .slice(0,6);
-    if(!matches.length){ closePopover(); return; }
-    activeIndex=0;
-    pop.innerHTML=matches.map((m,i)=>{
-      const color=colorForAssignee(m.uid);
-      return `<div class="mention-autocomplete-item${i===0?' active':''}" data-uid="${escHtml(m.uid)}" data-name="${escHtml(m.name)}">
-        <span class="mention-autocomplete-avatar" style="background:linear-gradient(145deg, ${color}dd, ${color});">${escHtml((m.name[0]||'?').toUpperCase())}</span>
-        <span>${escHtml(m.name)}</span>
-      </div>`;
-    }).join('');
-    pop.classList.add('open');
-    pop.querySelectorAll('.mention-autocomplete-item').forEach(item=>{
-      item.onclick=()=>pickMention(item.dataset.uid,item.dataset.name);
-    });
-  }
-
-  function pickMention(uid,name){
-    const trig=currentTrigger();
-    if(!trig){ closePopover(); return; }
-    const before=textarea.value.slice(0,trig.start);
-    const after=textarea.value.slice(textarea.selectionStart);
-    const insertion='@'+name+' ';
-    textarea.value=before+insertion+after;
-    const newCaret=(before+insertion).length;
-    textarea.setSelectionRange(newCaret,newCaret);
-    _pendingMentionUids.add(uid);
-    closePopover();
-    textarea.focus();
-  }
-
-  textarea.addEventListener('input',()=>{
-    const trig=currentTrigger();
-    if(trig) renderPopover(trig.query); else closePopover();
-  });
-  textarea.addEventListener('keydown',e=>{
-    if(!pop.classList.contains('open')) return;
-    const items=[...pop.querySelectorAll('.mention-autocomplete-item')];
-    if(!items.length) return;
-    if(e.key==='ArrowDown'){ e.preventDefault(); activeIndex=(activeIndex+1)%items.length; items.forEach((it,i)=>it.classList.toggle('active',i===activeIndex)); }
-    else if(e.key==='ArrowUp'){ e.preventDefault(); activeIndex=(activeIndex-1+items.length)%items.length; items.forEach((it,i)=>it.classList.toggle('active',i===activeIndex)); }
-    else if(e.key==='Enter'||e.key==='Tab'){ e.preventDefault(); const it=items[activeIndex]; pickMention(it.dataset.uid,it.dataset.name); }
-    else if(e.key==='Escape'){ closePopover(); }
-  });
-  textarea.addEventListener('blur',()=>setTimeout(closePopover,150));
-}
-wireMentionAutocomplete();
-
 
 function getComments(model,idx,subIdx){
   const task=state[model]&&state[model][idx];
@@ -10285,14 +9903,12 @@ function openCommentsModal(model,idx,subIdx){
   if(!task||!target) return;
   document.getElementById('commentsTaskName').textContent=subIdx==null?task.name:`${task.name} — ${target.name}`;
   document.getElementById('commentInputText').value='';
-  _pendingMentionUids=new Set();
   renderCommentsTimeline();
   document.getElementById('commentsModal').classList.add('open');
   setTimeout(()=>document.getElementById('commentInputText').focus(),100);
 }
 function closeCommentsModal(){
   document.getElementById('commentsModal').classList.remove('open');
-  _pendingMentionUids=new Set();
 }
 function renderCommentsTimeline(){
   const wrap=document.getElementById('commentsTimeline');
@@ -10323,7 +9939,7 @@ function renderCommentsTimeline(){
             <span class="comment-entry-delete" data-id="${escHtml(c.id)}" title="Delete comment">✕</span>
           </span>
         </div>
-        <div class="comment-entry-text">${highlightMentionsHtml(escHtml(c.text))}</div>
+        <div class="comment-entry-text">${escHtml(c.text)}</div>
       </div>`;
   });
   if(lastLabel!==null) html+='</div>';
@@ -10342,30 +9958,19 @@ function postComment(){
   const comments=getComments(model,idx,subIdx);
   const authorName=(auth&&auth.currentUser&&(auth.currentUser.displayName||(auth.currentUser.email||'').split('@')[0]))||'Someone';
   const authorUid=auth&&auth.currentUser?auth.currentUser.uid:null;
-  // Union of mentions picked via the autocomplete popover and any "@Name"
-  // typed by hand that happens to match a real teammate — either path
-  // should notify the person, and excludes mentioning yourself.
-  const detected=detectMentionsInText(text).map(m=>m.uid);
-  const mentionUids=[...new Set([..._pendingMentionUids,...detected])].filter(u=>u&&u!==authorUid);
   comments.push({
     id:'c'+Date.now()+Math.random().toString(36).slice(2,7),
     text:text.slice(0,600),
     authorName,
     authorUid,
-    mentions:mentionUids,
     ts:Date.now()
   });
   input.value='';
-  _pendingMentionUids=new Set();
   save();
   renderCommentsTimeline();
   const task=state[model][idx];
   const target=subIdx==null?task:(getSubtasks(model,idx)[subIdx]);
-  const targetName=(target&&target.name)||task.name;
-  logActivity('💬',`commented on "${targetName}"`,model);
-  if(mentionUids.length){
-    logActivity('🔔',`mentioned you in "${targetName}"`,model,undefined,{mentions:mentionUids,commentRef:{model,idx,subIdx:subIdx==null?null:subIdx}});
-  }
+  logActivity('💬',`commented on "${(target&&target.name)||task.name}"`,model);
   renderTaskList();
 }
 function deleteComment(id){
@@ -10505,33 +10110,6 @@ document.getElementById('bulkMoveBottomBtn').onclick=()=>{
   save();renderAll();
   document.getElementById('bulkMoveDropdown').classList.remove('menu-open');
   toast('↓',`Moved ${moving.length} tasks to bottom`);
-};
-document.getElementById('bulkMoveToPositionBtn').onclick=async()=>{
-  document.getElementById('bulkMoveDropdown').classList.remove('menu-open');
-  const tasks=state[activeTab];
-  const idxs=[...selectedTasks].sort((a,b)=>a-b);
-  if(!idxs.length)return;
-  const moving=idxs.map(i=>tasks[i]);
-  const remaining=tasks.filter((_,i)=>!selectedTasks.has(i));
-  const maxPos=remaining.length+1;
-  const raw=await showTextPrompt({
-    title:'Move to Position',
-    message:`${moving.length} task${moving.length===1?'':'s'} selected — enter target serial number (1–${maxPos}).`,
-    placeholder:`1–${maxPos}`,
-    confirmText:'Move',
-    icon:'#'
-  });
-  if(raw===null)return;
-  const n=parseInt(raw,10);
-  if(!Number.isFinite(n)||n<1){toast('⚠','Enter a valid serial number');return;}
-  const insertPos=Math.min(Math.max(n-1,0),remaining.length);
-  state[activeTab]=[...remaining.slice(0,insertPos),...moving,...remaining.slice(insertPos)];
-  renumber(state[activeTab]);
-  selectedTasks.clear();moving.forEach((_,i)=>selectedTasks.add(insertPos+i));
-  clearSubSelectionsForModel(activeTab);
-  save();renderAll();
-  toast('#',`Moved ${moving.length} task${moving.length===1?'':'s'} to position ${insertPos+1}`);
-  logActivity('#',`moved ${moving.length} task${moving.length===1?'':'s'} to position ${insertPos+1}`,activeTab);
 };
 let _moveModelAction='move'; // 'move' or 'copy' — tracks which bulk action opened the shared modal
 document.getElementById('bulkMoveModelBtn').onclick=()=>{
@@ -11914,7 +11492,6 @@ document.addEventListener('keydown',e=>{
     document.getElementById('notesModal').classList.remove('open');
     _notesObj=null; _notesObjCb=null;
     document.getElementById('overdueModal').classList.remove('open');
-    document.getElementById('myTasksModal').classList.remove('open');
     document.getElementById('globalSearchModal').classList.remove('open');
     document.getElementById('activityModal').classList.remove('open');
     document.getElementById('userBadge').classList.remove('menu-open');
@@ -12098,12 +11675,10 @@ function toast(icon,msg,showUndo){
 
 // ── RENDER ALL ────────────────────────────────────────────────────────────────
 function renderAll(){
-  renderKPIs();renderModelCards();renderTabs();renderTaskList();updateBulkBar();updateArchiveBadge();updateRecycleBadge();updateMyTasksBadge();
+  renderKPIs();renderModelCards();renderTabs();renderTaskList();updateBulkBar();updateArchiveBadge();updateRecycleBadge();
   if(archiveViewActive) renderArchiveView();
   if(recycleViewActive) renderRecycleView();
   if(analyticsViewActive) renderAnalyticsView();
-  const myTasksModalEl=document.getElementById('myTasksModal');
-  if(myTasksModalEl&&myTasksModalEl.classList.contains('open')) renderMyTasksModal();
 }
 
 // ── FRESH START ───────────────────────────────────────────────────────────────
@@ -12380,7 +11955,7 @@ updateStickyBarPin();
         <button class="elmodal-export-btn" id="teamGenerateCodeBtn" style="flex:0 0 auto;">Get Code</button>
         <button class="elmodal-export-btn" id="teamCopyCodeBtn" style="display:none;flex:0 0 auto;">Copy</button>
       </div>
-      <div class="elmodal-desc" style="margin:8px 0 0;font-size:12.5px;">Share this code with a teammate — they enter it below to join and start seeing/editing this workspace together.</div>
+      <div class="elmodal-desc" style="margin:8px 0 0;font-size:12.5px;">Share this code with a teammate — they enter it below to join and can see everything right away. They'll be view-only until you grant them edit access below.</div>
     </div>
 
     <div class="elmodal-divider">or</div>
@@ -12435,13 +12010,16 @@ function renderTeamModal(){
     const initial=((info.displayName||info.email||'?')[0]||'?').toUpperCase();
     const isOwner=uid===workspaceOwnerUid;
     const showRemove=iAmOwner&&!isOwner;
+    const role=isOwner?'editor':(info.role==='viewer'?'viewer':'editor');
+    const showRoleToggle=iAmOwner&&!isOwner;
     return `<div class="team-member-row">
       <div class="team-member-avatar">${escHtml(initial)}</div>
       <div>
         <div class="team-member-name">${escHtml(info.displayName||info.email||'Unknown')}</div>
         <div class="team-member-email">${escHtml(info.email||'')}</div>
       </div>
-      ${isOwner?'<span class="team-member-owner-tag">Owner</span>':''}
+      ${isOwner?'<span class="team-member-owner-tag">Owner</span>':`<span class="team-member-role-tag${role==='viewer'?' is-viewer':''}">${role==='viewer'?'View only':'Can edit'}</span>`}
+      ${showRoleToggle?`<button class="team-member-role-toggle-btn" data-uid="${escHtml(uid)}" data-role="${role}" data-name="${escHtml(info.displayName||info.email||'this person')}" title="${role==='viewer'?'Grant edit access':'Revoke edit access (make view-only)'}">${role==='viewer'?'Grant edit':'Make view-only'}</button>`:''}
       ${showRemove?`<button class="team-member-remove-btn" data-uid="${escHtml(uid)}" data-name="${escHtml(info.displayName||info.email||'this person')}" title="Remove from workspace">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>`:''}
@@ -12455,6 +12033,13 @@ function renderTeamModal(){
       if(confirm(`Remove ${name} from this workspace? They'll lose access to these tasks immediately.`)){
         removeMemberFromWorkspace(uid);
       }
+    };
+  });
+  listEl.querySelectorAll('.team-member-role-toggle-btn').forEach(btn=>{
+    btn.onclick=()=>{
+      const uid=btn.dataset.uid;
+      const nextRole=btn.dataset.role==='viewer'?'editor':'viewer';
+      setMemberRole(uid,nextRole,btn.dataset.name);
     };
   });
 
@@ -12481,9 +12066,6 @@ function updateTeamUI(){
   else{ badge.style.display='none'; }
   const mineBtn=document.getElementById('mineFilterBtn');
   if(mineBtn) mineBtn.style.display=count>1?'':'none';
-  const myTasksBtn=document.getElementById('myTasksMenuBtn');
-  if(myTasksBtn) myTasksBtn.style.display=count>1?'':'none';
-  if(count>1) updateMyTasksBadge();
   // If the workspace shrank back to just you, don't leave the UI stuck
   // filtered on a chip that's now hidden.
   if(count<=1 && activeFilter==='mine'){
@@ -12515,6 +12097,22 @@ async function removeMemberFromWorkspace(uid){
   }catch(e){
     console.error('Remove member failed:',e);
     toast('⚠','Could not remove member — check your connection',false);
+  }
+}
+
+// Grants or revokes edit access for a teammate. Owner-only at the UI
+// level (same trust model as removeMemberFromWorkspace above).
+async function setMemberRole(uid,role,name){
+  if(!isCurrentWorkspaceOwner()||!currentWorkspaceId) return;
+  try{
+    await getWorkspaceDoc().update({['members.'+uid+'.role']: role});
+    if(workspaceMembers[uid]) workspaceMembers[uid].role=role;
+    renderTeamModal();
+    toast(role==='editor'?'✎':'👁',`${name||'Member'} can now ${role==='editor'?'edit':'only view'} this workspace`,false);
+    logActivity(role==='editor'?'✎':'👁',`gave ${name||'a teammate'} ${role==='editor'?'edit access':'view-only access'}`);
+  }catch(e){
+    console.error('Set member role failed:',e);
+    toast('⚠','Could not update permission — check your connection',false);
   }
 }
 
@@ -12550,6 +12148,7 @@ async function switchToWorkspace(workspaceId){
     const saved=await loadFromFirestore(currentWorkspaceId);
     workspaceMembers=(saved&&saved.members)||{};
     workspaceOwnerUid=(saved&&saved.ownerUid)||null;
+    applyViewOnlyMode();
     deletedModelsSet=new Set(saved?.deletedModels||[]);
     archivedModelsSet=new Set(saved?.archivedModels||[]);
     pinnedModelsSet=new Set(saved?.pinnedModels||[]);
@@ -12610,13 +12209,15 @@ async function joinWorkspaceByCode(rawCode){
     const targetId=lookupSnap.data().workspaceId;
     if(targetId===currentWorkspaceId){ errEl.textContent="You're already in this workspace."; return; }
     const user=auth.currentUser;
-    const myInfo={email:user.email||'',displayName:user.displayName||(user.email||'').split('@')[0]};
+    // Joining via code grants view-only access by default — the owner can
+    // upgrade a member to edit access afterwards from the Team panel.
+    const myInfo={email:user.email||'',displayName:user.displayName||(user.email||'').split('@')[0],role:'viewer'};
     await db.collection('workspaces').doc(targetId).update({
       memberUids: firebase.firestore.FieldValue.arrayUnion(user.uid),
       ['members.'+user.uid]: myInfo
     });
     await switchToWorkspace(targetId);
-    toast('👥','Joined the shared workspace',false);
+    toast('👥','Joined the shared workspace (view-only — ask the owner for edit access)',false);
     logActivity('👥',`joined the workspace`);
     closeTeamModal();
   }catch(e){
