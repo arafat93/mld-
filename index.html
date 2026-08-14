@@ -3084,13 +3084,14 @@ img { -webkit-user-drag: none; }
   background: var(--accent1-dim); padding: 2px 8px; border-radius: 20px; font-weight: 600;
 }
 .team-member-role-tag {
-  margin-left: auto; flex-shrink: 0; font-size: 10.5px; color: var(--green);
-  background: rgba(16,185,129,0.12); padding: 2px 8px; border-radius: 20px; font-weight: 600;
+  margin-left: auto; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%; color: var(--green);
+  background: rgba(16,185,129,0.12);
 }
 .team-member-role-tag.is-viewer { color: var(--text-muted); background: var(--surface3); }
 .team-member-role-toggle-btn {
-  flex-shrink: 0; font-size: 11px; font-weight: 600; white-space: nowrap;
-  padding: 5px 10px; border-radius: 20px; cursor: pointer;
+  flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
   background: var(--surface3); border: 1px solid var(--border); color: var(--text);
   transition: background 0.15s ease, border-color 0.15s ease;
 }
@@ -4450,7 +4451,9 @@ function applyViewOnlyMode(){
 const VIEW_ONLY_BLOCK_SELECTOR=[
   '.add-task-btn','.add-task-bar input','.add-task-bar select',
   '.row-action-btn','.task-checkbox','.assignee-picker',
-  '.model-thumb-preview','.model-card-action-btn',
+  '.model-card-action-btn','.model-pin-btn',
+  '.model-thumb-btn','.model-thumb-remove','.model-thumb-input',
+  '.model-deadline-native-input',
   '#addModelBtn','#modelsEmptyStateBtn','#newModelInput','#newModelDeadline',
   '#newTaskInput','#newTaskPosition'
 ].join(',');
@@ -12016,8 +12019,8 @@ function renderTeamModal(){
         <div class="team-member-name">${escHtml(info.displayName||info.email||'Unknown')}</div>
         <div class="team-member-email">${escHtml(info.email||'')}</div>
       </div>
-      ${isOwner?'<span class="team-member-owner-tag">Owner</span>':`<span class="team-member-role-tag${role==='viewer'?' is-viewer':''}">${role==='viewer'?'View only':'Can edit'}</span>`}
-      ${showRoleToggle?`<button class="team-member-role-toggle-btn" data-uid="${escHtml(uid)}" data-role="${role}" data-name="${escHtml(info.displayName||info.email||'this person')}" title="${role==='viewer'?'Grant edit access':'Revoke edit access (make view-only)'}">${role==='viewer'?'Grant edit':'Make view-only'}</button>`:''}
+      ${isOwner?'<span class="team-member-owner-tag">Owner</span>':`<span class="team-member-role-tag${role==='viewer'?' is-viewer':''}" title="${role==='viewer'?'View only':'Can edit'}">${role==='viewer'?'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>':'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>'}</span>`}
+      ${showRoleToggle?`<button class="team-member-role-toggle-btn" data-uid="${escHtml(uid)}" data-role="${role}" data-name="${escHtml(info.displayName||info.email||'this person')}" title="${role==='viewer'?'Grant edit access':'Revoke edit access (make view-only)'}">${role==='viewer'?'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>':'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>'}</button>`:''}
       ${showRemove?`<button class="team-member-remove-btn" data-uid="${escHtml(uid)}" data-name="${escHtml(info.displayName||info.email||'this person')}" title="Remove from workspace">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>`:''}
