@@ -12112,14 +12112,21 @@ async function removeMemberFromWorkspace(uid){
 // level (same trust model as removeMemberFromWorkspace above).
 async function setMemberRole(uid,role,name){
   if(!isCurrentWorkspaceOwner()||!currentWorkspaceId) return;
+  if(!workspaceMembers[uid]) return;
+  const previousRole=workspaceMembers[uid].role;
+  // Optimistic update: flip the icon instantly instead of waiting on the
+  // round-trip to Firestore, so the click always feels responsive. Roll
+  // back and explain if the write actually fails.
+  workspaceMembers[uid].role=role;
+  renderTeamModal();
   try{
     await getWorkspaceDoc().update({['members.'+uid+'.role']: role});
-    if(workspaceMembers[uid]) workspaceMembers[uid].role=role;
-    renderTeamModal();
     toast(role==='editor'?'✎':'👁',`${name||'Member'} can now ${role==='editor'?'edit':'only view'} this workspace`,false);
     logActivity(role==='editor'?'✎':'👁',`gave ${name||'a teammate'} ${role==='editor'?'edit access':'view-only access'}`);
   }catch(e){
     console.error('Set member role failed:',e);
+    if(workspaceMembers[uid]) workspaceMembers[uid].role=previousRole;
+    renderTeamModal();
     toast('⚠','Could not update permission — check your connection',false);
   }
 }
