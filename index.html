@@ -10181,26 +10181,44 @@ let commentsCtx={model:null,idx:null,subIdx:null};
 // ── @MENTIONS ────────────────────────────────────────────────────────────────
 // Comments support plain-text "@Display Name" mentions, matched against the
 // current workspace's member list (longest name first, so "@Alice Smith"
-// matches fully rather than stopping at "@Alice"). No live autocomplete —
-// the chip row in the comments modal inserts an exact, correctly-spelled
-// "@Name" so parsing here is a straightforward, unambiguous text match.
+// matches fully rather than stopping at "@Alice"). Matching is case-insensitive
+// and whitespace-normalized so a hand-typed "@john" still resolves against a
+// member named "John Smith" — the chip row and live autocomplete insert an
+// exact spelling, but people often edit or type mentions by hand too, and a
+// missed match here means the comment silently never counts as a mention.
 function parseMentions(text){
   const found=[];
   const seen=new Set();
+  const norm=s=>s.replace(/\s+/g,' ').trim();
+  const normalizedText=text.replace(/\s+/g,' ');
   const candidates=Object.entries(workspaceMembers)
-    .map(([uid,info])=>({uid,label:(info.displayName||info.email||'').trim()}))
+    .map(([uid,info])=>({uid,label:norm(info.displayName||info.email||'')}))
     .filter(c=>c.label)
     .sort((a,b)=>b.label.length-a.label.length); // longest first avoids partial-name collisions
   candidates.forEach(({uid,label})=>{
     if(seen.has(uid)) return;
     const escaped=label.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-    const re=new RegExp('@'+escaped+'(?![a-zA-Z0-9])');
-    if(re.test(text)){ found.push({uid,label}); seen.add(uid); }
+    const re=new RegExp('@'+escaped+'(?![a-zA-Z0-9])','i');
+    if(re.test(normalizedText)){ found.push({uid,label}); seen.add(uid); return; }
+    // Fall back to matching just the first word of the name (e.g. "@John"
+    // for "John Smith"), but only when that's unambiguous — i.e. no other
+    // member shares the same first word — so this never mis-attributes a
+    // mention to the wrong person.
+    const firstWord=label.split(' ')[0];
+    if(firstWord && firstWord!==label){
+      const dupFirstWord=candidates.some(c=>c.uid!==uid && c.label.split(' ')[0].toLowerCase()===firstWord.toLowerCase());
+      if(!dupFirstWord){
+        const escFirst=firstWord.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+        const reFirst=new RegExp('@'+escFirst+'(?![a-zA-Z0-9])','i');
+        if(reFirst.test(normalizedText)){ found.push({uid,label:firstWord}); seen.add(uid); }
+      }
+    }
   });
   return found;
 }
 // Wraps recognized "@Name" mentions in a highlight span for display. Text is
 // escaped first so this never introduces markup from the comment itself.
+// Case-insensitive to match parseMentions() above.
 function renderCommentTextWithMentions(text,mentionedUids){
   let html=escHtml(text);
   if(!mentionedUids||!mentionedUids.length) return html;
@@ -10210,8 +10228,15 @@ function renderCommentTextWithMentions(text,mentionedUids){
     .sort((a,b)=>b.length-a.length);
   labels.forEach(label=>{
     const escaped=escHtml(label).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-    const re=new RegExp('@'+escaped+'(?![a-zA-Z0-9])','g');
+    const re=new RegExp('@'+escaped+'(?![a-zA-Z0-9])','gi');
     html=html.replace(re,m=>`<span class="comment-mention">${m}</span>`);
+    // Also catch a first-name-only mention actually typed in the text, so
+    // the highlight matches whatever parseMentions() actually detected.
+    const firstWord=escHtml(label).split(' ')[0];
+    if(firstWord && firstWord!==escaped){
+      const reFirst=new RegExp('@'+firstWord+'(?![a-zA-Z0-9])','gi');
+      html=html.replace(reFirst,m=>`<span class="comment-mention">${m}</span>`);
+    }
   });
   return html;
 }
