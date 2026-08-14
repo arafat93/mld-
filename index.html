@@ -3113,11 +3113,9 @@ body.viewer-mode #deleteModelBtn {
 }
 body.viewer-mode .row-action-btn:not(.team-member-role-toggle-btn),
 body.viewer-mode .assignee-picker,
-body.viewer-mode .task-checkbox,
-body.viewer-mode [draggable="true"] {
+body.viewer-mode .task-checkbox {
   opacity: 0.55; cursor: not-allowed !important;
 }
-body.viewer-mode [draggable="true"] { cursor: default !important; }
 .team-member-remove-btn {
   margin-left: auto; flex-shrink: 0;
   width: 24px; height: 24px; border-radius: 50%;
@@ -4452,7 +4450,7 @@ function applyViewOnlyMode(){
 const VIEW_ONLY_BLOCK_SELECTOR=[
   '.add-task-btn','.add-task-bar input','.add-task-bar select',
   '.row-action-btn','.task-checkbox','.assignee-picker',
-  '[draggable="true"]','.model-thumb-preview','.model-card-action-btn',
+  '.model-thumb-preview','.model-card-action-btn',
   '#addModelBtn','#modelsEmptyStateBtn','#newModelInput','#newModelDeadline',
   '#newTaskInput','#newTaskPosition'
 ].join(',');
