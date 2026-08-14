@@ -3093,9 +3093,16 @@ img { -webkit-user-drag: none; }
   flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
   width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
   background: var(--surface3); border: 1px solid var(--border); color: var(--text);
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 .team-member-role-toggle-btn:hover { border-color: var(--border-hover); background: var(--accent1-dim); }
+/* Pencil (grant edit) reads as a positive/green action; eye (revoke, make
+   view-only) reads as a neutral/muted one — so the button's own color
+   signals its effect the same way the role tag next to it does. */
+.team-member-role-toggle-btn.is-viewer { color: var(--green); background: rgba(16,185,129,0.12); border-color: transparent; }
+.team-member-role-toggle-btn.is-viewer:hover { background: rgba(16,185,129,0.22); }
+.team-member-role-toggle-btn.is-editor { color: var(--text-muted); background: var(--surface3); }
+.team-member-role-toggle-btn.is-editor:hover { color: var(--text); background: var(--accent1-dim); }
 /* ── VIEW-ONLY MODE ── */
 #viewOnlyBanner {
   display: none; align-items: center; gap: 8px;
@@ -12020,7 +12027,7 @@ function renderTeamModal(){
         <div class="team-member-email">${escHtml(info.email||'')}</div>
       </div>
       ${isOwner?'<span class="team-member-owner-tag">Owner</span>':`<span class="team-member-role-tag${role==='viewer'?' is-viewer':''}" title="${role==='viewer'?'View only':'Can edit'}">${role==='viewer'?'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>':'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>'}</span>`}
-      ${showRoleToggle?`<button class="team-member-role-toggle-btn" data-uid="${escHtml(uid)}" data-role="${role}" data-name="${escHtml(info.displayName||info.email||'this person')}" title="${role==='viewer'?'Grant edit access':'Revoke edit access (make view-only)'}">${role==='viewer'?'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>':'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>'}</button>`:''}
+      ${showRoleToggle?`<button class="team-member-role-toggle-btn${role==='viewer'?' is-viewer':' is-editor'}" data-uid="${escHtml(uid)}" data-role="${role}" data-name="${escHtml(info.displayName||info.email||'this person')}" title="${role==='viewer'?'Grant edit access':'Revoke edit access (make view-only)'}">${role==='viewer'?'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>':'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>'}</button>`:''}
       ${showRemove?`<button class="team-member-remove-btn" data-uid="${escHtml(uid)}" data-name="${escHtml(info.displayName||info.email||'this person')}" title="Remove from workspace">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>`:''}
