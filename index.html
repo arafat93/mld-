@@ -1125,6 +1125,20 @@ footer {
 .comment-entry:hover .comment-entry-delete { opacity: 1; }
 .comment-entry-delete:hover { color: var(--red); }
 .comment-entry-text { font-size: 13px; color: var(--text); line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+.comment-mention {
+  color: var(--accent1); background: var(--accent1-dim);
+  padding: 1px 4px; border-radius: 5px; font-weight: 600;
+}
+.comment-mention-chips {
+  display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0;
+}
+.comment-mention-chip {
+  font-size: 11.5px; font-weight: 600; color: var(--text-muted);
+  background: var(--surface3); border: 1px solid var(--border);
+  border-radius: 20px; padding: 4px 10px; cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.comment-mention-chip:hover { color: var(--accent1); border-color: var(--accent1); background: var(--accent1-dim); }
 .comment-empty { padding: 28px 8px; text-align: center; color: var(--text-dim); font-size: 13px; }
 .comment-input-row { display: flex; gap: 8px; margin-top: 14px; align-items: flex-end; }
 .comment-textarea {
@@ -1832,6 +1846,21 @@ footer {
 }
 .activity-body { max-height: 60vh; overflow-y: auto; }
 .activity-empty { padding: 32px 8px; text-align: center; color: var(--text-dim); font-size: 13px; }
+.activity-filter-row { display: flex; gap: 8px; margin: 12px 0 4px; flex-wrap: wrap; }
+.activity-filter-chip {
+  position: relative; font-size: 12px; font-weight: 600; color: var(--text-muted);
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 6px 12px; cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.activity-filter-chip:hover { border-color: var(--border-hover); }
+.activity-filter-chip.active { color: var(--accent1); background: var(--accent1-dim); border-color: var(--accent1); }
+.activity-filter-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 16px; height: 16px; margin-left: 5px; padding: 0 4px;
+  font-size: 10px; font-weight: 700; color: #fff; background: var(--red);
+  border-radius: 20px; vertical-align: middle;
+}
 .activity-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 8px; border-radius: 10px; border-bottom: 1px solid var(--border); }
 .activity-row:last-child { border-bottom: none; }
 .activity-row.unread { background: var(--accent1-dim); }
@@ -3870,8 +3899,9 @@ document.addEventListener('keydown', e => {
     <div class="modal-title">💬 Comment Timeline</div>
     <div class="modal-subtitle" id="commentsTaskName"></div>
     <div class="comment-timeline" id="commentsTimeline"></div>
+    <div class="comment-mention-chips" id="commentMentionChips"></div>
     <div class="comment-input-row">
-      <textarea class="comment-textarea" id="commentInputText" placeholder="Add an update to the discussion…" maxlength="600"></textarea>
+      <textarea class="comment-textarea" id="commentInputText" placeholder="Add an update to the discussion… type @ to mention someone" maxlength="600"></textarea>
       <button type="button" class="comment-post-btn" id="commentPostBtn">Post</button>
     </div>
     <div class="modal-actions">
@@ -3894,6 +3924,10 @@ document.addEventListener('keydown', e => {
   <div class="modal-box" id="activityModalBox" style="width:min(560px, 92vw);">
     <div class="modal-title">🕓 Activity Log</div>
     <div class="modal-subtitle" id="activitySubtitle">Every change made across your workspace, most recent first.</div>
+    <div class="activity-filter-row" id="activityFilterRow">
+      <button type="button" class="activity-filter-chip active" data-filter="all">All Activity</button>
+      <button type="button" class="activity-filter-chip" data-filter="mentions">🔔 Mentions of Me<span class="activity-filter-badge" id="mentionsFilterBadge" style="display:none;"></span></button>
+    </div>
     <div class="activity-body" id="activityBody"></div>
     <div class="modal-actions" style="margin-top:16px;">
       <button class="modal-btn secondary" id="activityClearBtn" style="color:var(--red);border-color:rgba(244,63,94,0.25);" title="Permanently delete every entry in this workspace's activity log">Clear Log</button>
@@ -6072,6 +6106,7 @@ document.addEventListener('keydown',e=>{
 // the same feed in real time — this is what makes it a genuine audit trail
 // rather than just a local toast history.
 let activityFeed=[];          // most-recent-first, populated by the listener below
+let activityFilterMode='all'; // 'all' | 'mentions' — see renderActivityFeed()
 let unsubscribeActivity=null;
 function getActivitySeenKey(){ return 'mlc_activitySeen_'+(currentWorkspaceId||'none'); }
 function getActivitySeenTs(){ return parseInt(localStorage.getItem(getActivitySeenKey())||'0',10); }
@@ -6105,7 +6140,7 @@ const ACTIVITY_UNDO_CAP=60; // keep memory bounded; oldest restore points drop o
 //    by undo()/redo(), where undoStack was just popped/pushed by hand
 //    rather than via pushUndoSnapshot(), so its top can't be trusted —
 //    and "restore to before an undo" is redundant with hitting Redo anyway).
-function logActivity(icon,text,model,beforeSnapshot){
+function logActivity(icon,text,model,beforeSnapshot,extraFields){
   if(!auth||!auth.currentUser||!db||!currentWorkspaceId) return;
   const user=auth.currentUser;
   const restorePoint=beforeSnapshot!==undefined
@@ -6117,7 +6152,8 @@ function logActivity(icon,text,model,beforeSnapshot){
     icon:icon||'•',
     text:String(text||'').slice(0,200),
     model:model||null,
-    ts:firebase.firestore.FieldValue.serverTimestamp()
+    ts:firebase.firestore.FieldValue.serverTimestamp(),
+    ...(extraFields||{})
   };
   // .doc() (no args) generates a fresh document ID entirely client-side —
   // no network round-trip needed for that part. Registering the restore
@@ -6176,6 +6212,7 @@ function _activityTsMillis(entry){
 function updateNotifBadge(){
   const badge=document.getElementById('notifBadge');
   const bell=document.getElementById('notifBellBtn');
+  updateMentionsFilterBadge();
   if(!badge) return;
   const seen=getActivitySeenTs();
   const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
@@ -6190,6 +6227,15 @@ function updateNotifBadge(){
   }
 }
 
+function updateMentionsFilterBadge(){
+  const badge=document.getElementById('mentionsFilterBadge');
+  if(!badge) return;
+  const seen=getActivitySeenTs();
+  const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
+  const unread=activityFeed.filter(e=>e.type==='mention'&&e.mentionedUid===myUid&&_activityTsMillis(e)>seen).length;
+  if(unread>0){ badge.textContent=unread>99?'99+':String(unread); badge.style.display=''; }
+  else{ badge.style.display='none'; }
+}
 // A handful of early Activity Log entries were accidentally written with a
 // raw SVG string as the "icon" (a copy-paste of the calendar icon constant
 // used elsewhere in the UI) instead of a plain emoji/glyph. escHtml() alone
@@ -6202,16 +6248,22 @@ function _sanitizeActivityIcon(icon){
 }
 function renderActivityFeed(){
   const body=document.getElementById('activityBody');
-  if(!activityFeed.length){
-    body.innerHTML=`<div class="activity-empty">No activity yet — actions across your workspace will show up here.</div>`;
+  const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
+  const feed=activityFilterMode==='mentions'
+    ? activityFeed.filter(e=>e.type==='mention'&&e.mentionedUid===myUid)
+    : activityFeed;
+  if(!feed.length){
+    body.innerHTML=activityFilterMode==='mentions'
+      ? `<div class="activity-empty">No mentions yet — comments that @mention you will show up here.</div>`
+      : `<div class="activity-empty">No activity yet — actions across your workspace will show up here.</div>`;
     return;
   }
   const seen=getActivitySeenTs();
-  const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
-  body.innerHTML=activityFeed.map(e=>{
+  body.innerHTML=feed.map(e=>{
     const ms=_activityTsMillis(e);
     const unread=e.uid!==myUid&&ms>seen;
     const canRestore=e.id&&activityUndoSnapshots.has(e.id);
+    const canOpenComment=e.type==='mention'&&e.model&&e.taskName;
     return `<div class="activity-row${unread?' unread':''}">
       <div class="activity-row-icon">${escHtml(_sanitizeActivityIcon(e.icon))}</div>
       <div class="activity-row-main">
@@ -6221,12 +6273,39 @@ function renderActivityFeed(){
           ${e.model?`<span class="activity-row-model-tag">${escHtml(e.model)}</span>`:''}
         </div>
       </div>
+      ${canOpenComment?`<button class="activity-restore-btn" data-open-comment-id="${escHtml(e.id)}" title="Open this comment thread">💬 Open</button>`:''}
       ${canRestore?`<button class="activity-restore-btn" data-restore-id="${escHtml(e.id)}" title="Put the workspace back exactly as it was right before this change">↩ Restore</button>`:''}
     </div>`;
   }).join('');
-  body.querySelectorAll('.activity-restore-btn').forEach(btn=>{
+  body.querySelectorAll('.activity-restore-btn[data-restore-id]').forEach(btn=>{
     btn.onclick=()=>restoreToActivity(btn.getAttribute('data-restore-id'));
   });
+  body.querySelectorAll('[data-open-comment-id]').forEach(btn=>{
+    btn.onclick=()=>{
+      const entry=activityFeed.find(e=>e.id===btn.getAttribute('data-open-comment-id'));
+      if(entry) openCommentFromActivity(entry);
+    };
+  });
+}
+// Resolves a mention activity entry back to its task/subtask by name (entries
+// don't store array indices since those shift as tasks are reordered/deleted)
+// and opens the comment thread it came from.
+function openCommentFromActivity(entry){
+  const tasks=state[entry.model];
+  if(!tasks){ toast('⚠',`Model "${entry.model}" no longer exists`,false); return; }
+  const idx=tasks.findIndex(t=>t.name===entry.taskName);
+  if(idx===-1){ toast('⚠','That task no longer exists',false); return; }
+  let subIdx=null;
+  if(entry.subtaskName){
+    const subs=getSubtasks(entry.model,idx);
+    const sI=subs.findIndex(s=>s.name===entry.subtaskName);
+    if(sI===-1){ toast('⚠','That sub-task no longer exists',false); return; }
+    subIdx=sI;
+  }
+  closeActivityModal();
+  activeTab=entry.model; localStorage.setItem('mlc_activeTab',entry.model);
+  refreshModelsList(); renderAll();
+  openCommentsModal(entry.model,idx,subIdx);
 }
 
 // Reverts the whole workspace to the local snapshot captured right before
@@ -6269,6 +6348,10 @@ async function restoreToActivity(entryId){
 
 function openActivityModal(){
   document.getElementById('userBadge').classList.remove('menu-open');
+  activityFilterMode='all';
+  document.querySelectorAll('#activityFilterRow .activity-filter-chip').forEach(c=>{
+    c.classList.toggle('active',c.dataset.filter==='all');
+  });
   renderActivityFeed();
   document.getElementById('activityModal').classList.add('open');
   // Opening the log is the "read" action — clear the unread badge, but only
@@ -6276,6 +6359,15 @@ function openActivityModal(){
   setActivitySeenNow();
   updateNotifBadge();
 }
+document.querySelectorAll('#activityFilterRow .activity-filter-chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    activityFilterMode=chip.dataset.filter;
+    document.querySelectorAll('#activityFilterRow .activity-filter-chip').forEach(c=>{
+      c.classList.toggle('active',c===chip);
+    });
+    renderActivityFeed();
+  });
+});
 function closeActivityModal(){
   document.getElementById('activityModal').classList.remove('open');
 }
@@ -9913,6 +10005,43 @@ document.getElementById('notesModal').onclick=e=>{if(e.target===document.getElem
 // top-level task or the subtask's index within its parent.
 let commentsCtx={model:null,idx:null,subIdx:null};
 
+// ── @MENTIONS ────────────────────────────────────────────────────────────────
+// Comments support plain-text "@Display Name" mentions, matched against the
+// current workspace's member list (longest name first, so "@Alice Smith"
+// matches fully rather than stopping at "@Alice"). No live autocomplete —
+// the chip row in the comments modal inserts an exact, correctly-spelled
+// "@Name" so parsing here is a straightforward, unambiguous text match.
+function parseMentions(text){
+  const found=[];
+  const seen=new Set();
+  const candidates=Object.entries(workspaceMembers)
+    .map(([uid,info])=>({uid,label:(info.displayName||info.email||'').trim()}))
+    .filter(c=>c.label)
+    .sort((a,b)=>b.label.length-a.label.length); // longest first avoids partial-name collisions
+  candidates.forEach(({uid,label})=>{
+    if(seen.has(uid)) return;
+    const escaped=label.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    const re=new RegExp('@'+escaped+'(?![a-zA-Z0-9])');
+    if(re.test(text)){ found.push({uid,label}); seen.add(uid); }
+  });
+  return found;
+}
+// Wraps recognized "@Name" mentions in a highlight span for display. Text is
+// escaped first so this never introduces markup from the comment itself.
+function renderCommentTextWithMentions(text,mentionedUids){
+  let html=escHtml(text);
+  if(!mentionedUids||!mentionedUids.length) return html;
+  const labels=mentionedUids
+    .map(uid=>workspaceMembers[uid]&&(workspaceMembers[uid].displayName||workspaceMembers[uid].email))
+    .filter(Boolean)
+    .sort((a,b)=>b.length-a.length);
+  labels.forEach(label=>{
+    const escaped=escHtml(label).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    const re=new RegExp('@'+escaped+'(?![a-zA-Z0-9])','g');
+    html=html.replace(re,m=>`<span class="comment-mention">${m}</span>`);
+  });
+  return html;
+}
 function getComments(model,idx,subIdx){
   const task=state[model]&&state[model][idx];
   if(!task) return [];
@@ -9940,9 +10069,35 @@ function openCommentsModal(model,idx,subIdx){
   if(!task||!target) return;
   document.getElementById('commentsTaskName').textContent=subIdx==null?task.name:`${task.name} — ${target.name}`;
   document.getElementById('commentInputText').value='';
+  renderMentionChips();
   renderCommentsTimeline();
   document.getElementById('commentsModal').classList.add('open');
   setTimeout(()=>document.getElementById('commentInputText').focus(),100);
+}
+// Quick-insert row: one chip per other workspace member. Clicking inserts an
+// exact "@Display Name " at the cursor — sidesteps building a full live
+// autocomplete while still guaranteeing parseMentions() gets a name it can
+// match unambiguously (no typos, no partial names).
+function renderMentionChips(){
+  const wrap=document.getElementById('commentMentionChips');
+  if(!wrap) return;
+  const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
+  const others=Object.entries(workspaceMembers).filter(([uid])=>uid!==myUid);
+  if(!others.length){ wrap.innerHTML=''; wrap.style.display='none'; return; }
+  wrap.style.display='';
+  wrap.innerHTML=others.map(([uid,info])=>{
+    const label=(info.displayName||info.email||'Member').trim();
+    return `<button type="button" class="comment-mention-chip" data-name="${escHtml(label)}">@${escHtml(label)}</button>`;
+  }).join('');
+  wrap.querySelectorAll('.comment-mention-chip').forEach(chip=>{
+    chip.onclick=()=>{
+      const input=document.getElementById('commentInputText');
+      const name=chip.dataset.name;
+      const insert=(input.value&&!input.value.endsWith(' ')?' ':'')+'@'+name+' ';
+      input.value+=insert;
+      input.focus();
+    };
+  });
 }
 function closeCommentsModal(){
   document.getElementById('commentsModal').classList.remove('open');
@@ -9976,7 +10131,7 @@ function renderCommentsTimeline(){
             <span class="comment-entry-delete" data-id="${escHtml(c.id)}" title="Delete comment">✕</span>
           </span>
         </div>
-        <div class="comment-entry-text">${escHtml(c.text)}</div>
+        <div class="comment-entry-text">${renderCommentTextWithMentions(c.text,c.mentionedUids)}</div>
       </div>`;
   });
   if(lastLabel!==null) html+='</div>';
@@ -9996,11 +10151,13 @@ function postComment(){
   const comments=getComments(model,idx,subIdx);
   const authorName=(auth&&auth.currentUser&&(auth.currentUser.displayName||(auth.currentUser.email||'').split('@')[0]))||'Someone';
   const authorUid=auth&&auth.currentUser?auth.currentUser.uid:null;
+  const mentions=parseMentions(text);
   comments.push({
     id:'c'+Date.now()+Math.random().toString(36).slice(2,7),
     text:text.slice(0,600),
     authorName,
     authorUid,
+    mentionedUids:mentions.map(m=>m.uid),
     ts:Date.now()
   });
   input.value='';
@@ -10008,7 +10165,20 @@ function postComment(){
   renderCommentsTimeline();
   const task=state[model][idx];
   const target=subIdx==null?task:(getSubtasks(model,idx)[subIdx]);
-  logActivity('💬',`commented on "${(target&&target.name)||task.name}"`,model);
+  const targetName=(target&&target.name)||task.name;
+  logActivity('💬',`commented on "${targetName}"`,model);
+  // A separate, filterable entry per mentioned person — logActivity's default
+  // "commented on X" entry above doesn't carry who was @mentioned, so the
+  // Activity Log's "Mentions of me" filter has nothing to match against
+  // without this. mentionedUid !== authorUid is skipped since mentioning
+  // yourself isn't a notification-worthy event.
+  mentions.forEach(({uid,label})=>{
+    if(uid===authorUid) return;
+    logActivity('🔔',`mentioned ${label} in a comment on "${targetName}"`,model,null,{
+      type:'mention', mentionedUid:uid,
+      taskName:task.name, subtaskName:subIdx==null?null:target.name
+    });
+  });
   renderTaskList();
 }
 function deleteComment(id){if(!canEdit()){notifyViewOnly();return;}
