@@ -1141,12 +1141,24 @@ footer {
 .comment-mention-chip:hover { color: var(--accent1); border-color: var(--accent1); background: var(--accent1-dim); }
 .comment-empty { padding: 28px 8px; text-align: center; color: var(--text-dim); font-size: 13px; }
 .comment-input-row { display: flex; gap: 8px; margin-top: 14px; align-items: flex-end; }
+.comment-textarea-wrap { position: relative; flex: 1; display: flex; }
 .comment-textarea {
-  flex: 1; min-height: 42px; max-height: 120px; resize: vertical;
+  width: 100%; min-height: 42px; max-height: 120px; resize: vertical;
   background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
   padding: 10px 12px; font-family: inherit; font-size: 13px; color: var(--text);
 }
 .comment-textarea:focus { outline: none; border-color: var(--accent1); }
+.mention-autocomplete {
+  position: absolute; left: 0; right: 0; bottom: 100%; margin-bottom: 6px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  box-shadow: var(--shadow-md); max-height: 170px; overflow-y: auto; z-index: 30;
+}
+.mention-autocomplete-item {
+  display: flex; align-items: center; gap: 8px; padding: 9px 12px;
+  cursor: pointer; font-size: 13px; color: var(--text); font-weight: 500;
+}
+.mention-autocomplete-item:hover, .mention-autocomplete-item.active { background: var(--accent1-dim); color: var(--accent1); }
+.mention-autocomplete-empty { padding: 10px 12px; font-size: 12px; color: var(--text-muted); }
 .comment-post-btn {
   flex-shrink: 0; height: 40px; padding: 0 16px; border-radius: 10px; border: none;
   background: var(--accent1); color: var(--bg); font-weight: 700; font-size: 12.5px;
@@ -3925,7 +3937,10 @@ document.addEventListener('keydown', e => {
     <div class="comment-timeline" id="commentsTimeline"></div>
     <div class="comment-mention-chips" id="commentMentionChips"></div>
     <div class="comment-input-row">
-      <textarea class="comment-textarea" id="commentInputText" placeholder="Add an update to the discussion… type @ to mention someone" maxlength="600"></textarea>
+      <div class="comment-textarea-wrap">
+        <textarea class="comment-textarea" id="commentInputText" placeholder="Add an update to the discussion… type @ to mention someone" maxlength="600"></textarea>
+        <div class="mention-autocomplete" id="mentionAutocomplete" style="display:none;"></div>
+      </div>
       <button type="button" class="comment-post-btn" id="commentPostBtn">Post</button>
     </div>
     <div class="modal-actions">
@@ -10227,6 +10242,7 @@ function openCommentsModal(model,idx,subIdx){
   if(!task||!target) return;
   document.getElementById('commentsTaskName').textContent=subIdx==null?task.name:`${task.name} — ${target.name}`;
   document.getElementById('commentInputText').value='';
+  closeMentionAutocomplete();
   renderMentionChips();
   renderCommentsTimeline();
   document.getElementById('commentsModal').classList.add('open');
@@ -10257,8 +10273,94 @@ function renderMentionChips(){
     };
   });
 }
+
+// Live "@" autocomplete — pops a filtered dropdown of workspace members as
+// you type after "@", so you don't have to know the exact spelling or reach
+// for the chip row below. Mirrors parseMentions()'s matching: an exact,
+// correctly-spelled "@Name " is what actually gets inserted, so whatever
+// the person picks here parses cleanly later.
+let mentionAC={active:false,start:-1,query:'',items:[],activeIndex:0};
+
+function getMentionCandidates(query){
+  const myUid=auth&&auth.currentUser?auth.currentUser.uid:null;
+  const q=query.trim().toLowerCase();
+  return Object.entries(workspaceMembers)
+    .filter(([uid])=>uid!==myUid)
+    .map(([uid,info])=>({uid,label:(info.displayName||info.email||'Member').trim()}))
+    .filter(m=>m.label && m.label.toLowerCase().startsWith(q))
+    .sort((a,b)=>a.label.localeCompare(b.label))
+    .slice(0,6);
+}
+
+function closeMentionAutocomplete(){
+  mentionAC.active=false;
+  const dropdown=document.getElementById('mentionAutocomplete');
+  if(dropdown) dropdown.style.display='none';
+}
+
+function updateMentionAutocomplete(){
+  const input=document.getElementById('commentInputText');
+  const dropdown=document.getElementById('mentionAutocomplete');
+  if(!input||!dropdown) return;
+  const cursor=input.selectionStart;
+  const text=input.value;
+  const upto=text.slice(0,cursor);
+  const atIdx=upto.lastIndexOf('@');
+  let trigger=false, query='';
+  if(atIdx!==-1){
+    const before=atIdx===0?'':upto[atIdx-1];
+    const between=upto.slice(atIdx+1,cursor);
+    // Only trigger right after a word boundary, and only while the text
+    // since "@" still looks like the start of a name (no newline/another @).
+    if((atIdx===0||/\s/.test(before)) && !/[\n@]/.test(between)){
+      trigger=true; query=between;
+    }
+  }
+  if(!trigger){ closeMentionAutocomplete(); return; }
+  const items=getMentionCandidates(query);
+  mentionAC={active:true,start:atIdx,query,items,activeIndex:0};
+  if(!items.length){
+    dropdown.innerHTML = Object.keys(workspaceMembers).length>1
+      ? `<div class="mention-autocomplete-empty">No matching teammate</div>`
+      : `<div class="mention-autocomplete-empty">Invite teammates to @mention them</div>`;
+    dropdown.style.display='';
+    return;
+  }
+  renderMentionAutocompleteList();
+}
+
+function renderMentionAutocompleteList(){
+  const dropdown=document.getElementById('mentionAutocomplete');
+  if(!dropdown) return;
+  dropdown.innerHTML=mentionAC.items.map((m,i)=>
+    `<div class="mention-autocomplete-item${i===mentionAC.activeIndex?' active':''}" data-idx="${i}">${escHtml(m.label)}</div>`
+  ).join('');
+  dropdown.style.display='';
+  dropdown.querySelectorAll('.mention-autocomplete-item').forEach(el=>{
+    // mousedown (not click) + preventDefault so the textarea never blurs
+    // before the selection is applied.
+    el.onmousedown=e=>{ e.preventDefault(); applyMention(parseInt(el.dataset.idx,10)); };
+  });
+}
+
+function applyMention(i){
+  const input=document.getElementById('commentInputText');
+  const item=mentionAC.items[i];
+  if(!input||!item) return;
+  const text=input.value;
+  const cursor=input.selectionStart;
+  const before=text.slice(0,mentionAC.start);
+  const after=text.slice(cursor);
+  const insert='@'+item.label+' ';
+  input.value=before+insert+after;
+  const newPos=(before+insert).length;
+  input.focus();
+  input.setSelectionRange(newPos,newPos);
+  closeMentionAutocomplete();
+}
 function closeCommentsModal(){
   document.getElementById('commentsModal').classList.remove('open');
+  closeMentionAutocomplete();
 }
 function renderCommentsTimeline(){
   const wrap=document.getElementById('commentsTimeline');
@@ -10350,7 +10452,21 @@ function deleteComment(id){if(!canEdit()){notifyViewOnly();return;}
   renderTaskList();
 }
 document.getElementById('commentPostBtn').onclick=()=>postComment();
+document.getElementById('commentInputText').addEventListener('input',updateMentionAutocomplete);
+document.getElementById('commentInputText').addEventListener('click',updateMentionAutocomplete);
+document.getElementById('commentInputText').addEventListener('blur',()=>{
+  // Slight delay: if a dropdown item was mousedown'd, that handler already
+  // ran (and preventDefault'd) before blur fires, so this only closes the
+  // dropdown for genuine focus-away clicks.
+  setTimeout(closeMentionAutocomplete,120);
+});
 document.getElementById('commentInputText').addEventListener('keydown',e=>{
+  if(mentionAC.active && mentionAC.items.length){
+    if(e.key==='ArrowDown'){ e.preventDefault(); mentionAC.activeIndex=(mentionAC.activeIndex+1)%mentionAC.items.length; renderMentionAutocompleteList(); return; }
+    if(e.key==='ArrowUp'){ e.preventDefault(); mentionAC.activeIndex=(mentionAC.activeIndex-1+mentionAC.items.length)%mentionAC.items.length; renderMentionAutocompleteList(); return; }
+    if(e.key==='Enter'||e.key==='Tab'){ e.preventDefault(); applyMention(mentionAC.activeIndex); return; }
+    if(e.key==='Escape'){ closeMentionAutocomplete(); return; }
+  }
   if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); postComment(); }
 });
 document.getElementById('commentsCloseBtn').onclick=()=>closeCommentsModal();
