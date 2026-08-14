@@ -4819,6 +4819,7 @@ function updateRedoBtn(){
   if(btn) btn.style.display=redoStack.length?'':'none';
 }
 function undo(){
+  if(!canEdit()){notifyViewOnly();return;}
   if(!undoStack.length) return;
   const prev=undoStack.pop();
   // Save current state to redo stack before restoring
@@ -4858,6 +4859,7 @@ function undo(){
 }
 
 function redo(){
+  if(!canEdit()){notifyViewOnly();return;}
   if(!redoStack.length) return;
   const next=redoStack.pop();
   // Save current state back to undo stack so user can undo the redo
@@ -5600,7 +5602,7 @@ function getSubtasks(model,idx){
 function subKey(model,idx){ return model+'::'+idx; }
 function subPanelId(key){ return 'sp-'+key.replace(/[^a-zA-Z0-9]/g,'_'); }
 
-function addSubtask(model,idx,name){
+function addSubtask(model,idx,name){if(!canEdit()){notifyViewOnly();return;}
   const n=name.trim(); if(!n) return;
   getSubtasks(model,idx).push({name:n.toUpperCase(),done:false,priority:'med',notes:'',taskDeadline:'',startDate:'',screenshots:[]});
   save(); renderAll(); toast('＋','Subtask added: '+n.slice(0,28));
@@ -5649,7 +5651,7 @@ function syncTaskStatusFromSubtasks(model,idx,beforeSnapshot){
     }
   }
 }
-function setSubtaskStatus(model,idx,sIdx,newStatus){
+function setSubtaskStatus(model,idx,sIdx,newStatus){if(!canEdit()){notifyViewOnly();return;}
   const s=getSubtasks(model,idx)[sIdx]; if(!s) return;
   closeStatusDropdown();
   if((s.done?'done':(s.status==='inprogress'?'inprogress':'pending'))===newStatus) return;
@@ -5662,7 +5664,7 @@ function setSubtaskStatus(model,idx,sIdx,newStatus){
   const icon=newStatus==='done'?'✓':(newStatus==='inprogress'?'⏳':'↺');
   logActivity(icon,`${verb} subtask "${s.name}"`,model);
 }
-function deleteSubtask(model,idx,sIdx){
+function deleteSubtask(model,idx,sIdx){if(!canEdit()){notifyViewOnly();return;}
   const subs=getSubtasks(model,idx);
   const parentTask=state[model][idx];
   const nm=subs[sIdx].name;
@@ -5674,19 +5676,19 @@ function deleteSubtask(model,idx,sIdx){
   save(); renderAll(); updateRecycleBadge(); toast('🗑','Moved to Recycle Bin: '+nm.slice(0,28));
   logActivity('🗑',`deleted subtask "${nm}"`,model);
 }
-function renameSubtask(model,idx,sIdx,newName){
+function renameSubtask(model,idx,sIdx,newName){if(!canEdit()){notifyViewOnly();return;}
   const n=newName.trim(); if(!n) return;
   getSubtasks(model,idx)[sIdx].name=n.toUpperCase();
   save(); renderAll();
 }
-function moveSubtask(model,idx,sIdx,dir){
+function moveSubtask(model,idx,sIdx,dir){if(!canEdit()){notifyViewOnly();return;}
   const subs=getSubtasks(model,idx);
   const ni=sIdx+dir; if(ni<0||ni>=subs.length) return;
   [subs[sIdx],subs[ni]]=[subs[ni],subs[sIdx]];
   clearSubSelectionsForTask(model,idx);
   save(); renderAll();
 }
-function setSubPriority(model,idx,sIdx,p){
+function setSubPriority(model,idx,sIdx,p){if(!canEdit()){notifyViewOnly();return;}
   getSubtasks(model,idx)[sIdx].priority=p; save(); renderAll();
 }
 
@@ -5739,7 +5741,7 @@ function compressImageFile(file){
   });
 }
 
-async function addScreenshotFiles(files){
+async function addScreenshotFiles(files){if(!canEdit()){notifyViewOnly();return;}
   const imgFiles=[...files].filter(f=>f.type&&f.type.startsWith('image/'));
   if(!imgFiles.length) return;
   if(_notesScreenshots.length>=SHOT_MAX_COUNT){
@@ -6499,6 +6501,7 @@ function renderModelCards(){
     if(pinBtn){
       pinBtn.addEventListener('click',e=>{
         e.stopPropagation();
+        if(!canEdit()){notifyViewOnly();return;}
         if(pinnedModelsSet.has(m)){
           pinnedModelsSet.delete(m);
           toast('📌',`Unpinned: ${m}`,false);
@@ -6515,10 +6518,11 @@ function renderModelCards(){
     const thumbBtn=card.querySelector('.model-thumb-btn');
     const thumbInput=card.querySelector('.model-thumb-input');
     if(thumbBtn && thumbInput){
-      thumbBtn.addEventListener('click',e=>{ e.stopPropagation(); thumbInput.click(); });
-      thumbInput.addEventListener('click',e=>e.stopPropagation());
+      thumbBtn.addEventListener('click',e=>{ e.stopPropagation(); if(!canEdit()){notifyViewOnly();return;} thumbInput.click(); });
+      thumbInput.addEventListener('click',e=>{ e.stopPropagation(); if(!canEdit()){ e.preventDefault(); notifyViewOnly(); } });
       thumbInput.addEventListener('change',async e=>{
         e.stopPropagation();
+        if(!canEdit()){notifyViewOnly();return;}
         const file=e.target.files && e.target.files[0];
         if(!file) return;
         if(!file.type.startsWith('image/')){ toast('⚠','Please choose an image file',false); return; }
@@ -6537,6 +6541,7 @@ function renderModelCards(){
     if(thumbRemoveBtn){
       thumbRemoveBtn.addEventListener('click',e=>{
         e.stopPropagation();
+        if(!canEdit()){notifyViewOnly();return;}
         delete modelImages[m];
         save();renderModelCards();
         toast('🗑','Photo removed',false);
@@ -6554,9 +6559,10 @@ function renderModelCards(){
     // Deadline: native date input overlay — no modal, opens picker directly on click
     const dlNativeInput=card.querySelector('.model-deadline-native-input');
     if(dlNativeInput){
-      dlNativeInput.addEventListener('click',e=>e.stopPropagation());
+      dlNativeInput.addEventListener('click',e=>{ e.stopPropagation(); if(!canEdit()){ e.preventDefault(); notifyViewOnly(); } });
       dlNativeInput.addEventListener('change',e=>{
         e.stopPropagation();
+        if(!canEdit()){notifyViewOnly();return;}
         const val=e.target.value;
         if(val) deadlines[m]=val;
         else delete deadlines[m];
@@ -6668,6 +6674,7 @@ function renderModelCards(){
     card.addEventListener('dragleave',()=>{ card.classList.remove('drag-over','drag-over-before','drag-over-after'); });
     card.addEventListener('drop',e=>{
       e.preventDefault();
+      if(!canEdit()){ card.classList.remove('drag-over','drag-over-before','drag-over-after'); _cardDragSrc=null; return; }
       const wasBefore=card.classList.contains('drag-over-before');
       const wasAfter=card.classList.contains('drag-over-after');
       card.classList.remove('drag-over','drag-over-before','drag-over-after');
@@ -6823,7 +6830,7 @@ function renderArchiveView(){
   });
 }
 
-function archiveModel(name){
+function archiveModel(name){if(!canEdit()){notifyViewOnly();return;}
   archivedModelsSet.add(name);
   refreshModelsList();
   if(activeTab===name){ activeTab=models[0]||''; localStorage.setItem('mlc_activeTab',activeTab); }
@@ -6834,6 +6841,7 @@ function archiveModel(name){
 }
 
 function restoreModel(name){
+  if(!canEdit()){notifyViewOnly();return;}
   archivedModelsSet.delete(name);
   refreshModelsList();
   activeTab=name; localStorage.setItem('mlc_activeTab',name);
@@ -7317,7 +7325,7 @@ function renderRecycleView(){
   });
 }
 
-function restoreRecycledItem(bucket,i){
+function restoreRecycledItem(bucket,i){if(!canEdit()){notifyViewOnly();return;}
   const entry=recycleBin[bucket]&&recycleBin[bucket][i];
   if(!entry) return;
 
@@ -7386,7 +7394,7 @@ function restoreRecycledItem(bucket,i){
   toast('↺',`Restored subtask: ${entry.sub.name.slice(0,28)}`);
 }
 
-async function permanentlyDeleteRecycledItem(bucket,i){
+async function permanentlyDeleteRecycledItem(bucket,i){if(!canEdit()){notifyViewOnly();return;}
   const entry=recycleBin[bucket]&&recycleBin[bucket][i];
   if(!entry) return;
   const ok=await showConfirm({title:'Delete forever?',message:`"${recycleEntryLabel(entry)}" will be permanently removed and cannot be recovered.`,confirmText:'Delete Forever',danger:true,icon:'🗑'});
@@ -7859,6 +7867,7 @@ function renderTabs(){
       btn.addEventListener('drop',e=>{
         e.preventDefault();
         btn.classList.remove('drag-over');
+        if(!canEdit()){ _tabDragSrc=null; return; }
         if(!_tabDragSrc || _tabDragSrc===m) return;
         const fromIdx=models.indexOf(_tabDragSrc);
         const toIdx=models.indexOf(m);
@@ -7946,6 +7955,7 @@ function openAssigneeDropdown(triggerEl, idx, subIdx){
 
   dd.querySelectorAll('.assignee-dropdown-item').forEach(item=>{
     item.onclick=()=>{
+      if(!canEdit()){notifyViewOnly();closeAssigneeDropdown();return;}
       const parentT=(state[activeTab]||[])[idx];
       const t=subIdx==null?parentT:(parentT&&Array.isArray(parentT.subtasks)?parentT.subtasks[subIdx]:null);
       if(t){ t.assignee=item.dataset.uid||''; save(); renderAll(); }
@@ -8347,6 +8357,7 @@ function renderTaskList(){
     row.addEventListener('dragleave',()=>row.classList.remove('drag-over'));
     row.addEventListener('drop',e=>{
       e.preventDefault();row.classList.remove('drag-over');
+      if(!canEdit()){ dragSrcIdx=null; return; }
       if(dragSrcIdx===null||dragSrcIdx===idx)return;
       const tasks2=state[activeTab];
       const[moved]=tasks2.splice(dragSrcIdx,1);
@@ -8371,6 +8382,7 @@ function renderTaskList(){
 
     row.querySelector('.priority-badge').onclick=e=>{
       e.stopPropagation();
+      if(!canEdit()){notifyViewOnly();return;}
       const cycle={high:'low',med:'high',low:'med'};
       task.priority=cycle[task.priority||'med'];
       save();renderAll();
@@ -8380,6 +8392,7 @@ function renderTaskList(){
     if(assigneePickerEl){
       assigneePickerEl.onclick=e=>{
         e.stopPropagation();
+        if(!canEdit()){notifyViewOnly();return;}
         openAssigneeDropdown(assigneePickerEl, idx);
       };
     }
@@ -8387,10 +8400,11 @@ function renderTaskList(){
     const deadlinePickerEl=row.querySelector('.deadline-picker');
     if(deadlinePickerEl){
       const deadlineNativeInput=deadlinePickerEl.querySelector('.task-deadline-native');
-      deadlinePickerEl.onclick=e=>e.stopPropagation();
-      deadlineNativeInput.onclick=e=>e.stopPropagation();
+      deadlinePickerEl.onclick=e=>{ e.stopPropagation(); if(!canEdit()){notifyViewOnly();} };
+      deadlineNativeInput.onclick=e=>{ e.stopPropagation(); if(!canEdit()){ e.preventDefault(); notifyViewOnly(); } };
       deadlineNativeInput.onchange=e=>{
         e.stopPropagation();
+        if(!canEdit()){notifyViewOnly();return;}
         const val=e.target.value;
         task.taskDeadline=val;
         save();renderAll();
@@ -8484,6 +8498,7 @@ function renderTaskList(){
         <button class="bulk-btn" data-act="clear" style="margin-left:auto;">Clear Selection</button>`;
       sBar.querySelector('[data-act="done"]').onclick=e=>{
         e.stopPropagation();
+        if(!canEdit()){notifyViewOnly();return;}
         const _before=snapshotNow(); // captured before any mutation, for the auto-status log entry below
         selectedHere.forEach(k=>{const sI=Number(k.split('::')[2]); if(subs[sI]){subs[sI].done=true;subs[sI].status='done';}});
         subKeysForTask.forEach(k=>selectedSubtasks.delete(k));
@@ -8493,6 +8508,7 @@ function renderTaskList(){
       };
       sBar.querySelector('[data-act="inprogress"]').onclick=e=>{
         e.stopPropagation();
+        if(!canEdit()){notifyViewOnly();return;}
         const _before=snapshotNow();
         selectedHere.forEach(k=>{const sI=Number(k.split('::')[2]); if(subs[sI]){subs[sI].done=false;subs[sI].status='inprogress';}});
         subKeysForTask.forEach(k=>selectedSubtasks.delete(k));
@@ -8502,6 +8518,7 @@ function renderTaskList(){
       };
       sBar.querySelector('[data-act="pending"]').onclick=e=>{
         e.stopPropagation();
+        if(!canEdit()){notifyViewOnly();return;}
         const _before=snapshotNow();
         selectedHere.forEach(k=>{const sI=Number(k.split('::')[2]); if(subs[sI]){subs[sI].done=false;subs[sI].status='pending';}});
         subKeysForTask.forEach(k=>selectedSubtasks.delete(k));
@@ -8511,6 +8528,7 @@ function renderTaskList(){
       };
       sBar.querySelector('[data-act="delete"]').onclick=async e=>{
         e.stopPropagation();
+        if(!canEdit()){notifyViewOnly();return;}
         const n=selectedHere.length;
         const ok=await showConfirm({title:'Delete selected subtasks?',message:`${n} subtask${n===1?'':'s'} will be moved to the Recycle Bin (kept for 30 days).`,confirmText:`Delete ${n}`,danger:true,icon:'🗑'});
         if(!ok)return;
@@ -8524,14 +8542,17 @@ function renderTaskList(){
       sBar.querySelector('[data-act="clear"]').onclick=e=>{e.stopPropagation();subKeysForTask.forEach(k=>selectedSubtasks.delete(k));renderTaskList();};
       sBar.querySelector('[data-act="deadline"]').onclick=e=>{
         e.stopPropagation();
+        if(!canEdit()){notifyViewOnly();return;}
         openSubBulkDeadlineModal(activeTab,idx,selectedHere.map(k=>Number(k.split('::')[2])));
       };
       sBar.querySelector('[data-act="priority"]').onclick=e=>{
         e.stopPropagation();
+        if(!canEdit()){notifyViewOnly();return;}
         openSubBulkPriorityModal(activeTab,idx,selectedHere.map(k=>Number(k.split('::')[2])));
       };
       sBar.querySelector('[data-act="duplicate"]').onclick=e=>{
         e.stopPropagation();
+        if(!canEdit()){notifyViewOnly();return;}
         const n=selectedHere.length;
         const sIdxs=selectedHere.map(k=>Number(k.split('::')[2])).sort((a,b)=>b-a); // descending so each insert index stays valid
         sIdxs.forEach(sI=>{
@@ -8644,6 +8665,7 @@ function renderTaskList(){
       sRow.addEventListener('drop',e=>{
         e.preventDefault();e.stopPropagation();
         sRow.classList.remove('drag-over');
+        if(!canEdit()){ dragSrcSubCtx=null; return; }
         if(!dragSrcSubCtx||dragSrcSubCtx.model!==activeTab||dragSrcSubCtx.idx!==idx) return;
         const fromI=dragSrcSubCtx.sIdx;
         dragSrcSubCtx=null;
@@ -8672,10 +8694,11 @@ function renderTaskList(){
       const subDeadlinePickerEl=sRow.querySelector('.deadline-picker');
       if(subDeadlinePickerEl){
         const subDeadlineNativeInput=subDeadlinePickerEl.querySelector('.task-deadline-native');
-        subDeadlinePickerEl.onclick=e=>e.stopPropagation();
-        subDeadlineNativeInput.onclick=e=>e.stopPropagation();
+        subDeadlinePickerEl.onclick=e=>{ e.stopPropagation(); if(!canEdit()){notifyViewOnly();} };
+        subDeadlineNativeInput.onclick=e=>{ e.stopPropagation(); if(!canEdit()){ e.preventDefault(); notifyViewOnly(); } };
         subDeadlineNativeInput.onchange=e=>{
           e.stopPropagation();
+          if(!canEdit()){notifyViewOnly();return;}
           const val=e.target.value;
           sub.taskDeadline=val;
           save();renderAll();
@@ -8912,6 +8935,7 @@ function renderGantt(){
       rowBg.style.cursor='pointer';
       rowBg.title='Click to give this task a start/due date';
       rowBg.onclick=()=>{
+        if(!canEdit()){notifyViewOnly();return;}
         task.startDate=task.startDate||ganttFmt(today);
         task.taskDeadline=task.taskDeadline||ganttFmt(ganttAddDays(today,2));
         save();renderGantt();
@@ -8979,6 +9003,7 @@ function renderGantt(){
           srowBg.style.cursor='pointer';
           srowBg.title='Click to give this sub-task a start/due date';
           srowBg.onclick=()=>{
+            if(!canEdit()){notifyViewOnly();return;}
             sub.startDate=sub.startDate||ganttFmt(today);
             sub.taskDeadline=sub.taskDeadline||ganttFmt(ganttAddDays(today,2));
             save();renderGantt();
@@ -9102,6 +9127,7 @@ function attachGanttBarInteractions(bar,task){
   const dayWidth=ganttDayWidth();
   let mode=null,startX=0,origLeft=0,origWidth=0,moved=false;
   function onDown(e,m){
+    if(!canEdit()){ return; }
     e.preventDefault();e.stopPropagation();
     mode=m;moved=false;
     startX=(e.touches?e.touches[0].clientX:e.clientX);
@@ -9187,6 +9213,7 @@ document.getElementById('depModalOverlay').addEventListener('click',e=>{
   if(e.target.id==='depModalOverlay'){ document.getElementById('depModalOverlay').style.display='none'; ganttDepModalTaskIdx=null; }
 });
 document.getElementById('depModalSave').addEventListener('click',()=>{
+  if(!canEdit()){notifyViewOnly();return;}
   if(ganttDepModalTaskIdx===null) return;
   const task=state[activeTab][ganttDepModalTaskIdx];
   const checked=[...document.querySelectorAll('#depModalList input[type=checkbox]:checked')].map(el=>parseInt(el.dataset.sn,10));
@@ -9277,6 +9304,7 @@ function renderCompare(){
 
     row.querySelectorAll('.status-chip').forEach(btn=>{
       btn.onclick=()=>{
+        if(!canEdit()){notifyViewOnly();return;}
         const m=btn.dataset.model, n=btn.dataset.name;
         const t=state[m].find(x=>x.name===n);
         if(t){t.done=!t.done;if(t.done)completeAllSubtasks(t);save();renderAll();}
@@ -9319,7 +9347,7 @@ let sortDir='asc'; // 'asc'|'desc'
 // stable until the user explicitly re-clicks the Priority header.
 let prioritySortSnapshot=null; // Map<task, rank> | null
 
-function setTaskStatus(model,idx,newStatus){
+function setTaskStatus(model,idx,newStatus){if(!canEdit()){notifyViewOnly();return;}
   const task=state[model][idx];
   if(!task) return;
   closeStatusDropdown();
@@ -9385,7 +9413,7 @@ async function maybePromptArchive(model){
   });
   if(ok&&state[model]) archiveModel(model);
 }
-function addTask(model,name,position){
+function addTask(model,name,position){if(!canEdit()){notifyViewOnly();return;}
   const trimmed=name.trim();if(!trimmed)return;
   const tasks=state[model];
   const upperName=trimmed.toUpperCase();
@@ -9409,7 +9437,7 @@ function addTask(model,name,position){
   toast('＋',`Task added${insertAt<tasks.length-1?` at #${insertAt+1}`:''}: ${trimmed.slice(0,28)}`);
   logActivity('＋',`added task "${newTask.name}"`,model);
 }
-function renameTask(model,idx,newName){
+function renameTask(model,idx,newName){if(!canEdit()){notifyViewOnly();return;}
   const trimmed=newName.trim();
   const task=state[model][idx];
   if(!trimmed||trimmed.toUpperCase()===task.name.toUpperCase()){renderTaskList();return;}
@@ -9417,7 +9445,7 @@ function renameTask(model,idx,newName){
   save();renderAll();toast('✎',`Renamed: ${old.slice(0,20)} → ${task.name.slice(0,20)}`);
   logActivity('✎',`renamed task "${old}" → "${task.name}"`,model);
 }
-async function deleteTask(model,idx){
+async function deleteTask(model,idx){if(!canEdit()){notifyViewOnly();return;}
   const task=state[model][idx];
   const ok=await showConfirm({title:'Delete task?',message:`"${task.name}" will be moved to the Recycle Bin (kept for 30 days).`,confirmText:'Delete',danger:true,icon:'🗑'});
   if(!ok)return;
@@ -9443,7 +9471,7 @@ async function deleteTask(model,idx){
   toast('🗑',`Moved to Recycle Bin: ${task.name.slice(0,28)}`);
   logActivity('🗑',`deleted task "${task.name}"`,model);
 }
-function moveTask(model,idx,dir){
+function moveTask(model,idx,dir){if(!canEdit()){notifyViewOnly();return;}
   const tasks=state[model];
   const task=tasks[idx];
   // Move within the task's own section (pending vs completed) by skipping
@@ -9486,7 +9514,7 @@ function instantiateTemplateTasks(templateName){
     subtasks:(Array.isArray(t.subtasks)?t.subtasks:[]).map(s=>({name:s.name,done:false,priority:s.priority||'med',notes:'',taskDeadline:'',startDate:'',screenshots:[],status:'pending'}))
   }));
 }
-async function saveModelAsTemplate(modelName){
+async function saveModelAsTemplate(modelName){if(!canEdit()){notifyViewOnly();return;}
   const tasks=state[modelName]||[];
   if(!tasks.length){await showAlert({title:'Nothing to save',message:`"${modelName}" doesn't have any tasks yet.`,tone:'warn'});return;}
   const name=await showTextPrompt({
@@ -9508,7 +9536,7 @@ async function saveModelAsTemplate(modelName){
   toast('📑',`Template saved: ${key}`);
   logActivity('📑',`saved model "${modelName}" as template "${key}"`,modelName);
 }
-async function deleteTemplate(name){
+async function deleteTemplate(name){if(!canEdit()){notifyViewOnly();return;}
   if(!templates[name]) return;
   const ok=await showConfirm({icon:'🗑',title:'Delete template?',message:`"${name}" will be permanently deleted. Models already created from it are not affected.`,confirmText:'Delete',danger:true});
   if(!ok) return false;
@@ -9631,7 +9659,7 @@ function wireTemplateEditorEvents(){
 // addEventListener wiring for #templateEditorAddTaskBtn/CancelBtn/SaveBtn/
 // Overlay happens later, right after that HTML exists (search
 // "TEMPLATE EDITOR BUTTON WIRING").
-async function commitTemplateEditorSave(){
+async function commitTemplateEditorSave(){if(!canEdit()){notifyViewOnly();return;}
   const newName=(document.getElementById('templateEditorNameInput').value||'').trim();
   if(!newName){ await showAlert({title:'Name required',message:'Give the template a name before saving.',tone:'warn'}); return; }
   const cleanedTasks=teDraftTasks.map(t=>({
@@ -9755,7 +9783,7 @@ function isFirestoreSafeFieldName(name){
   return !(name.startsWith('__') && name.endsWith('__'));
 }
 
-async function addModel(name,deadline){
+async function addModel(name,deadline){if(!canEdit()){notifyViewOnly();return;}
   const trimmed=name.trim();if(!trimmed)return;
   if(!isFirestoreSafeFieldName(trimmed)){await showAlert({title:'Invalid model name',message:'Model names can\'t both start and end with "__" — please choose a different name.',tone:'warn'});return;}
   const key=trimmed.toUpperCase();
@@ -9771,7 +9799,7 @@ async function addModel(name,deadline){
   toast('＋',`Model added: ${trimmed}`);
   logActivity('🚀',`added model "${trimmed}"`,trimmed);
 }
-async function duplicateModel(name){
+async function duplicateModel(name){if(!canEdit()){notifyViewOnly();return;}
   if(!(name in state)) return;
   // Build a unique copy name: "MODEL (Copy)", then "MODEL (Copy 2)", "MODEL (Copy 3)", ...
   const existingKeys=new Set(Object.keys(state).map(m=>m.toUpperCase()));
@@ -9795,7 +9823,7 @@ async function duplicateModel(name){
   toast('⧉',`Duplicated: ${name} → ${copyName}`);
   logActivity('⧉',`duplicated "${name}" → "${copyName}"`,copyName);
 }
-async function deleteModel(name){
+async function deleteModel(name){if(!canEdit()){notifyViewOnly();return;}
   if(!archivedModelsSet.has(name)&&models.length<=1){await showAlert({title:"Can't delete this model",message:'You need at least one model on the dashboard.',tone:'warn'});return;}
   const ok=await showConfirm({title:'Move model to Recycle Bin?',message:`"${name}" and all its tasks will be moved to the Recycle Bin (kept for 30 days). You can restore it any time before then.`,confirmText:'Move to Recycle Bin',danger:true,icon:'🗑'});
   if(!ok)return;
@@ -9813,7 +9841,7 @@ async function deleteModel(name){
   logActivity('🗑',`deleted model "${name}"`,name);
 }
 
-async function renameModel(oldName, newName){
+async function renameModel(oldName, newName){if(!canEdit()){notifyViewOnly();return;}
   const trimmed=newName.trim();
   if(!trimmed||trimmed.toUpperCase()===oldName.toUpperCase()){renderModelCards();renderTabs();return;}
   if(!isFirestoreSafeFieldName(trimmed)){await showAlert({title:'Invalid model name',message:'Model names can\'t both start and end with "__" — please choose a different name.',tone:'warn'});renderModelCards();renderTabs();return;}
@@ -9860,6 +9888,7 @@ function closeNotesModal(){
   _notesObj=null; _notesObjCb=null;
 }
 document.getElementById('notesSaveBtn').onclick=()=>{
+  if(!canEdit()){notifyViewOnly();return;}
   const text=document.getElementById('notesTextarea').value.trim();
   const shots=_notesScreenshots;
   if(_notesObj&&_notesObjCb){
@@ -9959,6 +9988,7 @@ function renderCommentsTimeline(){
   wrap.scrollTop=wrap.scrollHeight;
 }
 function postComment(){
+  if(!canEdit()){notifyViewOnly();return;}
   const input=document.getElementById('commentInputText');
   const text=input.value.trim();
   if(!text) return;
@@ -9981,7 +10011,7 @@ function postComment(){
   logActivity('💬',`commented on "${(target&&target.name)||task.name}"`,model);
   renderTaskList();
 }
-function deleteComment(id){
+function deleteComment(id){if(!canEdit()){notifyViewOnly();return;}
   const{model,idx,subIdx}=commentsCtx;
   const comments=getComments(model,idx,subIdx);
   const pos=comments.findIndex(c=>c.id===id);
@@ -10006,6 +10036,7 @@ document.getElementById('commentsModal').onclick=e=>{if(e.target===document.getE
 let _modelDeadlineTarget = null; // set by card click in renderModelCards
 
 document.getElementById('modelDeadlineSaveBtn').onclick=()=>{
+  if(!canEdit()){notifyViewOnly();return;}
   const model=_modelDeadlineTarget;
   if(!model) return;
   const val=document.getElementById('modelDeadlinePickerModal').value;
@@ -10016,6 +10047,7 @@ document.getElementById('modelDeadlineSaveBtn').onclick=()=>{
   logActivity('📅',`${val?`set deadline to ${val} for`:'cleared the deadline for'} model "${model}"`,model);
 };
 document.getElementById('modelDeadlineClearBtn').onclick=()=>{
+  if(!canEdit()){notifyViewOnly();return;}
   const model=_modelDeadlineTarget;
   if(!model) return;
   delete deadlines[model];
@@ -10048,6 +10080,7 @@ function openTaskDeadlineModal(model,idx){
   setTimeout(()=>{ try{ if(picker.showPicker) picker.showPicker(); else picker.focus(); }catch(err){} },320);
 }
 document.getElementById('taskDeadlineSaveBtn').onclick=()=>{
+  if(!canEdit()){notifyViewOnly();return;}
   const{model,idx}=taskDeadlineCtx;
   const val=document.getElementById('taskDeadlinePicker').value;
   state[model][idx].taskDeadline=val;
@@ -10057,6 +10090,7 @@ document.getElementById('taskDeadlineSaveBtn').onclick=()=>{
   logActivity('📅',`${val?`set deadline to ${val} for`:'cleared the deadline for'} task "${state[model][idx].name}"`,model);
 };
 document.getElementById('taskDeadlineClearBtn').onclick=()=>{
+  if(!canEdit()){notifyViewOnly();return;}
   const{model,idx}=taskDeadlineCtx;
   state[model][idx].taskDeadline='';
   save();renderAll();
@@ -10069,6 +10103,7 @@ document.getElementById('taskDeadlineModal').onclick=e=>{if(e.target===document.
 
 // ── BULK ACTIONS ──────────────────────────────────────────────────────────────
 document.getElementById('bulkDoneBtn').onclick=()=>{
+  if(!canEdit()){notifyViewOnly();return;}
   const n=selectedTasks.size;
   selectedTasks.forEach(i=>{
     const t=state[activeTab][i];
@@ -10079,18 +10114,21 @@ document.getElementById('bulkDoneBtn').onclick=()=>{
   logActivity('✓',`marked ${n} task${n===1?'':'s'} done`,activeTab);
 };
 document.getElementById('bulkInProgressBtn').onclick=()=>{
+  if(!canEdit()){notifyViewOnly();return;}
   const n=selectedTasks.size;
   selectedTasks.forEach(i=>{state[activeTab][i].done=false;state[activeTab][i].status='inprogress';state[activeTab][i].completedAt=null;});
   selectedTasks.clear();save();renderAll();toast('⏳',`Marked ${n} task${n===1?'':'s'} in progress`);
   logActivity('⏳',`marked ${n} task${n===1?'':'s'} in progress`,activeTab);
 };
 document.getElementById('bulkPendingBtn').onclick=()=>{
+  if(!canEdit()){notifyViewOnly();return;}
   const n=selectedTasks.size;
   selectedTasks.forEach(i=>{state[activeTab][i].done=false;state[activeTab][i].status='pending';state[activeTab][i].completedAt=null;});
   selectedTasks.clear();save();renderAll();toast('↺','Marked selected pending');
   logActivity('↺',`marked ${n} task${n===1?'':'s'} pending`,activeTab);
 };
 document.getElementById('bulkMoveTopBtn').onclick=()=>{
+  if(!canEdit()){notifyViewOnly();return;}
   const tasks=state[activeTab];
   const idxs=[...selectedTasks].sort((a,b)=>a-b);
   if(!idxs.length)return;
@@ -10105,6 +10143,7 @@ document.getElementById('bulkMoveTopBtn').onclick=()=>{
   toast('↑',`Moved ${moving.length} tasks to top`);
 };
 document.getElementById('bulkMoveBottomBtn').onclick=()=>{
+  if(!canEdit()){notifyViewOnly();return;}
   const tasks=state[activeTab];
   const idxs=[...selectedTasks].sort((a,b)=>a-b);
   if(!idxs.length)return;
@@ -10162,7 +10201,7 @@ function populateMoveModelList(){
     });
   }
 }
-function moveSelectedTasksToModel(destModel){
+function moveSelectedTasksToModel(destModel){if(!canEdit()){notifyViewOnly();return;}
   const n=selectedTasks.size;
   if(!n||!(destModel in state))return;
   const srcModel=activeTab;
@@ -10184,6 +10223,7 @@ function moveSelectedTasksToModel(destModel){
   logActivity('⇄',`moved ${n} task${n===1?'':'s'} from "${srcModel}" to "${destModel}"`,destModel);
 }
 function copySelectedTasksToModel(destModel){
+  if(!canEdit()){notifyViewOnly();return;}
   const n=selectedTasks.size;
   if(!n||!(destModel in state))return;
   const srcModel=activeTab;
@@ -10418,7 +10458,7 @@ document.getElementById('crossModelBulkApplyBtn').onclick=()=>{
 // Duplicates each selected task in place — right after its original —
 // within the current model. Sits beside Copy to Model in the bulk bar, but
 // unlike Copy to Model this never leaves the model you're on.
-function duplicateSelectedTasks(){
+function duplicateSelectedTasks(){if(!canEdit()){notifyViewOnly();return;}
   const tasks=state[activeTab];
   const n=selectedTasks.size;
   if(!n||!tasks) return;
@@ -10436,6 +10476,7 @@ function duplicateSelectedTasks(){
 }
 document.getElementById('bulkDuplicateBtn').onclick=()=>duplicateSelectedTasks();
 document.getElementById('bulkDeleteBtn').onclick=async()=>{
+  if(!canEdit()){notifyViewOnly();return;}
   const n=selectedTasks.size;
   const ok=await showConfirm({title:'Delete selected tasks?',message:`${n} task${n===1?'':'s'} will be moved to the Recycle Bin (kept for 30 days).`,confirmText:`Delete ${n}`,danger:true,icon:'🗑'});
   if(!ok)return;
@@ -10489,6 +10530,7 @@ document.getElementById('bulkSetDeadlineBtn').onclick=()=>{
   setTimeout(()=>{ try{ if(picker.showPicker) picker.showPicker(); else picker.focus(); }catch(e){ picker.focus(); } },320);
 };
 document.getElementById('bulkDeadlineSaveBtn').onclick=()=>{
+  if(!canEdit()){notifyViewOnly();return;}
   const val=document.getElementById('bulkDeadlinePicker').value;
   if(bulkModalSubCtx){
     const {model,idx,subIdxs}=bulkModalSubCtx;
@@ -10511,6 +10553,7 @@ document.getElementById('bulkDeadlineSaveBtn').onclick=()=>{
   logActivity('📅',`${val?`set deadline to ${val} for`:'cleared the deadline for'} ${n} task${n===1?'':'s'}`,activeTab);
 };
 document.getElementById('bulkDeadlineClearBtn').onclick=()=>{
+  if(!canEdit()){notifyViewOnly();return;}
   if(bulkModalSubCtx){
     const {model,idx,subIdxs}=bulkModalSubCtx;
     const subs=getSubtasks(model,idx);
@@ -10556,7 +10599,7 @@ document.getElementById('bulkSetPriorityBtn').onclick=()=>{
     `${n} task${n===1?'':'s'} selected — choose a priority to apply to all of them`;
   document.getElementById('bulkPriorityModal').classList.add('open');
 };
-function applyBulkPriority(level){
+function applyBulkPriority(level){if(!canEdit()){notifyViewOnly();return;}
   if(bulkModalSubCtx){
     const {model,idx,subIdxs}=bulkModalSubCtx;
     const subs=getSubtasks(model,idx);
@@ -10839,6 +10882,7 @@ function importStatsToMessage(stats){
 }
 
 document.getElementById('importFile').onchange=async e=>{
+  if(!canEdit()){notifyViewOnly();e.target.value='';return;}
   const file=e.target.files[0];if(!file)return;
   const isExcel=/\.(xlsx|xls)$/i.test(file.name);
   if(!isExcel){await showAlert({title:'Unsupported file',message:'Please choose a valid .xlsx or .xls workbook.',tone:'warn'});e.target.value='';return;}
@@ -11106,6 +11150,7 @@ document.getElementById('backupNowBtn').onclick=async()=>{
 };
 
 document.getElementById('restoreBackupBtn').onclick=async()=>{
+  if(!canEdit()){notifyViewOnly();return;}
   document.getElementById('exportAllDropdown').classList.remove('menu-open');
   const backup=await getLastBackup();
   if(!backup){await showAlert({title:'No backup found',message:'Use "Backup Now" at least once to create a backup you can restore from.',tone:'warn'});return;}
@@ -11268,6 +11313,7 @@ function normDate(val){
   return '';
 }
 document.getElementById('importExcelFile').onchange=async e=>{
+  if(!canEdit()){notifyViewOnly();e.target.value='';return;}
   const file=e.target.files[0];if(!file)return;
   if(activeTab==='Compare Models'){await showAlert({title:'Select a model first',message:'Switch to a model tab before importing.',tone:'warn'});e.target.value='';return;}
   try{ await loadXLSX(); }catch(err){ await showAlert({title:'Could not load Excel library',message:'Check your internet connection and try again.',tone:'error'}); e.target.value=''; return; }
