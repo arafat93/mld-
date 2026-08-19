@@ -1703,6 +1703,53 @@ footer {
   color: var(--accent1); background: var(--accent1-dim);
   padding: 3px 8px; border-radius: 6px; white-space: nowrap; flex-shrink: 0;
 }
+/* ── VOICE ASSISTANT ── */
+.voice-mic-row { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
+.voice-mic-btn {
+  flex-shrink: 0; width: 56px; height: 56px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--surface2); color: var(--text);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: background .2s ease, border-color .2s ease, transform .1s ease;
+}
+.voice-mic-btn:hover { border-color: var(--accent1); }
+.voice-mic-btn:active { transform: scale(0.96); }
+.voice-mic-btn.listening {
+  background: var(--red); border-color: var(--red); color: #fff;
+  animation: voicePulse 1.4s ease-in-out infinite;
+}
+@keyframes voicePulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(244,63,94,0.45); }
+  50% { box-shadow: 0 0 0 10px rgba(244,63,94,0); }
+}
+.voice-mic-status { font-size: 13px; color: var(--text-muted); flex: 1; }
+.voice-mic-status.listening { color: var(--red); font-weight: 600; }
+.voice-transcript-box {
+  margin-top: 12px; min-height: 44px; max-height: 100px; overflow-y: auto;
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 12px; font-size: 13px; color: var(--text); white-space: pre-wrap;
+}
+.voice-transcript-box:empty::before { content: "Your speech will appear here…"; color: var(--text-muted); }
+.voice-fallback-label { font-size: 12px; color: var(--text-muted); margin-top: 16px; margin-bottom: 6px; }
+.voice-fallback-textarea {
+  width: 100%; min-height: 64px; max-height: 140px; resize: vertical;
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 12px; font-family: inherit; font-size: 13px; color: var(--text);
+}
+.voice-fallback-textarea:focus { outline: none; border-color: var(--accent1); }
+.voice-parse-btn { margin-top: 10px; }
+.voice-review-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; max-height: 260px; overflow-y: auto; }
+.voice-review-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 12px;
+}
+.voice-review-item.unresolved { border-color: rgba(244,63,94,0.35); }
+.voice-review-item input[type="checkbox"] { margin-top: 3px; accent-color: var(--accent1); flex-shrink: 0; }
+.voice-review-item-main { flex: 1; min-width: 0; }
+.voice-review-item-summary { font-size: 13px; color: var(--text); line-height: 1.4; }
+.voice-review-item.unresolved .voice-review-item-summary { color: var(--red); }
+.voice-review-item-raw { font-size: 11.5px; color: var(--text-muted); margin-top: 3px; font-style: italic; }
+.voice-review-empty { color: var(--text-muted); font-size: 13px; text-align: center; padding: 18px 0; }
 .crossmodel-select-all-row {
   display: flex; align-items: center; justify-content: space-between;
   margin-top: 14px; padding: 0 2px;
@@ -3017,6 +3064,55 @@ img { -webkit-user-drag: none; }
   transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 .template-chooser-item-edit:hover { background: var(--accent1-dim); border-color: var(--border-hover); color: var(--accent1); }
+.template-chooser-item.ai-special {
+  background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(96,165,250,0.05));
+  border: 1px solid rgba(212,175,55,0.3);
+}
+.template-chooser-item.ai-special:hover { border-color: var(--accent1); background: linear-gradient(135deg, rgba(212,175,55,0.16), rgba(96,165,250,0.08)); }
+.template-chooser-item.ai-special .template-chooser-item-icon { background: rgba(212,175,55,0.16); color: var(--accent1); }
+
+/* ── AI Suggest Checklist modal ── */
+#aiSuggestOverlay {
+  position: fixed; inset: 0; z-index: 10001;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+  padding: 20px;
+}
+#aiSuggestOverlay.open { opacity: 1; pointer-events: all; }
+#aiSuggestModal {
+  background: var(--surface);
+  border: 1px solid var(--border-hover);
+  border-radius: 24px;
+  padding: 32px 30px 26px;
+  max-width: 460px; width: 100%; max-height: 85vh; overflow-y: auto;
+  box-shadow: var(--shadow-md), 0 0 0 1px var(--border);
+  transform: translateY(14px) scale(0.97);
+  transition: transform 0.28s cubic-bezier(0.16,1,0.3,1);
+}
+#aiSuggestOverlay.open #aiSuggestModal { transform: translateY(0) scale(1); }
+.ai-suggest-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 28px 0 8px; }
+.ai-suggest-loading p { font-size: 12.5px; color: var(--text-muted); }
+.ai-suggest-error {
+  font-size: 13px; line-height: 1.6; color: var(--red);
+  background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25);
+  border-radius: 12px; padding: 14px 16px;
+}
+.ai-suggest-preview { display: flex; flex-direction: column; gap: 6px; max-height: 46vh; overflow-y: auto; margin: -2px 0 2px; padding-right: 2px; }
+.ai-task-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 12px;
+  background: var(--surface2); border: 1px solid var(--border);
+  cursor: pointer; transition: border-color 0.15s ease, background 0.15s ease;
+}
+.ai-task-row:hover { border-color: var(--border-hover); }
+.ai-task-row input[type="checkbox"] { flex-shrink: 0; width: 16px; height: 16px; accent-color: var(--accent1); cursor: pointer; }
+.ai-task-row-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.ai-task-row-name { font-size: 12.5px; font-weight: 600; color: var(--text); }
+.ai-task-row-meta { font-size: 11px; color: var(--text-muted); }
 #templateEditorOverlay {
   position: fixed; inset: 0; z-index: 10000;
   background: rgba(0,0,0,0.65);
@@ -3110,6 +3206,84 @@ img { -webkit-user-drag: none; }
   transition: transform 0.28s cubic-bezier(0.16,1,0.3,1);
 }
 #teamOverlay.open #teamModal { transform: translateY(0) scale(1); }
+#modelAccessOverlay {
+  position: fixed; inset: 0; z-index: 10000;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+  padding: 20px;
+}
+#modelAccessOverlay.open { opacity: 1; pointer-events: all; }
+#profileOverlay {
+  position: fixed; inset: 0; z-index: 10001;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+  padding: 20px;
+}
+#profileOverlay.open { opacity: 1; pointer-events: all; }
+#profileModal {
+  background: var(--surface);
+  border: 1px solid var(--border-hover);
+  border-radius: 24px;
+  padding: 32px 30px 26px;
+  max-width: 420px; width: 100%; max-height: 85vh; overflow-y: auto;
+  box-shadow: var(--shadow-md), 0 0 0 1px var(--border);
+  transform: translateY(14px) scale(0.97);
+  transition: transform 0.28s cubic-bezier(0.16,1,0.3,1);
+}
+#profileOverlay.open #profileModal { transform: translateY(0) scale(1); }
+.profile-avatar-wrap {
+  position: relative; width: 84px; height: 84px; margin: 0 auto 18px;
+}
+.profile-avatar-lg {
+  width: 84px; height: 84px; border-radius: 50%;
+  background: var(--accent1); color: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px; font-weight: 700; overflow: hidden;
+  background-size: cover; background-position: center;
+  border: 2px solid var(--border-hover);
+}
+.profile-avatar-camera-btn {
+  position: absolute; right: -2px; bottom: -2px;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--surface2); border: 2px solid var(--surface);
+  color: var(--text); display: flex; align-items: center; justify-content: center;
+  cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  transition: filter 0.15s ease;
+}
+.profile-avatar-camera-btn:hover { filter: brightness(1.25); }
+.profile-field-label {
+  font-size: 11px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: .5px; display: block; margin: 16px 0 8px;
+}
+.profile-field-label:first-of-type { margin-top: 0; }
+.profile-input {
+  width: 100%; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 14px; color: var(--text);
+  font-family: inherit; font-size: 14px; outline: none; box-sizing: border-box;
+}
+.profile-input:focus { border-color: var(--accent1); }
+.profile-hint { font-size: 12px; color: var(--text-muted); margin-top: 6px; line-height: 1.5; }
+.profile-error { font-size: 12.5px; color: var(--red); margin-top: 10px; min-height: 0; }
+.profile-success { font-size: 12.5px; color: var(--green); margin-top: 10px; min-height: 0; }
+#modelAccessModal {
+  background: var(--surface);
+  border: 1px solid var(--border-hover);
+  border-radius: 24px;
+  padding: 32px 30px 26px;
+  max-width: 440px; width: 100%; max-height: 85vh; overflow-y: auto;
+  box-shadow: var(--shadow-md), 0 0 0 1px var(--border);
+  transform: translateY(14px) scale(0.97);
+  transition: transform 0.28s cubic-bezier(0.16,1,0.3,1);
+}
+#modelAccessOverlay.open #modelAccessModal { transform: translateY(0) scale(1); }
 .team-section-label {
   font-size: 12px; font-weight: 600; color: var(--text-muted);
   text-transform: uppercase; letter-spacing: 0.5px; margin: 20px 0 8px;
@@ -3152,6 +3326,25 @@ img { -webkit-user-drag: none; }
 .team-member-role-toggle-btn.is-viewer:hover { background: rgba(16,185,129,0.22); }
 .team-member-role-toggle-btn.is-editor { color: var(--text-muted); background: var(--surface3); }
 .team-member-role-toggle-btn.is-editor:hover { color: var(--text); background: var(--accent1-dim); }
+.team-member-access-btn {
+  flex-shrink: 0; margin-left: auto; font-size: 11px; font-weight: 600; white-space: nowrap;
+  padding: 4px 10px; border-radius: 20px; cursor: pointer;
+  background: var(--surface3); border: 1px solid var(--border); color: var(--text-muted);
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.team-member-access-btn:hover { border-color: var(--border-hover); color: var(--text); background: var(--accent1-dim); }
+.team-member-access-btn.is-restricted { color: var(--accent1); background: var(--accent1-dim); border-color: transparent; }
+/* ── MODEL ACCESS MODAL ── */
+.model-access-list { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; max-height: 260px; overflow-y: auto; }
+.model-access-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 10px;
+  background: var(--surface2); border: 1px solid var(--border);
+}
+.model-access-row input[type="checkbox"] { accent-color: var(--accent1); flex-shrink: 0; }
+.model-access-row label { font-size: 13px; color: var(--text); cursor: pointer; flex: 1; }
+.model-access-all-row { font-weight: 600; border-color: var(--accent1); background: var(--accent1-dim); }
+.model-access-empty-hint { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
 /* ── VIEW-ONLY MODE ── */
 #viewOnlyBanner {
   display: none; align-items: center; gap: 8px;
@@ -3471,12 +3664,16 @@ document.addEventListener('keydown', e => {
       <span id="userEmail" style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
       <span class="user-badge-caret">▾</span>
       <div class="user-menu" id="userMenu">
+        <button class="menu-item" id="myProfileBtn" title="Edit your name, email &amp; profile photo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>My Profile</span></button>
+        <button class="logout-btn" id="logoutBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Sign Out</span></button>
+        <button class="menu-item" id="teamMenuBtn" title="Invite teammates or manage your shared workspace"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Team</span><span class="archive-count-badge" id="teamCountBadge" style="display:none;">1</span></button>
+        <button class="menu-item" id="myTasksViewBtn" title="See every task assigned to you across all your models" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>My Tasks</span><span class="archive-count-badge" id="myTasksCountBadge" style="display:none;">0</span></button>
+        <div class="menu-divider"></div>
         <button class="menu-item" id="globalSearchBtn" title="Search tasks &amp; models across your entire workspace"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Global Search</span><span class="menu-item-kbd">Ctrl K</span></button>
         <button class="menu-item" id="crossModelBulkBtn" title="Update the same task across all your models at once"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Bulk Update by Task</span></button>
         <button class="menu-item" id="activityLogMenuBtn" title="See every change across your workspace"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg><span>Activity Log</span></button>
         <div class="menu-divider"></div>
-        <button class="menu-item" id="teamMenuBtn" title="Invite teammates or manage your shared workspace"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Team</span><span class="archive-count-badge" id="teamCountBadge" style="display:none;">1</span></button>
-        <button class="menu-item" id="myTasksViewBtn" title="See every task assigned to you across all your models" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>My Tasks</span><span class="archive-count-badge" id="myTasksCountBadge" style="display:none;">0</span></button>
+        <button class="menu-item" id="voiceAssistantBtn" title="Add or update tasks in bulk by voice"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg><span>Voice Assistant</span></button>
         <button class="menu-item" id="archiveViewBtn" title="View archived models"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><line x1="10" y1="13" x2="14" y2="13"/></svg><span>Archived</span><span class="archive-count-badge" id="archiveCountBadge" style="display:none;">0</span></button>
         <button class="menu-item" id="recycleViewBtn" title="View deleted tasks (kept for 30 days)" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg><span>Recycle Bin</span><span class="archive-count-badge" id="recycleCountBadge" style="display:none;">0</span></button>
         <button class="menu-item" id="analyticsViewBtn" title="Burndown, trends, and overdue analysis"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Analytics</span></button>
@@ -3486,8 +3683,6 @@ document.addEventListener('keydown', e => {
         <button class="menu-item" id="redoBtn" title="Redo last undone change" style="display:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14l5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0-5.5 5.5v0A5.5 5.5 0 0 0 9.5 20H13"/></svg><span>Redo</span></button>
         <div class="menu-divider"></div>
         <a class="menu-item whatsapp-menu-item" href="https://wa.me/8801608985264?text=Hi%2C%20I%20need%20help%20with%20the%20Model%20Launch%20Dashboard." target="_blank" rel="noopener noreferrer" title="Chat with admin on WhatsApp"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.533 5.858L.057 23.184a.75.75 0 0 0 .916.919l5.453-1.43A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.726 9.726 0 0 1-4.964-1.357l-.355-.212-3.68.965.981-3.585-.232-.369A9.713 9.713 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg><span>Help (WhatsApp)</span></a>
-        <div class="menu-divider"></div>
-        <button class="logout-btn" id="logoutBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Sign Out</span></button>
       </div>
     </div>
     <button class="hdr-btn accent" id="loginOpenBtn">✦ <span>Login</span></button>
@@ -3991,6 +4186,29 @@ document.addEventListener('keydown', e => {
   </div>
 </div>
 
+<!-- VOICE ASSISTANT MODAL -->
+<div class="modal-overlay" id="voiceModal">
+  <div class="modal-box" id="voiceModalBox" style="width:min(560px, 92vw);">
+    <div class="modal-title">🎙️ Voice Assistant</div>
+    <div class="modal-subtitle">Speak (or type) several commands at once — new tasks, new subtasks, or status changes — then review and apply them together.</div>
+    <div class="voice-mic-row">
+      <button type="button" class="voice-mic-btn" id="voiceMicBtn" title="Start listening">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <div class="voice-mic-status" id="voiceMicStatus">Tap the mic and try: "add task Design homepage mockup" or "mark Create wireframes as done"</div>
+    </div>
+    <div class="voice-transcript-box" id="voiceTranscriptBox"></div>
+    <div class="voice-fallback-label">Or type commands — one per line, or separated by "and":</div>
+    <textarea class="voice-fallback-textarea" id="voiceFallbackText" placeholder="add task Design homepage mockup&#10;mark Create wireframes as done&#10;add subtask Export assets to Design homepage mockup"></textarea>
+    <button type="button" class="modal-btn secondary voice-parse-btn" id="voiceParseBtn">Parse Commands</button>
+    <div class="voice-review-list" id="voiceReviewList"></div>
+    <div class="modal-actions" style="margin-top:16px;">
+      <button class="modal-btn secondary" id="voiceCloseBtn">Close</button>
+      <button class="modal-btn primary" id="voiceApplyBtn" disabled>Apply Selected</button>
+    </div>
+  </div>
+</div>
+
 <!-- TASK DEADLINE MODAL -->
 <div class="modal-overlay" id="overdueModal">
   <div class="modal-box" id="overdueModalBox" style="width:min(560px, 92vw);">
@@ -4170,6 +4388,7 @@ document.addEventListener('keydown', e => {
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js" onerror="window.__firebaseLoadFailed=true;"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js" onerror="window.__firebaseLoadFailed=true;"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js" onerror="window.__firebaseLoadFailed=true;"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-functions-compat.js" onerror="window.__firebaseLoadFailed=true;"></script>
 <script>
 // ── FIREBASE CONFIG ───────────────────────────────────────────────────────────
 const firebaseConfig = {
@@ -4479,6 +4698,9 @@ function friendlyAuthError(code){
     'auth/too-many-requests':'Too many attempts. Please wait a moment.',
     'auth/invalid-credential':'Invalid email or password.',
     'auth/network-request-failed':'Network error. Check your connection.',
+    'auth/requires-recent-login':'Please re-enter your current password and try again.',
+    'auth/operation-not-allowed':'Email sign-in isn\'t enabled for this project.',
+    'auth/popup-closed-by-user':'Sign-in was cancelled before it finished.',
   };
   return map[code]||'Something went wrong. Please try again.';
 }
@@ -4498,6 +4720,29 @@ let workspaceOwnerUid=null;
 let workspaceMembers={};         // {uid: {email, displayName}} for everyone in currentWorkspaceId
 function getWorkspaceDoc(){ return db.collection('workspaces').doc(currentWorkspaceId); }
 function getUserProfileDoc(uid){ return db.collection('users').doc(uid); }
+
+// Renders a member's avatar into `el` — their photo if set, otherwise the
+// first letter of their name/email on the accent background. Shared by the
+// header badge and the team members list so photos show up everywhere.
+function renderMemberAvatar(el,uid,fallbackNameOrEmail){
+  if(!el) return;
+  const info=(uid&&workspaceMembers[uid])||null;
+  const photo=info&&info.photo;
+  const label=(info&&(info.displayName||info.email))||fallbackNameOrEmail||'?';
+  if(photo){
+    el.style.backgroundImage=`url("${photo}")`;
+    el.style.backgroundSize='cover';
+    el.style.backgroundPosition='center';
+    el.style.backgroundRepeat='no-repeat';
+    el.textContent='';
+  }else{
+    el.style.backgroundImage='';
+    el.style.backgroundSize='';
+    el.style.backgroundPosition='';
+    el.style.backgroundRepeat='';
+    el.textContent=(label[0]||'?').toUpperCase();
+  }
+}
 function isCurrentWorkspaceOwner(){ return !!auth&&!!auth.currentUser&&workspaceOwnerUid===auth.currentUser.uid; }
 
 // ── VIEW-ONLY / EDIT PERMISSIONS ──────────────────────────────────────────
@@ -4518,6 +4763,29 @@ function myMemberRole(){
 }
 function canEdit(){ return myMemberRole()==='editor'; }
 function notifyViewOnly(){ toast('👁','View-only access — ask the workspace owner for edit permission',false); }
+
+// ── PER-MODEL ACCESS RESTRICTION ──────────────────────────────────────────────
+// On top of the editor/viewer role above, the workspace owner can restrict a
+// member to a subset of models via members.{uid}.modelAccess (an array of
+// model names). Missing/null means unrestricted (full access) — this keeps
+// every existing member unaffected until the owner deliberately narrows
+// someone down. The owner themself is never restricted.
+// NOTE: this is a UI-level restriction only. Because every model in a shared
+// workspace currently lives in the same Firestore document/listener, a
+// restricted member's browser still receives the full dataset — this hides
+// other models from the interface but isn't a hard security boundary against
+// someone deliberately inspecting network traffic or the JS console.
+function myModelAccess(){
+  if(!auth||!auth.currentUser) return null;
+  if(isCurrentWorkspaceOwner()) return null;
+  const info=workspaceMembers[auth.currentUser.uid];
+  if(!info||!Array.isArray(info.modelAccess)) return null;
+  return info.modelAccess;
+}
+function isModelVisibleToMe(m){
+  const allowed=myModelAccess();
+  return !allowed||allowed.includes(m);
+}
 
 // Toggles a body-level class + banner so the whole UI visually reflects
 // view-only status, and (re)wires a capture-phase guard that blocks clicks
@@ -4579,6 +4847,7 @@ async function resolveWorkspace(user){
 
   const profile=profileSnap&&profileSnap.exists?profileSnap.data():null;
   const myInfo={email:user.email||'',displayName:user.displayName||(user.email||'').split('@')[0]};
+  if(profile&&profile.photo) myInfo.photo=profile.photo;
 
   if(profile && profile.workspaceId){
     // Keep the denormalized member info fresh (in case display name
@@ -4717,7 +4986,7 @@ function userIsBusy(){
   const activeEl=document.activeElement;
   const isTypingInTaskArea = activeEl && (activeEl.tagName==='INPUT'||activeEl.tagName==='TEXTAREA')
     && activeEl.closest && (activeEl.closest('#taskRows')||activeEl.closest('.model-rename-input')||activeEl.closest('#modelsGrid'));
-  const modalIsOpen = document.querySelector('.modal-overlay.open, #teamOverlay.open, #exportLogoutOverlay.open, #bulkMoveModelModal.open');
+  const modalIsOpen = document.querySelector('.modal-overlay.open, #teamOverlay.open, #exportLogoutOverlay.open, #bulkMoveModelModal.open, #profileOverlay.open');
   const recentlyActive = (Date.now()-lastActivityTime) < ACTIVITY_IDLE_MS;
   return !!(isTypingInTaskArea || modalIsOpen || isDragInProgress || recentlyActive || hasUnsavedLocalEdit());
 }
@@ -5130,6 +5399,7 @@ async function handleAuthState(user){
     const loginOpenBtn=document.getElementById('loginOpenBtn');
     avatar.textContent=(user.displayName||user.email||'?')[0].toUpperCase();
     emailEl.textContent=user.displayName||(user.email||'').split('@')[0];
+    // Re-rendered with the real photo (if any) once workspaceMembers loads below.
     badge.style.display='flex';
     loginOpenBtn.style.display='none';
     document.getElementById('notifBellBtn').style.display='';
@@ -5150,6 +5420,7 @@ async function handleAuthState(user){
       : (currentWorkspaceId===user.uid ? await speculativeLoad : await loadFromFirestore(currentWorkspaceId));
     workspaceMembers=(saved&&saved.members)||{[user.uid]:{email:user.email||'',displayName:user.displayName||(user.email||'').split('@')[0]}};
     workspaceOwnerUid=(saved&&saved.ownerUid)||user.uid;
+    renderMemberAvatar(avatar,user.uid,user.displayName||user.email);
     applyViewOnlyMode();
     deletedModelsSet=new Set(saved?.deletedModels||[]);
     archivedModelsSet=new Set(saved?.archivedModels||[]);
@@ -5464,7 +5735,7 @@ let expandedCompletedSet = new Set();
 let expandedSubtasksSet = new Set();
 
 function refreshModelsList(){
-  const active=Object.keys(state).filter(m=>!archivedModelsSet.has(m));
+  const active=refreshedActiveModelNames();
   // Merge saved order with current active models
   const ordered=modelOrder.filter(m=>active.includes(m));
   const unordered=active.filter(m=>!ordered.includes(m));
@@ -6920,7 +7191,7 @@ function renderArchiveView(){
   const grid=document.getElementById('archiveGrid');
   const emptyState=document.getElementById('archiveEmptyState');
   grid.innerHTML='';
-  const archived=[...archivedModelsSet].filter(m=>m in state);
+  const archived=[...archivedModelsSet].filter(m=>m in state&&isModelVisibleToMe(m));
   emptyState.style.display=archived.length?'none':'';
   grid.style.display=archived.length?'':'none';
   archived.forEach((m,idx)=>{
@@ -7201,6 +7472,285 @@ function renderMyTasksView(){
   });
 }
 
+// ── VOICE ASSISTANT ────────────────────────────────────────────────────────────
+// Lets you speak (or type) several commands in one go — "add task X",
+// "add subtask Y to X", "mark X as done" — then shows exactly what it
+// understood before touching any data, so a misheard word never silently
+// creates or changes the wrong thing.
+let voiceRecognition=null;
+let voiceListening=false;
+let voiceFinalTranscript='';
+let voiceParsedItems=[];
+
+function voiceSupported(){
+  return !!(window.SpeechRecognition||window.webkitSpeechRecognition);
+}
+
+function initVoiceRecognition(){
+  if(voiceRecognition||!voiceSupported()) return voiceRecognition;
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const rec=new SR();
+  rec.continuous=true;
+  rec.interimResults=true;
+  rec.lang=(navigator.language||'en-US');
+  rec.onresult=e=>{
+    let interim='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const chunk=e.results[i][0].transcript;
+      if(e.results[i].isFinal) voiceFinalTranscript+=(voiceFinalTranscript&&!voiceFinalTranscript.endsWith(' ')?' ':'')+chunk.trim()+'. ';
+      else interim+=chunk;
+    }
+    const box=document.getElementById('voiceTranscriptBox');
+    if(box) box.textContent=(voiceFinalTranscript+' '+interim).trim();
+  };
+  rec.onerror=e=>{
+    const statusEl=document.getElementById('voiceMicStatus');
+    if(e.error==='not-allowed'||e.error==='service-not-allowed'){
+      if(statusEl) statusEl.textContent='Microphone access was blocked — allow it in your browser, or type commands below instead.';
+    } else if(e.error==='no-speech'){
+      // Not an error worth surfacing — just means it timed out waiting.
+    } else {
+      if(statusEl) statusEl.textContent=`Voice recognition error (${e.error}) — you can type commands below instead.`;
+    }
+  };
+  rec.onend=()=>{
+    voiceListening=false;
+    const btn=document.getElementById('voiceMicBtn');
+    const statusEl=document.getElementById('voiceMicStatus');
+    if(btn) btn.classList.remove('listening');
+    if(statusEl){ statusEl.classList.remove('listening'); statusEl.textContent='Stopped listening. Tap "Parse Commands" below, or the mic to keep going.'; }
+  };
+  voiceRecognition=rec;
+  return rec;
+}
+
+function toggleVoiceListening(){
+  const statusEl=document.getElementById('voiceMicStatus');
+  if(!voiceSupported()){
+    if(statusEl) statusEl.textContent='Voice recognition isn\'t supported in this browser — type commands below instead.';
+    return;
+  }
+  const rec=initVoiceRecognition();
+  const btn=document.getElementById('voiceMicBtn');
+  if(voiceListening){
+    rec.stop();
+    return;
+  }
+  try{
+    rec.start();
+    voiceListening=true;
+    if(btn) btn.classList.add('listening');
+    if(statusEl){ statusEl.classList.add('listening'); statusEl.textContent='Listening… speak your commands, then tap the mic again to stop.'; }
+  }catch(err){
+    // start() throws if called while already running (rapid double-click etc.)
+    console.warn('Voice recognition start failed:',err);
+  }
+}
+
+// ── Command parsing ──
+function voiceStatusFromWord(w){
+  w=String(w||'').trim().toLowerCase();
+  if(/(done|complete)/.test(w)) return 'done';
+  if(/in\s?progress/.test(w)) return 'inprogress';
+  if(/(pending|not\s?started|open|reopen)/.test(w)) return 'pending';
+  return null;
+}
+
+function parseVoiceCommands(text){
+  if(!text||!text.trim()) return [];
+  const chunks=text
+    .split(/\n|(?:,?\s+and\s+then\s+)|(?:,?\s+then\s+)|(?:\.\s+)|(?:;\s*)|(?:,?\s+and\s+(?=add |mark |set |complete |reopen |uncomplete ))/i)
+    .map(s=>s.replace(/\.+$/,'').trim())
+    .filter(Boolean);
+  const cmds=[];
+  chunks.forEach(raw=>{
+    let m;
+    if((m=raw.match(/^add\s+(?:a\s+)?subtask\s+(.+?)\s+(?:to|under|for)\s+(.+?)(?:\s+in\s+(.+))?$/i))){
+      cmds.push({type:'addSubtask', raw, subName:m[1].trim(), taskQuery:m[2].trim(), modelQuery:m[3]?m[3].trim():null});
+      return;
+    }
+    if((m=raw.match(/^add\s+(?:a\s+)?(?:new\s+)?task\s+(.+?)(?:\s+(?:to|in)\s+(?:model\s+)?(.+))?$/i))){
+      cmds.push({type:'addTask', raw, taskName:m[1].trim(), modelQuery:m[2]?m[2].trim():null});
+      return;
+    }
+    if((m=raw.match(/^(?:mark|set)\s+(.+?)\s+(?:as|to)\s+(done|complete|completed|in\s?progress|pending|not\s?started|open)$/i))){
+      const status=voiceStatusFromWord(m[2]);
+      if(status){ cmds.push({type:'setStatus', raw, targetQuery:m[1].trim(), status}); return; }
+    }
+    if((m=raw.match(/^complete\s+(.+)$/i))){
+      cmds.push({type:'setStatus', raw, targetQuery:m[1].trim(), status:'done'});
+      return;
+    }
+    if((m=raw.match(/^(?:reopen|un-?complete)\s+(.+)$/i))){
+      cmds.push({type:'setStatus', raw, targetQuery:m[1].trim(), status:'pending'});
+      return;
+    }
+    cmds.push({type:'unknown', raw});
+  });
+  return cmds;
+}
+
+// ── Command resolution (read-only — matches spoken names against real data) ──
+function voiceFindModel(query){
+  const names=refreshedActiveModelNames();
+  if(!query) return names.includes(activeTab)?activeTab:(names[0]||null);
+  const q=query.trim().toLowerCase();
+  let match=names.find(m=>m.toLowerCase()===q);
+  if(!match) match=names.find(m=>m.toLowerCase().includes(q)||q.includes(m.toLowerCase()));
+  return match||null;
+}
+function voiceFindTaskIdx(model,query){
+  if(!model||!query) return -1;
+  const q=query.trim().toUpperCase();
+  const tasks=state[model]||[];
+  let idx=tasks.findIndex(t=>t.name===q);
+  if(idx===-1) idx=tasks.findIndex(t=>t.name.includes(q)||q.includes(t.name));
+  return idx;
+}
+function voiceFindAnyItem(query){
+  const q=query.trim();
+  if(!q) return null;
+  const names=refreshedActiveModelNames();
+  const order=[activeTab,...names.filter(m=>m!==activeTab)];
+  for(const m of order){
+    const idx=voiceFindTaskIdx(m,q);
+    if(idx!==-1) return {model:m, idx, subIdx:null};
+  }
+  const qu=q.toUpperCase();
+  for(const m of order){
+    const tasks=state[m]||[];
+    for(let i=0;i<tasks.length;i++){
+      const subs=getSubtasks(m,i);
+      let sIdx=subs.findIndex(s=>s.name===qu);
+      if(sIdx===-1) sIdx=subs.findIndex(s=>s.name.includes(qu)||qu.includes(s.name));
+      if(sIdx!==-1) return {model:m, idx:i, subIdx:sIdx};
+    }
+  }
+  return null;
+}
+const VOICE_STATUS_LABEL={done:'Done',inprogress:'In Progress',pending:'Pending'};
+
+function resolveVoiceCommand(cmd){
+  if(cmd.type==='addTask'){
+    const model=voiceFindModel(cmd.modelQuery);
+    return {...cmd, ok:!!model, apply:!!model, resolvedModel:model,
+      summary: model ? `➕ Add task "${cmd.taskName}" to <b>${escHtml(model)}</b>` : `➕ Add task "${cmd.taskName}" — no model found${cmd.modelQuery?` for "${escHtml(cmd.modelQuery)}"`:''}`};
+  }
+  if(cmd.type==='addSubtask'){
+    const model=voiceFindModel(cmd.modelQuery);
+    const idx=model?voiceFindTaskIdx(model,cmd.taskQuery):-1;
+    const ok=!!model&&idx!==-1;
+    return {...cmd, ok, apply:ok, resolvedModel:model, resolvedIdx:idx,
+      summary: ok
+        ? `➕ Add subtask "${cmd.subName}" to <b>${escHtml(state[model][idx].name)}</b> (${escHtml(model)})`
+        : `➕ Add subtask "${cmd.subName}" — couldn't find a task matching "${escHtml(cmd.taskQuery)}"`};
+  }
+  if(cmd.type==='setStatus'){
+    const found=voiceFindAnyItem(cmd.targetQuery);
+    if(!found){
+      return {...cmd, ok:false, apply:false, summary:`🔄 Couldn't find a task or subtask matching "${escHtml(cmd.targetQuery)}"`};
+    }
+    const {model,idx,subIdx}=found;
+    const label=subIdx==null?state[model][idx].name:getSubtasks(model,idx)[subIdx].name;
+    return {...cmd, ok:true, apply:true, resolvedModel:model, resolvedIdx:idx, resolvedSubIdx:subIdx,
+      summary:`🔄 Set "${escHtml(label)}" (${escHtml(model)}) to <b>${VOICE_STATUS_LABEL[cmd.status]}</b>`};
+  }
+  return {...cmd, ok:false, apply:false, summary:`❓ Didn't understand: "${escHtml(cmd.raw)}"`};
+}
+
+function renderVoiceReview(){
+  const list=document.getElementById('voiceReviewList');
+  const applyBtn=document.getElementById('voiceApplyBtn');
+  if(!list) return;
+  if(!voiceParsedItems.length){
+    list.innerHTML='';
+    if(applyBtn) applyBtn.disabled=true;
+    return;
+  }
+  list.innerHTML=voiceParsedItems.map((cmd,i)=>`
+    <div class="voice-review-item${cmd.ok?'':' unresolved'}">
+      <input type="checkbox" data-idx="${i}" ${cmd.apply?'checked':''} ${cmd.ok?'':'disabled'}>
+      <div class="voice-review-item-main">
+        <div class="voice-review-item-summary">${cmd.summary}</div>
+        <div class="voice-review-item-raw">"${escHtml(cmd.raw)}"</div>
+      </div>
+    </div>`).join('');
+  list.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
+    cb.onchange=()=>{ voiceParsedItems[parseInt(cb.dataset.idx,10)].apply=cb.checked; updateVoiceApplyBtn(); };
+  });
+  updateVoiceApplyBtn();
+}
+function updateVoiceApplyBtn(){
+  const applyBtn=document.getElementById('voiceApplyBtn');
+  if(!applyBtn) return;
+  const n=voiceParsedItems.filter(c=>c.ok&&c.apply).length;
+  applyBtn.disabled=n===0;
+  applyBtn.textContent=n>0?`Apply ${n} Command${n===1?'':'s'}`:'Apply Selected';
+}
+
+function runVoiceParse(){
+  const box=document.getElementById('voiceTranscriptBox');
+  const fallback=document.getElementById('voiceFallbackText');
+  const spoken=(box&&box.textContent||'').trim();
+  const typed=(fallback&&fallback.value||'').trim();
+  const combined=[spoken,typed].filter(Boolean).join('. ');
+  if(!combined){
+    const statusEl=document.getElementById('voiceMicStatus');
+    if(statusEl) statusEl.textContent='Nothing to parse yet — speak into the mic or type a command below.';
+    return;
+  }
+  voiceParsedItems=parseVoiceCommands(combined).map(resolveVoiceCommand);
+  renderVoiceReview();
+}
+
+function applyVoiceCommands(){
+  if(!canEdit()){notifyViewOnly();return;}
+  const toApply=voiceParsedItems.filter(c=>c.ok&&c.apply);
+  if(!toApply.length) return;
+  toApply.forEach(cmd=>{
+    if(cmd.type==='addTask'){
+      addTask(cmd.resolvedModel,cmd.taskName);
+    } else if(cmd.type==='addSubtask'){
+      addSubtask(cmd.resolvedModel,cmd.resolvedIdx,cmd.subName);
+    } else if(cmd.type==='setStatus'){
+      if(cmd.resolvedSubIdx==null) setTaskStatus(cmd.resolvedModel,cmd.resolvedIdx,cmd.status);
+      else setSubtaskStatus(cmd.resolvedModel,cmd.resolvedIdx,cmd.resolvedSubIdx,cmd.status);
+    }
+  });
+  toast('🎙️',`Applied ${toApply.length} voice command${toApply.length===1?'':'s'}`);
+  closeVoiceModal();
+}
+
+function openVoiceModal(){
+  document.getElementById('userBadge').classList.remove('menu-open');
+  voiceFinalTranscript='';
+  voiceParsedItems=[];
+  const box=document.getElementById('voiceTranscriptBox');
+  const fallback=document.getElementById('voiceFallbackText');
+  const statusEl=document.getElementById('voiceMicStatus');
+  if(box) box.textContent='';
+  if(fallback) fallback.value='';
+  if(statusEl){
+    statusEl.classList.remove('listening');
+    statusEl.textContent=voiceSupported()
+      ? 'Tap the mic and try: "add task Design homepage mockup" or "mark Create wireframes as done"'
+      : 'Voice recognition isn\'t supported in this browser — type commands below instead.';
+  }
+  renderVoiceReview();
+  document.getElementById('voiceModal').classList.add('open');
+}
+function closeVoiceModal(){
+  if(voiceRecognition&&voiceListening){ try{ voiceRecognition.stop(); }catch(e){} }
+  document.getElementById('voiceModal').classList.remove('open');
+}
+
+document.getElementById('voiceAssistantBtn').onclick=openVoiceModal;
+document.getElementById('voiceMicBtn').onclick=toggleVoiceListening;
+document.getElementById('voiceParseBtn').onclick=runVoiceParse;
+document.getElementById('voiceApplyBtn').onclick=applyVoiceCommands;
+document.getElementById('voiceCloseBtn').onclick=closeVoiceModal;
+document.getElementById('voiceModal').onclick=e=>{if(e.target===document.getElementById('voiceModal'))closeVoiceModal();};
+
 // Which model the burndown chart focuses on. '__all__' aggregates every
 // active model's tasks against the earliest start / latest deadline span.
 let analyticsSelectedModel='__all__';
@@ -7214,7 +7764,7 @@ function analyticsAllTasks(modelFilter){
 // Active (non-archived) model names, freshly filtered from current state —
 // small helper so analytics never accidentally includes archived models.
 function refreshedActiveModelNames(){
-  return Object.keys(state).filter(m=>!archivedModelsSet.has(m));
+  return Object.keys(state).filter(m=>!archivedModelsSet.has(m)&&isModelVisibleToMe(m));
 }
 
 function fmtShortDate(d){ return d.toLocaleDateString(undefined,{month:'short',day:'numeric'}); }
@@ -7541,7 +8091,14 @@ function renderRecycleView(){
   listEl.innerHTML='';
   const entries=[];
   Object.keys(recycleBin).forEach(bucket=>{
-    recycleBin[bucket].forEach((entry,i)=>entries.push({bucket,entry,i}));
+    const modelForBucket = bucket===RECYCLE_MODELS_KEY ? null : bucket;
+    recycleBin[bucket].forEach((entry,i)=>{
+      // For the special "_models_" bucket, each entry carries its own
+      // deleted model name in entry.name; every other bucket is keyed by
+      // the model name itself.
+      const modelName = modelForBucket || entry.name;
+      if(isModelVisibleToMe(modelName)) entries.push({bucket,entry,i});
+    });
   });
   entries.sort((a,b)=>b.entry.deletedAt-a.entry.deletedAt);
   emptyState.style.display=entries.length?'none':'';
@@ -9779,6 +10336,110 @@ function instantiateTemplateTasks(templateName){
     subtasks:(Array.isArray(t.subtasks)?t.subtasks:[]).map(s=>({name:s.name,done:false,priority:s.priority||'med',notes:'',taskDeadline:'',startDate:'',screenshots:[],status:'pending'}))
   }));
 }
+
+// ── AI SUGGEST CHECKLIST ──────────────────────────────────────────────────────
+// Turns the Cloud Function's raw {name, subtasks:[string,...]} shape into the
+// same instantiated-task shape instantiateTemplateTasks() produces, so it can
+// be dropped straight into state[model] like any other freshly created list.
+function aiTasksToInstantiated(rawTasks){
+  return (rawTasks||[]).map((t,i)=>({
+    sn:i+1,name:String((t&&t.name)||'').trim().toUpperCase(),done:false,priority:'med',notes:'',taskDeadline:'',screenshots:[],
+    subtasks:(Array.isArray(t&&t.subtasks)?t.subtasks:[]).map(s=>({
+      name:String(typeof s==='string'?s:(s&&s.name)||'').trim().toUpperCase(),
+      done:false,priority:'med',notes:'',taskDeadline:'',startDate:'',screenshots:[],status:'pending'
+    })).filter(s=>s.name)
+  })).filter(t=>t.name);
+}
+// Calls the `suggestChecklist` Firebase Cloud Function, which forwards the
+// description to Claude server-side (keeping the Anthropic API key off the
+// client) and returns { tasks: [{name, subtasks:[...]}, ...] }.
+async function callSuggestChecklistFn(modelName,description){
+  if(typeof firebase==='undefined' || !firebase.functions){
+    throw new Error('AI Suggest isn\'t set up yet — the "suggestChecklist" Cloud Function needs to be deployed to this Firebase project first.');
+  }
+  let res;
+  try{
+    const fn=firebase.functions().httpsCallable('suggestChecklist');
+    res=await fn({ modelName, description, existingModelNames:Object.keys(state).slice(0,15) });
+  }catch(err){
+    if(err && err.code==='functions/not-found'){
+      throw new Error('AI Suggest isn\'t set up yet — the "suggestChecklist" Cloud Function needs to be deployed to this Firebase project first.');
+    }
+    throw new Error((err&&err.message)||'Something went wrong reaching the AI service. Please try again.');
+  }
+  const tasks=res && res.data && res.data.tasks;
+  if(!Array.isArray(tasks) || !tasks.length) throw new Error('AI didn\'t return any tasks — try a more specific description.');
+  return tasks;
+}
+// runAiChecklistFlow(modelName, description) -> Promise<instantiated tasks[] | null>
+// Drives the #aiSuggestOverlay through loading → preview (checkbox list,
+// uncheck to exclude) → error (with retry) states.
+function runAiChecklistFlow(modelName,description){
+  return new Promise(resolveOuter=>{
+    const overlay=document.getElementById('aiSuggestOverlay');
+    const titleEl=document.getElementById('aiSuggestTitle');
+    const descEl=document.getElementById('aiSuggestDesc');
+    const loadingEl=document.getElementById('aiSuggestLoading');
+    const errorEl=document.getElementById('aiSuggestError');
+    const previewEl=document.getElementById('aiSuggestPreview');
+    const cancelBtn=document.getElementById('aiSuggestCancelBtn');
+    const primaryBtn=document.getElementById('aiSuggestPrimaryBtn');
+    let rawTasks=null;
+
+    function showLoading(){
+      titleEl.textContent='Generating checklist…';
+      descEl.textContent=`Claude is drafting tasks for "${modelName}".`;
+      descEl.style.display='';
+      loadingEl.style.display='flex'; errorEl.style.display='none'; previewEl.style.display='none';
+      primaryBtn.style.display='none';
+    }
+    function showError(msg){
+      titleEl.textContent="Couldn't generate checklist";
+      descEl.style.display='none';
+      loadingEl.style.display='none'; previewEl.style.display='none';
+      errorEl.style.display='block'; errorEl.textContent=msg;
+      primaryBtn.style.display='inline-block'; primaryBtn.textContent='Try Again';
+    }
+    function showPreview(tasks){
+      rawTasks=tasks;
+      titleEl.textContent='Review generated checklist';
+      descEl.style.display='';
+      descEl.textContent=`${tasks.length} task${tasks.length===1?'':'s'} suggested — uncheck any you don't want.`;
+      loadingEl.style.display='none'; errorEl.style.display='none';
+      previewEl.style.display='flex';
+      previewEl.innerHTML=tasks.map((t,i)=>{
+        const subN=Array.isArray(t&&t.subtasks)?t.subtasks.length:0;
+        return `<label class="ai-task-row"><input type="checkbox" checked data-idx="${i}"><span class="ai-task-row-info"><span class="ai-task-row-name">${escHtml(String((t&&t.name)||'').trim())}</span>${subN?`<span class="ai-task-row-meta">${subN} subtask${subN===1?'':'s'}</span>`:''}</span></label>`;
+      }).join('');
+      primaryBtn.style.display='inline-block'; primaryBtn.textContent='Add Tasks';
+    }
+    function cleanup(result){
+      overlay.classList.remove('open');
+      cancelBtn.onclick=null; primaryBtn.onclick=null; overlay.onclick=null;
+      document.removeEventListener('keydown',escHandler);
+      resolveOuter(result);
+    }
+    function escHandler(e){ if(e.key==='Escape') cleanup(null); }
+    function generate(){
+      showLoading();
+      callSuggestChecklistFn(modelName,description).then(showPreview).catch(err=>showError(err.message||'Something went wrong. Please try again.'));
+    }
+
+    cancelBtn.onclick=()=>cleanup(null);
+    overlay.onclick=e=>{ if(e.target===overlay) cleanup(null); };
+    document.addEventListener('keydown',escHandler);
+    primaryBtn.onclick=()=>{
+      if(errorEl.style.display==='block'){ generate(); return; }
+      const checked=[...previewEl.querySelectorAll('input[type="checkbox"]:checked')].map(cb=>rawTasks[+cb.dataset.idx]);
+      if(!checked.length) return;
+      cleanup(aiTasksToInstantiated(checked));
+    };
+
+    overlay.classList.add('open');
+    generate();
+  });
+}
+
 async function saveModelAsTemplate(modelName){if(!canEdit()){notifyViewOnly();return;}
   const tasks=state[modelName]||[];
   if(!tasks.length){await showAlert({title:'Nothing to save',message:`"${modelName}" doesn't have any tasks yet.`,tone:'warn'});return;}
@@ -9977,6 +10638,7 @@ function showTemplateChooser(modelName,manageOnly){
       const ICON_LAYERS='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>';
       const ICON_CLIPBOARD_CHECK='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"/><path d="m9 14 2 2 4-4"/></svg>';
       const rows=[
+        ...(manageOnly?[]:[{choice:'__ai__',icon:'✨',name:'AI Suggest Checklist',meta:'Describe the product — Claude drafts the tasks',editable:false,deletable:false,special:true}]),
         ...(manageOnly?[]:[{choice:'blank',icon:'◻',name:'Blank',meta:'Start with no tasks',editable:false,deletable:false}]),
         ...customNames.map(n=>{
           const tpl=templates[n];
@@ -9990,7 +10652,7 @@ function showTemplateChooser(modelName,manageOnly){
         return;
       }
       listEl.innerHTML=rows.map(r=>`
-        <button class="template-chooser-item" data-choice="${escHtml(r.choice)}">
+        <button class="template-chooser-item${r.special?' ai-special':''}" data-choice="${escHtml(r.choice)}">
           <span class="template-chooser-item-icon">${r.icon}</span>
           <span class="template-chooser-item-info">
             <span class="template-chooser-item-name">${escHtml(r.name)}</span>
@@ -10001,9 +10663,21 @@ function showTemplateChooser(modelName,manageOnly){
         </button>
       `).join('');
       listEl.querySelectorAll('.template-chooser-item').forEach(btn=>{
-        btn.onclick=e=>{
+        btn.onclick=async e=>{
           if(e.target.closest('[data-delete],[data-edit]')) return;
           const choice=btn.dataset.choice;
+          if(choice==='__ai__'){
+            const desc=await showTextPrompt({
+              icon:'✨',title:'AI Suggest Checklist',
+              message:`Briefly describe "${modelName}" — product type, key specs, category — and Claude will draft a full task checklist for it.`,
+              placeholder:'e.g. Electric kettle, 1.7L capacity, stainless steel body, auto shut-off',
+              confirmText:'Generate'
+            });
+            if(desc===null) return; // back to chooser, still open
+            const tasks=await runAiChecklistFlow(modelName,desc);
+            if(tasks && tasks.length) cleanup({__ai:true,tasks});
+            return;
+          }
           if(manageOnly) openTemplateEditor(choice,renderList);
           else cleanup(choice);
         };
@@ -10057,7 +10731,11 @@ async function addModel(name,deadline){if(!canEdit()){notifyViewOnly();return;}
   const choice=await showTemplateChooser(trimmed,false);
   if(choice===null) return; // cancelled — nothing has been written to state[trimmed] yet, so this is a full no-op
 
-  state[trimmed]=choice==='blank' ? [] : instantiateTemplateTasks(choice);
+  if(choice && typeof choice==='object' && choice.__ai){
+    state[trimmed]=choice.tasks;
+  }else{
+    state[trimmed]=choice==='blank' ? [] : instantiateTemplateTasks(choice);
+  }
   if(deadline)deadlines[trimmed]=deadline;
   deletedModelsSet.delete(trimmed);
   refreshModelsList();activeTab=trimmed;localStorage.setItem('mlc_activeTab',trimmed);editingIdx=null;save();renderAll();
@@ -10128,6 +10806,7 @@ async function renameModel(oldName, newName){if(!canEdit()){notifyViewOnly();ret
   save(); renderAll();
   toast('✎',`Renamed: ${oldName.slice(0,20)} → ${trimmed.slice(0,20)}`);
   logActivity('✎',`renamed model "${oldName}" → "${trimmed}"`,trimmed);
+  propagateModelRenameToAccess(oldName,trimmed);
 }
 
 // ── NOTES & DEADLINE MODALS ───────────────────────────────────────────────────
@@ -12017,6 +12696,9 @@ document.addEventListener('keydown',e=>{
     document.getElementById('overdueModal').classList.remove('open');
     document.getElementById('globalSearchModal').classList.remove('open');
     document.getElementById('activityModal').classList.remove('open');
+    if(typeof closeVoiceModal==='function') closeVoiceModal();
+    if(typeof closeModelAccessModal==='function') closeModelAccessModal();
+    if(typeof closeProfileModal==='function') closeProfileModal();
     document.getElementById('userBadge').classList.remove('menu-open');
     hideAuthGate();
     if (document.activeElement) document.activeElement.blur();
@@ -12448,6 +13130,24 @@ updateStickyBarPin();
   </div>
 </div>
 
+<div id="aiSuggestOverlay" role="dialog" aria-modal="true" aria-labelledby="aiSuggestTitle">
+  <div id="aiSuggestModal">
+    <div class="elmodal-icon" style="background:var(--accent1-dim);border-color:var(--border-hover);">✨</div>
+    <div class="elmodal-title" id="aiSuggestTitle">Generating checklist…</div>
+    <div class="elmodal-desc" id="aiSuggestDesc">Claude is drafting tasks for this model.</div>
+    <div id="aiSuggestLoading" class="ai-suggest-loading">
+      <div class="auth-spinner"></div>
+      <p>This usually takes a few seconds…</p>
+    </div>
+    <div id="aiSuggestError" class="ai-suggest-error" style="display:none;"></div>
+    <div id="aiSuggestPreview" class="ai-suggest-preview" style="display:none;"></div>
+    <div class="elmodal-actions" style="margin-top:20px;">
+      <button class="elmodal-cancel-btn" id="aiSuggestCancelBtn" style="flex:1;">Cancel</button>
+      <button class="modal-btn primary" id="aiSuggestPrimaryBtn" style="flex:1;display:none;">Add Tasks</button>
+    </div>
+  </div>
+</div>
+
 <div id="templateEditorOverlay" role="dialog" aria-modal="true" aria-labelledby="templateEditorTitle">
   <div id="templateEditorModal">
     <div class="elmodal-icon" style="background:var(--accent1-dim);border-color:var(--border-hover);">📑</div>
@@ -12503,6 +13203,56 @@ updateStickyBarPin();
   </div>
 </div>
 
+<div id="modelAccessOverlay" role="dialog" aria-modal="true" aria-labelledby="modelAccessModalTitle">
+  <div id="modelAccessModal">
+    <div class="elmodal-icon" style="background:var(--accent1-dim);border-color:var(--border-hover);">🔒</div>
+    <div class="elmodal-title" id="modelAccessModalTitle">Model Access</div>
+    <div class="elmodal-desc" id="modelAccessModalDesc">Choose which models this person can see.</div>
+    <div class="model-access-list" id="modelAccessList"></div>
+    <div class="model-access-empty-hint">Unchecking "All models" lets you pick specific ones below. This hides other models from their view — it isn't a hard security boundary, since workspace data still syncs to their device.</div>
+    <div class="elmodal-actions" style="margin-top:18px;">
+      <button class="elmodal-cancel-btn" id="modelAccessCancelBtn" style="flex:1;">Cancel</button>
+      <button class="modal-btn primary" id="modelAccessSaveBtn" style="flex:1;">Save</button>
+    </div>
+  </div>
+</div>
+
+<div id="profileOverlay" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
+  <div id="profileModal">
+    <div class="elmodal-title" id="profileModalTitle" style="text-align:center;">My Profile</div>
+    <div class="elmodal-desc" style="text-align:center;">Update your name, email or profile photo.</div>
+
+    <div class="profile-avatar-wrap">
+      <div class="profile-avatar-lg" id="profileAvatarPreview">?</div>
+      <div class="profile-avatar-camera-btn" id="profilePhotoBtn" title="Change photo">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      </div>
+      <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;">
+    </div>
+
+    <label class="profile-field-label" for="profileNameInput">Display Name</label>
+    <input type="text" id="profileNameInput" class="profile-input" placeholder="Your name" maxlength="60">
+
+    <label class="profile-field-label" for="profileEmailInput">Email Address</label>
+    <input type="email" id="profileEmailInput" class="profile-input" placeholder="you@example.com">
+    <div class="profile-hint">Changing this sends a confirmation link to the new address — your email only updates once you click it.</div>
+
+    <div id="profilePasswordSection" style="display:none;">
+      <label class="profile-field-label" for="profileReauthPassword">Current Password</label>
+      <input type="password" id="profileReauthPassword" class="profile-input" placeholder="Confirm with your current password" autocomplete="current-password">
+      <div class="profile-hint">Changing your email needs a quick re-confirmation for security.</div>
+    </div>
+
+    <div class="profile-error" id="profileError"></div>
+    <div class="profile-success" id="profileSuccess"></div>
+
+    <div class="elmodal-actions" style="margin-top:18px;">
+      <button class="elmodal-cancel-btn" id="profileCancelBtn" style="flex:1;">Cancel</button>
+      <button class="modal-btn primary" id="profileSaveBtn" style="flex:1;">Save Changes</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── TEAM / SHARED WORKSPACE MODAL ─────────────────────────────────────────────
 function openTeamModal(){
@@ -12547,18 +13297,28 @@ function renderTeamModal(){
       :(showRoleToggle
         ?`<button class="team-member-role-toggle-btn${role==='viewer'?' is-viewer':' is-editor'}" data-uid="${escHtml(uid)}" data-role="${role}" data-name="${escHtml(info.displayName||info.email||'this person')}" title="${role==='viewer'?'View only — click to grant edit access':'Can edit — click to make view-only'}">${role==='viewer'?EYE_SVG:PENCIL_SVG}</button>`
         :`<span class="team-member-role-tag${role==='viewer'?' is-viewer':''}" title="${role==='viewer'?'View only':'Can edit'}">${role==='viewer'?EYE_SVG:PENCIL_SVG}</span>`);
+    const accessArr=Array.isArray(info.modelAccess)?info.modelAccess:null;
+    const accessLabel=!accessArr?'All models':`${accessArr.length} model${accessArr.length===1?'':'s'}`;
+    const modelAccessBtn=(!isOwner&&iAmOwner)
+      ?`<button class="team-member-access-btn${accessArr?' is-restricted':''}" data-uid="${escHtml(uid)}" data-name="${escHtml(info.displayName||info.email||'this person')}" title="Choose which models ${escHtml(info.displayName||info.email||'this person')} can see">${accessLabel}</button>`
+      :'';
     return `<div class="team-member-row">
-      <div class="team-member-avatar">${escHtml(initial)}</div>
+      <div class="team-member-avatar"${info.photo?` style="background-image:url(&quot;${escHtml(info.photo)}&quot;);background-size:cover;background-position:center;"`:''}>${info.photo?'':escHtml(initial)}</div>
       <div>
         <div class="team-member-name">${escHtml(info.displayName||info.email||'Unknown')}</div>
         <div class="team-member-email">${escHtml(info.email||'')}</div>
       </div>
+      ${modelAccessBtn}
       ${roleIndicator}
       ${showRemove?`<button class="team-member-remove-btn" data-uid="${escHtml(uid)}" data-name="${escHtml(info.displayName||info.email||'this person')}" title="Remove from workspace">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>`:''}
     </div>`;
   }).join('') || '<div class="elmodal-desc" style="margin:0;">No members found.</div>';
+
+  listEl.querySelectorAll('.team-member-access-btn').forEach(btn=>{
+    btn.onclick=()=>openModelAccessModal(btn.dataset.uid,btn.dataset.name);
+  });
 
   listEl.querySelectorAll('.team-member-remove-btn').forEach(btn=>{
     btn.onclick=()=>{
@@ -12658,6 +13418,230 @@ async function setMemberRole(uid,role,name){
     if(workspaceMembers[uid]) workspaceMembers[uid].role=previousRole;
     renderTeamModal();
     toast('⚠','Could not update permission — check your connection',false);
+  }
+}
+
+// ── MODEL ACCESS MODAL ────────────────────────────────────────────────────────
+// Lets the workspace owner restrict a specific member to a chosen subset of
+// models instead of the whole workspace. Enforcement itself lives in
+// isModelVisibleToMe()/refreshedActiveModelNames() — this is just the UI for
+// setting members.{uid}.modelAccess.
+let modelAccessCtx={uid:null,name:null};
+
+function openModelAccessModal(uid,name){
+  if(!isCurrentWorkspaceOwner()) return;
+  modelAccessCtx={uid,name};
+  document.getElementById('modelAccessModalDesc').textContent=`Choose which models ${name||'this person'} can see.`;
+  renderModelAccessModal();
+  document.getElementById('modelAccessOverlay').classList.add('open');
+}
+function closeModelAccessModal(){
+  document.getElementById('modelAccessOverlay').classList.remove('open');
+}
+function renderModelAccessModal(){
+  const list=document.getElementById('modelAccessList');
+  const {uid}=modelAccessCtx;
+  const info=workspaceMembers[uid]||{};
+  const currentAccess=Array.isArray(info.modelAccess)?info.modelAccess:null; // null = all models
+  const allModels=refreshedActiveModelNames(); // the owner's own view is always unrestricted
+  const isAll=!currentAccess;
+  list.innerHTML = `
+    <div class="model-access-row model-access-all-row">
+      <input type="checkbox" id="modelAccessAllCb" ${isAll?'checked':''}>
+      <label for="modelAccessAllCb">All models (including future ones)</label>
+    </div>
+    ${allModels.map((m,i)=>`
+      <div class="model-access-row">
+        <input type="checkbox" class="model-access-item-cb" id="modelAccessCb${i}" value="${escHtml(m)}" ${(isAll||currentAccess.includes(m))?'checked':''} ${isAll?'disabled':''}>
+        <label for="modelAccessCb${i}">${escHtml(m)}</label>
+      </div>`).join('')}
+  `;
+  const allCb=document.getElementById('modelAccessAllCb');
+  const itemCbs=()=>list.querySelectorAll('.model-access-item-cb');
+  allCb.onchange=()=>{
+    itemCbs().forEach(cb=>{ cb.disabled=allCb.checked; if(allCb.checked) cb.checked=true; });
+  };
+}
+async function saveModelAccess(){
+  const {uid,name}=modelAccessCtx;
+  if(!uid||!isCurrentWorkspaceOwner()||!currentWorkspaceId) return;
+  const list=document.getElementById('modelAccessList');
+  const allCb=document.getElementById('modelAccessAllCb');
+  const isAll=allCb.checked;
+  let modelAccess=null;
+  if(!isAll){
+    const chosen=[...list.querySelectorAll('.model-access-item-cb:checked')].map(cb=>cb.value);
+    if(!chosen.length){
+      toast('⚠','Pick at least one model, or check "All models"',false);
+      return;
+    }
+    modelAccess=chosen;
+  }
+  const saveBtn=document.getElementById('modelAccessSaveBtn');
+  saveBtn.disabled=true;
+  const previous=workspaceMembers[uid]?workspaceMembers[uid].modelAccess:undefined;
+  if(workspaceMembers[uid]) workspaceMembers[uid].modelAccess=modelAccess;
+  try{
+    await getWorkspaceDoc().update({['members.'+uid+'.modelAccess']: modelAccess});
+    toast('🔒', isAll ? `${name||'Member'} can now see all models` : `${name||'Member'} restricted to ${modelAccess.length} model${modelAccess.length===1?'':'s'}`, false);
+    logActivity('🔒', isAll ? `gave ${name||'a teammate'} access to all models` : `restricted ${name||'a teammate'} to ${modelAccess.length} model${modelAccess.length===1?'':'s'}`);
+    closeModelAccessModal();
+    renderTeamModal();
+  }catch(e){
+    console.error('Set model access failed:',e);
+    if(workspaceMembers[uid]) workspaceMembers[uid].modelAccess=previous;
+    toast('⚠','Could not update model access — check your connection',false);
+  }finally{
+    saveBtn.disabled=false;
+  }
+}
+document.getElementById('modelAccessCancelBtn').onclick=closeModelAccessModal;
+document.getElementById('modelAccessSaveBtn').onclick=saveModelAccess;
+document.getElementById('modelAccessOverlay').onclick=e=>{
+  if(e.target===document.getElementById('modelAccessOverlay')) closeModelAccessModal();
+};
+
+// ── MY PROFILE MODAL ──────────────────────────────────────────────────────────
+let pendingProfilePhoto=undefined; // undefined = unchanged this session, string = new data URL
+function openProfileModal(){
+  document.getElementById('userBadge').classList.remove('menu-open');
+  if(!auth||!auth.currentUser){ toast('⚠','Sign in to edit your profile',false); return; }
+  const user=auth.currentUser;
+  pendingProfilePhoto=undefined;
+  document.getElementById('profileNameInput').value=user.displayName||'';
+  document.getElementById('profileEmailInput').value=user.email||'';
+  document.getElementById('profileReauthPassword').value='';
+  document.getElementById('profilePasswordSection').style.display='none';
+  document.getElementById('profileError').textContent='';
+  document.getElementById('profileSuccess').textContent='';
+  renderMemberAvatar(document.getElementById('profileAvatarPreview'),user.uid,user.displayName||user.email);
+  document.getElementById('profileSaveBtn').disabled=false;
+  document.getElementById('profileSaveBtn').textContent='Save Changes';
+  document.getElementById('profileOverlay').classList.add('open');
+}
+function closeProfileModal(){
+  document.getElementById('profileOverlay').classList.remove('open');
+}
+document.getElementById('profilePhotoBtn').onclick=()=>document.getElementById('profilePhotoInput').click();
+document.getElementById('profilePhotoInput').onchange=async(e)=>{
+  const file=e.target.files&&e.target.files[0];
+  e.target.value='';
+  if(!file) return;
+  if(!file.type.startsWith('image/')){ document.getElementById('profileError').textContent='Please choose an image file.'; return; }
+  try{
+    const dataUrl=await resizeImageFile(file,240,240,0.85);
+    pendingProfilePhoto=dataUrl;
+    const preview=document.getElementById('profileAvatarPreview');
+    preview.style.backgroundImage=`url("${dataUrl}")`;
+    preview.textContent='';
+    document.getElementById('profileError').textContent='';
+  }catch(err){
+    console.error('Profile photo resize failed:',err);
+    document.getElementById('profileError').textContent='Could not read that image — please try another.';
+  }
+};
+// Email edits need a fresh sign-in per Firebase's security rules — reveal
+// the confirm-password field only once the person actually changes it.
+document.getElementById('profileEmailInput').addEventListener('input',()=>{
+  const user=auth&&auth.currentUser;
+  const changed=user&&document.getElementById('profileEmailInput').value.trim()!==(user.email||'');
+  const hasPasswordProvider=user&&user.providerData.some(p=>p.providerId==='password');
+  document.getElementById('profilePasswordSection').style.display=(changed&&hasPasswordProvider)?'':'none';
+});
+async function saveProfile(){
+  const user=auth&&auth.currentUser;
+  if(!user) return;
+  const errEl=document.getElementById('profileError');
+  const okEl=document.getElementById('profileSuccess');
+  const saveBtn=document.getElementById('profileSaveBtn');
+  errEl.textContent='';okEl.textContent='';
+  const newName=document.getElementById('profileNameInput').value.trim();
+  const newEmail=document.getElementById('profileEmailInput').value.trim();
+  const password=document.getElementById('profileReauthPassword').value;
+  if(!newName){ errEl.textContent='Please enter a display name.'; return; }
+  if(!newEmail){ errEl.textContent='Please enter an email address.'; return; }
+  const emailChanged=newEmail!==(user.email||'');
+  const hasPasswordProvider=user.providerData.some(p=>p.providerId==='password');
+  if(emailChanged&&hasPasswordProvider&&!password){ errEl.textContent='Enter your current password to confirm the email change.'; return; }
+  saveBtn.disabled=true;saveBtn.textContent='Saving…';
+  let verificationSent=false;
+  try{
+    if(emailChanged){
+      // Re-confirm identity before touching the email — password accounts
+      // reauth with the password just entered; Google-only accounts (no
+      // password provider at all) reauth via a fresh Google popup instead.
+      if(hasPasswordProvider){
+        const cred=firebase.auth.EmailAuthProvider.credential(user.email,password);
+        await user.reauthenticateWithCredential(cred);
+      }else{
+        await user.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider());
+      }
+      // Firebase projects with email-enumeration protection reject the old
+      // updateEmail() call outright — verifyBeforeUpdateEmail is the
+      // supported path: it emails a confirmation link to the NEW address,
+      // and the email only actually changes once that link is clicked.
+      await user.verifyBeforeUpdateEmail(newEmail);
+      verificationSent=true;
+    }
+    if(newName!==(user.displayName||'')){
+      await user.updateProfile({displayName:newName});
+    }
+    // Email in Firestore stays the still-current auth email until the
+    // verification link is clicked — otherwise the workspace roster would
+    // show an address that doesn't work yet.
+    const memberUpdate={displayName:newName,email:user.email||''};
+    if(pendingProfilePhoto!==undefined) memberUpdate.photo=pendingProfilePhoto;
+    if(!workspaceMembers[user.uid]) workspaceMembers[user.uid]={};
+    Object.assign(workspaceMembers[user.uid],memberUpdate);
+    await Promise.all([
+      getUserProfileDoc(user.uid).set(memberUpdate,{merge:true}),
+      currentWorkspaceId?getWorkspaceDoc().set({members:{[user.uid]:memberUpdate}},{merge:true}):Promise.resolve()
+    ]);
+    document.getElementById('userEmail').textContent=newName||(user.email||'').split('@')[0];
+    renderMemberAvatar(document.getElementById('userAvatar'),user.uid,newName||user.email);
+    updateTeamUI();
+    if(verificationSent){
+      document.getElementById('profileEmailInput').value=user.email||'';
+      document.getElementById('profilePasswordSection').style.display='none';
+      document.getElementById('profileReauthPassword').value='';
+      okEl.textContent=`Verification link sent to ${newEmail} — click it to finish changing your email. It stays ${user.email} until then.`;
+      setTimeout(closeProfileModal,4000);
+    }else{
+      okEl.textContent='Profile updated.';
+      setTimeout(closeProfileModal,900);
+    }
+  }catch(e){
+    console.error('Profile save failed:',e);
+    errEl.textContent=friendlyAuthError(e.code)||'Could not save your profile — please try again.';
+    saveBtn.disabled=false;saveBtn.textContent='Save Changes';
+    return;
+  }
+  saveBtn.disabled=false;saveBtn.textContent='Save Changes';
+}
+document.getElementById('myProfileBtn').onclick=openProfileModal;
+document.getElementById('profileCancelBtn').onclick=closeProfileModal;
+document.getElementById('profileSaveBtn').onclick=saveProfile;
+document.getElementById('profileOverlay').onclick=e=>{
+  if(e.target===document.getElementById('profileOverlay')) closeProfileModal();
+};
+
+// If the owner renames a model, propagate that rename into any restricted
+// member's modelAccess list — otherwise the old name silently falls out of
+// their list and they lose access to what is, from their point of view, the
+// same model.
+async function propagateModelRenameToAccess(oldName,newName){
+  if(!isCurrentWorkspaceOwner()||!currentWorkspaceId) return;
+  const updates={};
+  Object.entries(workspaceMembers).forEach(([uid,info])=>{
+    if(Array.isArray(info.modelAccess)&&info.modelAccess.includes(oldName)){
+      const next=info.modelAccess.map(m=>m===oldName?newName:m);
+      workspaceMembers[uid].modelAccess=next;
+      updates['members.'+uid+'.modelAccess']=next;
+    }
+  });
+  if(Object.keys(updates).length){
+    try{ await getWorkspaceDoc().update(updates); }
+    catch(e){ console.error('Failed to propagate model rename to member access:',e); }
   }
 }
 
